@@ -1,9 +1,53 @@
-queries = {
-    'WA': {
+STATE = 'state'
+UNIVERSITY = 'university'
+MANAGING_AGENCY = 'managing_agency'
+RIGHTS_TYPE = 'rights_type'
+GEOMETRY = 'geometry'
+ATTRIBUTE_FILTER = 'attribute_filter'
+
+COLUMNS = [
+    STATE, UNIVERSITY, MANAGING_AGENCY, RIGHTS_TYPE, ATTRIBUTE_FILTER, GEOMETRY
+]
+
+QUERY_CONFIGS = {
+    'WA-surface': {
+        STATE: 'WA',
+        UNIVERSITY: 'Washington State University',
+        MANAGING_AGENCY: 'Department of Natural Resources',
+        RIGHTS_TYPE: 'surface',
         'url':
         'https://gis.dnr.wa.gov/site3/rest/services/Public_Boundaries/WADNR_PUBLIC_Cadastre_OpenData/MapServer/6/',
-        'attribute_label_to_filter_by':
-        ['SURFACE_TRUST_CD', 'MINERAL_TRUST_CD', 'TIMBER_TRUST_CD'],
+        'attribute_label_to_filter_by': ['SURFACE_TRUST_CD'],
+        'attribute_value_to_alias_map': {
+            4: 'Agricultural School',
+            5: 'University Transferred',
+            10: 'Scientific School',
+            11: 'University Original'
+        },
+    },
+    'WA-subsurface': {
+        STATE: 'WA',
+        UNIVERSITY: 'Washington State University',
+        MANAGING_AGENCY: 'Department of Natural Resources',
+        RIGHTS_TYPE: 'subsurface',
+        'url':
+        'https://gis.dnr.wa.gov/site3/rest/services/Public_Boundaries/WADNR_PUBLIC_Cadastre_OpenData/MapServer/6/',
+        'attribute_label_to_filter_by': ['MINERAL_TRUST_CD'],
+        'attribute_value_to_alias_map': {
+            4: 'Agricultural School',
+            5: 'University Transferred',
+            10: 'Scientific School',
+            11: 'University Original'
+        },
+    },
+    'WA-timber': {
+        STATE: 'WA',
+        UNIVERSITY: 'Washington State University',
+        MANAGING_AGENCY: 'Department of Natural Resources',
+        RIGHTS_TYPE: 'timber',
+        'url':
+        'https://gis.dnr.wa.gov/site3/rest/services/Public_Boundaries/WADNR_PUBLIC_Cadastre_OpenData/MapServer/6/',
+        'attribute_label_to_filter_by': ['TIMBER_TRUST_CD'],
         'attribute_value_to_alias_map': {
             4: 'Agricultural School',
             5: 'University Transferred',
@@ -12,6 +56,9 @@ queries = {
         },
     },
     'MT': {
+        STATE: 'MT',
+        UNIVERSITY: 'Montana State University',
+        MANAGING_AGENCY: 'Department of Natural Resources',
         'url':
         'https://gis.dnrc.mt.gov/arcgis/rest/services/DNRALL/BasemapService/MapServer/31',
         'attribute_label_to_filter_by': ['GrantID'],
@@ -20,7 +67,11 @@ queries = {
             "'ACB'": 'MSU 2nd Grant'
         },
     },
-    'UT-surface-trust': {
+    'UT-surface': {
+        STATE: 'UT',
+        UNIVERSITY: 'Utah State University',
+        MANAGING_AGENCY: 'Trust Lands Administration',
+        RIGHTS_TYPE: 'surface',
         'url':
         'https://gis.trustlands.utah.gov/server/rest/services/Ownership/UT_SITLA_Ownership_Beneficiary/MapServer/1',
         'attribute_label_to_filter_by': ['bene_abrev'],
@@ -28,7 +79,11 @@ queries = {
             "'USU'": 'Utah State University'
         },
     },
-    'UT-mineral-trust': {
+    'UT-subsurface': {
+        STATE: 'UT',
+        UNIVERSITY: 'Utah State University',
+        MANAGING_AGENCY: 'Trust Lands Administration',
+        RIGHTS_TYPE: 'subsurface',
         'url':
         'https://gis.trustlands.utah.gov/server/rest/services/Ownership/UT_SITLA_Ownership_Beneficiary/MapServer/0',
         'attribute_label_to_filter_by': ['bene_abrev'],
@@ -42,15 +97,34 @@ queries = {
         'attribute_label_to_filter_by': [],
         'attribute_value_to_alias_map': {},
     },
-    'OR': {
+    'OR-surface': {
+        STATE: 'OR',
+        UNIVERSITY: 'Oregon State University',
+        MANAGING_AGENCY: 'Department of State Lands',
+        RIGHTS_TYPE: 'surface',
         'url':
         'https://maps.dsl.state.or.us/arcgis/rest/services/SlisPublic/MapServer/0',
-        'attribute_label_to_filter_by': ['SURF_OWNER', 'SUB_OWNER'],
+        'attribute_label_to_filter_by': ['SURF_OWNER'],
+        'attribute_value_to_alias_map': {
+            "'OSU'": 'Oregon State University'
+        },
+    },
+    'OR-subsurface': {
+        STATE: 'OR',
+        UNIVERSITY: 'Oregon State University',
+        MANAGING_AGENCY: 'Department of State Lands',
+        RIGHTS_TYPE: 'subsurface',
+        'url':
+        'https://maps.dsl.state.or.us/arcgis/rest/services/SlisPublic/MapServer/0',
+        'attribute_label_to_filter_by': ['SUB_OWNER'],
         'attribute_value_to_alias_map': {
             "'OSU'": 'Oregon State University'
         },
     },
     'ID': {
+        STATE: 'ID',
+        UNIVERSITY: 'University of Idaho',
+        MANAGING_AGENCY: 'Department of Lands',
         'url':
         'https://gis1.idl.idaho.gov/arcgis/rest/services/State_Ownership/MapServer/0',
         'attribute_label_to_filter_by': ['SURF_ENDOWMENT'],
@@ -73,6 +147,9 @@ queries = {
         },
     },
     'CO-ownership-beneficiary': {
+        STATE: 'CO',
+        UNIVERSITY: 'Colorado State University',
+        MANAGING_AGENCY: 'State Land Board',
         'url':
         'https://services5.arcgis.com/rqsYvPKZmvSrSWbw/ArcGIS/rest/services/Surface_Ownership_Beneficiary/FeatureServer/0',
         'attribute_label_to_filter_by': ['Beneficiary'],
@@ -94,6 +171,10 @@ queries = {
         'attribute_value_to_alias_map': {},
     },
     'WY-subsurface': {
+        STATE: 'WY',
+        UNIVERSITY: 'University of Wyoming',
+        MANAGING_AGENCY: 'Board of Commissioners of Public Lands',
+        RIGHTS_TYPE: 'subsurface',
         'url':
         'https://gis2.statelands.wyo.gov/arcgis/rest/services/Services/MapViewerService2/MapServer/19',
         'attribute_label_to_filter_by': ['FundCode'],
@@ -103,6 +184,10 @@ queries = {
         },
     },
     'WY-surface': {
+        STATE: 'WY',
+        UNIVERSITY: 'University of Wyoming',
+        MANAGING_AGENCY: 'Board of Commissioners of Public Lands',
+        RIGHTS_TYPE: 'surface',
         'url':
         'https://gis2.statelands.wyo.gov/arcgis/rest/services/Services/MapViewerService2/MapServer/18',
         'attribute_label_to_filter_by': ['FundCode'],
@@ -112,6 +197,9 @@ queries = {
         },
     },
     'AZ': {
+        STATE: 'AZ',
+        UNIVERSITY: 'University of Arizona',
+        MANAGING_AGENCY: 'State Land Department',
         'url':
         'https://server.azgeo.az.gov/arcgis/rest/services/azland/State_Trust_Parcels/MapServer/0',
         'attribute_label_to_filter_by': ['fundtxt'],
