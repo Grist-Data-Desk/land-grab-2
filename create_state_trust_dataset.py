@@ -7,12 +7,11 @@ import pandas as pd
 import restapi
 import typer
 
-from config import (SURFACE_ATTRIBUTE_LABEL_TO_FILTER_BY,
-                    SUBSURFACE_ATTRIBUTE_LABEL_TO_FILTER_BY, URL,
-                    ATTRIBUTE_LABEL_TO_FILTER_BY, ATTRIBUTE_CODE_TO_ALIAS_MAP,
-                    CONFIGS, STATE, UNIVERSITY, MANAGING_AGENCY, RIGHTS_TYPE,
-                    ATTRIBUTE_FILTER, COLUMNS, DOWNLOAD_TYPE,
-                    SHAPEFILE_DOWNLOAD_TYPE, API_QUERY_DOWNLOAD_TYPE, LAYER)
+from config import (URL, ATTRIBUTE_LABEL_TO_FILTER_BY,
+                    ATTRIBUTE_CODE_TO_ALIAS_MAP, CONFIGS, STATE, UNIVERSITY,
+                    MANAGING_AGENCY, RIGHTS_TYPE, ATTRIBUTE_FILTER, COLUMNS,
+                    DOWNLOAD_TYPE, SHAPEFILE_DOWNLOAD_TYPE,
+                    API_QUERY_DOWNLOAD_TYPE, LAYER)
 
 app = typer.Typer()
 
@@ -55,18 +54,16 @@ def get_merged_data_directory(state=None):
     return f'merged-data/'
 
 
-def get_state_abbreviation(source):
-  return source.split('-')[0]
-
-
 def query_arcgis_restapi(config, source, label, code, alias, directory):
+  '''
+  Query available arcgis restapi's with relevant filters
+  '''
   # create a descriptive filename to store query info
   filename = get_filename(source, label, alias, '.geojson')
 
   # url for specific Map Server
   url = config['url']
   layer = restapi.MapServiceLayer(url)
-  # layer = restapi.FeatureLayer(url)
 
   # to get feature set as GeoJson, must set outSR to 4326 for geojson
   # first get the state's metadata by submitting an incorrect query
@@ -77,7 +74,7 @@ def query_arcgis_restapi(config, source, label, code, alias, directory):
   features.dump(directory + f'{to_kebab_case(source)}-metadata.geojson',
                 indent=2)  # indent allows for pretty view
 
-  # desired attribute conditions to filter the query by
+  # create desired attribute conditions to filter the query by
   attribute_filter = f'{label}={code}'
 
   # then filter by specific attributes
@@ -101,6 +98,9 @@ def query_arcgis_restapi(config, source, label, code, alias, directory):
 
 def clean_queried_data(source, config, label, alias, queried_data_directory,
                        cleaned_data_directory):
+  '''
+  Clean data queried from restapis
+  '''
 
   filename = get_filename(source, label, alias, '.json')
   gdf = gpd.read_file(queried_data_directory + filename)
@@ -111,7 +111,10 @@ def clean_queried_data(source, config, label, alias, queried_data_directory,
   gdf.to_file(cleaned_data_directory + filename, driver='GeoJSON')
 
 
-def format_columns(gdf, config, label, alias):
+def format_columns(gdf, config):
+  '''
+  Column formatting used in final dataset
+  '''
   # add useful column data to dataset
   gdf[STATE] = config[STATE]
   gdf[UNIVERSITY] = config[UNIVERSITY]
@@ -128,6 +131,10 @@ def format_columns(gdf, config, label, alias):
 
 
 def merge_dataframes(df_list):
+  '''
+  Merge multiple dataframes for a state, correctly merging the different
+  rights type column values (surface, mineral, etc)
+  '''
   # rights_types = pd.unique([df[RIGHTS_TYPE] for df in df_list])
   # find columns to join on
   columns_to_join_on = [
@@ -158,7 +165,7 @@ def merge_dataframes(df_list):
 
 def merge_rights_type(row):
   '''
-    If we find duplicate
+    Correctly merge the rights type columns, removing duplicated, etc
   '''
   # get all rights type values from datasets
   rights_types = row.filter(like=RIGHTS_TYPE).dropna()
@@ -253,7 +260,6 @@ def extract_and_clean_all():
 
 @app.command()
 def extract_and_clean_single_source(source: str):
-  breakpoint()
 
   config = CONFIGS[source]
   state = config[STATE]
@@ -285,12 +291,13 @@ def extract_and_clean_single_source(source: str):
     for label in config[ATTRIBUTE_LABEL_TO_FILTER_BY]:
       for code, alias in config[ATTRIBUTE_CODE_TO_ALIAS_MAP].items():
 
-        gdf = gdf[gdf[label] == code].copy()
+        filtered_gdf = gdf[gdf[label] == code].copy()
 
-        gdf = format_columns(gdf, config, label, alias)
+        filtered_gdf = format_columns(filtered_gdf, config, label, alias)
 
         filename = get_filename(source, label, alias, '.geojson')
-        gdf.to_file(cleaned_data_directory + filename, driver='GeoJSON')
+        filtered_gdf.to_file(cleaned_data_directory + filename,
+                             driver='GeoJSON')
 
 
 if __name__ == "__main__":

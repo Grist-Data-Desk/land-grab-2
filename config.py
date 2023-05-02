@@ -249,6 +249,22 @@ CONFIGS = {
             "'OSU'": 'Oregon State University'
         },
     },
+    'TX': {
+        DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
+        STATE: 'TX',
+        UNIVERSITY: 'Texas A&M',
+        MANAGING_AGENCY: 'General Land Office',
+        RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
+        URL: '../../Downloads/StateAgencyLands.zip',
+        # TODO: switch out actual url
+        # 'https://mapservice.nmstatelands.org/GISDataDownloads/ZipFiles/slo_STLStatusCombined.zip',
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['varSurveyN'],
+        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+            'A & M University': 'A & M University',
+            'Texas A&M University': 'Texas A & M University',
+            'Texas A&m University': 'Texas A&m University',
+        },
+    },
     'UT-surface': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
         STATE: 'UT',
