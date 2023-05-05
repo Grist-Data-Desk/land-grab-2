@@ -1,28 +1,12 @@
-STATE = 'state'
-UNIVERSITY = 'university'
-MANAGING_AGENCY = 'managing_agency'
-RIGHTS_TYPE = 'rights_type'
-GEOMETRY = 'geometry'
-ATTRIBUTE_FILTER = 'attribute_filter'
-SURFACE_RIGHTS_TYPE = 'surface'
-SUBSURFACE_RIGHTS_TYPE = 'subsurface'
-DOWNLOAD_TYPE = 'download_type'
-API_QUERY_DOWNLOAD_TYPE = 'api_query'
-SHAPEFILE_DOWNLOAD_TYPE = 'shapefile'
-URL = 'url'
-LAYER = 'layer'
-ATTRIBUTE_LABEL_TO_FILTER_BY = 'attribute_label_to_filter_by'
-SURFACE_ATTRIBUTE_LABEL_TO_FILTER_BY = 'surface_attribute_label_to_filter_by'
-SUBSURFACE_ATTRIBUTE_LABEL_TO_FILTER_BY = 'subsurface_attribute_label_to_filter_by'
-ATTRIBUTE_CODE_TO_ALIAS_MAP = 'attribute_code_to_alias_map'
+from constants import (
+    DOWNLOAD_TYPE, API_QUERY_DOWNLOAD_TYPE, SHAPEFILE_DOWNLOAD_TYPE, STATE,
+    UNIVERSITY, MANAGING_AGENCY, DATA_SOURCE, ATTRIBUTE_LABEL_TO_FILTER_BY,
+    ATTRIBUTE_CODE_TO_ALIAS_MAP, RIGHTS_TYPE, SURFACE_RIGHTS_TYPE,
+    SUBSURFACE_RIGHTS_TYPE, TIMBER_RIGHTS_TYPE, LAYER)
 
-COLUMNS = [
-    STATE, UNIVERSITY, MANAGING_AGENCY, RIGHTS_TYPE, ATTRIBUTE_FILTER, GEOMETRY
-]
-
-CONFIGS = {
+STATE_TRUST_CONFIGS = {
     # 'AL': {
-    #     URL:
+    #     DATA_SOURCE:
     #     'https://conservationgis.alabama.gov/adcnrweb/rest/services/StateLands/MapServer/0',
     #     ATTRIBUTE_LABEL_TO_FILTER_BY: [],
     #     ATTRIBUTE_CODE_TO_ALIAS_MAP: {},
@@ -32,7 +16,7 @@ CONFIGS = {
         STATE: 'AZ',
         UNIVERSITY: 'University of Arizona',
         MANAGING_AGENCY: 'State Land Department',
-        URL:
+        DATA_SOURCE:
         'https://server.azgeo.az.gov/arcgis/rest/services/azland/State_Trust_Parcels/MapServer/0',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['fundtxt'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
@@ -46,7 +30,7 @@ CONFIGS = {
         STATE: 'CO',
         UNIVERSITY: 'Colorado State University',
         MANAGING_AGENCY: 'State Land Board',
-        URL:
+        DATA_SOURCE:
         'https://services5.arcgis.com/rqsYvPKZmvSrSWbw/ArcGIS/rest/services/SLB_Leases_ALL_Trustlands2_View/FeatureServer/0',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Beneficiary'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
@@ -58,7 +42,7 @@ CONFIGS = {
         STATE: 'CO',
         UNIVERSITY: 'Colorado State University',
         MANAGING_AGENCY: 'State Land Board',
-        URL:
+        DATA_SOURCE:
         'https://services5.arcgis.com/rqsYvPKZmvSrSWbw/ArcGIS/rest/services/Surface_Ownership_Beneficiary/FeatureServer/0',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Beneficiary'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
@@ -70,7 +54,7 @@ CONFIGS = {
     #     STATE: 'IA',
     #     UNIVERSITY: 'University of Idaho',
     #     MANAGING_AGENCY: 'Department of Lands',
-    #     URL:
+    #     DATA_SOURCE:
     #     'https://programs.iowadnr.gov/geospatial/rest/services/Boundaries/Public_Lands/MapServer/0',
     #     # 'https://programs.iowadnr.gov/geospatial/rest/services/Boundaries/Public_Lands_ESRI/MapServer/0',
     #     # ATTRIBUTE_LABEL_TO_FILTER_BY: ['OWNER'],
@@ -89,7 +73,7 @@ CONFIGS = {
         STATE: 'ID',
         UNIVERSITY: 'University of Idaho',
         MANAGING_AGENCY: 'Department of Lands',
-        URL:
+        DATA_SOURCE:
         'https://gis1.idl.idaho.gov/arcgis/rest/services/State_Ownership/MapServer/0',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['SURF_ENDOWMENT'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
@@ -107,7 +91,7 @@ CONFIGS = {
     #     STATE: 'IA',
     #     UNIVERSITY: 'University of Idaho',
     #     MANAGING_AGENCY: 'Department of Lands',
-    #     URL:
+    #     DATA_SOURCE:
     #     'https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/dnrRealEstate/FeatureServer/2',
     #     ATTRIBUTE_LABEL_TO_FILTER_BY: ['Beneficiary'],
     #     ATTRIBUTE_CODE_TO_ALIAS_MAP: {
@@ -121,7 +105,7 @@ CONFIGS = {
         STATE: 'MN',
         UNIVERSITY: 'University of Minnesota',
         MANAGING_AGENCY: 'Department of Natural Resources',
-        URL: '../../Downloads/shp_plan_stateland_dnrcounty.zip',
+        DATA_SOURCE: '../../Downloads/shp_plan_stateland_dnrcounty.zip',
         # 'https://resources.gisdata.mn.gov/pub/gdrs/data/pub/us_mn_state_dnr/plan_stateland_dnrcounty/shp_plan_stateland_dnrcounty.zip',
         LAYER: 'stateland_type_trust',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['LANDTYPECO'],
@@ -134,7 +118,7 @@ CONFIGS = {
         STATE: 'MT',
         UNIVERSITY: 'Montana State University',
         MANAGING_AGENCY: 'Department of Natural Resources',
-        URL:
+        DATA_SOURCE:
         'https://gis.dnrc.mt.gov/arcgis/rest/services/DNRALL/BasemapService/MapServer/31',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['GrantID'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
@@ -147,8 +131,8 @@ CONFIGS = {
         STATE: 'ND',
         UNIVERSITY: 'North Dakota State University',
         MANAGING_AGENCY: 'Commissioner of University and School Lands',
-        URL: '../../Downloads/Surface_Trust_Lands_with_Trusts.zip',
-        # TODO: switch out actual url
+        DATA_SOURCE: '../../Downloads/Surface_Trust_Lands_with_Trusts.zip',
+        # TODO: switch out actual data_source
         # 'https://mapservice.nmstatelands.org/GISDataDownloads/ZipFiles/slo_STLStatusCombined.zip',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Trust_Desc'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
@@ -160,8 +144,8 @@ CONFIGS = {
         STATE: 'NE',
         UNIVERSITY: 'University of Nebraska',
         MANAGING_AGENCY: 'Board of Educational Lands and Funds',
-        URL: '../../Downloads/2023_Nebraska_BELF_lands.zip',
-        # TODO: switch out actual url
+        DATA_SOURCE: '../../Downloads/2023_Nebraska_BELF_lands.zip',
+        # TODO: switch out actual data_source
         # 'https://mapservice.nmstatelands.org/GISDataDownloads/ZipFiles/slo_STLStatusCombined.zip',
         LAYER: '233103 BELF trust lands',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Fund_Desc'],
@@ -174,8 +158,8 @@ CONFIGS = {
     #     STATE: 'NE',
     #     UNIVERSITY: 'University of Nebraska',
     #     MANAGING_AGENCY: 'Board of Educational Lands and Funds',
-    #     URL: '../../Downloads/2023_Nebraska_BELF_lands.zip',
-    #     # TODO: switch out actual url
+    #     DATA_SOURCE: '../../Downloads/2023_Nebraska_BELF_lands.zip',
+    #     # TODO: switch out actual data_source
     #     # 'https://mapservice.nmstatelands.org/GISDataDownloads/ZipFiles/slo_STLStatusCombined.zip',
     #     LAYER: '2023 BELF University Lands',
     #     ATTRIBUTE_LABEL_TO_FILTER_BY: ['Fund_Desc'],
@@ -189,8 +173,8 @@ CONFIGS = {
         UNIVERSITY: 'New Mexico State University',
         MANAGING_AGENCY: 'State Land Office',
         RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
-        URL: '../../Downloads/slo_STLStatusCombined.zip',
-        # TODO: switch out actual url
+        DATA_SOURCE: '../../Downloads/slo_STLStatusCombined.zip',
+        # TODO: switch out actual data_source
         # 'https://mapservice.nmstatelands.org/GISDataDownloads/ZipFiles/slo_STLStatusCombined.zip',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Benef_Surf'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
@@ -203,12 +187,29 @@ CONFIGS = {
         UNIVERSITY: 'New Mexico State University',
         MANAGING_AGENCY: 'State Land Office',
         RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
-        URL: '../../Downloads/slo_STLStatusCombined.zip',
-        # TODO: switch out actual url
+        DATA_SOURCE: '../../Downloads/slo_STLStatusCombined.zip',
+        # TODO: switch out actual data_source
         # 'https://mapservice.nmstatelands.org/GISDataDownloads/ZipFiles/slo_STLStatusCombined.zip',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Benef_SubS'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             '04': 'New Mexico State University',
+        },
+    },
+    'OK-surface': {
+        # for oklahoma's real estate (surface) lease holdings, we query the API below, but the API does not
+        # contain information on which trust fund the land belongs to. The CLO gavbe us a list of which
+        # parcels, by HoldingDetailID, map to different funds which is not publicly available, so we
+        # create a custom filter here.
+        DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
+        STATE: 'OK',
+        UNIVERSITY: 'Oklahoma State University',
+        MANAGING_AGENCY: 'Commissioners of the Land Office',
+        RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
+        DATA_SOURCE:
+        'https://gis.clo.ok.gov/arcgis/rest/services/Public/OKLeaseData_ExternalProd/MapServer/2',
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['*'],
+        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+            "*": 'All'
         },
     },
     'OK-subsurface': {
@@ -217,7 +218,7 @@ CONFIGS = {
         UNIVERSITY: 'Oklahoma State University',
         MANAGING_AGENCY: 'Commissioners of the Land Office',
         RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
-        URL:
+        DATA_SOURCE:
         'https://gis.clo.ok.gov/arcgis/rest/services/Public/OKLeaseData_ExternalProd/MapServer/1',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['TrustName'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
@@ -229,7 +230,7 @@ CONFIGS = {
         STATE: 'OR',
         UNIVERSITY: 'Oregon State University',
         MANAGING_AGENCY: 'Department of State Lands',
-        URL:
+        DATA_SOURCE:
         'https://maps.dsl.state.or.us/arcgis/rest/services/SlisPublic/MapServer/0',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['SURF_OWNER'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
@@ -242,7 +243,7 @@ CONFIGS = {
         UNIVERSITY: 'Oregon State University',
         MANAGING_AGENCY: 'Department of State Lands',
         RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
-        URL:
+        DATA_SOURCE:
         'https://maps.dsl.state.or.us/arcgis/rest/services/SlisPublic/MapServer/0',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['SUB_OWNER'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
@@ -250,28 +251,42 @@ CONFIGS = {
         },
     },
     'TX': {
-        DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
+        DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
         STATE: 'TX',
         UNIVERSITY: 'Texas A&M',
         MANAGING_AGENCY: 'General Land Office',
-        RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
-        URL: '../../Downloads/StateAgencyLands.zip',
-        # TODO: switch out actual url
-        # 'https://mapservice.nmstatelands.org/GISDataDownloads/ZipFiles/slo_STLStatusCombined.zip',
-        ATTRIBUTE_LABEL_TO_FILTER_BY: ['varSurveyN'],
+        RIGHTS_TYPE: SURFACE_RIGHTS_TYPE + '+' + SUBSURFACE_RIGHTS_TYPE,
+        # found at https://universitylands.utsystem.edu/Resources/GIS
+        DATA_SOURCE:
+        'https://gisapps.universitylands.org/server/rest/services/Hosted/GrantTracts_SpatialJoin/FeatureServer/16',
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['id'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-            'A & M University': 'A & M University',
-            'Texas A&M University': 'Texas A & M University',
-            'Texas A&m University': 'Texas A&m University',
+            "*": 'All'
         },
     },
+    # 'TX': {
+    #     DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
+    #     STATE: 'TX',
+    #     UNIVERSITY: 'Texas A&M',
+    #     MANAGING_AGENCY: 'General Land Office',
+    #     RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
+    #     DATA_SOURCE: '../../Downloads/StateAgencyLands.zip',
+    #     # TODO: switch out actual data_source
+    #     # 'https://mapservice.nmstatelands.org/GISDataDownloads/ZipFiles/slo_STLStatusCombined.zip',
+    #     ATTRIBUTE_LABEL_TO_FILTER_BY: ['varSurveyN'],
+    #     ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+    #         'A & M University': 'A & M University',
+    #         'Texas A&M University': 'Texas A & M University',
+    #         'Texas A&m University': 'Texas A&m University',
+    #     },
+    # },
     'UT-surface': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
         STATE: 'UT',
         UNIVERSITY: 'Utah State University',
         MANAGING_AGENCY: 'Trust Lands Administration',
         RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
-        URL:
+        DATA_SOURCE:
         'https://gis.trustlands.utah.gov/server/rest/services/Ownership/UT_SITLA_Ownership_Beneficiary/MapServer/1',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['bene_abrev'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
@@ -284,7 +299,7 @@ CONFIGS = {
         UNIVERSITY: 'Utah State University',
         MANAGING_AGENCY: 'Trust Lands Administration',
         RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
-        URL:
+        DATA_SOURCE:
         'https://gis.trustlands.utah.gov/server/rest/services/Ownership/UT_SITLA_Ownership_Beneficiary/MapServer/0',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['bene_abrev'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
@@ -297,7 +312,7 @@ CONFIGS = {
         UNIVERSITY: 'Washington State University',
         MANAGING_AGENCY: 'Department of Natural Resources',
         RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
-        URL:
+        DATA_SOURCE:
         'https://gis.dnr.wa.gov/site3/rest/services/Public_Boundaries/WADNR_PUBLIC_Cadastre_OpenData/MapServer/6/',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['SURFACE_TRUST_CD'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
@@ -313,7 +328,7 @@ CONFIGS = {
         UNIVERSITY: 'Washington State University',
         MANAGING_AGENCY: 'Department of Natural Resources',
         RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
-        URL:
+        DATA_SOURCE:
         'https://gis.dnr.wa.gov/site3/rest/services/Public_Boundaries/WADNR_PUBLIC_Cadastre_OpenData/MapServer/6/',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['MINERAL_TRUST_CD'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
@@ -328,8 +343,8 @@ CONFIGS = {
         STATE: 'WA',
         UNIVERSITY: 'Washington State University',
         MANAGING_AGENCY: 'Department of Natural Resources',
-        RIGHTS_TYPE: 'timber',
-        URL:
+        RIGHTS_TYPE: TIMBER_RIGHTS_TYPE,
+        DATA_SOURCE:
         'https://gis.dnr.wa.gov/site3/rest/services/Public_Boundaries/WADNR_PUBLIC_Cadastre_OpenData/MapServer/6/',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['TIMBER_TRUST_CD'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
@@ -339,13 +354,26 @@ CONFIGS = {
             11: 'University Original'
         },
     },
+    'WI': {
+        DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
+        STATE: 'WI',
+        UNIVERSITY: 'University of Wisconsin',
+        MANAGING_AGENCY: 'Board of Commissioners of Public Lands',
+        DATA_SOURCE: '../../Downloads/BCPLShapeFIleforWeb',
+        # TODO: switch out actual data_source
+        # DATA_SOURCE: 'https://bcpl.wisconsin.gov/bcpl.wisconsin.gov%20Shared%20Documents/Maps/BCPLPropertyBoundariesShapefile.zip',
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['FUND'],
+        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+            '746': 'university fund parcel or ag college',
+        },
+    },
     'WY-subsurface': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
         STATE: 'WY',
         UNIVERSITY: 'University of Wyoming',
         MANAGING_AGENCY: 'Board of Commissioners of Public Lands',
         RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
-        URL:
+        DATA_SOURCE:
         'https://gis2.statelands.wyo.gov/arcgis/rest/services/Services/MapViewerService2/MapServer/19',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['FundCode'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
@@ -359,7 +387,7 @@ CONFIGS = {
         UNIVERSITY: 'University of Wyoming',
         MANAGING_AGENCY: 'Board of Commissioners of Public Lands',
         RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
-        URL:
+        DATA_SOURCE:
         'https://gis2.statelands.wyo.gov/arcgis/rest/services/Services/MapViewerService2/MapServer/18',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['FundCode'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
