@@ -23,7 +23,6 @@ UNIVERSITY_CONFIGS = {
         DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
         STATE: 'MN',
         UNIVERSITY: 'University of Minnesota',
-        MANAGING_AGENCY: 'Department of Natural Resources',
         DATA_SOURCE:
         UNIVERSITY_DATA_SOURCE_DIRECTORY + 'REO_UMN_Data_2022-01-28',
         # TODO: other possible columsn to add, county, also percentage of surface and mineral ownership

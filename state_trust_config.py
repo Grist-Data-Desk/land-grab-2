@@ -2,7 +2,9 @@ from constants import (
     DOWNLOAD_TYPE, API_QUERY_DOWNLOAD_TYPE, SHAPEFILE_DOWNLOAD_TYPE, STATE,
     UNIVERSITY, MANAGING_AGENCY, DATA_SOURCE, ATTRIBUTE_LABEL_TO_FILTER_BY,
     ATTRIBUTE_CODE_TO_ALIAS_MAP, RIGHTS_TYPE, SURFACE_RIGHTS_TYPE,
-    SUBSURFACE_RIGHTS_TYPE, TIMBER_RIGHTS_TYPE, LAYER)
+    SUBSURFACE_RIGHTS_TYPE, TIMBER_RIGHTS_TYPE, LAYER,
+    STATE_TRUST_DATA_SOURCE_DIRECTORY, EXISTING_COLUMN_TO_FINAL_COLUMN_MAP,
+    ACRES, COUNTY, MERIDIAN, TOWNSHIP, RANGE, SECTION, ALIQUOT)
 
 STATE_TRUST_CONFIGS = {
     # 'AL': {
@@ -105,7 +107,9 @@ STATE_TRUST_CONFIGS = {
         STATE: 'MN',
         UNIVERSITY: 'University of Minnesota',
         MANAGING_AGENCY: 'Department of Natural Resources',
-        DATA_SOURCE: '../../Downloads/shp_plan_stateland_dnrcounty.zip',
+        DATA_SOURCE:
+        STATE_TRUST_DATA_SOURCE_DIRECTORY + 'shp_plan_stateland_dnrcounty.zip',
+        # TODO: replace with real source
         # 'https://resources.gisdata.mn.gov/pub/gdrs/data/pub/us_mn_state_dnr/plan_stateland_dnrcounty/shp_plan_stateland_dnrcounty.zip',
         LAYER: 'stateland_type_trust',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['LANDTYPECO'],
@@ -131,12 +135,21 @@ STATE_TRUST_CONFIGS = {
         STATE: 'ND',
         UNIVERSITY: 'North Dakota State University',
         MANAGING_AGENCY: 'Commissioner of University and School Lands',
-        DATA_SOURCE: '../../Downloads/Surface_Trust_Lands_with_Trusts.zip',
+        DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY +
+        'Surface_Trust_Lands_with_Trusts.zip',
         # TODO: switch out actual data_source
         # 'https://mapservice.nmstatelands.org/GISDataDownloads/ZipFiles/slo_STLStatusCombined.zip',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Trust_Desc'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             'ND STATE UNIVERSITY': 'North Dakota State University',
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'ACRES': ACRES,
+            'COUNTY': COUNTY,
+            'TOWNSHIP': TOWNSHIP,
+            'RANGE': RANGE,
+            'SECTION': SECTION,
+            'SUBDIVISIO': ALIQUOT,
         },
     },
     'NE': {

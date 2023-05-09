@@ -170,22 +170,15 @@ def _format_columns(gdf, config):
   '''
   Column formatting used in final dataset
   '''
-  # if we want to preserve some existing columns
+  # if the initial dataset contains any columns that can be used in our final
+  # dataset, rename them to the final dataset column name
   if (config[EXISTING_COLUMN_TO_FINAL_COLUMN_MAP]):
     gdf = gdf.rename(columns=config[EXISTING_COLUMN_TO_FINAL_COLUMN_MAP])
 
-  # add useful column data to dataset
-  if STATE not in gdf.columns:
-    gdf[STATE] = config[STATE]
-  if UNIVERSITY not in gdf.columns:
-    gdf[UNIVERSITY] = config[UNIVERSITY]
-  if MANAGING_AGENCY not in gdf.columns:
-    gdf[MANAGING_AGENCY] = config[MANAGING_AGENCY]
-  if ((RIGHTS_TYPE not in gdf.columns) and config.get(RIGHTS_TYPE)):
-    gdf[RIGHTS_TYPE] = config[RIGHTS_TYPE]
-
-  # get the readable attribute filer which we used in the query
-  # gdf[ATTRIBUTE_FILTER] = f'{label}={alias}'
+  # add any other data if it exists in the config
+  for column in COLUMNS:
+    if ((column not in gdf.columns) and config.get(column)):
+      gdf[column] = config[column]
 
   # remove remaining columns
   columns_to_drop = [column for column in gdf.columns if column not in COLUMNS]
