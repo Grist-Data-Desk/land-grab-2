@@ -6,46 +6,104 @@
 # Then it will also use the Regrid logic that exists within the land_grab package to match the cleaned parcel dataset
 #   to find the matches between Regrid
 # Then it will write the matched parcels to a .csv file.
-import pandas as pd
+import argparse
+import csv
+from functools import partial
+from pathlib import Path
 
-from land_grab.university_real_estate.parcel_extractor import regrid_matching
+from land_grab.university_real_estate.regrid_matching import regrid_matching
 from land_grab.university_real_estate.parcel_list_parsers.az_universityofarizona_parser import azua_parser
 from land_grab.university_real_estate.parcel_list_parsers.in_purdueuniversity_parser import inpu_parser
 from land_grab.university_real_estate.parcel_list_parsers.mo_universityofmissouri_parser import moum_parser
 
 parser_mapping = {
-    'azua_parser':azua_parser,
+    'azua_parser': azua_parser,
     'inpu_parser': inpu_parser,
     'moum_parser': moum_parser,
 
-} #azua_parser will change to reflect diff universities
+}  # azua_parser will change to reflect diff universities
 
-def read_csv(dataset_location):
-    csv = pd.read_csv(dataset_location)
-    return csv
-def write_csv(data):
-    pass
+
+def collect_database_csvs(parcel_database):  # parcel database is Regrid state folder
+    database_directory = Path(parcel_database).resolve()
+    database_dir_contents = list(database_directory.glob('*.csv'))
+    csvs = []
+    for csv_file in database_dir_contents:
+        if '.' == csv_file.name[0]:
+            continue
+        if csv_file is not None:
+            csvs.append(csv_file)
+    return csvs
+
+
+def do_on_csv_as_csv(csv_file, action):
+    results = []
+    with csv_file.open() as f:
+        real_csv = csv.reader(f)
+        for row in real_csv:
+            result = action(row)
+            if result is not None:
+                results.append(result)
+    return results
+
+
+def do_on_csv(dataset_location, action):
+    results = []
+    with open(Path(dataset_location).resolve()) as file:
+        while line := file.readline():
+            l = line.rstrip().split(',')
+            result = action(l)
+            if result is not None:
+                results.append(result)
+    return results
+
+
+def write_csv(data, output_location):
+    file = open(Path(output_location).resolve(), 'w+')
+    with file:
+        write = csv.writer(file, quoting=csv.QUOTE_ALL)
+        write.writerows(data)
+
 
 def parse_arguments():
-    pass
+    parser = argparse.ArgumentParser(
+        prog=__name__,
+        description='This program matches university parcel id datasets against the Regrid dataset')
+
+    parser.add_argument('-p', '--parser')  # option that takes a value
+    parser.add_argument('-d', '--dataset')  # option that takes a value
+    parser.add_argument('-o', '--output')  # option that takes a value
+    parser.add_argument('-db', '--database')  # option that takes a value
+
+    args = parser.parse_args()
+    return vars(args)
+
 
 def main():
-    args = parse_arguments() # will be a dictionary
+    args = parse_arguments()  # will be a dictionary
 
+    # database will be a path to where the Regrid .csvs are (by county in a state folder)
     requested_parser = args['parser']
     dataset_location = args['dataset']
-    parcel_database = args['database'] # database will be a path to where the Regrid .csvs are (by county in a state folder)
+    output_location = args['output']
+    parcel_database = args['database']
 
     parser = parser_mapping[requested_parser]
-    data = read_csv(dataset_location) # the csv here is the cleaned parcel id list
+    clean_uni_parcel_id_list = do_on_csv(dataset_location, parser)  # the csv here is the cleaned parcel id list
 
-    parcel_id_list = parser(data)
-    regrid_matched_parcels_parcel_id = regrid_matching(parcel_id_list, parcel_database) # will need two parameters in regrid_matching
+    regrid_matching_with_parcel_numbers = partial(regrid_matching, clean_uni_parcel_id_list)
+    csvs = collect_database_csvs(parcel_database)
+    regrid_matched_parcels_parcel_id = []
+    for csv in csvs:
+        results = do_on_csv_as_csv(csv, regrid_matching_with_parcel_numbers)
+        regrid_matched_parcels_parcel_id += results  # += to join at list level not item level
 
-    write_csv(regrid_matched_parcels_parcel_id) # write_csv doesn't exist yet
-
-
-
+    write_csv(regrid_matched_parcels_parcel_id, Path(output_location) / 'regrid_matched_parcels_parcel_id.csv')
+    # data will be regrid_matched_parcel_ids
+    clean_uni_parcel_id_list = [[p] for p in clean_uni_parcel_id_list]
+    # reformat after it has been read by regrid list so that it can be properly formatted
+    write_csv(clean_uni_parcel_id_list, Path(output_location) / 'clean_uni_parcel_id_list.csv')
+    # data will be uni_parcel_id list
 
 
 if __name__ == '__main__':
