@@ -4,7 +4,7 @@ from constants import (
     ATTRIBUTE_CODE_TO_ALIAS_MAP, RIGHTS_TYPE, SURFACE_RIGHTS_TYPE,
     SUBSURFACE_RIGHTS_TYPE, TIMBER_RIGHTS_TYPE, LAYER,
     STATE_TRUST_DATA_SOURCE_DIRECTORY, EXISTING_COLUMN_TO_FINAL_COLUMN_MAP,
-    ACRES, COUNTY, MERIDIAN, TOWNSHIP, RANGE, SECTION, ALIQUOT)
+    ACRES, COUNTY, MERIDIAN, TOWNSHIP, RANGE, SECTION, ALIQUOT, BLOCK)
 
 STATE_TRUST_CONFIGS = {
     # 'AL': {
@@ -25,6 +25,10 @@ STATE_TRUST_CONFIGS = {
             "'UNIVERSITY'": 'UNIVERSITY',
             "'UNIV OF ARIZ (ACT 2/18/1881)'": 'UNIV OF ARIZ (ACT 2.18.1881)'
         },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'acres': ACRES,
+            'County': COUNTY,
+        },
     },
     # TODO: do we want to use this source?
     'CO-trustland-leases': {
@@ -38,6 +42,14 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "'Colorado State University'": 'Colorado State University'
         },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'Acreage': ACRES,
+            'County': COUNTY,
+            'Township': TOWNSHIP,
+            'Range': RANGE,
+            'Section': SECTION,
+            'Meridian': MERIDIAN,
+        },
     },
     'CO-ownership-beneficiary': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
@@ -49,6 +61,14 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Beneficiary'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "'Colorado State University'": 'Colorado State University'
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'Acreage': ACRES,
+            'County': COUNTY,
+            'Township': TOWNSHIP,
+            'Range': RANGE,
+            'Section': SECTION,
+            'Meridian': MERIDIAN,
         },
     },
     # 'IA': {
@@ -87,6 +107,9 @@ STATE_TRUST_CONFIGS = {
             911: 'Split - U 96% and HS 4%',
             928: 'Split - U and F.&G.'
         },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'L_ACRES': ACRES,
+        },
     },
     # 'MI': {
     #     DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
@@ -116,6 +139,13 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             '5': 'Trust Fund: University (University Trust)',
         },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'SU_ACRES': ACRES,
+            'COUNTYNAME': COUNTY,
+            'TOWN': TOWNSHIP,
+            'RANG': RANGE,
+            'SECT': SECTION,
+        },
     },
     'MT': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
@@ -128,6 +158,13 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "'ACI'": 'MSU Morrill',
             "'ACB'": 'MSU 2nd Grant'
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'Acres': ACRES,
+            'COUNTYNAME': COUNTY,
+            'TOWN': TOWNSHIP,
+            'RANG': RANGE,
+            'SECT': SECTION,
         },
     },
     'ND': {
@@ -157,13 +194,16 @@ STATE_TRUST_CONFIGS = {
         STATE: 'NE',
         UNIVERSITY: 'University of Nebraska',
         MANAGING_AGENCY: 'Board of Educational Lands and Funds',
-        DATA_SOURCE: '../../Downloads/2023_Nebraska_BELF_lands.zip',
+        DATA_SOURCE:
+        STATE_TRUST_DATA_SOURCE_DIRECTORY + '2023_Nebraska_BELF_lands.zip',
         # TODO: switch out actual data_source
-        # 'https://mapservice.nmstatelands.org/GISDataDownloads/ZipFiles/slo_STLStatusCombined.zip',
         LAYER: '233103 BELF trust lands',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Fund_Desc'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             'University': 'University',
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'County': COUNTY,
         },
     },
     # 'NE-university': {
@@ -186,12 +226,23 @@ STATE_TRUST_CONFIGS = {
         UNIVERSITY: 'New Mexico State University',
         MANAGING_AGENCY: 'State Land Office',
         RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
-        DATA_SOURCE: '../../Downloads/slo_STLStatusCombined.zip',
+        DATA_SOURCE:
+        STATE_TRUST_DATA_SOURCE_DIRECTORY + 'slo_STLStatusCombined.zip',
+        # DATA_SOURCE: '../../Downloads/slo_STLStatusCombined.zip',
         # TODO: switch out actual data_source
         # 'https://mapservice.nmstatelands.org/GISDataDownloads/ZipFiles/slo_STLStatusCombined.zip',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Benef_Surf'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             '04': 'New Mexico State University',
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'Acres_Surf': ACRES,
+            'County': COUNTY,
+            'Township': TOWNSHIP,
+            'Range': RANGE,
+            'Section': SECTION,
+            'Meridian': MERIDIAN,
+            'Aliquot': ALIQUOT,
         },
     },
     'NM-subsurface': {
@@ -200,12 +251,23 @@ STATE_TRUST_CONFIGS = {
         UNIVERSITY: 'New Mexico State University',
         MANAGING_AGENCY: 'State Land Office',
         RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
-        DATA_SOURCE: '../../Downloads/slo_STLStatusCombined.zip',
+        DATA_SOURCE:
+        STATE_TRUST_DATA_SOURCE_DIRECTORY + 'slo_STLStatusCombined.zip',
+        # DATA_SOURCE: '../../Downloads/slo_STLStatusCombined.zip',
         # TODO: switch out actual data_source
         # 'https://mapservice.nmstatelands.org/GISDataDownloads/ZipFiles/slo_STLStatusCombined.zip',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Benef_SubS'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             '04': 'New Mexico State University',
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'Acres_SubS': ACRES,
+            'County': COUNTY,
+            'Township': TOWNSHIP,
+            'Range': RANGE,
+            'Section': SECTION,
+            'Meridian': MERIDIAN,
+            'Aliquot': ALIQUOT,
         },
     },
     'OK-surface': {
@@ -224,6 +286,13 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "*": 'All'
         },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'TotalAllAcreage': ACRES,
+            'CountyName': COUNTY,
+            'Section': SECTION,
+            'Meridian': MERIDIAN,
+            'QuarterDescription': ALIQUOT,
+        },
     },
     'OK-subsurface': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
@@ -237,6 +306,11 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "'Oklahoma State University'": 'Oklahoma State University'
         },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'NetAcres': ACRES,
+            'CountyName': COUNTY,
+            # 'LegalDescription': ALIQUOT,
+        },
     },
     'OR-surface': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
@@ -248,6 +322,10 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['SURF_OWNER'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "'OSU'": 'Oregon State University'
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'ACRES': ACRES,
+            'CountyName': COUNTY,
         },
     },
     'OR-subsurface': {
@@ -262,6 +340,10 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "'OSU'": 'Oregon State University'
         },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'ACRES': ACRES,
+            'CountyName': COUNTY,
+        },
     },
     'TX': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
@@ -275,6 +357,12 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['id'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "*": 'All'
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'acres': ACRES,
+            'countyname': COUNTY,
+            'section': SECTION,
+            'block': BLOCK,
         },
     },
     # 'TX': {
@@ -305,6 +393,9 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "'USU'": 'Utah State University'
         },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'acres': ACRES,
+        },
     },
     'UT-subsurface': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
@@ -317,6 +408,9 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['bene_abrev'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "'USU'": 'Utah State University'
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'acres': ACRES,
         },
     },
     'WA-surface': {
@@ -372,12 +466,16 @@ STATE_TRUST_CONFIGS = {
         STATE: 'WI',
         UNIVERSITY: 'University of Wisconsin',
         MANAGING_AGENCY: 'Board of Commissioners of Public Lands',
-        DATA_SOURCE: '../../Downloads/BCPLShapeFIleforWeb',
+        DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'BCPLShapeFIleforWeb',
         # TODO: switch out actual data_source
         # DATA_SOURCE: 'https://bcpl.wisconsin.gov/bcpl.wisconsin.gov%20Shared%20Documents/Maps/BCPLPropertyBoundariesShapefile.zip',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['FUND'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             '746': 'university fund parcel or ag college',
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'GLOACRES': ACRES,
+            'COUNTY_NAM': COUNTY,
         },
     },
     'WY-subsurface': {
@@ -391,7 +489,10 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['FundCode'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "'UN'": 'University Land (trust)',
-            "'UW'": 'University of Wyoming (acquired)'
+            # "'UW'": 'University of Wyoming (acquired)'
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'SurfaceAcres': ACRES,
         },
     },
     'WY-surface': {
@@ -405,7 +506,10 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['FundCode'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "'UN'": 'University Land (trust)',
-            "'UW'": 'University of Wyoming (acquired)'
+            # "'UW'": 'University of Wyoming (acquired)'
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'SurfaceAcres': ACRES,
         },
     },
 }
