@@ -1,4 +1,4 @@
-from land_grab.constants import (
+from constants import (
     DOWNLOAD_TYPE, API_QUERY_DOWNLOAD_TYPE, SHAPEFILE_DOWNLOAD_TYPE, STATE,
     UNIVERSITY, MANAGING_AGENCY, DATA_SOURCE, ATTRIBUTE_LABEL_TO_FILTER_BY,
     ATTRIBUTE_CODE_TO_ALIAS_MAP, RIGHTS_TYPE, SURFACE_RIGHTS_TYPE,
@@ -97,8 +97,14 @@ STATE_TRUST_CONFIGS = {
         MANAGING_AGENCY: 'Department of Lands',
         DATA_SOURCE:
         'https://gis1.idl.idaho.gov/arcgis/rest/services/State_Ownership/MapServer/0',
+        # ATTRIBUTE_LABEL_TO_FILTER_BY: ['*'],
+        # ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+        #     "*": 'All'
+        # },
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['SURF_ENDOWMENT'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+            2: '100.00% Agricultural College',
+            6: '100.00% School of Science (Scientific School',
             8: 'University of ID',
             20: 'University of ID Regent',
             907: 'Split - PS 65%, CI 27%, and U 8%',
