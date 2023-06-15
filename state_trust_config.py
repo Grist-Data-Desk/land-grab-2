@@ -13,17 +13,44 @@ STATE_TRUST_CONFIGS = {
     #     ATTRIBUTE_LABEL_TO_FILTER_BY: [],
     #     ATTRIBUTE_CODE_TO_ALIAS_MAP: {},
     # },
-    'AZ': {
+    'AZ-surface': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
         STATE: 'AZ',
         UNIVERSITY: 'University of Arizona',
         MANAGING_AGENCY: 'State Land Department',
+        RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
         DATA_SOURCE:
         'https://server.azgeo.az.gov/arcgis/rest/services/azland/State_Trust_Parcels/MapServer/0',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['fundtxt'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "'UNIVERSITY'": 'UNIVERSITY',
-            "'UNIV OF ARIZ (ACT 2/18/1881)'": 'UNIV OF ARIZ (ACT 2.18.1881)'
+            "'UNIV OF ARIZ (ACT 2/18/1881)'": 'UNIV OF ARIZ (ACT 2.18.1881)',
+            "'AGRICULTURE & MECHANICAL CLLGE'":
+            'AGRICULTURE & MECHANICAL COLLEGE',
+            "'SCHOOL OF MINES'": 'SCHOOL OF MINES',
+            "'MILITARY INSTITUTES'": 'MILITARY INSTITUTES',
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'acres': ACRES,
+            'County': COUNTY,
+        },
+    },
+    'AZ-subsurface': {
+        DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
+        STATE: 'AZ',
+        UNIVERSITY: 'University of Arizona',
+        MANAGING_AGENCY: 'State Land Department',
+        RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
+        DATA_SOURCE:
+        'https://server.azgeo.az.gov/arcgis/rest/services/azland/Mineral_Parcels/MapServer/0',
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['fundtxt'],
+        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+            "'UNIVERSITY'": 'UNIVERSITY',
+            "'UNIV OF ARIZ (ACT 2/18/1881)'": 'UNIV OF ARIZ (ACT 2.18.1881)',
+            "'AGRICULTURE & MECHANICAL CLLGE'":
+            'AGRICULTURE & MECHANICAL COLLEGE',
+            "'SCHOOL OF MINES'": 'SCHOOL OF MINES',
+            "'MILITARY INSTITUTES'": 'MILITARY INSTITUTES',
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'acres': ACRES,
@@ -90,28 +117,39 @@ STATE_TRUST_CONFIGS = {
     #     # ATTRIBUTE_LABEL_TO_FILTER_BY: [],
     #     # ATTRIBUTE_CODE_TO_ALIAS_MAP: {},
     # },
-    'ID': {
+    'ID-surface': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
         STATE: 'ID',
         UNIVERSITY: 'University of Idaho',
         MANAGING_AGENCY: 'Department of Lands',
+        RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
         DATA_SOURCE:
         'https://gis1.idl.idaho.gov/arcgis/rest/services/State_Ownership/MapServer/0',
-        # ATTRIBUTE_LABEL_TO_FILTER_BY: ['*'],
-        # ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-        #     "*": 'All'
-        # },
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['SURF_ENDOWMENT'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             2: '100.00% Agricultural College',
-            6: '100.00% School of Science (Scientific School',
-            8: 'University of ID',
-            20: 'University of ID Regent',
-            907: 'Split - PS 65%, CI 27%, and U 8%',
-            908: 'Split - PS 68% and U 32%',
-            910: 'Split - U 77.8% and NS 22.2%',
-            911: 'Split - U 96% and HS 4%',
-            928: 'Split - U and F.&G.'
+            6: '100.00% School of Science (Scientific School)',
+            921: 'Split - AC and F.&G.',
+            927: 'Split - SS and F.&G.',
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'L_ACRES': ACRES,
+        },
+    },
+    'ID-subsurface': {
+        DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
+        STATE: 'ID',
+        UNIVERSITY: 'University of Idaho',
+        MANAGING_AGENCY: 'Department of Lands',
+        RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
+        DATA_SOURCE:
+        'https://gis1.idl.idaho.gov/arcgis/rest/services/State_Ownership/MapServer/1',
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['SUB_ENDOWMENT'],
+        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+            2: '100.00% Agricultural College',
+            6: '100.00% School of Science (Scientific School)',
+            921: 'Split - AC and F.&G.',
+            927: 'Split - SS and F.&G.',
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'L_ACRES': ACRES,
