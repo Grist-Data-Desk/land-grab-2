@@ -201,7 +201,8 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['GrantID'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "'ACI'": 'MSU Morrill',
-            "'ACB'": 'MSU 2nd Grant'
+            "'ACB'": 'MSU 2nd Grant',
+            "'SNS'": 'State Normal School'
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'Acres': ACRES,
