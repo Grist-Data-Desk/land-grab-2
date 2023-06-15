@@ -7,13 +7,14 @@ import pandas as pd
 import restapi
 import typer
 
-from constants import (
-    DATA_SOURCE, ATTRIBUTE_LABEL_TO_FILTER_BY, ATTRIBUTE_CODE_TO_ALIAS_MAP,
-    STATE, UNIVERSITY, MANAGING_AGENCY, RIGHTS_TYPE, ATTRIBUTE_FILTER, COLUMNS,
-    DOWNLOAD_TYPE, SHAPEFILE_DOWNLOAD_TYPE, API_QUERY_DOWNLOAD_TYPE, LAYER,
-    OK_HOLDING_DETAIL_ID, OK_TRUST_FUNDS_ID_MAP, OK_TRUST_FUND_ID,
-    OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE, EXISTING_COLUMN_TO_FINAL_COLUMN_MAP,
-    TOWNSHIP, SECTION, RANGE, MERIDIAN, COUNTY, ALIQUOT, GEOMETRY, ACRES)
+from constants import (DATA_SOURCE, ATTRIBUTE_LABEL_TO_FILTER_BY,
+                       ATTRIBUTE_CODE_TO_ALIAS_MAP, UNIVERSITY, RIGHTS_TYPE,
+                       TRUST_NAME, COLUMNS, DOWNLOAD_TYPE,
+                       SHAPEFILE_DOWNLOAD_TYPE, API_QUERY_DOWNLOAD_TYPE, LAYER,
+                       OK_HOLDING_DETAIL_ID, OK_TRUST_FUNDS_ID_MAP,
+                       OK_TRUST_FUND_ID, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE,
+                       EXISTING_COLUMN_TO_FINAL_COLUMN_MAP, TOWNSHIP, SECTION,
+                       RANGE, MERIDIAN, COUNTY, ALIQUOT)
 
 app = typer.Typer()
 
@@ -132,7 +133,7 @@ def _clean_queried_data(source, config, label, alias, queried_data_directory,
   elif 'UT' in source:
     gdf = _get_ut_town_range_section_county(gdf)
 
-  gdf = _format_columns(gdf, config)
+  gdf = _format_columns(gdf, config, alias)
 
   filename = _get_filename(source, label, alias, '.geojson')
   gdf.to_file(cleaned_data_directory + filename, driver='GeoJSON')
@@ -151,7 +152,7 @@ def _filter_and_clean_shapefile(gdf, config, source, label, code, alias,
   elif source == 'WI':
     filtered_gdf = _get_wi_town_range_section_aliquot(filtered_gdf)
 
-  filtered_gdf = _format_columns(filtered_gdf, config)
+  filtered_gdf = _format_columns(filtered_gdf, config, alias)
 
   # more custom cleaning
   if 'NM' in source:
@@ -161,7 +162,7 @@ def _filter_and_clean_shapefile(gdf, config, source, label, code, alias,
   filtered_gdf.to_file(cleaned_data_directory + filename, driver='GeoJSON')
 
 
-def _format_columns(gdf, config):
+def _format_columns(gdf, config, alias):
   '''
   Column formatting used in final dataset
   '''
@@ -177,6 +178,9 @@ def _format_columns(gdf, config):
 
   # remove remaining columns
   columns_to_drop = [column for column in gdf.columns if column not in COLUMNS]
+
+  # add trust name columns
+  gdf[TRUST_NAME] = alias
   return gdf.drop(columns_to_drop, axis=1)
 
 
