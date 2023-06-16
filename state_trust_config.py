@@ -534,6 +534,7 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['FundCode'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "'UN'": 'University Land (trust)',
+            "'AG'": 'Agricultural College',
             # "'UW'": 'University of Wyoming (acquired)'
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
@@ -551,6 +552,7 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['FundCode'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "'UN'": 'University Land (trust)',
+            "'AG'": 'Agricultural College',
             # "'UW'": 'University of Wyoming (acquired)'
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
