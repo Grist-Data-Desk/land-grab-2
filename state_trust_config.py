@@ -515,7 +515,8 @@ STATE_TRUST_CONFIGS = {
         # DATA_SOURCE: 'https://bcpl.wisconsin.gov/bcpl.wisconsin.gov%20Shared%20Documents/Maps/BCPLPropertyBoundariesShapefile.zip',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['FUND'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-            '746': 'university fund parcel or ag college',
+            '745': 'Normal School',
+            '746': 'University or Ag College',
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'GLOACRES': ACRES,
