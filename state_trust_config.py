@@ -245,6 +245,7 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Fund_Desc'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             'University': 'University',
+            'AG College ': 'AG College',
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'County': COUNTY,

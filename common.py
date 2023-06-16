@@ -330,10 +330,9 @@ def _create_oklahoma_trust_fund_filter():
   # get the custom excel file
   df = pd.read_excel(OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE)
 
-  # clean and filter by the trust funds we care about, 5 for OSU, 7 for
-  # langston university
+  # clean and filter by the trust funds we care about, 5 for OSU
   df = df[[OK_HOLDING_DETAIL_ID, OK_TRUST_FUND_ID]].copy()
-  df = df[df[OK_TRUST_FUND_ID].isin([5, 7])]
+  df = df[df[OK_TRUST_FUND_ID].isin([5])]
   df[UNIVERSITY] = df[OK_TRUST_FUND_ID].map(OK_TRUST_FUNDS_ID_MAP)
   df[OK_HOLDING_DETAIL_ID] = df[OK_HOLDING_DETAIL_ID].astype(str)
   return df
