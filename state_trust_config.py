@@ -212,7 +212,7 @@ STATE_TRUST_CONFIGS = {
             'SECT': SECTION,
         },
     },
-    'ND': {
+    'ND-surface': {
         DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
         STATE: 'ND',
         UNIVERSITY: 'North Dakota State University',
@@ -232,6 +232,26 @@ STATE_TRUST_CONFIGS = {
             'RANGE': RANGE,
             'SECTION': SECTION,
             'SUBDIVISIO': ALIQUOT,
+        },
+    },
+    'ND-subsurface': {
+        DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
+        STATE: 'ND',
+        UNIVERSITY: 'North Dakota State University',
+        MANAGING_AGENCY: 'Commissioner of University and School Lands',
+        DATA_SOURCE:
+        'https://ndgishub.nd.gov/arcgis/rest/services/All_GovtLands_State/MapServer/2',
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['TRUST'],
+        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+            "'N'": 'North Dakota State University'
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'GROSS_ACRES': ACRES,
+            'COUNTY': COUNTY,
+            'TWP': TOWNSHIP,
+            'RNG': RANGE,
+            'SEC': SECTION,
+            'SUBDIVISION': ALIQUOT,
         },
     },
     'NE': {
@@ -362,39 +382,39 @@ STATE_TRUST_CONFIGS = {
             # 'LegalDescription': ALIQUOT,
         },
     },
-    'OR-surface': {
-        DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
-        STATE: 'OR',
-        UNIVERSITY: 'Oregon State University',
-        MANAGING_AGENCY: 'Department of State Lands',
-        DATA_SOURCE:
-        'https://maps.dsl.state.or.us/arcgis/rest/services/SlisPublic/MapServer/0',
-        ATTRIBUTE_LABEL_TO_FILTER_BY: ['SURF_OWNER'],
-        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-            "'OSU'": 'Oregon State University'
-        },
-        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
-            'ACRES': ACRES,
-            'CountyName': COUNTY,
-        },
-    },
-    'OR-subsurface': {
-        DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
-        STATE: 'OR',
-        UNIVERSITY: 'Oregon State University',
-        MANAGING_AGENCY: 'Department of State Lands',
-        RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
-        DATA_SOURCE:
-        'https://maps.dsl.state.or.us/arcgis/rest/services/SlisPublic/MapServer/0',
-        ATTRIBUTE_LABEL_TO_FILTER_BY: ['SUB_OWNER'],
-        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-            "'OSU'": 'Oregon State University'
-        },
-        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
-            'ACRES': ACRES,
-            'CountyName': COUNTY,
-        },
-    },
+    # 'OR-surface': {
+    #     DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
+    #     STATE: 'OR',
+    #     UNIVERSITY: 'Oregon State University',
+    #     MANAGING_AGENCY: 'Department of State Lands',
+    #     DATA_SOURCE:
+    #     'https://maps.dsl.state.or.us/arcgis/rest/services/SlisPublic/MapServer/0',
+    #     ATTRIBUTE_LABEL_TO_FILTER_BY: ['SURF_OWNER'],
+    #     ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+    #         "'OSU'": 'Oregon State University'
+    #     },
+    #     EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+    #         'ACRES': ACRES,
+    #         'CountyName': COUNTY,
+    #     },
+    # },
+    # 'OR-subsurface': {
+    #     DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
+    #     STATE: 'OR',
+    #     UNIVERSITY: 'Oregon State University',
+    #     MANAGING_AGENCY: 'Department of State Lands',
+    #     RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
+    #     DATA_SOURCE:
+    #     'https://maps.dsl.state.or.us/arcgis/rest/services/SlisPublic/MapServer/0',
+    #     ATTRIBUTE_LABEL_TO_FILTER_BY: ['SUB_OWNER'],
+    #     ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+    #         "'OSU'": 'Oregon State University'
+    #     },
+    #     EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+    #         'ACRES': ACRES,
+    #         'CountyName': COUNTY,
+    #     },
+    # },
     'TX': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
         STATE: 'TX',
@@ -441,7 +461,8 @@ STATE_TRUST_CONFIGS = {
         'https://gis.trustlands.utah.gov/server/rest/services/Ownership/UT_SITLA_Ownership_Beneficiary/MapServer/1',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['bene_abrev'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-            "'USU'": 'Utah State University'
+            "'USU'": 'Utah State University',
+            "'NS'": 'Normal School',
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'acres': ACRES,
@@ -457,7 +478,8 @@ STATE_TRUST_CONFIGS = {
         'https://gis.trustlands.utah.gov/server/rest/services/Ownership/UT_SITLA_Ownership_Beneficiary/MapServer/0',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['bene_abrev'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-            "'USU'": 'Utah State University'
+            "'USU'": 'Utah State University',
+            "'NS'": 'Normal School',
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'acres': ACRES,
@@ -539,6 +561,9 @@ STATE_TRUST_CONFIGS = {
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'SurfaceAcres': ACRES,
+            'Township_Temp': TOWNSHIP,
+            'Range_Temp': RANGE,
+            'FirstDivision_Temp': SECTION,
         },
     },
     'WY-surface': {
@@ -557,6 +582,9 @@ STATE_TRUST_CONFIGS = {
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'SurfaceAcres': ACRES,
+            'Township_Temp': TOWNSHIP,
+            'Range_Temp': RANGE,
+            'FirstDivision_Temp': SECTION,
         },
     },
 }

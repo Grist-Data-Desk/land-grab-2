@@ -122,7 +122,7 @@ def _clean_queried_data(source, config, label, alias, queried_data_directory,
   if source == 'OK-surface':
     gdf = _filter_queried_oklahoma_data(gdf)
     gdf = _get_ok_surface_town_range(gdf)
-  elif source == 'AZ':
+  elif 'AZ' in source:
     gdf = _get_az_town_range_section(gdf)
   elif source == 'MT':
     gdf = _get_mt_town_range_section(gdf)
