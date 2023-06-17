@@ -58,16 +58,56 @@ STATE_TRUST_CONFIGS = {
         },
     },
     # TODO: do we want to use this source?
-    'CO-trustland-leases': {
-        DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
+    # 'CO-trustland-leases': {
+    #     DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
+    #     STATE: 'CO',
+    #     UNIVERSITY: 'Colorado State University',
+    #     MANAGING_AGENCY: 'State Land Board',
+    #     DATA_SOURCE:
+    #     'https://services5.arcgis.com/rqsYvPKZmvSrSWbw/ArcGIS/rest/services/SLB_Leases_ALL_Trustlands2_View/FeatureServer/0',
+    #     ATTRIBUTE_LABEL_TO_FILTER_BY: ['Beneficiary'],
+    #     ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+    #         "'Colorado State University'": 'Colorado State University'
+    #     },
+    #     EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+    #         'Acreage': ACRES,
+    #         'County': COUNTY,
+    #         'Township': TOWNSHIP,
+    #         'Range': RANGE,
+    #         'Section': SECTION,
+    #         'Meridian': MERIDIAN,
+    #     },
+    # },
+    # 'CO-ownership-beneficiary': {
+    #     DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
+    #     STATE: 'CO',
+    #     UNIVERSITY: 'Colorado State University',
+    #     MANAGING_AGENCY: 'State Land Board',
+    #     DATA_SOURCE:
+    #     'https://services5.arcgis.com/rqsYvPKZmvSrSWbw/ArcGIS/rest/services/Surface_Ownership_Beneficiary/FeatureServer/0',
+    #     ATTRIBUTE_LABEL_TO_FILTER_BY: ['Beneficiary'],
+    #     ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+    #         "'Colorado State University'": 'Colorado State University'
+    #     },
+    #     EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+    #         'Acreage': ACRES,
+    #         'County': COUNTY,
+    #         'Township': TOWNSHIP,
+    #         'Range': RANGE,
+    #         'Section': SECTION,
+    #         'Meridian': MERIDIAN,
+    #     },
+    # },
+    'CO-surface': {
+        DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
         STATE: 'CO',
         UNIVERSITY: 'Colorado State University',
         MANAGING_AGENCY: 'State Land Board',
-        DATA_SOURCE:
-        'https://services5.arcgis.com/rqsYvPKZmvSrSWbw/ArcGIS/rest/services/SLB_Leases_ALL_Trustlands2_View/FeatureServer/0',
-        ATTRIBUTE_LABEL_TO_FILTER_BY: ['Beneficiary'],
+        DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'CO',
+        LAYER: 'SLB_Surface_University_Beneficiary',
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['Beneficiar'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-            "'Colorado State University'": 'Colorado State University'
+            'Colorado State University': 'Colorado State University'
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'Acreage': ACRES,
@@ -78,16 +118,16 @@ STATE_TRUST_CONFIGS = {
             'Meridian': MERIDIAN,
         },
     },
-    'CO-ownership-beneficiary': {
-        DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
+    'CO-subsurface': {
+        DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
         STATE: 'CO',
         UNIVERSITY: 'Colorado State University',
         MANAGING_AGENCY: 'State Land Board',
-        DATA_SOURCE:
-        'https://services5.arcgis.com/rqsYvPKZmvSrSWbw/ArcGIS/rest/services/Surface_Ownership_Beneficiary/FeatureServer/0',
-        ATTRIBUTE_LABEL_TO_FILTER_BY: ['Beneficiary'],
+        DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'CO',
+        LAYER: 'SLB_Minerals_University_Beneficiary',
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['Beneficiar'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-            "'Colorado State University'": 'Colorado State University'
+            'Colorado State University': 'Colorado State University'
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'Acreage': ACRES,
@@ -266,7 +306,7 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Fund_Desc'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             'University': 'University',
-            'AG College ': 'AG College',
+            'AG College': 'AG College',
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'County': COUNTY,
