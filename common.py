@@ -14,7 +14,7 @@ from constants import (DATA_SOURCE, ATTRIBUTE_LABEL_TO_FILTER_BY,
                        OK_HOLDING_DETAIL_ID, OK_TRUST_FUNDS_ID_MAP,
                        OK_TRUST_FUND_ID, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE,
                        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP, TOWNSHIP, SECTION,
-                       RANGE, MERIDIAN, COUNTY, ALIQUOT)
+                       RANGE, MERIDIAN, COUNTY, ALIQUOT, LOCAL_DATA_SOURCE)
 
 app = typer.Typer()
 
@@ -33,7 +33,10 @@ def _to_kebab_case(string):
 
 def _get_filename(state, label, alias, filetype):
   '''return a filename in kebabcase'''
-  return f'{_to_kebab_case(state)}-{_to_kebab_case(label)}-{_to_kebab_case(alias)}{filetype}'
+  if alias:
+    return f'{_to_kebab_case(state)}-{_to_kebab_case(label)}-{_to_kebab_case(alias)}{filetype}'
+  else:
+    return f'{_to_kebab_case(state)}-{_to_kebab_case(label)}{filetype}'
 
 
 def _get_merged_dataset_filename(state=None):
@@ -180,7 +183,8 @@ def _format_columns(gdf, config, alias):
   columns_to_drop = [column for column in gdf.columns if column not in COLUMNS]
 
   # add trust name columns
-  gdf[TRUST_NAME] = alias
+  if alias:
+    gdf[TRUST_NAME] = alias
   return gdf.drop(columns_to_drop, axis=1)
 
 
@@ -436,7 +440,7 @@ def extract_and_clean_single_source_helper(source: str, config: dict,
 
   # if downloading shapefile
   if config[DOWNLOAD_TYPE] == SHAPEFILE_DOWNLOAD_TYPE:
-    gdf = gpd.read_file(config[DATA_SOURCE], layer=config.get(LAYER))
+    gdf = gpd.read_file(config[LOCAL_DATA_SOURCE], layer=config.get(LAYER))
 
   for label in config[ATTRIBUTE_LABEL_TO_FILTER_BY]:
     for code, alias in config[ATTRIBUTE_CODE_TO_ALIAS_MAP].items():

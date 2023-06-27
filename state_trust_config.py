@@ -1,8 +1,8 @@
 from constants import (
     DOWNLOAD_TYPE, API_QUERY_DOWNLOAD_TYPE, SHAPEFILE_DOWNLOAD_TYPE, STATE,
-    UNIVERSITY, MANAGING_AGENCY, DATA_SOURCE, ATTRIBUTE_LABEL_TO_FILTER_BY,
-    ATTRIBUTE_CODE_TO_ALIAS_MAP, RIGHTS_TYPE, SURFACE_RIGHTS_TYPE,
-    SUBSURFACE_RIGHTS_TYPE, TIMBER_RIGHTS_TYPE, LAYER,
+    UNIVERSITY, MANAGING_AGENCY, DATA_SOURCE, LOCAL_DATA_SOURCE,
+    ATTRIBUTE_LABEL_TO_FILTER_BY, ATTRIBUTE_CODE_TO_ALIAS_MAP, RIGHTS_TYPE,
+    SURFACE_RIGHTS_TYPE, SUBSURFACE_RIGHTS_TYPE, TIMBER_RIGHTS_TYPE, LAYER,
     STATE_TRUST_DATA_SOURCE_DIRECTORY, EXISTING_COLUMN_TO_FINAL_COLUMN_MAP,
     ACRES, COUNTY, MERIDIAN, TOWNSHIP, RANGE, SECTION, ALIQUOT, BLOCK)
 
@@ -103,7 +103,7 @@ STATE_TRUST_CONFIGS = {
         STATE: 'CO',
         UNIVERSITY: 'Colorado State University',
         MANAGING_AGENCY: 'State Land Board',
-        DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'CO',
+        LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'CO',
         LAYER: 'SLB_Surface_University_Beneficiary',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Beneficiar'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
@@ -123,7 +123,7 @@ STATE_TRUST_CONFIGS = {
         STATE: 'CO',
         UNIVERSITY: 'Colorado State University',
         MANAGING_AGENCY: 'State Land Board',
-        DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'CO',
+        LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'CO',
         LAYER: 'SLB_Minerals_University_Beneficiary',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Beneficiar'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
@@ -214,10 +214,10 @@ STATE_TRUST_CONFIGS = {
         STATE: 'MN',
         UNIVERSITY: 'University of Minnesota',
         MANAGING_AGENCY: 'Department of Natural Resources',
-        DATA_SOURCE:
+        LOCAL_DATA_SOURCE:
         STATE_TRUST_DATA_SOURCE_DIRECTORY + 'shp_plan_stateland_dnrcounty.zip',
-        # TODO: replace with real source
-        # 'https://resources.gisdata.mn.gov/pub/gdrs/data/pub/us_mn_state_dnr/plan_stateland_dnrcounty/shp_plan_stateland_dnrcounty.zip',
+        DATA_SOURCE:
+        'https://resources.gisdata.mn.gov/pub/gdrs/data/pub/us_mn_state_dnr/plan_stateland_dnrcounty/shp_plan_stateland_dnrcounty.zip',
         LAYER: 'stateland_type_trust',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['LANDTYPECO'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
@@ -257,10 +257,8 @@ STATE_TRUST_CONFIGS = {
         STATE: 'ND',
         UNIVERSITY: 'North Dakota State University',
         MANAGING_AGENCY: 'Commissioner of University and School Lands',
-        DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY +
+        LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY +
         'Surface_Trust_Lands_with_Trusts.zip',
-        # TODO: switch out actual data_source
-        # 'https://mapservice.nmstatelands.org/GISDataDownloads/ZipFiles/slo_STLStatusCombined.zip',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Trust_Desc'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             'ND STATE UNIVERSITY': 'North Dakota State University',
@@ -299,9 +297,8 @@ STATE_TRUST_CONFIGS = {
         STATE: 'NE',
         UNIVERSITY: 'University of Nebraska',
         MANAGING_AGENCY: 'Board of Educational Lands and Funds',
-        DATA_SOURCE:
+        LOCAL_DATA_SOURCE:
         STATE_TRUST_DATA_SOURCE_DIRECTORY + '2023_Nebraska_BELF_lands.zip',
-        # TODO: switch out actual data_source
         LAYER: '233103 BELF trust lands',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Fund_Desc'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
@@ -332,11 +329,10 @@ STATE_TRUST_CONFIGS = {
         UNIVERSITY: 'New Mexico State University',
         MANAGING_AGENCY: 'State Land Office',
         RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
-        DATA_SOURCE:
+        LOCAL_DATA_SOURCE:
         STATE_TRUST_DATA_SOURCE_DIRECTORY + 'slo_STLStatusCombined.zip',
-        # DATA_SOURCE: '../../Downloads/slo_STLStatusCombined.zip',
-        # TODO: switch out actual data_source
-        # 'https://mapservice.nmstatelands.org/GISDataDownloads/ZipFiles/slo_STLStatusCombined.zip',
+        DATA_SOURCE:
+        'https://mapservice.nmstatelands.org/GISDataDownloads/ZipFiles/slo_STLStatusCombined.zip',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Benef_Surf'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             '04': 'New Mexico State University',
@@ -359,11 +355,10 @@ STATE_TRUST_CONFIGS = {
         UNIVERSITY: 'New Mexico State University',
         MANAGING_AGENCY: 'State Land Office',
         RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
-        DATA_SOURCE:
+        LOCAL_DATA_SOURCE:
         STATE_TRUST_DATA_SOURCE_DIRECTORY + 'slo_STLStatusCombined.zip',
-        # DATA_SOURCE: '../../Downloads/slo_STLStatusCombined.zip',
-        # TODO: switch out actual data_source
-        # 'https://mapservice.nmstatelands.org/GISDataDownloads/ZipFiles/slo_STLStatusCombined.zip',
+        DATA_SOURCE:
+        'https://mapservice.nmstatelands.org/GISDataDownloads/ZipFiles/slo_STLStatusCombined.zip',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Benef_SubS'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             '04': 'New Mexico State University',
@@ -466,7 +461,7 @@ STATE_TRUST_CONFIGS = {
         'https://gisapps.universitylands.org/server/rest/services/Hosted/GrantTracts_SpatialJoin/FeatureServer/16',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['id'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-            "*": 'All'
+            "*": None
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'acres': ACRES,
@@ -572,9 +567,10 @@ STATE_TRUST_CONFIGS = {
         STATE: 'WI',
         UNIVERSITY: 'University of Wisconsin',
         MANAGING_AGENCY: 'Board of Commissioners of Public Lands',
-        DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'BCPLShapeFIleforWeb',
-        # TODO: switch out actual data_source
-        # DATA_SOURCE: 'https://bcpl.wisconsin.gov/bcpl.wisconsin.gov%20Shared%20Documents/Maps/BCPLPropertyBoundariesShapefile.zip',
+        LOCAL_DATA_SOURCE:
+        STATE_TRUST_DATA_SOURCE_DIRECTORY + 'BCPLShapeFIleforWeb',
+        DATA_SOURCE:
+        'https://bcpl.wisconsin.gov/bcpl.wisconsin.gov%20Shared%20Documents/Maps/BCPLPropertyBoundariesShapefile.zip',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['FUND'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             '745': 'Normal School',
