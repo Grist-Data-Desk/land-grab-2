@@ -4,7 +4,7 @@ from constants import (
     ATTRIBUTE_CODE_TO_ALIAS_MAP, RIGHTS_TYPE, SURFACE_RIGHTS_TYPE,
     SUBSURFACE_RIGHTS_TYPE, TIMBER_RIGHTS_TYPE, LAYER,
     STATE_TRUST_DATA_SOURCE_DIRECTORY, EXISTING_COLUMN_TO_FINAL_COLUMN_MAP,
-    ACRES, COUNTY, MERIDIAN, TOWNSHIP, RANGE, SECTION, ALIQUOT, BLOCK)
+    ACRES, COUNTY, MERIDIAN, TOWNSHIP, RANGE, SECTION, ALIQUOT, BLOCK, TRUST_NAME, ACTIVITY)
 
 STATE_TRUST_CONFIGS = {
     # 'AL': {
@@ -33,6 +33,7 @@ STATE_TRUST_CONFIGS = {
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'acres': ACRES,
             'County': COUNTY,
+            'fundtxt': TRUST_NAME,
         },
     },
     'AZ-subsurface': {
@@ -55,6 +56,7 @@ STATE_TRUST_CONFIGS = {
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'acres': ACRES,
             'County': COUNTY,
+            'fundtxt': TRUST_NAME,
         },
     },
     # TODO: do we want to use this source?
@@ -116,6 +118,7 @@ STATE_TRUST_CONFIGS = {
             'Range': RANGE,
             'Section': SECTION,
             'Meridian': MERIDIAN,
+            # todo:'fundtxt': TRUST_NAME,
         },
     },
     'CO-subsurface': {
@@ -127,7 +130,7 @@ STATE_TRUST_CONFIGS = {
         LAYER: 'SLB_Minerals_University_Beneficiary',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Beneficiar'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-            'Colorado State University': 'Colorado State University'
+            'Colorado State University': 'CSU Trust Common Schools'
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'Acreage': ACRES,
@@ -136,6 +139,8 @@ STATE_TRUST_CONFIGS = {
             'Range': RANGE,
             'Section': SECTION,
             'Meridian': MERIDIAN,
+            'Asset_Laye': ACTIVITY,
+            # todo:'fundtxt': TRUST_NAME,
         },
     },
     # 'IA': {
@@ -174,6 +179,7 @@ STATE_TRUST_CONFIGS = {
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'L_ACRES': ACRES,
+            'SURF_ENDOWMENT': TRUST_NAME,
         },
     },
     'ID-subsurface': {
@@ -193,6 +199,7 @@ STATE_TRUST_CONFIGS = {
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'L_ACRES': ACRES,
+            'SUB_ENDOWMENT': TRUST_NAME,
         },
     },
     # 'MI': {
@@ -209,11 +216,12 @@ STATE_TRUST_CONFIGS = {
     #     # ATTRIBUTE_LABEL_TO_FILTER_BY: [],
     #     # ATTRIBUTE_CODE_TO_ALIAS_MAP: {},
     # },
-    'MN': {
+    'MN-surface': {
         DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
         STATE: 'MN',
         UNIVERSITY: 'University of Minnesota',
         MANAGING_AGENCY: 'Department of Natural Resources',
+        RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
         DATA_SOURCE:
         STATE_TRUST_DATA_SOURCE_DIRECTORY + 'shp_plan_stateland_dnrcounty.zip',
         # TODO: replace with real source
@@ -231,11 +239,37 @@ STATE_TRUST_CONFIGS = {
             'SECT': SECTION,
         },
     },
-    'MT': {
+    'MN-subsurface': {
+        DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
+        STATE: 'MN',
+        UNIVERSITY: 'University of Minnesota',
+        MANAGING_AGENCY: 'Department of Natural Resources',
+        RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
+        DATA_SOURCE:
+        STATE_TRUST_DATA_SOURCE_DIRECTORY + 'shp_plan_stateland_dnrcounty.zip',
+        # TODO: replace with real source
+        LAYER: 'stateland_type_trust',
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['LANDTYPECO'],
+        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+            '5': 'Trust Fund: University',
+            '8': 'Trust Fund: Agricultural College',
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'SU_ACRES': ACRES,
+            'COUNTYNAME': COUNTY,
+            'TOWN': TOWNSHIP,
+            'RANG': RANGE,
+            'SECT': SECTION,
+            'FORTDESC': ALIQUOT,
+        },
+    },
+
+    'MT-surface': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
         STATE: 'MT',
         UNIVERSITY: 'Montana State University',
         MANAGING_AGENCY: 'Department of Natural Resources',
+        RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
         DATA_SOURCE:
         'https://gis.dnrc.mt.gov/arcgis/rest/services/DNRALL/BasemapService/MapServer/31',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['GrantID'],
@@ -257,6 +291,7 @@ STATE_TRUST_CONFIGS = {
         STATE: 'ND',
         UNIVERSITY: 'North Dakota State University',
         MANAGING_AGENCY: 'Commissioner of University and School Lands',
+        RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
         DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY +
         'Surface_Trust_Lands_with_Trusts.zip',
         # TODO: switch out actual data_source
@@ -279,6 +314,7 @@ STATE_TRUST_CONFIGS = {
         STATE: 'ND',
         UNIVERSITY: 'North Dakota State University',
         MANAGING_AGENCY: 'Commissioner of University and School Lands',
+        RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
         DATA_SOURCE:
         'https://ndgishub.nd.gov/arcgis/rest/services/All_GovtLands_State/MapServer/2',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['TRUST'],
@@ -294,11 +330,12 @@ STATE_TRUST_CONFIGS = {
             'SUBDIVISION': ALIQUOT,
         },
     },
-    'NE': {
+    'NE-surface': {
         DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
         STATE: 'NE',
         UNIVERSITY: 'University of Nebraska',
         MANAGING_AGENCY: 'Board of Educational Lands and Funds',
+        RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
         DATA_SOURCE:
         STATE_TRUST_DATA_SOURCE_DIRECTORY + '2023_Nebraska_BELF_lands.zip',
         # TODO: switch out actual data_source
@@ -382,7 +419,7 @@ STATE_TRUST_CONFIGS = {
     },
     'OK-surface': {
         # for oklahoma's real estate (surface) lease holdings, we query the API below, but the API does not
-        # contain information on which trust fund the land belongs to. The CLO gavbe us a list of which
+        # contain information on which trust fund the land belongs to. The CLO gave us a list of which
         # parcels, by HoldingDetailID, map to different funds which is not publicly available, so we
         # create a custom filter here.
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
@@ -455,7 +492,7 @@ STATE_TRUST_CONFIGS = {
     #         'CountyName': COUNTY,
     #     },
     # },
-    'TX': {
+    'TX-surface-and-subsurface': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
         STATE: 'TX',
         UNIVERSITY: 'Texas A&M',
@@ -464,9 +501,30 @@ STATE_TRUST_CONFIGS = {
         # found at https://universitylands.utsystem.edu/Resources/GIS
         DATA_SOURCE:
         'https://gisapps.universitylands.org/server/rest/services/Hosted/GrantTracts_SpatialJoin/FeatureServer/16',
-        ATTRIBUTE_LABEL_TO_FILTER_BY: ['id'],
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['HasSurfaceRights'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-            "*": 'All'
+            "1": 'Surface and Subsurface'
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'acres': ACRES,
+            'countyname': COUNTY,
+            'section': SECTION,
+            'block': BLOCK,
+        },
+    },
+
+    'TX-subsurface-only': {
+        DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
+        STATE: 'TX',
+        UNIVERSITY: 'Texas A&M',
+        MANAGING_AGENCY: 'General Land Office',
+        RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
+        # found at https://universitylands.utsystem.edu/Resources/GIS
+        DATA_SOURCE:
+            'https://gisapps.universitylands.org/server/rest/services/Hosted/GrantTracts_SpatialJoin/FeatureServer/16',
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['HasSurfaceRights'],
+        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+            "0": 'Subsurface Only'
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'acres': ACRES,
@@ -533,7 +591,7 @@ STATE_TRUST_CONFIGS = {
         RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
         DATA_SOURCE:
         'https://gis.dnr.wa.gov/site3/rest/services/Public_Boundaries/WADNR_PUBLIC_Cadastre_OpenData/MapServer/6/',
-        ATTRIBUTE_LABEL_TO_FILTER_BY: ['SURFACE_TRUST_CD'],
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['SURFACE_TRUST_CD', 'TIMBER_TRUST_CD'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             4: 'Agricultural School',
             10: 'Scientific School',

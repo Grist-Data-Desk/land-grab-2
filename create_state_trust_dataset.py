@@ -3,10 +3,8 @@ import typer
 from common import (state_specific_directory,
                     extract_and_clean_single_source_helper,
                     merge_single_state_helper, merge_all_states_helper)
-
 from constants import (STATE, STATE_TRUST_DIRECTORY, CLEANED_DIRECTORY,
                        MERGED_DIRECTORY, QUERIED_DIRECTORY)
-
 from state_trust_config import STATE_TRUST_CONFIGS
 
 app = typer.Typer()
