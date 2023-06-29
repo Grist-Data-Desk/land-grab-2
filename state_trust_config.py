@@ -285,6 +285,28 @@ STATE_TRUST_CONFIGS = {
             'RANG': RANGE,
             'SECT': SECTION,
         },
+
+'MT-subsurface': {
+        DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
+        STATE: 'MT',
+        UNIVERSITY: 'Montana State University',
+        MANAGING_AGENCY: 'Department of Natural Resources',
+        RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
+        DATA_SOURCE: # todo add actual source
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['GrantID'],
+        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+            "'ACI'": 'MSU Morrill',
+            "'ACB'": 'MSU 2nd Grant',
+            "'SNS'": 'State Normal School'
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'Acres': ACRES,
+            'COUNTY1': COUNTY,
+            'LegalDesc': ALIQUOT,
+            'Activity': ACTIVITY,
+            # todo figure out best way to separate STRID field,
+        },
+
     },
     'ND-surface': {
         DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
