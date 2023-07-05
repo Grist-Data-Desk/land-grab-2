@@ -33,7 +33,6 @@ STATE_TRUST_CONFIGS = {
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'acres': ACRES,
             'County': COUNTY,
-            'fundtxt': TRUST_NAME,
         },
     },
     'AZ-subsurface': {
@@ -56,7 +55,6 @@ STATE_TRUST_CONFIGS = {
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'acres': ACRES,
             'County': COUNTY,
-            'fundtxt': TRUST_NAME,
         },
     },
     # TODO: do we want to use this source?
@@ -118,7 +116,6 @@ STATE_TRUST_CONFIGS = {
             'Range': RANGE,
             'Section': SECTION,
             'Meridian': MERIDIAN,
-            # todo:'fundtxt': TRUST_NAME,
         },
     },
     'CO-subsurface': {
@@ -140,7 +137,6 @@ STATE_TRUST_CONFIGS = {
             'Section': SECTION,
             'Meridian': MERIDIAN,
             'Asset_Laye': ACTIVITY,
-            # todo:'fundtxt': TRUST_NAME,
         },
     },
     # 'IA': {
@@ -179,7 +175,6 @@ STATE_TRUST_CONFIGS = {
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'L_ACRES': ACRES,
-            'SURF_ENDOWMENT': TRUST_NAME,
         },
     },
     'ID-subsurface': {
@@ -199,7 +194,6 @@ STATE_TRUST_CONFIGS = {
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'L_ACRES': ACRES,
-            'SUB_ENDOWMENT': TRUST_NAME,
         },
     },
     # 'MI': {
