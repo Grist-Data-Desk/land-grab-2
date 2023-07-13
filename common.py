@@ -144,6 +144,10 @@ def _clean_queried_data(source, config, label, alias, queried_data_directory,
 
 def _filter_and_clean_shapefile(gdf, config, source, label, code, alias,
                                 cleaned_data_directory):
+  # adding projection info for wisconsin
+  if source == 'WI':
+    gdf = gdf.to_crs('WGS 84')
+
   if label != '*':
     filtered_gdf = gdf[gdf[label] == code].copy()
   else:
