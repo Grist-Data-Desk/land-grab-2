@@ -100,25 +100,6 @@ STATE_TRUST_CONFIGS = {
             'Asset_Laye': ACTIVITY,
         },
     },
-    # 'IA': {
-    #     DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
-    #     STATE: 'IA',
-    #     UNIVERSITY: 'University of Idaho',
-    #     MANAGING_AGENCY: 'Department of Lands',
-    #     DATA_SOURCE:
-    #     'https://programs.iowadnr.gov/geospatial/rest/services/Boundaries/Public_Lands/MapServer/0',
-    #     # 'https://programs.iowadnr.gov/geospatial/rest/services/Boundaries/Public_Lands_ESRI/MapServer/0',
-    #     # ATTRIBUTE_LABEL_TO_FILTER_BY: ['OWNER'],
-    #     # ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-    #     #     "'Iowa State University'": 'Iowa State University'
-    #     # },
-    #     ATTRIBUTE_LABEL_TO_FILTER_BY: ['MANAGER'],
-    #     ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-    #         "'DNR - Wildlife'": 'DNR - Wildlife'
-    #     },
-    #     # ATTRIBUTE_LABEL_TO_FILTER_BY: [],
-    #     # ATTRIBUTE_CODE_TO_ALIAS_MAP: {},
-    # },
     'ID-surface': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
         STATE: 'ID',
