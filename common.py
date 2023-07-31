@@ -7,7 +7,7 @@ import pandas as pd
 import restapi
 import typer
 
-from constants import (DATA_SOURCE, ATTRIBUTE_LABEL_TO_FILTER_BY,
+from constants import (ATTRIBUTE_LABEL_TO_FILTER_BY,
                        ATTRIBUTE_CODE_TO_ALIAS_MAP, UNIVERSITY, RIGHTS_TYPE,
                        TRUST_NAME, COLUMNS, DOWNLOAD_TYPE,
                        SHAPEFILE_DOWNLOAD_TYPE, API_QUERY_DOWNLOAD_TYPE, LAYER,
@@ -127,7 +127,7 @@ def _clean_queried_data(source, config, label, alias, queried_data_directory,
     gdf = _get_ok_surface_town_range(gdf)
   elif 'AZ' in source:
     gdf = _get_az_town_range_section(gdf)
-  elif source == 'MT':
+  elif 'MT' in source:
     gdf = _get_mt_town_range_section(gdf)
   elif source == 'OK-subsurface':
     gdf = _get_ok_subsurface_town_range(gdf)
@@ -148,16 +148,18 @@ def _filter_and_clean_shapefile(gdf, config, source, label, code, alias,
   if source == 'WI':
     gdf = gdf.to_crs('WGS 84')
 
-  if label != '*':
-    filtered_gdf = gdf[gdf[label] == code].copy()
-  else:
-    filtered_gdf = gdf
+  # if label != '*':
+  filtered_gdf = gdf[gdf[label] == code].copy()
+  # else:
+  #   filtered_gdf = gdf
 
   # custom cleaning
   if source == 'NE':
     filtered_gdf = _get_ne_town_range_section(filtered_gdf)
   elif source == 'WI':
     filtered_gdf = _get_wi_town_range_section_aliquot(filtered_gdf)
+  elif 'MT' in source:
+    filtered_gdf = _get_mt_town_range_section(filtered_gdf)
 
   filtered_gdf = _format_columns(filtered_gdf, config, alias)
 

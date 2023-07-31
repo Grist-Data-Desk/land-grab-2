@@ -176,33 +176,70 @@ STATE_TRUST_CONFIGS = {
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'Acres': ACRES,
-            'COUNTYNAME': COUNTY,
-            'TOWN': TOWNSHIP,
-            'RANG': RANGE,
-            'SECT': SECTION,
         },
     },
     # TODO: add montana subsurface from 3 shapefiles
-    # 'MT-subsurface': {
-    #     DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
-    #     STATE: 'MT',
-    #     UNIVERSITY: 'Montana State University',
-    #     MANAGING_AGENCY: 'Department of Natural Resources',
-    #     RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
-    #     DATA_SOURCE:
-    #     'https://gis.dnrc.mt.gov/arcgis/rest/services/DNRALL/BasemapService/MapServer/31',
-    #     ATTRIBUTE_LABEL_TO_FILTER_BY: ['GrantID'],
-    #     ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-    #         "'ACI'": 'MSU Morrill',
-    #         "'ACB'": 'MSU 2nd Grant',
-    #         "'SNS'": 'State Normal School'
-    #     },
-    #     EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
-    #         'Acres': ACRES,
-    #         'COUNTY1': COUNTY,
-    #         'LegalDesc': ALIQUOT,
-    #     },
-    # },
+    'MT-subsurface-coal': {
+        DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
+        STATE: 'MT',
+        UNIVERSITY: 'Montana State University',
+        MANAGING_AGENCY: 'Department of Natural Resources',
+        RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
+        LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'MT-coal',
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['GrantID'],
+        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+            'ACI': 'MSU Morrill',
+            'ACB': 'MSU 2nd Grant',
+            'SNS': 'State Normal School'
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'Acres': ACRES,
+            'COUNTY1': COUNTY,
+            'LegalDesc': ALIQUOT,
+            'Activity': ACTIVITY,
+        },
+    },
+    'MT-subsurface-oil-and-gas': {
+        DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
+        STATE: 'MT',
+        UNIVERSITY: 'Montana State University',
+        MANAGING_AGENCY: 'Department of Natural Resources',
+        RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
+        LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'MT-oil-and-gas',
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['GrantID'],
+        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+            'ACI': 'MSU Morrill',
+            'ACB': 'MSU 2nd Grant',
+            'SNS': 'State Normal School'
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'Acres': ACRES,
+            'COUNTY1': COUNTY,
+            'LegalDesc': ALIQUOT,
+            'Activity': ACTIVITY,
+        },
+    },
+    'MT-subsurface-other-minerals': {
+        DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
+        STATE: 'MT',
+        UNIVERSITY: 'Montana State University',
+        MANAGING_AGENCY: 'Department of Natural Resources',
+        RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
+        LOCAL_DATA_SOURCE:
+        STATE_TRUST_DATA_SOURCE_DIRECTORY + 'MT-other-minerals',
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['GrantID'],
+        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+            'ACI': 'MSU Morrill',
+            'ACB': 'MSU 2nd Grant',
+            'SNS': 'State Normal School'
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'Acres': ACRES,
+            'COUNTY1': COUNTY,
+            'LegalDesc': ALIQUOT,
+            'Activity': ACTIVITY,
+        },
+    },
     'ND-surface': {
         DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
         STATE: 'ND',
