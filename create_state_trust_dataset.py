@@ -36,6 +36,7 @@ def merge_single_state(state: str):
 
 
 @app.command()
+# TODO: compute area!
 def merge_all_states():
   # first, find all states for which we have cleaned data
   cleaned_data_directory = _cleaned_data_directory()

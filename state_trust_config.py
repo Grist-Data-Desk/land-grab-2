@@ -178,7 +178,6 @@ STATE_TRUST_CONFIGS = {
             'Acres': ACRES,
         },
     },
-    # TODO: add montana subsurface from 3 shapefiles
     'MT-subsurface-coal': {
         DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
         STATE: 'MT',
@@ -374,7 +373,6 @@ STATE_TRUST_CONFIGS = {
             'QuarterDescription': ALIQUOT,
         },
     },
-    # TODO: add STRM?
     'OK-subsurface': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
         STATE: 'OK',
