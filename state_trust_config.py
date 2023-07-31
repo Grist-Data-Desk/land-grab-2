@@ -4,7 +4,7 @@ from constants import (
     ATTRIBUTE_LABEL_TO_FILTER_BY, ATTRIBUTE_CODE_TO_ALIAS_MAP, RIGHTS_TYPE,
     SURFACE_RIGHTS_TYPE, SUBSURFACE_RIGHTS_TYPE, TIMBER_RIGHTS_TYPE, LAYER,
     STATE_TRUST_DATA_SOURCE_DIRECTORY, EXISTING_COLUMN_TO_FINAL_COLUMN_MAP,
-    ACRES, COUNTY, MERIDIAN, TOWNSHIP, RANGE, SECTION, ALIQUOT, BLOCK)
+    ACRES, COUNTY, MERIDIAN, TOWNSHIP, RANGE, SECTION, ALIQUOT, BLOCK, ACTIVITY)
 
 STATE_TRUST_CONFIGS = {
     # 'AL': {
@@ -79,7 +79,6 @@ STATE_TRUST_CONFIGS = {
             'Meridian': MERIDIAN,
         },
     },
-    # TODO: incoporaorate maria's change to add activity field
     'CO-subsurface': {
         DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
         STATE: 'CO',
@@ -98,6 +97,7 @@ STATE_TRUST_CONFIGS = {
             'Range': RANGE,
             'Section': SECTION,
             'Meridian': MERIDIAN,
+            'Asset_Laye': ACTIVITY,
         },
     },
     # 'IA': {
@@ -370,6 +370,7 @@ STATE_TRUST_CONFIGS = {
             'QuarterDescription': ALIQUOT,
         },
     },
+    # TODO: add STRM?
     'OK-subsurface': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
         STATE: 'OK',
