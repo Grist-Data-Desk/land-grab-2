@@ -1,0 +1,211 @@
+{
+  "type": "FeatureCollection",
+  "features": [],
+  "fields": [
+    {
+      "name": "OBJECTID",
+      "type": "esriFieldTypeOID",
+      "alias": "OBJECTID",
+      "domain": null
+    },
+    {
+      "name": "SHAPE",
+      "type": "esriFieldTypeGeometry",
+      "alias": "SHAPE",
+      "domain": null
+    },
+    {
+      "name": "TRACTID",
+      "type": "esriFieldTypeInteger",
+      "alias": "TRACTID",
+      "domain": null
+    },
+    {
+      "name": "COUNTY",
+      "type": "esriFieldTypeString",
+      "alias": "COUNTY",
+      "length": 50,
+      "domain": null
+    },
+    {
+      "name": "TWP",
+      "type": "esriFieldTypeString",
+      "alias": "TWP",
+      "length": 20,
+      "domain": null
+    },
+    {
+      "name": "RNG",
+      "type": "esriFieldTypeString",
+      "alias": "RNG",
+      "length": 20,
+      "domain": null
+    },
+    {
+      "name": "SEC",
+      "type": "esriFieldTypeString",
+      "alias": "SEC",
+      "length": 20,
+      "domain": null
+    },
+    {
+      "name": "SUBDIVISION",
+      "type": "esriFieldTypeString",
+      "alias": "SUBDIVISION",
+      "length": 255,
+      "domain": null
+    },
+    {
+      "name": "TRACT_STATUS",
+      "type": "esriFieldTypeString",
+      "alias": "TRACT_STATUS",
+      "length": 1,
+      "domain": null
+    },
+    {
+      "name": "ACQUISITION",
+      "type": "esriFieldTypeString",
+      "alias": "ACQUISITION",
+      "length": 1,
+      "domain": null
+    },
+    {
+      "name": "TRUST",
+      "type": "esriFieldTypeString",
+      "alias": "TRUST",
+      "length": 1,
+      "domain": null
+    },
+    {
+      "name": "NET_ACRES",
+      "type": "esriFieldTypeSingle",
+      "alias": "NET_ACRES",
+      "domain": null
+    },
+    {
+      "name": "GROSS_ACRES",
+      "type": "esriFieldTypeSingle",
+      "alias": "GROSS_ACRES",
+      "domain": null
+    },
+    {
+      "name": "OWNERSHIP",
+      "type": "esriFieldTypeSingle",
+      "alias": "OWNERSHIP",
+      "domain": null
+    },
+    {
+      "name": "AUCTION",
+      "type": "esriFieldTypeString",
+      "alias": "AUCTION",
+      "length": 20,
+      "domain": null
+    },
+    {
+      "name": "LEASE",
+      "type": "esriFieldTypeString",
+      "alias": "LEASE",
+      "length": 9,
+      "domain": null
+    },
+    {
+      "name": "LEASE_STATUS",
+      "type": "esriFieldTypeString",
+      "alias": "LEASE_STATUS",
+      "length": 2,
+      "domain": null
+    },
+    {
+      "name": "LEASE_EFFECTIVE",
+      "type": "esriFieldTypeDate",
+      "alias": "LEASE_EFFECTIVE",
+      "length": 8,
+      "domain": null
+    },
+    {
+      "name": "LEASE_EXPIRATION",
+      "type": "esriFieldTypeDate",
+      "alias": "LEASE_EXPIRATION",
+      "length": 8,
+      "domain": null
+    },
+    {
+      "name": "LEASE_EXTENDED",
+      "type": "esriFieldTypeDate",
+      "alias": "LEASE_EXTENDED",
+      "length": 8,
+      "domain": null
+    },
+    {
+      "name": "LEASE_ROYRATE",
+      "type": "esriFieldTypeDouble",
+      "alias": "LEASE_ROYRATE",
+      "domain": null
+    },
+    {
+      "name": "LEASE_BONUS",
+      "type": "esriFieldTypeDouble",
+      "alias": "LEASE_BONUS",
+      "domain": null
+    },
+    {
+      "name": "LEASE_DESC",
+      "type": "esriFieldTypeString",
+      "alias": "LEASE_DESC",
+      "length": 255,
+      "domain": null
+    },
+    {
+      "name": "LESSEE",
+      "type": "esriFieldTypeString",
+      "alias": "LESSEE",
+      "length": 150,
+      "domain": null
+    },
+    {
+      "name": "LEASE_URL",
+      "type": "esriFieldTypeString",
+      "alias": "LEASE_URL",
+      "length": 255,
+      "domain": null
+    },
+    {
+      "name": "SECTWPRNG",
+      "type": "esriFieldTypeString",
+      "alias": "SECTWPRNG",
+      "length": 20,
+      "domain": null
+    },
+    {
+      "name": "LEASE_PROVISIONS",
+      "type": "esriFieldTypeString",
+      "alias": "LEASE_PROVISIONS",
+      "length": 10,
+      "domain": null
+    },
+    {
+      "name": "LAST_UPDATED",
+      "type": "esriFieldTypeDate",
+      "alias": "LAST_UPDATED",
+      "length": 8,
+      "domain": null
+    },
+    {
+      "name": "SHAPE.STArea()",
+      "type": "esriFieldTypeDouble",
+      "alias": "SHAPE.STArea()",
+      "domain": null
+    },
+    {
+      "name": "SHAPE.STLength()",
+      "type": "esriFieldTypeDouble",
+      "alias": "SHAPE.STLength()",
+      "domain": null
+    }
+  ],
+  "geometryType": "esriGeometryPolygon",
+  "spatialReference": {
+    "wkid": 102100,
+    "latestWkid": 3857
+  }
+}

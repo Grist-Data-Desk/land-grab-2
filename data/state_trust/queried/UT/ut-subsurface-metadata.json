@@ -1,0 +1,216 @@
+{
+  "type": "FeatureCollection",
+  "features": [],
+  "fields": [
+    {
+      "name": "quad",
+      "type": "esriFieldTypeSmallInteger",
+      "alias": "quad",
+      "domain": null
+    },
+    {
+      "name": "township",
+      "type": "esriFieldTypeSingle",
+      "alias": "township",
+      "domain": null
+    },
+    {
+      "name": "range",
+      "type": "esriFieldTypeSingle",
+      "alias": "range",
+      "domain": null
+    },
+    {
+      "name": "section_",
+      "type": "esriFieldTypeSmallInteger",
+      "alias": "section_",
+      "domain": null
+    },
+    {
+      "name": "county_cd",
+      "type": "esriFieldTypeSmallInteger",
+      "alias": "county_cd",
+      "domain": null
+    },
+    {
+      "name": "county_abrev",
+      "type": "esriFieldTypeString",
+      "alias": "county_abrev",
+      "length": 4,
+      "domain": null
+    },
+    {
+      "name": "county_name",
+      "type": "esriFieldTypeString",
+      "alias": "county_name",
+      "length": 20,
+      "domain": null
+    },
+    {
+      "name": "bene_cd",
+      "type": "esriFieldTypeSmallInteger",
+      "alias": "bene_cd",
+      "domain": null
+    },
+    {
+      "name": "bene_abrev",
+      "type": "esriFieldTypeString",
+      "alias": "bene_abrev",
+      "length": 4,
+      "domain": null
+    },
+    {
+      "name": "parcel_type_cd",
+      "type": "esriFieldTypeSmallInteger",
+      "alias": "parcel_type_cd",
+      "domain": {
+        "type": "codedValue",
+        "name": "lnd_parcel_type",
+        "description": "Parcel usage type",
+        "codedValues": [
+          {
+            "name": "Ownership",
+            "code": 0
+          },
+          {
+            "name": "Usage",
+            "code": 1
+          }
+        ],
+        "mergePolicy": "esriMPTDefaultValue",
+        "splitPolicy": "esriSPTDuplicate"
+      }
+    },
+    {
+      "name": "parcel_layer_cd",
+      "type": "esriFieldTypeSmallInteger",
+      "alias": "parcel_layer_cd",
+      "domain": {
+        "type": "codedValue",
+        "name": "lnd_parcel_layer",
+        "description": "Parcel Layer",
+        "codedValues": [
+          {
+            "name": "None",
+            "code": 0
+          },
+          {
+            "name": "Surface",
+            "code": 1
+          },
+          {
+            "name": "Oil & Gas",
+            "code": 2
+          },
+          {
+            "name": "Coal",
+            "code": 3
+          },
+          {
+            "name": "Other Minerals",
+            "code": 4
+          },
+          {
+            "name": "Other Interests",
+            "code": 10
+          },
+          {
+            "name": "Waterbed",
+            "code": 11
+          }
+        ],
+        "mergePolicy": "esriMPTDefaultValue",
+        "splitPolicy": "esriSPTDuplicate"
+      }
+    },
+    {
+      "name": "parcel_seq_nbr",
+      "type": "esriFieldTypeSmallInteger",
+      "alias": "parcel_seq_nbr",
+      "domain": null
+    },
+    {
+      "name": "land_status_cd",
+      "type": "esriFieldTypeSmallInteger",
+      "alias": "land_status_cd",
+      "domain": null
+    },
+    {
+      "name": "legal_descr",
+      "type": "esriFieldTypeString",
+      "alias": "legal_descr",
+      "length": 255,
+      "domain": null
+    },
+    {
+      "name": "acres",
+      "type": "esriFieldTypeDouble",
+      "alias": "acres",
+      "domain": null
+    },
+    {
+      "name": "lin",
+      "type": "esriFieldTypeString",
+      "alias": "lin",
+      "length": 102,
+      "domain": null
+    },
+    {
+      "name": "QUAD_LBL",
+      "type": "esriFieldTypeString",
+      "alias": "QUAD_LBL",
+      "length": 3,
+      "domain": null
+    },
+    {
+      "name": "merid",
+      "type": "esriFieldTypeString",
+      "alias": "merid",
+      "length": 2,
+      "domain": null
+    },
+    {
+      "name": "TRS_LABEL",
+      "type": "esriFieldTypeString",
+      "alias": "TRS_LABEL",
+      "length": 25,
+      "domain": null
+    },
+    {
+      "name": "Shape",
+      "type": "esriFieldTypeGeometry",
+      "alias": "Shape",
+      "domain": null
+    },
+    {
+      "name": "GlobalID",
+      "type": "esriFieldTypeGlobalID",
+      "alias": "GlobalID",
+      "length": 38,
+      "domain": null
+    },
+    {
+      "name": "OBJECTID",
+      "type": "esriFieldTypeOID",
+      "alias": "OBJECTID",
+      "domain": null
+    },
+    {
+      "name": "Shape.STArea()",
+      "type": "esriFieldTypeDouble",
+      "alias": "Shape.STArea()",
+      "domain": null
+    },
+    {
+      "name": "Shape.STLength()",
+      "type": "esriFieldTypeDouble",
+      "alias": "Shape.STLength()",
+      "domain": null
+    }
+  ],
+  "geometryType": "esriGeometryPolygon",
+  "spatialReference": {
+    "wkid": 26912,
+    "latestWkid": 26912
+  }
+}

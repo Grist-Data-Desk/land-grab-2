@@ -1,0 +1,145 @@
+{
+  "type": "FeatureCollection",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "EPSG:4326"
+    }
+  },
+  "features": [],
+  "fields": [
+    {
+      "name": "SHAPE",
+      "type": "esriFieldTypeGeometry",
+      "alias": "SHAPE",
+      "domain": null
+    },
+    {
+      "name": "Lease",
+      "type": "esriFieldTypeString",
+      "alias": "Lease Number",
+      "length": 7,
+      "domain": null
+    },
+    {
+      "name": "CountyName",
+      "type": "esriFieldTypeString",
+      "alias": "County Name",
+      "length": 100,
+      "domain": null
+    },
+    {
+      "name": "LegalDescription",
+      "type": "esriFieldTypeString",
+      "alias": "Legal Description",
+      "length": 1073741822,
+      "domain": null
+    },
+    {
+      "name": "TotalAllAcreage",
+      "type": "esriFieldTypeDouble",
+      "alias": "Total All Acreage",
+      "domain": null
+    },
+    {
+      "name": "Section",
+      "type": "esriFieldTypeInteger",
+      "alias": "Section",
+      "domain": null
+    },
+    {
+      "name": "Township",
+      "type": "esriFieldTypeInteger",
+      "alias": "Township",
+      "domain": null
+    },
+    {
+      "name": "TownshipDirection",
+      "type": "esriFieldTypeString",
+      "alias": "Township Direction",
+      "length": 1,
+      "domain": null
+    },
+    {
+      "name": "Range",
+      "type": "esriFieldTypeInteger",
+      "alias": "Range",
+      "domain": null
+    },
+    {
+      "name": "RangeDirection",
+      "type": "esriFieldTypeString",
+      "alias": "Range Direction",
+      "length": 1,
+      "domain": null
+    },
+    {
+      "name": "Meridian",
+      "type": "esriFieldTypeString",
+      "alias": "Meridian",
+      "length": 255,
+      "domain": null
+    },
+    {
+      "name": "QuarterDescription",
+      "type": "esriFieldTypeString",
+      "alias": "Quarter Description",
+      "length": 255,
+      "domain": null
+    },
+    {
+      "name": "LocationDescription",
+      "type": "esriFieldTypeString",
+      "alias": "Location Description",
+      "length": 1073741822,
+      "domain": null
+    },
+    {
+      "name": "GridName",
+      "type": "esriFieldTypeString",
+      "alias": "GridName",
+      "length": 50,
+      "domain": null
+    },
+    {
+      "name": "OBJECTID",
+      "type": "esriFieldTypeInteger",
+      "alias": "OBJECTID",
+      "domain": null
+    },
+    {
+      "name": "HoldingDetailID",
+      "type": "esriFieldTypeGUID",
+      "alias": "HoldingDetailID",
+      "length": 38,
+      "domain": null
+    },
+    {
+      "name": "AuctionUnitID",
+      "type": "esriFieldTypeGUID",
+      "alias": "AuctionUnitID",
+      "length": 38,
+      "domain": null
+    },
+    {
+      "name": "GlobalID",
+      "type": "esriFieldTypeGUID",
+      "alias": "GlobalID",
+      "length": 38,
+      "domain": null
+    },
+    {
+      "name": "ESRI_OID",
+      "type": "esriFieldTypeOID",
+      "alias": "ESRI_OID",
+      "domain": null
+    }
+  ],
+  "geometryType": "esriGeometryPolygon",
+  "spatialReference": {
+    "wkid": 26914,
+    "latestWkid": 26914,
+    "vcsWkid": 115702,
+    "latestVcsWkid": 115702
+  }
+}

@@ -1,0 +1,183 @@
+{
+  "type": "FeatureCollection",
+  "features": [],
+  "fields": [
+    {
+      "name": "OBJECTID",
+      "type": "esriFieldTypeOID",
+      "alias": "FID",
+      "domain": null
+    },
+    {
+      "name": "Shape",
+      "type": "esriFieldTypeGeometry",
+      "alias": "Shape",
+      "domain": null
+    },
+    {
+      "name": "landnum",
+      "type": "esriFieldTypeString",
+      "alias": "LANDNUM",
+      "length": 40,
+      "domain": null
+    },
+    {
+      "name": "County",
+      "type": "esriFieldTypeString",
+      "alias": "COUNTY",
+      "length": 20,
+      "domain": null
+    },
+    {
+      "name": "parcel",
+      "type": "esriFieldTypeInteger",
+      "alias": "PARCEL",
+      "domain": null
+    },
+    {
+      "name": "fundtxt",
+      "type": "esriFieldTypeString",
+      "alias": "FUNDTXT",
+      "length": 254,
+      "domain": null
+    },
+    {
+      "name": "open_code",
+      "type": "esriFieldTypeInteger",
+      "alias": "OPEN_CODE",
+      "domain": null
+    },
+    {
+      "name": "leased",
+      "type": "esriFieldTypeString",
+      "alias": "LEASED",
+      "length": 200,
+      "domain": null
+    },
+    {
+      "name": "ke",
+      "type": "esriFieldTypeString",
+      "alias": "KE",
+      "length": 200,
+      "domain": null
+    },
+    {
+      "name": "lease_",
+      "type": "esriFieldTypeDouble",
+      "alias": "LEASE_",
+      "domain": null
+    },
+    {
+      "name": "lse_code",
+      "type": "esriFieldTypeDouble",
+      "alias": "LSE_CODE",
+      "domain": null
+    },
+    {
+      "name": "lse_seq",
+      "type": "esriFieldTypeDouble",
+      "alias": "LSE_SEQ",
+      "domain": null
+    },
+    {
+      "name": "effdate",
+      "type": "esriFieldTypeString",
+      "alias": "EFFDATE",
+      "length": 21,
+      "domain": null
+    },
+    {
+      "name": "expdate",
+      "type": "esriFieldTypeString",
+      "alias": "EXPDATE",
+      "length": 21,
+      "domain": null
+    },
+    {
+      "name": "perpetual",
+      "type": "esriFieldTypeString",
+      "alias": "PERPETUAL",
+      "length": 1,
+      "domain": null
+    },
+    {
+      "name": "aus",
+      "type": "esriFieldTypeDouble",
+      "alias": "AUS",
+      "domain": null
+    },
+    {
+      "name": "rolodex_",
+      "type": "esriFieldTypeDouble",
+      "alias": "ROLODEX_",
+      "domain": null
+    },
+    {
+      "name": "full_name",
+      "type": "esriFieldTypeString",
+      "alias": "FULL_NAME",
+      "length": 162,
+      "domain": null
+    },
+    {
+      "name": "trs",
+      "type": "esriFieldTypeString",
+      "alias": "TRS",
+      "length": 200,
+      "domain": null
+    },
+    {
+      "name": "legal",
+      "type": "esriFieldTypeString",
+      "alias": "Legal",
+      "length": 200,
+      "domain": null
+    },
+    {
+      "name": "acres",
+      "type": "esriFieldTypeDouble",
+      "alias": "Acres",
+      "domain": null
+    },
+    {
+      "name": "link",
+      "type": "esriFieldTypeString",
+      "alias": "LINK",
+      "length": 76,
+      "domain": null
+    },
+    {
+      "name": "total_aus",
+      "type": "esriFieldTypeDouble",
+      "alias": "total_aus",
+      "domain": null
+    },
+    {
+      "name": "Shape.STArea()",
+      "type": "esriFieldTypeDouble",
+      "alias": "Shape.STArea()",
+      "domain": null
+    },
+    {
+      "name": "Shape.STLength()",
+      "type": "esriFieldTypeDouble",
+      "alias": "Shape.STLength()",
+      "domain": null
+    }
+  ],
+  "geometryType": "esriGeometryPolygon",
+  "spatialReference": {
+    "wkid": 102100,
+    "latestWkid": 3857,
+    "xyTolerance": 0.001,
+    "zTolerance": 0.001,
+    "mTolerance": 0.001,
+    "falseX": -20037700,
+    "falseY": -30241100,
+    "xyUnits": 10000,
+    "falseZ": -100000,
+    "zUnits": 10000,
+    "falseM": -100000,
+    "mUnits": 10000
+  }
+}
