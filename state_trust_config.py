@@ -138,20 +138,6 @@ STATE_TRUST_CONFIGS = {
             'L_ACRES': ACRES,
         },
     },
-    # 'MI': {
-    #     DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
-    #     STATE: 'IA',
-    #     UNIVERSITY: 'University of Idaho',
-    #     MANAGING_AGENCY: 'Department of Lands',
-    #     DATA_SOURCE:
-    #     'https://services3.arcgis.com/Jdnp1TjADvSDxMAX/ArcGIS/rest/services/dnrRealEstate/FeatureServer/2',
-    #     ATTRIBUTE_LABEL_TO_FILTER_BY: ['Beneficiary'],
-    #     ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-    #         "'Colorado State University'": 'Colorado State University'
-    #     },
-    #     # ATTRIBUTE_LABEL_TO_FILTER_BY: [],
-    #     # ATTRIBUTE_CODE_TO_ALIAS_MAP: {},
-    # },
     'MN': {
         DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
         STATE: 'MN',
