@@ -30,12 +30,6 @@ SUBSURFACE_ATTRIBUTE_LABEL_TO_FILTER_BY = 'subsurface_attribute_label_to_filter_
 ATTRIBUTE_CODE_TO_ALIAS_MAP = 'attribute_code_to_alias_map'
 EXISTING_COLUMN_TO_FINAL_COLUMN_MAP = 'existing_column_to_final_column_map'
 
-# cleaning oklahoma specific constants
-OK_TRUST_FUNDS_ID_MAP = {5: 'Oregon State University', 7: 'Langston University'}
-OK_TRUST_FUND_ID = 'TrustFundID'
-OK_HOLDING_DETAIL_ID = 'HoldingDetailID'
-OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE = '../../Downloads/All CLO Holdings.xlsx'
-
 # data directories
 DATA_DIRECTORY = 'data/'
 STATE_TRUST_DIRECTORY = DATA_DIRECTORY + 'state_trust/'
@@ -46,6 +40,11 @@ CLEANED_DIRECTORY = 'cleaned/'
 SOURCE_DIRECTORY = 'source/'
 UNIVERSITY_DATA_SOURCE_DIRECTORY = UNIVERSITY_DIRECTORY + SOURCE_DIRECTORY
 STATE_TRUST_DATA_SOURCE_DIRECTORY = STATE_TRUST_DIRECTORY + SOURCE_DIRECTORY
+
+# cleaning oklahoma specific constants
+OK_TRUST_FUND_ID = 'TrustFundID'
+OK_HOLDING_DETAIL_ID = 'HoldingDetailID'
+OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE = STATE_TRUST_DATA_SOURCE_DIRECTORY + 'All CLO Holdings.xlsx'
 
 # final dataset columns
 COLUMNS = [
