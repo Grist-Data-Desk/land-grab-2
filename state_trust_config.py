@@ -29,6 +29,7 @@ STATE_TRUST_CONFIGS = {
             'AGRICULTURE & MECHANICAL COLLEGE',
             "'SCHOOL OF MINES'": 'SCHOOL OF MINES',
             "'MILITARY INSTITUTES'": 'MILITARY INSTITUTES',
+            "'NORMAL SCHOOL'": 'NORMAL SCHOOL',
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'acres': ACRES,
@@ -51,6 +52,7 @@ STATE_TRUST_CONFIGS = {
             'AGRICULTURE & MECHANICAL COLLEGE',
             "'SCHOOL OF MINES'": 'SCHOOL OF MINES',
             "'MILITARY INSTITUTES'": 'MILITARY INSTITUTES',
+            "'NORMAL SCHOOL'": 'NORMAL SCHOOL',
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'acres': ACRES,
@@ -77,6 +79,7 @@ STATE_TRUST_CONFIGS = {
             'Meridian': MERIDIAN,
         },
     },
+    # TODO: incoporaorate maria's change to add activity field
     'CO-subsurface': {
         DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
         STATE: 'CO',
@@ -212,6 +215,7 @@ STATE_TRUST_CONFIGS = {
             'SECT': SECTION,
         },
     },
+    # TODO: add montana subsurface from 3 shapefiles
     # 'MT-subsurface': {
     #     DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
     #     STATE: 'MT',
@@ -341,6 +345,7 @@ STATE_TRUST_CONFIGS = {
             'Aliquot': ALIQUOT,
         },
     },
+    # TODO: check for duplicate parcels, and check for OK parcels with oregon state university label.
     'OK-surface': {
         # for oklahoma's real estate (surface) lease holdings, we query the API below, but the API does not
         # contain information on which trust fund the land belongs to. The CLO gavbe us a list of which
