@@ -34686,7 +34686,7 @@
       "length": 50,
       "domain": {
         "type": "codedValue",
-        "name": "WS1_FundID",
+        "name": "WS3_FundID",
         "description": "",
         "codedValues": [
           {
@@ -34889,7 +34889,7 @@
       "length": 10,
       "domain": {
         "type": "codedValue",
-        "name": "WS1_SurfaceOwnership",
+        "name": "WS3_SurfaceOwnership",
         "description": "",
         "codedValues": [
           {
@@ -34919,7 +34919,7 @@
       "alias": "SubsurfaceOwnership",
       "domain": {
         "type": "codedValue",
-        "name": "WS1_SubsurfaceOwnership",
+        "name": "WS3_SubsurfaceOwnership",
         "description": "",
         "codedValues": [
           {
@@ -34965,7 +34965,7 @@
       "alias": "ControlSource",
       "domain": {
         "type": "codedValue",
-        "name": "WS1_ControlSource",
+        "name": "WS3_ControlSource",
         "description": "",
         "codedValues": [
           {
@@ -35184,7 +35184,7 @@
       "alias": "Access",
       "domain": {
         "type": "codedValue",
-        "name": "WS1_LandAccess",
+        "name": "WS3_LandAccess",
         "description": "State Land Accessibility",
         "codedValues": [
           {
