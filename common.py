@@ -13,7 +13,8 @@ from constants import (ATTRIBUTE_LABEL_TO_FILTER_BY,
                        API_QUERY_DOWNLOAD_TYPE, LAYER, OK_HOLDING_DETAIL_ID,
                        OK_TRUST_FUND_ID, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE,
                        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP, TOWNSHIP, SECTION,
-                       RANGE, MERIDIAN, COUNTY, ALIQUOT, LOCAL_DATA_SOURCE)
+                       RANGE, MERIDIAN, COUNTY, ALIQUOT, LOCAL_DATA_SOURCE,
+                       GIS_ACRES, ACRES_TO_SQUARE_METERS, ALBERS_EQUAL_AREA)
 
 app = typer.Typer()
 
@@ -38,11 +39,11 @@ def _get_filename(state, label, alias, filetype):
     return f'{_to_kebab_case(state)}-{_to_kebab_case(label)}{filetype}'
 
 
-def _get_merged_dataset_filename(state=None):
+def _get_merged_dataset_filename(state=None, file_extension='.geojson'):
   if state:
-    return state.lower() + '-merged.geojson'
+    return state.lower() + '-merged' + file_extension
   else:
-    return 'all-states.geojson'
+    return 'all-states' + file_extension
 
 
 ##############################################
@@ -145,7 +146,7 @@ def _filter_and_clean_shapefile(gdf, config, source, label, code, alias,
                                 cleaned_data_directory):
   # adding projection info for wisconsin
   if source == 'WI':
-    gdf = gdf.to_crs('WGS 84')
+    gdf = gdf.to_crs(ALBERS_EQUAL_AREA)
 
   # if label != '*':
   filtered_gdf = gdf[gdf[label] == code].copy()
@@ -404,26 +405,6 @@ def _merge_rights_type(row):
     return '+'.join(rights_types)
   else:
     return None
-  # see if there are any rights type columns
-  # rights_type_columns = [
-  #     column for column in row.index if RIGHTS_TYPE in column
-  # ]
-  # # if there are rights type columns, get all unique rights types, join them and return
-  # if rights_type_columns:
-  #   # print(row[rights_type_columns].fillna('').unique())
-  #   # return '+'.join(row[rights_type_columns].fillna('').unique())
-  #   row = row.fillna('')
-  #   rights_type = []
-  #   for column in rights_type_columns:
-  # for rights_type in rights_types:
-  #   if rights_type:
-  #     breakpoint()
-  #     if row[column]:
-  #       rights_type.append(row[column])
-  #   rights_type = pd.unique(rights_type)
-  #   return '+'.join(rights_type)
-  # else:
-  #   return None
 
 
 #################################################################
@@ -486,33 +467,51 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
   gdf = _merge_dataframes(gdfs)
   print(len(gdf))
 
-  filename = _get_merged_dataset_filename(state)
-  gdf.to_file(merged_data_directory + filename, driver='GeoJSON')
+  # compute gis calculated areas, rounded to 2 decimals
+  gdf[GIS_ACRES] = (gdf.to_crs(ALBERS_EQUAL_AREA).area /
+                    ACRES_TO_SQUARE_METERS).round(2)
+
+  # reorder columns to desired order
+  final_column_order = [column for column in COLUMNS if column in gdf.columns]
+  gdf = gdf[final_column_order]
+
+  # save to geojson and csv
+  gdf.to_file(merged_data_directory + _get_merged_dataset_filename(state),
+              driver='GeoJSON')
+  gdf.to_csv(merged_data_directory +
+             _get_merged_dataset_filename(state, '.csv'))
 
   return gdf
 
 
 def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
   state_datasets_to_merge = []
+
+  # grab data from each state directory
   for state in os.listdir(cleaned_data_directory):
     print(state)
     state_cleaned_data_directory = state_specific_directory(
         cleaned_data_directory, state)
-    # TODO: finalize which projection we want the data in
-    state_datasets_to_merge.append(
-        merge_single_state_helper(state, state_cleaned_data_directory,
-                                  merged_data_directory).to_crs('WGS 84'))
 
-  # merged_data_directory = _merged_data_directory()
-  # gdfs = []
-  # for state in os.listdir(merged_data_directory):
-  #   print(merged_data_directory + state)
-  #   merged_single_state_file = _merged_data_directory(
-  #       state) + get_single_state_merged_filename(state)
-  #   gdf = gpd.read_file(merged_single_state_file)
-  #   gdfs.append(gdf.to_crs('WGS 84'))
+    state_datasets_to_merge.append(
+        merge_single_state_helper(
+            state, state_cleaned_data_directory,
+            merged_data_directory).to_crs(ALBERS_EQUAL_AREA))
+
+  # merge all states to single geodataframe
   merged = pd.concat(state_datasets_to_merge, ignore_index=True)
-  print(merged)
-  filename = _get_merged_dataset_filename()
-  merged.to_file(merged_data_directory + filename, driver='GeoJSON')
+
+  # reorder columns to desired order
+  final_column_order = [
+      column for column in COLUMNS if column in merged.columns
+  ]
+  merged = merged[final_column_order]
+
+  # save to geojson and csv
+  merged.to_file(merged_data_directory + _get_merged_dataset_filename(),
+                 driver='GeoJSON')
+  merged.to_csv(merged_data_directory +
+                _get_merged_dataset_filename(file_extension='.csv'),
+                driver='GeoJSON')
+
   return merged

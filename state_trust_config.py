@@ -348,7 +348,7 @@ STATE_TRUST_CONFIGS = {
             'Aliquot': ALIQUOT,
         },
     },
-    # TODO: check for duplicate parcels, and check for OK parcels with oregon state university label.
+    # TODO: check for duplicate parcels
     'OK-surface': {
         # for oklahoma's real estate (surface) lease holdings, we query the API below, but the API does not
         # contain information on which trust fund the land belongs to. The CLO gavbe us a list of which
