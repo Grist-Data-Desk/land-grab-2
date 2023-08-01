@@ -7,14 +7,13 @@ import pandas as pd
 import restapi
 import typer
 
-from constants import (ATTRIBUTE_LABEL_TO_FILTER_BY,
-                       ATTRIBUTE_CODE_TO_ALIAS_MAP, RIGHTS_TYPE, TRUST_NAME,
-                       COLUMNS, DOWNLOAD_TYPE, SHAPEFILE_DOWNLOAD_TYPE,
-                       API_QUERY_DOWNLOAD_TYPE, LAYER, OK_HOLDING_DETAIL_ID,
-                       OK_TRUST_FUND_ID, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE,
-                       EXISTING_COLUMN_TO_FINAL_COLUMN_MAP, TOWNSHIP, SECTION,
-                       RANGE, MERIDIAN, COUNTY, ALIQUOT, LOCAL_DATA_SOURCE,
-                       GIS_ACRES, ACRES_TO_SQUARE_METERS, ALBERS_EQUAL_AREA)
+from constants import (
+    ATTRIBUTE_LABEL_TO_FILTER_BY, ATTRIBUTE_CODE_TO_ALIAS_MAP, RIGHTS_TYPE,
+    TRUST_NAME, COLUMNS, DOWNLOAD_TYPE, SHAPEFILE_DOWNLOAD_TYPE,
+    API_QUERY_DOWNLOAD_TYPE, LAYER, OK_HOLDING_DETAIL_ID, OK_TRUST_FUND_ID,
+    OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE, EXISTING_COLUMN_TO_FINAL_COLUMN_MAP,
+    TOWNSHIP, SECTION, RANGE, MERIDIAN, COUNTY, ALIQUOT, LOCAL_DATA_SOURCE,
+    GIS_ACRES, ACRES_TO_SQUARE_METERS, ALBERS_EQUAL_AREA, ACRES)
 
 app = typer.Typer()
 
@@ -148,10 +147,10 @@ def _filter_and_clean_shapefile(gdf, config, source, label, code, alias,
   if source == 'WI':
     gdf = gdf.to_crs(ALBERS_EQUAL_AREA)
 
-  # if label != '*':
-  filtered_gdf = gdf[gdf[label] == code].copy()
-  # else:
-  #   filtered_gdf = gdf
+  if label != '*':
+    filtered_gdf = gdf[gdf[label] == code].copy()
+  else:
+    filtered_gdf = gdf
 
   # custom cleaning
   if source == 'NE':
@@ -160,6 +159,9 @@ def _filter_and_clean_shapefile(gdf, config, source, label, code, alias,
     filtered_gdf = _get_wi_town_range_section_aliquot(filtered_gdf)
   elif 'MT' in source:
     filtered_gdf = _get_mt_town_range_section(filtered_gdf)
+  elif 'SD' in source:
+    filtered_gdf = _get_sd_town_range_meridian(filtered_gdf)
+    filtered_gdf = _get_sd_rights_type(filtered_gdf)
 
   filtered_gdf = _format_columns(filtered_gdf, config, alias)
 
@@ -321,6 +323,30 @@ def _get_wi_town_range_section_aliquot(gdf):
   return gdf
 
 
+def _get_sd_town_range_meridian(gdf):
+  '''
+  SD data has meridian, township, range together in a certain format in the PLSSID field
+  ex: "SD051130N0810W0": where the meridian is 5, township is 113N, range is 81W
+  '''
+  gdf[MERIDIAN] = gdf['PLSSID'].str.slice(start=3, stop=4)
+  gdf[TOWNSHIP] = gdf['PLSSID'].str.slice(
+      start=4, stop=7).str.strip('0') + gdf['PLSSID'].str.slice(start=8, stop=9)
+  gdf[RANGE] = gdf['PLSSID'].str.slice(
+      start=9, stop=12).str.strip('0') + gdf['PLSSID'].str.slice(start=13,
+                                                                 stop=14)
+
+  return gdf
+
+
+def _get_sd_rights_type(gdf):
+  '''
+  get and clean SD rights types to be consistent with the rest of the dataset
+  '''
+  gdf[RIGHTS_TYPE] = gdf['match_type'].str.replace('both', 'surface+subsurface')
+  gdf[RIGHTS_TYPE] = gdf[RIGHTS_TYPE].str.lower()
+  return gdf
+
+
 def _filter_queried_oklahoma_data(gdf):
   filter_df = _create_oklahoma_trust_fund_filter()
   # change id from from dictionary to string
@@ -470,6 +496,8 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
   # compute gis calculated areas, rounded to 2 decimals
   gdf[GIS_ACRES] = (gdf.to_crs(ALBERS_EQUAL_AREA).area /
                     ACRES_TO_SQUARE_METERS).round(2)
+  # round acres to 2 decimals
+  gdf[ACRES] = gdf[ACRES].round(2)
 
   # reorder columns to desired order
   final_column_order = [column for column in COLUMNS if column in gdf.columns]

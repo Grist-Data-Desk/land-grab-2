@@ -391,6 +391,21 @@ STATE_TRUST_CONFIGS = {
             # 'LegalDescription': ALIQUOT,
         },
     },
+    'SD': {
+        DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
+        STATE: 'SD',
+        UNIVERSITY: 'South Dakota State University',
+        MANAGING_AGENCY: 'Commissioner of School and Public Lands',
+        LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'SD',
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['*'],
+        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+            "*": 'All'
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'RECRDAREAN': ACRES,
+            'QQSEC': ALIQUOT,
+        },
+    },
     'TX': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
         STATE: 'TX',
