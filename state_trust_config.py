@@ -493,7 +493,8 @@ STATE_TRUST_CONFIGS = {
         STATE: 'WA',
         UNIVERSITY: 'Washington State University',
         MANAGING_AGENCY: 'Department of Natural Resources',
-        RIGHTS_TYPE: TIMBER_RIGHTS_TYPE,
+        RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
+        ACTIVITY: TIMBER_RIGHTS_TYPE,
         DATA_SOURCE:
         'https://gis.dnr.wa.gov/site3/rest/services/Public_Boundaries/WADNR_PUBLIC_Cadastre_OpenData/MapServer/6/',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['TIMBER_TRUST_CD'],

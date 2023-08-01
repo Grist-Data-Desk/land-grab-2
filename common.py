@@ -497,7 +497,8 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
   gdf[GIS_ACRES] = (gdf.to_crs(ALBERS_EQUAL_AREA).area /
                     ACRES_TO_SQUARE_METERS).round(2)
   # round acres to 2 decimals
-  gdf[ACRES] = gdf[ACRES].round(2)
+  if ACRES in gdf.columns:
+    gdf[ACRES] = gdf[ACRES].round(2)
 
   # reorder columns to desired order
   final_column_order = [column for column in COLUMNS if column in gdf.columns]
