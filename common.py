@@ -120,6 +120,9 @@ def _clean_queried_data(source, config, label, alias, queried_data_directory,
   filename = _get_filename(source, label, alias, '.json')
   gdf = gpd.read_file(queried_data_directory + filename)
 
+  if gdf.empty:
+    return gdf
+
   # custom cleaning
   if source == 'OK-surface':
     gdf = _filter_queried_oklahoma_data(gdf)
@@ -140,6 +143,8 @@ def _clean_queried_data(source, config, label, alias, queried_data_directory,
   filename = _get_filename(source, label, alias, '.geojson')
   gdf.to_file(cleaned_data_directory + filename, driver='GeoJSON')
 
+  return gdf
+
 
 def _filter_and_clean_shapefile(gdf, config, source, label, code, alias,
                                 cleaned_data_directory):
@@ -151,6 +156,9 @@ def _filter_and_clean_shapefile(gdf, config, source, label, code, alias,
     filtered_gdf = gdf[gdf[label] == code].copy()
   else:
     filtered_gdf = gdf
+
+  if filtered_gdf.empty:
+    return filtered_gdf
 
   # custom cleaning
   if source == 'NE':
@@ -171,6 +179,8 @@ def _filter_and_clean_shapefile(gdf, config, source, label, code, alias,
 
   filename = _get_filename(source, label, alias, '.geojson')
   filtered_gdf.to_file(cleaned_data_directory + filename, driver='GeoJSON')
+
+  return filtered_gdf
 
 
 def _format_columns(gdf, config, alias):
@@ -540,7 +550,6 @@ def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
   merged.to_file(merged_data_directory + _get_merged_dataset_filename(),
                  driver='GeoJSON')
   merged.to_csv(merged_data_directory +
-                _get_merged_dataset_filename(file_extension='.csv'),
-                driver='GeoJSON')
+                _get_merged_dataset_filename(file_extension='.csv'))
 
   return merged
