@@ -383,6 +383,22 @@ def _create_oklahoma_trust_fund_filter():
   return df
 
 
+###################################################
+##### helper functions for cleaning directory #####
+###################################################
+
+
+def delete_files_and_subdirectories_in_directory(directory_path):
+  try:
+    for root, dirs, files in os.walk(directory_path):
+      for file in files:
+        file_path = os.path.join(root, file)
+        os.remove(file_path)
+    print("All files and subdirectories deleted successfully.")
+  except OSError:
+    print("Error occurred while deleting files and subdirectories.")
+
+
 #############################################
 ##### helper functions for merging data #####
 #############################################
