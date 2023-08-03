@@ -64,6 +64,7 @@ STATE_TRUST_CONFIGS = {
         STATE: 'CO',
         UNIVERSITY: 'Colorado State University',
         MANAGING_AGENCY: 'State Land Board',
+        RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
         LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'CO',
         LAYER: 'SLB_Surface_University_Beneficiary',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Beneficiar'],
@@ -84,6 +85,7 @@ STATE_TRUST_CONFIGS = {
         STATE: 'CO',
         UNIVERSITY: 'Colorado State University',
         MANAGING_AGENCY: 'State Land Board',
+        RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
         LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'CO',
         LAYER: 'SLB_Minerals_University_Beneficiary',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Beneficiar'],
@@ -244,6 +246,7 @@ STATE_TRUST_CONFIGS = {
         STATE: 'ND',
         UNIVERSITY: 'North Dakota State University',
         MANAGING_AGENCY: 'Commissioner of University and School Lands',
+        RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
         LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY +
         'Surface_Trust_Lands_with_Trusts.zip',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Trust_Desc'],
@@ -264,6 +267,7 @@ STATE_TRUST_CONFIGS = {
         STATE: 'ND',
         UNIVERSITY: 'North Dakota State University',
         MANAGING_AGENCY: 'Commissioner of University and School Lands',
+        RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
         DATA_SOURCE:
         'https://ndgishub.nd.gov/arcgis/rest/services/All_GovtLands_State/MapServer/2',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['TRUST'],
@@ -284,6 +288,7 @@ STATE_TRUST_CONFIGS = {
         STATE: 'NE',
         UNIVERSITY: 'University of Nebraska',
         MANAGING_AGENCY: 'Board of Educational Lands and Funds',
+        RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
         LOCAL_DATA_SOURCE:
         STATE_TRUST_DATA_SOURCE_DIRECTORY + '2023_Nebraska_BELF_lands.zip',
         LAYER: '233103 BELF trust lands',
