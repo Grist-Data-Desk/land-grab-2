@@ -363,7 +363,7 @@ STATE_TRUST_CONFIGS = {
         STATE: 'OK',
         UNIVERSITY: 'Oklahoma State University',
         MANAGING_AGENCY: 'Commissioners of the Land Office',
-        RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
+        RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
         DATA_SOURCE:
         'https://gis.clo.ok.gov/arcgis/rest/services/Public/OKLeaseData_ExternalProd/MapServer/2',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['*'],
