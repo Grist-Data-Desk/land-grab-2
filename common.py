@@ -13,7 +13,7 @@ from constants import (
     API_QUERY_DOWNLOAD_TYPE, LAYER, OK_HOLDING_DETAIL_ID, OK_TRUST_FUND_ID,
     OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE, EXISTING_COLUMN_TO_FINAL_COLUMN_MAP,
     TOWNSHIP, SECTION, RANGE, MERIDIAN, COUNTY, ALIQUOT, LOCAL_DATA_SOURCE,
-    GIS_ACRES, ACRES_TO_SQUARE_METERS, ALBERS_EQUAL_AREA, ACRES)
+    GIS_ACRES, ACRES_TO_SQUARE_METERS, ALBERS_EQUAL_AREA, ACRES, ACTIVITY)
 
 app = typer.Typer()
 
@@ -411,50 +411,99 @@ def _merge_dataframes(df_list):
   '''
 
   # get intersection of all columns
-  columns_to_join_on = set.intersection(
-      *map(set, [df.columns for df in df_list]))
-  for df in df_list:
-    for column in df.columns:
-      if df[column].dtype == int:
-        df[column] = df[column].astype(object)
+  # columns_to_join_on = set.intersection(
+  #     *map(set, [df.columns for df in df_list]))
+  # for df in df_list:
+  #   for column in df.columns:
+  #     if df[column].dtype == int:
+  #       df[column] = df[column].astype(object)
 
-  # convert to lists
-  columns_to_join_on = [
-      column for column in columns_to_join_on if column not in [RIGHTS_TYPE]
-  ]
+  # # convert to lists
+  # columns_to_join_on = [
+  #     column for column in columns_to_join_on if column not in [RIGHTS_TYPE]
+  # ]
 
   # columns_to_join_on = [STATE, UNIVERSITY, GEOMETRY]
 
   # merge dataframes one by one until only 1 exists
   while len(df_list) > 1:
+    # get the first two datasets
     df1 = df_list.pop()
     df2 = df_list.pop()
-    merged = pd.merge(df1, df2, on=columns_to_join_on, how='outer')
-    df_list.append(merged)
 
-  merged = df_list.pop()
+    # get intersection of all columns between these two datasets
+    columns_to_join_on = set.intersection(
+        *map(set, [df.columns for df in [df1, df2]]))
+    for df in [df1, df2]:
+      for column in df.columns:
+        if df[column].dtype == int:
+          df[column] = df[column].astype(object)
+
+    # convert to lists
+    columns_to_join_on = [
+        column for column in columns_to_join_on
+        if column not in [RIGHTS_TYPE, ACTIVITY]
+    ]
+
+    # merge on these columns
+    merged = pd.merge(df1, df2, on=columns_to_join_on, how='outer')
+
+    # if there are any rights type columns in the merged dataset,
+    # correctly merge those columns to contain a readable rights type
+    if merged.columns.str.contains(RIGHTS_TYPE).any():
+      merged[RIGHTS_TYPE] = merged.apply(_merge_rights_type, axis=1)
+
+    # if there are any activity columns in the merged dataset,
+    # correctly merge those columns to contain a readable activity
+    if merged.columns.str.contains(ACTIVITY).any():
+      merged[ACTIVITY] = merged.apply(_merge_activity, axis=1)
+
+    # remove remaining columns
+    columns_to_drop = [
+        column for column in merged.columns if column not in COLUMNS
+    ]
+    merged = merged.drop(columns_to_drop, axis=1)
+
+    df_list.append(merged)
 
   # if there are any rights type columns in the merged dataset,
   # correctly merge those columns to cintain a readable rights type
-  if merged.columns.str.contains(RIGHTS_TYPE).any():
-    merged[RIGHTS_TYPE] = merged.apply(_merge_rights_type, axis=1)
+  # if merged.columns.str.contains(RIGHTS_TYPE).any():
+  #   merged[RIGHTS_TYPE] = merged.apply(_merge_rights_type, axis=1)
 
   # remove remaining columns
-  columns_to_drop = [
-      column for column in merged.columns if column not in COLUMNS
-  ]
-  return merged.drop(columns_to_drop, axis=1)
+  # columns_to_drop = [
+  #     column for column in merged.columns if column not in COLUMNS
+  # ]
+
+  # return the final merged dataset
+  merged = df_list.pop()
+  return merged
 
 
 def _merge_rights_type(row):
   '''
-    Correctly merge the rights type columns, removing duplicated, etc
+  Correctly merge the rights type column, aggregating values and removing duplicated values
+  '''
+  return _merge_row_helper(row, column=RIGHTS_TYPE)
+
+
+def _merge_activity(row):
+  '''
+  Correctly merge the activity column, aggregating values and removing duplicated values
+  '''
+  return _merge_row_helper(row, column=ACTIVITY)
+
+
+def _merge_row_helper(row, column):
+  '''
+  Correctly merge a column, aggregating values and removing duplicated values
   '''
   # get all rights type values from datasets
-  rights_types = row.filter(like=RIGHTS_TYPE).dropna()
-  if rights_types.any():
-    rights_types = pd.unique(rights_types)
-    return '+'.join(rights_types)
+  values = row.filter(like=column).dropna()
+  if values.any():
+    values = pd.unique(values)
+    return '+'.join(values)
   else:
     return None
 
