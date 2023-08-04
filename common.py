@@ -75,15 +75,6 @@ def _query_arcgis_restapi(config, source, label, code, alias, directory):
   data_source = config['data_source']
   layer = restapi.MapServiceLayer(data_source)
 
-  # to get feature set as GeoJson, must set outSR to 4326 for geojson
-  # first get the state's metadata by submitting an incorrect query
-  # features = layer.query(where='OBJECTID=20',
-  #                        outSR=4326,
-  #                        f='geojson',
-  #                        exceed_limit=True)
-  # features.dump(directory + f'{_to_kebab_case(source)}-metadata.geojson',
-  #               indent=2)  # indent allows for pretty view
-
   # create desired attribute conditions to filter the query by
   attribute_filter = f'{label}={code}'
 
@@ -95,17 +86,12 @@ def _query_arcgis_restapi(config, source, label, code, alias, directory):
                            outSR=4326,
                            f='geojson',
                            exceed_limit=True)
-  # features = layer.query(where="bene_abrev = 'USU'", outSR=4326, f='geojson', exceed_limit=True)
 
   # count the number of features
   print(f'Found {len(features)} features with {attribute_filter}')
 
   # save geojson file, may save as json depending on the esri api version, needs 10.3 to saave as geojson
   features.dump(directory + filename, indent=2)  # indent allows for pretty view
-  # features.dump('test.json', indent=2) # indent allows for pretty view
-
-  # OR, you can save it directly to a shapefile (does not require arcpy)
-  # layer.export_layer('test.shp', where=attribute_filter)
 
 
 #############################################################
@@ -644,7 +630,6 @@ def calculate_summary_statistics_helper(summary_statistics_data_directory):
                             UNIVERSITY_SUMMARY)
 
   # second csv: tribal summary
-  breakpoint()
   tribe_summary = df.groupby(['present_day_tribe']).sum()[GIS_ACRES].to_frame()
   tribe_summary['Royce_ID'] = df.groupby(['present_day_tribe'
                                           ])['Royce_ID'].unique()
@@ -653,4 +638,3 @@ def calculate_summary_statistics_helper(summary_statistics_data_directory):
                                           ])[UNIVERSITY].unique()
 
   tribe_summary.to_csv(summary_statistics_data_directory + TRIBE_SUMMARY)
-  breakpoint()
