@@ -14,7 +14,8 @@ from constants import (
     API_QUERY_DOWNLOAD_TYPE, LAYER, OK_HOLDING_DETAIL_ID, OK_TRUST_FUND_ID,
     OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE, EXISTING_COLUMN_TO_FINAL_COLUMN_MAP,
     TOWNSHIP, SECTION, RANGE, MERIDIAN, COUNTY, ALIQUOT, LOCAL_DATA_SOURCE,
-    GIS_ACRES, ACRES_TO_SQUARE_METERS, ALBERS_EQUAL_AREA, ACRES, ACTIVITY)
+    GIS_ACRES, ACRES_TO_SQUARE_METERS, ALBERS_EQUAL_AREA, ACRES, ACTIVITY,
+    UNIVERSITY, STATE, ALL_STATES, UNIVERSITY_SUMMARY, TRIBE_SUMMARY)
 
 app = typer.Typer()
 
@@ -41,9 +42,9 @@ def _get_filename(state, label, alias, filetype):
 
 def _get_merged_dataset_filename(state=None, file_extension='.geojson'):
   if state:
-    return state.lower() + '-merged' + file_extension
+    return state.lower() + file_extension
   else:
-    return 'all-states' + file_extension
+    return ALL_STATES + file_extension
 
 
 ##############################################
@@ -599,3 +600,57 @@ def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
                 _get_merged_dataset_filename(file_extension='.csv'))
 
   return merged
+
+
+def merge_cessions_data_helper(cessions_directory):
+
+  # layer = restapi.MapServiceLayer(
+  #     'https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TribalCessionLands_01/MapServer/0'
+  # )
+
+  # # then filter by specific attributes
+  # features = layer.query(outSR=4326, f='geojson', exceed_limit=True)
+  # print(f'Found {len(features)} features.')
+  # # save json file, may save as json depending on the esri api version, needs 10.3 to saave as geojson
+  # features.dump(cessions_directory + 'data.json',
+  #               indent=2)  # indent allows for pretty view
+  gdf = gpd.read_file(cessions_directory + 'data.json')
+  breakpoint()
+
+
+def calculate_summary_statistics_helper(summary_statistics_data_directory):
+  '''
+  Calculate summary statistics based on the full dataset. Create two csvs. In the first,
+  for each university calculate total acreage of land held in trust, all present day tribes
+  and tribes listed in treaties associated with the university land, and which cessions
+  (represented by Royce IDs) overlap with land held in trust. In the second, for each present
+  day tribe, get total acreage of state land trust parcels, all associated cessions, and all
+  states and universities that have land taken from this tribe held in trust
+  '''
+  # gdf = gpd.read_file(merged_data_directory + _get_merged_dataset_filename())
+  # upload merged dataset
+  df = gpd.read_file('../../Downloads/national-stls.csv')
+  df[GIS_ACRES] = df['gis_calculated_acres'].astype(float)
+
+  # create first csv: university summary
+  university_summary = df.groupby([UNIVERSITY]).sum()[GIS_ACRES].to_frame()
+  university_summary['present_day_tribe'] = df.groupby(
+      [UNIVERSITY])['present_day_tribe'].unique()
+  university_summary['tribe_named_in_land_cessions_1784-1894'] = df.groupby(
+      [UNIVERSITY])['tribe_named_in_land_cessions_1784-1894'].unique()
+  university_summary['Royce_ID'] = df.groupby([UNIVERSITY])['Royce_ID'].unique()
+
+  university_summary.to_csv(summary_statistics_data_directory +
+                            UNIVERSITY_SUMMARY)
+
+  # second csv: tribal summary
+  breakpoint()
+  tribe_summary = df.groupby(['present_day_tribe']).sum()[GIS_ACRES].to_frame()
+  tribe_summary['Royce_ID'] = df.groupby(['present_day_tribe'
+                                          ])['Royce_ID'].unique()
+  tribe_summary[STATE] = df.groupby(['present_day_tribe'])[STATE].unique()
+  tribe_summary[UNIVERSITY] = df.groupby(['present_day_tribe'
+                                          ])[UNIVERSITY].unique()
+
+  tribe_summary.to_csv(summary_statistics_data_directory + TRIBE_SUMMARY)
+  breakpoint()
