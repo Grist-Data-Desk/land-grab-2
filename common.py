@@ -76,12 +76,12 @@ def _query_arcgis_restapi(config, source, label, code, alias, directory):
 
   # to get feature set as GeoJson, must set outSR to 4326 for geojson
   # first get the state's metadata by submitting an incorrect query
-  features = layer.query(where='OBJECTID=20',
-                         outSR=4326,
-                         f='geojson',
-                         exceed_limit=True)
-  features.dump(directory + f'{_to_kebab_case(source)}-metadata.geojson',
-                indent=2)  # indent allows for pretty view
+  # features = layer.query(where='OBJECTID=20',
+  #                        outSR=4326,
+  #                        f='geojson',
+  #                        exceed_limit=True)
+  # features.dump(directory + f'{_to_kebab_case(source)}-metadata.geojson',
+  #               indent=2)  # indent allows for pretty view
 
   # create desired attribute conditions to filter the query by
   attribute_filter = f'{label}={code}'
@@ -153,7 +153,7 @@ def _filter_and_clean_shapefile(gdf, config, source, label, code, alias,
   if source == 'WI':
     gdf = gdf.to_crs(ALBERS_EQUAL_AREA)
 
-  if label != '*':
+  if code != '*':
     filtered_gdf = gdf[gdf[label] == code].copy()
   else:
     filtered_gdf = gdf
