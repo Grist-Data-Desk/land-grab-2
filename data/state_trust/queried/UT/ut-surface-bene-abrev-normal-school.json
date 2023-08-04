@@ -3,62 +3,7 @@
   "features": [
     {
       "type": "Feature",
-      "id": 2205801,
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -111.56486455245656,
-              39.54927009299082
-            ],
-            [
-              -111.56489953644699,
-              39.552995460519085
-            ],
-            [
-              -111.56947054729488,
-              39.552918641204556
-            ],
-            [
-              -111.56942027218169,
-              39.54917505922024
-            ],
-            [
-              -111.56486455245656,
-              39.54927009299082
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "OBJECTID": 2205801,
-        "quad": 4,
-        "township": 14,
-        "range": 3,
-        "section_": 34,
-        "county_cd": 20,
-        "county_abrev": "SANP",
-        "county_name": "Sanpete             ",
-        "bene_cd": 6,
-        "bene_abrev": "NS  ",
-        "parcel_seq_nbr": 4,
-        "parcel_layer_cd": 1,
-        "lin": "4T14.0R3.0S34C20_B6PT0L1_SQ4",
-        "acres": 40,
-        "legal_descr": "SE4SE4",
-        "ADMIN": null,
-        "QUAD_LBL": "S E",
-        "merid": "SL",
-        "TRS_LABEL": "T14.0S R3.0E Sec34 SL",
-        "SHAPE.STArea()": 273945.38260225,
-        "SHAPE.STLength()": 2094.643882376258,
-        "GlobalID": "{344D3E28-DF2F-412B-858D-D4063F4D577F}"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 2205919,
+      "id": 2247062,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -87,7 +32,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2205919,
+        "OBJECTID": 2247062,
         "quad": 4,
         "township": 13,
         "range": 2,
@@ -108,45 +53,100 @@
         "TRS_LABEL": "T13.0S R2.0E Sec24 SL",
         "SHAPE.STArea()": 278515.1779931,
         "SHAPE.STLength()": 2111.0343177855802,
-        "GlobalID": "{21FAD516-28FC-473C-991A-5A683D7E11B0}"
+        "GlobalID": "{90604473-37C9-4396-A733-09079DDBDE55}"
       }
     },
     {
       "type": "Feature",
-      "id": 2206564,
+      "id": 2247092,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -111.91618182242708,
-              39.170614672194155
+              -111.56486455245656,
+              39.54927009299082
             ],
             [
-              -111.92082824504645,
-              39.17061859521563
+              -111.56489953644699,
+              39.552995460519085
             ],
             [
-              -111.92067656720566,
-              39.16700292584701
+              -111.56947054729488,
+              39.552918641204556
             ],
             [
-              -111.91602655222347,
-              39.16699821282531
+              -111.56942027218169,
+              39.54917505922024
             ],
             [
-              -111.91618182242708,
-              39.170614672194155
+              -111.56486455245656,
+              39.54927009299082
             ]
           ]
         ]
       },
       "properties": {
-        "OBJECTID": 2206564,
-        "quad": 3,
+        "OBJECTID": 2247092,
+        "quad": 4,
+        "township": 14,
+        "range": 3,
+        "section_": 34,
+        "county_cd": 20,
+        "county_abrev": "SANP",
+        "county_name": "Sanpete             ",
+        "bene_cd": 6,
+        "bene_abrev": "NS  ",
+        "parcel_seq_nbr": 4,
+        "parcel_layer_cd": 1,
+        "lin": "4T14.0R3.0S34C20_B6PT0L1_SQ4",
+        "acres": 40,
+        "legal_descr": "SE4SE4",
+        "ADMIN": null,
+        "QUAD_LBL": "S E",
+        "merid": "SL",
+        "TRS_LABEL": "T14.0S R3.0E Sec34 SL",
+        "SHAPE.STArea()": 273945.38260225,
+        "SHAPE.STLength()": 2094.643882376258,
+        "GlobalID": "{C3FB9A6C-6F6C-45BE-AAAC-08015B40FDA1}"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2248117,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -111.73718152016191,
+              39.150290372286946
+            ],
+            [
+              -111.7418516717795,
+              39.15031976060103
+            ],
+            [
+              -111.74183164563688,
+              39.14665954066438
+            ],
+            [
+              -111.73712209660584,
+              39.14663526649176
+            ],
+            [
+              -111.73718152016191,
+              39.150290372286946
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 2248117,
+        "quad": 4,
         "township": 19,
-        "range": 1,
-        "section_": 9,
+        "range": 2,
+        "section_": 19,
         "county_cd": 20,
         "county_abrev": "SANP",
         "county_name": "Sanpete             ",
@@ -154,21 +154,21 @@
         "bene_abrev": "NS  ",
         "parcel_seq_nbr": 1,
         "parcel_layer_cd": 1,
-        "lin": "3T19.0R1.0S9C20_B6PT0L1_SQ1",
-        "acres": 40,
-        "legal_descr": "NW4SE4",
+        "lin": "4T19.0R2.0S19C20_B6PT0L1_SQ1",
+        "acres": 39.83,
+        "legal_descr": "LOT 1 (NW4NW4)",
         "ADMIN": null,
-        "QUAD_LBL": "S W",
+        "QUAD_LBL": "S E",
         "merid": "SL",
-        "TRS_LABEL": "T19.0S R1.0W Sec9 SL",
-        "SHAPE.STArea()": 268648.67493532,
-        "SHAPE.STLength()": 2073.859943000129,
-        "GlobalID": "{16451763-EDEF-4D4D-9EF2-DDEB53FFFEAC}"
+        "TRS_LABEL": "T19.0S R2.0E Sec19 SL",
+        "SHAPE.STArea()": 274087.526081495,
+        "SHAPE.STLength()": 2094.2833230701926,
+        "GlobalID": "{EF39DC95-DD5C-43D8-AEA5-A13EE81AB92B}"
       }
     },
     {
       "type": "Feature",
-      "id": 2206666,
+      "id": 2248127,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -197,7 +197,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2206666,
+        "OBJECTID": 2248127,
         "quad": 3,
         "township": 20,
         "range": 8,
@@ -218,12 +218,12 @@
         "TRS_LABEL": "T20.0S R8.0W Sec5 SL",
         "SHAPE.STArea()": 272438.7865884,
         "SHAPE.STLength()": 2087.9142581260508,
-        "GlobalID": "{28AF9725-F4D3-4A3A-986C-F4BCBC4957D9}"
+        "GlobalID": "{CE24807E-C010-4066-B249-B22E6781CE63}"
       }
     },
     {
       "type": "Feature",
-      "id": 2206679,
+      "id": 2248140,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -260,7 +260,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2206679,
+        "OBJECTID": 2248140,
         "quad": 4,
         "township": 20,
         "range": 1,
@@ -281,45 +281,45 @@
         "TRS_LABEL": "T20.0S R1.0E Sec10 SL",
         "SHAPE.STArea()": 553362.014573665,
         "SHAPE.STLength()": 3150.803673752197,
-        "GlobalID": "{7BC012C4-7AF1-4C9C-B86E-164C94D1B351}"
+        "GlobalID": "{B40A6BD2-4FA0-4012-A8DF-E1071D99BF68}"
       }
     },
     {
       "type": "Feature",
-      "id": 2206825,
+      "id": 2248198,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -111.73718152016191,
-              39.150290372286946
+              -111.91618182242708,
+              39.170614672194155
             ],
             [
-              -111.7418516717795,
-              39.15031976060103
+              -111.92082824504645,
+              39.17061859521563
             ],
             [
-              -111.74183164563688,
-              39.14665954066438
+              -111.92067656720566,
+              39.16700292584701
             ],
             [
-              -111.73712209660584,
-              39.14663526649176
+              -111.91602655222347,
+              39.16699821282531
             ],
             [
-              -111.73718152016191,
-              39.150290372286946
+              -111.91618182242708,
+              39.170614672194155
             ]
           ]
         ]
       },
       "properties": {
-        "OBJECTID": 2206825,
-        "quad": 4,
+        "OBJECTID": 2248198,
+        "quad": 3,
         "township": 19,
-        "range": 2,
-        "section_": 19,
+        "range": 1,
+        "section_": 9,
         "county_cd": 20,
         "county_abrev": "SANP",
         "county_name": "Sanpete             ",
@@ -327,21 +327,21 @@
         "bene_abrev": "NS  ",
         "parcel_seq_nbr": 1,
         "parcel_layer_cd": 1,
-        "lin": "4T19.0R2.0S19C20_B6PT0L1_SQ1",
-        "acres": 39.83,
-        "legal_descr": "LOT 1 (NW4NW4)",
+        "lin": "3T19.0R1.0S9C20_B6PT0L1_SQ1",
+        "acres": 40,
+        "legal_descr": "NW4SE4",
         "ADMIN": null,
-        "QUAD_LBL": "S E",
+        "QUAD_LBL": "S W",
         "merid": "SL",
-        "TRS_LABEL": "T19.0S R2.0E Sec19 SL",
-        "SHAPE.STArea()": 274087.526081495,
-        "SHAPE.STLength()": 2094.2833230701926,
-        "GlobalID": "{242BA313-9609-4FBE-B011-F3793B8118A6}"
+        "TRS_LABEL": "T19.0S R1.0W Sec9 SL",
+        "SHAPE.STArea()": 268648.67493532,
+        "SHAPE.STLength()": 2073.859943000129,
+        "GlobalID": "{CD727269-2166-40EF-92E0-E36BC76EF1FA}"
       }
     },
     {
       "type": "Feature",
-      "id": 2206945,
+      "id": 2248292,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -370,7 +370,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2206945,
+        "OBJECTID": 2248292,
         "quad": 3,
         "township": 22,
         "range": 1,
@@ -391,12 +391,12 @@
         "TRS_LABEL": "T22.0S R1.0W Sec7 SL",
         "SHAPE.STArea()": 245399.61311157,
         "SHAPE.STLength()": 2033.9406326944988,
-        "GlobalID": "{2663809A-1F82-4E16-8C01-06799153BBDC}"
+        "GlobalID": "{46743774-14DA-477B-B0AD-15C811459623}"
       }
     },
     {
       "type": "Feature",
-      "id": 2207340,
+      "id": 2248624,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -441,7 +441,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2207340,
+        "OBJECTID": 2248624,
         "quad": 3,
         "township": 21,
         "range": 1,
@@ -462,12 +462,67 @@
         "TRS_LABEL": "T21.0S R1.0W Sec10 SL",
         "SHAPE.STArea()": 1089450.46742727,
         "SHAPE.STLength()": 4175.210095088973,
-        "GlobalID": "{71591EA1-0D29-47CA-97EB-368E504EFC23}"
+        "GlobalID": "{2613188C-5154-4DC7-B9F2-A7A83ABF2498}"
       }
     },
     {
       "type": "Feature",
-      "id": 2207399,
+      "id": 2248899,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -112.77511929437046,
+              39.10826989980931
+            ],
+            [
+              -112.77519202377248,
+              39.10461899034205
+            ],
+            [
+              -112.77048501517707,
+              39.10460165583588
+            ],
+            [
+              -112.77041610181837,
+              39.10825304716736
+            ],
+            [
+              -112.77511929437046,
+              39.10826989980931
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 2248899,
+        "quad": 3,
+        "township": 20,
+        "range": 8,
+        "section_": 5,
+        "county_cd": 14,
+        "county_abrev": "MLRD",
+        "county_name": "Millard             ",
+        "bene_cd": 6,
+        "bene_abrev": "NS  ",
+        "parcel_seq_nbr": 2,
+        "parcel_layer_cd": 1,
+        "lin": "3T20.0R8.0S5C14_B6PT0L1_SQ2",
+        "acres": 40,
+        "legal_descr": "SW4NE4",
+        "ADMIN": null,
+        "QUAD_LBL": "S W",
+        "merid": "SL",
+        "TRS_LABEL": "T20.0S R8.0W Sec5 SL",
+        "SHAPE.STArea()": 274361.78307948,
+        "SHAPE.STLength()": 2095.2386264844104,
+        "GlobalID": "{29C2A3DC-3547-4FAC-8C3A-03CA52F08634}"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2248924,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -496,7 +551,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2207399,
+        "OBJECTID": 2248924,
         "quad": 3,
         "township": 28,
         "range": 7,
@@ -517,12 +572,12 @@
         "TRS_LABEL": "T28.0S R7.0W Sec7 SL",
         "SHAPE.STArea()": 269414.59707936,
         "SHAPE.STLength()": 2076.2750550056294,
-        "GlobalID": "{85A756F0-1D2C-4A3C-B800-E26C67FBAC86}"
+        "GlobalID": "{9EC168D6-5BC8-42E3-8722-2BE3DBB1206C}"
       }
     },
     {
       "type": "Feature",
-      "id": 2207452,
+      "id": 2249013,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -599,7 +654,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2207452,
+        "OBJECTID": 2249013,
         "quad": 3,
         "township": 39,
         "range": 9,
@@ -620,67 +675,12 @@
         "TRS_LABEL": "T39.0S R9.0W Sec9 SL",
         "SHAPE.STArea()": 4107333.016814425,
         "SHAPE.STLength()": 8107.5176536038,
-        "GlobalID": "{20612CFA-8CCE-45CE-BA9D-E862D4CC3EC2}"
+        "GlobalID": "{31E2C59B-193E-4096-A3AD-8F17C44EB470}"
       }
     },
     {
       "type": "Feature",
-      "id": 2207780,
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -112.77511929437046,
-              39.10826989980931
-            ],
-            [
-              -112.77519202377248,
-              39.10461899034205
-            ],
-            [
-              -112.77048501517707,
-              39.10460165583588
-            ],
-            [
-              -112.77041610181837,
-              39.10825304716736
-            ],
-            [
-              -112.77511929437046,
-              39.10826989980931
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "OBJECTID": 2207780,
-        "quad": 3,
-        "township": 20,
-        "range": 8,
-        "section_": 5,
-        "county_cd": 14,
-        "county_abrev": "MLRD",
-        "county_name": "Millard             ",
-        "bene_cd": 6,
-        "bene_abrev": "NS  ",
-        "parcel_seq_nbr": 2,
-        "parcel_layer_cd": 1,
-        "lin": "3T20.0R8.0S5C14_B6PT0L1_SQ2",
-        "acres": 40,
-        "legal_descr": "SW4NE4",
-        "ADMIN": null,
-        "QUAD_LBL": "S W",
-        "merid": "SL",
-        "TRS_LABEL": "T20.0S R8.0W Sec5 SL",
-        "SHAPE.STArea()": 274361.78307948,
-        "SHAPE.STLength()": 2095.2386264844104,
-        "GlobalID": "{BCC6D7AF-727B-44E0-BE17-40BF943F379B}"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 2207832,
+      "id": 2249197,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -713,7 +713,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2207832,
+        "OBJECTID": 2249197,
         "quad": 3,
         "township": 21,
         "range": 1,
@@ -734,12 +734,12 @@
         "TRS_LABEL": "T21.0S R1.0W Sec3 SL",
         "SHAPE.STArea()": 294279.44653366,
         "SHAPE.STLength()": 2172.851201386963,
-        "GlobalID": "{9CFC4CD9-5415-4370-A9AB-8DCCCA6B352C}"
+        "GlobalID": "{1578F6FC-3AC7-4E91-874F-0768AC68DE9C}"
       }
     },
     {
       "type": "Feature",
-      "id": 2208006,
+      "id": 2249255,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -768,7 +768,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2208006,
+        "OBJECTID": 2249255,
         "quad": 3,
         "township": 18,
         "range": 1,
@@ -789,12 +789,12 @@
         "TRS_LABEL": "T18.0S R1.0W Sec33 SL",
         "SHAPE.STArea()": 266591.903269185,
         "SHAPE.STLength()": 2068.7399918259916,
-        "GlobalID": "{6DFB8071-1564-4E40-9B67-D14D43C6E086}"
+        "GlobalID": "{F04A4225-54E2-4ACC-9B13-8FFE46066B2A}"
       }
     },
     {
       "type": "Feature",
-      "id": 2208425,
+      "id": 2249402,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -823,7 +823,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2208425,
+        "OBJECTID": 2249402,
         "quad": 3,
         "township": 21,
         "range": 1,
@@ -844,12 +844,177 @@
         "TRS_LABEL": "T21.0S R1.0W Sec29 SL",
         "SHAPE.STArea()": 270385.56534455,
         "SHAPE.STLength()": 2080.0238906077957,
-        "GlobalID": "{94303294-C3FE-43F8-8FB6-E946EFF1E22D}"
+        "GlobalID": "{D7A1CE24-0AC2-43C4-80F4-8902F1AB6B1D}"
       }
     },
     {
       "type": "Feature",
-      "id": 2208596,
+      "id": 2249921,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -111.92633911197215,
+              39.90127802351072
+            ],
+            [
+              -111.92157985286826,
+              39.90128423062442
+            ],
+            [
+              -111.92178226126806,
+              39.9050053584932
+            ],
+            [
+              -111.9264922558635,
+              39.90503980964191
+            ],
+            [
+              -111.92633911197215,
+              39.90127802351072
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 2249921,
+        "quad": 3,
+        "township": 10,
+        "range": 1,
+        "section_": 34,
+        "county_cd": 25,
+        "county_abrev": "UTAH",
+        "county_name": "Utah                ",
+        "bene_cd": 6,
+        "bene_abrev": "NS  ",
+        "parcel_seq_nbr": 2,
+        "parcel_layer_cd": 1,
+        "lin": "3T10.0R1.0S34C25_B6PT0L1_SQ2",
+        "acres": 40,
+        "legal_descr": "SW4NE4",
+        "ADMIN": null,
+        "QUAD_LBL": "S W",
+        "merid": "SL",
+        "TRS_LABEL": "T10.0S R1.0W Sec34 SL",
+        "SHAPE.STArea()": 286113.59257503,
+        "SHAPE.STLength()": 2140.731237716939,
+        "GlobalID": "{99F57C47-3A7F-4669-9D0E-C2B35123C831}"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2249948,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -113.9237168731848,
+              37.96549167358844
+            ],
+            [
+              -113.91916458143078,
+              37.96552219835996
+            ],
+            [
+              -113.91915853756554,
+              37.96933595629295
+            ],
+            [
+              -113.92371137100366,
+              37.96932460561523
+            ],
+            [
+              -113.9237168731848,
+              37.96549167358844
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 2249948,
+        "quad": 3,
+        "township": 33,
+        "range": 19,
+        "section_": 1,
+        "county_cd": 11,
+        "county_abrev": "IRON",
+        "county_name": "Iron                ",
+        "bene_cd": 6,
+        "bene_abrev": "NS  ",
+        "parcel_seq_nbr": 2,
+        "parcel_layer_cd": 1,
+        "lin": "3T33.0R19.0S1C11_B6PT0L1_SQ2",
+        "acres": 42.33,
+        "legal_descr": "LOT 2 (NW4NE4)",
+        "ADMIN": null,
+        "QUAD_LBL": "S W",
+        "merid": "SL",
+        "TRS_LABEL": "T33.0S R19.0W Sec1 SL",
+        "SHAPE.STArea()": 273598.579886725,
+        "SHAPE.STLength()": 2093.3408301251716,
+        "GlobalID": "{5F2B6626-B387-452D-B2C2-A2794B339D56}"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2249953,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -113.92826711677996,
+              37.96546138393171
+            ],
+            [
+              -113.9237168731848,
+              37.96549167358844
+            ],
+            [
+              -113.92371137100366,
+              37.96932460561523
+            ],
+            [
+              -113.92826431223966,
+              37.969313256352066
+            ],
+            [
+              -113.92826711677996,
+              37.96546138393171
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 2249953,
+        "quad": 3,
+        "township": 33,
+        "range": 19,
+        "section_": 1,
+        "county_cd": 11,
+        "county_abrev": "IRON",
+        "county_name": "Iron                ",
+        "bene_cd": 6,
+        "bene_abrev": "NS  ",
+        "parcel_seq_nbr": 3,
+        "parcel_layer_cd": 1,
+        "lin": "3T33.0R19.0S1C11_B6PT0L1_SQ3",
+        "acres": 42.55,
+        "legal_descr": "LOT 3 (NE4NW4)",
+        "ADMIN": null,
+        "QUAD_LBL": "S W",
+        "merid": "SL",
+        "TRS_LABEL": "T33.0S R19.0W Sec1 SL",
+        "SHAPE.STArea()": 274904.191725965,
+        "SHAPE.STLength()": 2098.5058255985255,
+        "GlobalID": "{08D95FDF-B72C-4885-AD26-E2733BA7C8C3}"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2250247,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -882,7 +1047,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2208596,
+        "OBJECTID": 2250247,
         "quad": 1,
         "township": 15,
         "range": 6,
@@ -903,151 +1068,104 @@
         "TRS_LABEL": "T15.0N R6.0E Sec34 SL",
         "SHAPE.STArea()": 284935.55449501,
         "SHAPE.STLength()": 2135.7635795731767,
-        "GlobalID": "{8BA97489-E88B-407B-873F-641DCDF6C7B2}"
+        "GlobalID": "{37050A84-8241-4C98-93D0-656A35025AB3}"
       }
     },
     {
       "type": "Feature",
-      "id": 2208648,
+      "id": 2250408,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -111.92633911197215,
-              39.90127802351072
+              -111.9523650754342,
+              38.91286889932217
             ],
             [
-              -111.92157985286826,
-              39.90128423062442
+              -111.94769610869446,
+              38.91300656000097
             ],
             [
-              -111.92178226126806,
-              39.9050053584932
+              -111.9478225465707,
+              38.91658956850211
             ],
             [
-              -111.9264922558635,
-              39.90503980964191
+              -111.94794888473393,
+              38.92017248486947
             ],
             [
-              -111.92633911197215,
-              39.90127802351072
+              -111.9526156362282,
+              38.919963462527235
+            ],
+            [
+              -111.95249034819554,
+              38.916416227295294
+            ],
+            [
+              -111.9523650754342,
+              38.91286889932217
             ]
           ]
         ]
       },
       "properties": {
-        "OBJECTID": 2208648,
+        "OBJECTID": 2250408,
         "quad": 3,
-        "township": 10,
+        "township": 22,
         "range": 1,
-        "section_": 34,
-        "county_cd": 25,
-        "county_abrev": "UTAH",
-        "county_name": "Utah                ",
+        "section_": 6,
+        "county_cd": 21,
+        "county_abrev": "SEVR",
+        "county_name": "Sevier              ",
         "bene_cd": 6,
         "bene_abrev": "NS  ",
-        "parcel_seq_nbr": 2,
+        "parcel_seq_nbr": 3,
         "parcel_layer_cd": 1,
-        "lin": "3T10.0R1.0S34C25_B6PT0L1_SQ2",
-        "acres": 40,
-        "legal_descr": "SW4NE4",
+        "lin": "3T22.0R1.0S6C21_B6PT0L1_SQ3",
+        "acres": 80,
+        "legal_descr": "W2SE4",
         "ADMIN": null,
         "QUAD_LBL": "S W",
         "merid": "SL",
-        "TRS_LABEL": "T10.0S R1.0W Sec34 SL",
-        "SHAPE.STArea()": 286113.59257503,
-        "SHAPE.STLength()": 2140.731237716939,
-        "GlobalID": "{1F9DF09B-D9E5-471A-A566-48D25115CA91}"
+        "TRS_LABEL": "T22.0S R1.0W Sec6 SL",
+        "SHAPE.STArea()": 530782.2650663,
+        "SHAPE.STLength()": 3081.5367708910067,
+        "GlobalID": "{1E56AEC6-5FAA-4DC4-9750-8E34BD8CCF9C}"
       }
     },
     {
       "type": "Feature",
-      "id": 2208675,
+      "id": 2250486,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
-            [
-              -113.9237168731848,
-              37.96549167358844
-            ],
-            [
-              -113.91916458143078,
-              37.96552219835996
-            ],
-            [
-              -113.91915853756554,
-              37.96933595629295
-            ],
-            [
-              -113.92371137100366,
-              37.96932460561523
-            ],
-            [
-              -113.9237168731848,
-              37.96549167358844
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "OBJECTID": 2208675,
-        "quad": 3,
-        "township": 33,
-        "range": 19,
-        "section_": 1,
-        "county_cd": 11,
-        "county_abrev": "IRON",
-        "county_name": "Iron                ",
-        "bene_cd": 6,
-        "bene_abrev": "NS  ",
-        "parcel_seq_nbr": 2,
-        "parcel_layer_cd": 1,
-        "lin": "3T33.0R19.0S1C11_B6PT0L1_SQ2",
-        "acres": 42.33,
-        "legal_descr": "LOT 2 (NW4NE4)",
-        "ADMIN": null,
-        "QUAD_LBL": "S W",
-        "merid": "SL",
-        "TRS_LABEL": "T33.0S R19.0W Sec1 SL",
-        "SHAPE.STArea()": 273598.579886725,
-        "SHAPE.STLength()": 2093.3408301251716,
-        "GlobalID": "{C25964AC-428C-4CBE-96BA-61AECB7C7A3C}"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 2208680,
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -113.92826711677996,
-              37.96546138393171
-            ],
-            [
-              -113.9237168731848,
-              37.96549167358844
-            ],
-            [
-              -113.92371137100366,
-              37.96932460561523
-            ],
             [
               -113.92826431223966,
               37.969313256352066
             ],
             [
+              -113.93281713849126,
+              37.96930200339941
+            ],
+            [
+              -113.9328173460021,
+              37.96543091791675
+            ],
+            [
               -113.92826711677996,
               37.96546138393171
+            ],
+            [
+              -113.92826431223966,
+              37.969313256352066
             ]
           ]
         ]
       },
       "properties": {
-        "OBJECTID": 2208680,
+        "OBJECTID": 2250486,
         "quad": 3,
         "township": 33,
         "range": 19,
@@ -1057,23 +1175,78 @@
         "county_name": "Iron                ",
         "bene_cd": 6,
         "bene_abrev": "NS  ",
-        "parcel_seq_nbr": 3,
+        "parcel_seq_nbr": 4,
         "parcel_layer_cd": 1,
-        "lin": "3T33.0R19.0S1C11_B6PT0L1_SQ3",
-        "acres": 42.55,
-        "legal_descr": "LOT 3 (NE4NW4)",
+        "lin": "3T33.0R19.0S1C11_B6PT0L1_SQ4",
+        "acres": 42.77,
+        "legal_descr": "LOT 4 (NW4NW4)",
         "ADMIN": null,
         "QUAD_LBL": "S W",
         "merid": "SL",
         "TRS_LABEL": "T33.0S R19.0W Sec1 SL",
-        "SHAPE.STArea()": 274904.191725965,
-        "SHAPE.STLength()": 2098.5058255985255,
-        "GlobalID": "{16507C60-06F6-4BBA-995E-49DDBD4FF08B}"
+        "SHAPE.STArea()": 276265.90175994,
+        "SHAPE.STLength()": 2103.8783476536655,
+        "GlobalID": "{31736D97-288F-4C46-B299-C3768D8B215B}"
       }
     },
     {
       "type": "Feature",
-      "id": 2209077,
+      "id": 2250658,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -111.9523650754342,
+              38.91286889932217
+            ],
+            [
+              -111.95249034819554,
+              38.916416227295294
+            ],
+            [
+              -111.95669126662112,
+              38.91573180622819
+            ],
+            [
+              -111.956407116022,
+              38.91168007506972
+            ],
+            [
+              -111.9523650754342,
+              38.91286889932217
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 2250658,
+        "quad": 3,
+        "township": 22,
+        "range": 1,
+        "section_": 6,
+        "county_cd": 21,
+        "county_abrev": "SEVR",
+        "county_name": "Sevier              ",
+        "bene_cd": 6,
+        "bene_abrev": "NS  ",
+        "parcel_seq_nbr": 2,
+        "parcel_layer_cd": 1,
+        "lin": "3T22.0R1.0S6C21_B6PT0L1_SQ2",
+        "acres": 40,
+        "legal_descr": "SE4SW4",
+        "ADMIN": null,
+        "QUAD_LBL": "S W",
+        "merid": "SL",
+        "TRS_LABEL": "T22.0S R1.0W Sec6 SL",
+        "SHAPE.STArea()": 252453.73543332,
+        "SHAPE.STLength()": 2047.0509007286855,
+        "GlobalID": "{68572B2F-6F98-4DE2-BB47-6D35C2FBEA58}"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2250943,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -1130,7 +1303,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2209077,
+        "OBJECTID": 2250943,
         "quad": 3,
         "township": 33,
         "range": 19,
@@ -1151,12 +1324,12 @@
         "TRS_LABEL": "T33.0S R19.0W Sec1 SL",
         "SHAPE.STArea()": 1033618.490666745,
         "SHAPE.STLength()": 5072.948166079824,
-        "GlobalID": "{3E767706-54E1-412E-996C-4F16291B1732}"
+        "GlobalID": "{E2FE3E4E-1C0A-41C2-A133-492BF9ED3BE2}"
       }
     },
     {
       "type": "Feature",
-      "id": 2209101,
+      "id": 2250967,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -1217,7 +1390,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2209101,
+        "OBJECTID": 2250967,
         "quad": 3,
         "township": 19,
         "range": 8,
@@ -1238,67 +1411,12 @@
         "TRS_LABEL": "T19.0S R8.0W Sec31 SL",
         "SHAPE.STArea()": 1356479.00696237,
         "SHAPE.STLength()": 5207.859573373688,
-        "GlobalID": "{E2A9EA3D-1D56-4DF9-89A6-C6B5F869EEE6}"
+        "GlobalID": "{2D03B6D6-361B-43C0-86C6-F837760ACB0E}"
       }
     },
     {
       "type": "Feature",
-      "id": 2209557,
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -113.92826431223966,
-              37.969313256352066
-            ],
-            [
-              -113.93281713849126,
-              37.96930200339941
-            ],
-            [
-              -113.9328173460021,
-              37.96543091791675
-            ],
-            [
-              -113.92826711677996,
-              37.96546138393171
-            ],
-            [
-              -113.92826431223966,
-              37.969313256352066
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "OBJECTID": 2209557,
-        "quad": 3,
-        "township": 33,
-        "range": 19,
-        "section_": 1,
-        "county_cd": 11,
-        "county_abrev": "IRON",
-        "county_name": "Iron                ",
-        "bene_cd": 6,
-        "bene_abrev": "NS  ",
-        "parcel_seq_nbr": 4,
-        "parcel_layer_cd": 1,
-        "lin": "3T33.0R19.0S1C11_B6PT0L1_SQ4",
-        "acres": 42.77,
-        "legal_descr": "LOT 4 (NW4NW4)",
-        "ADMIN": null,
-        "QUAD_LBL": "S W",
-        "merid": "SL",
-        "TRS_LABEL": "T33.0S R19.0W Sec1 SL",
-        "SHAPE.STArea()": 276265.90175994,
-        "SHAPE.STLength()": 2103.8783476536655,
-        "GlobalID": "{FB1F016E-7BDF-4012-9E01-84026F3525B3}"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 2209626,
+      "id": 2251115,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -1327,7 +1445,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2209626,
+        "OBJECTID": 2251115,
         "quad": 1,
         "township": 3,
         "range": 25,
@@ -1348,12 +1466,12 @@
         "TRS_LABEL": "T3.0N R25.0E Sec31 SL",
         "SHAPE.STArea()": 270504.78461886,
         "SHAPE.STLength()": 2081.6355050165284,
-        "GlobalID": "{B27E87BE-5B59-4489-80A4-A0FB425E4962}"
+        "GlobalID": "{4D8BCABA-CCC1-401B-8785-8A24A542E082}"
       }
     },
     {
       "type": "Feature",
-      "id": 2209989,
+      "id": 2251742,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -1434,7 +1552,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2209989,
+        "OBJECTID": 2251742,
         "quad": 1,
         "township": 15,
         "range": 6,
@@ -1455,130 +1573,12 @@
         "TRS_LABEL": "T15.0N R6.0E Sec34 SL",
         "SHAPE.STArea()": 2172363.1191903,
         "SHAPE.STLength()": 6162.639355555665,
-        "GlobalID": "{E2306D9F-B98E-46F7-B790-803FB4E4E87E}"
+        "GlobalID": "{52E0C309-9DAC-45DE-B654-84AC77431C4A}"
       }
     },
     {
       "type": "Feature",
-      "id": 2210231,
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -111.9523650754342,
-              38.91286889932217
-            ],
-            [
-              -111.94769610869446,
-              38.91300656000097
-            ],
-            [
-              -111.9478225465707,
-              38.91658956850211
-            ],
-            [
-              -111.94794888473393,
-              38.92017248486947
-            ],
-            [
-              -111.9526156362282,
-              38.919963462527235
-            ],
-            [
-              -111.95249034819554,
-              38.916416227295294
-            ],
-            [
-              -111.9523650754342,
-              38.91286889932217
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "OBJECTID": 2210231,
-        "quad": 3,
-        "township": 22,
-        "range": 1,
-        "section_": 6,
-        "county_cd": 21,
-        "county_abrev": "SEVR",
-        "county_name": "Sevier              ",
-        "bene_cd": 6,
-        "bene_abrev": "NS  ",
-        "parcel_seq_nbr": 3,
-        "parcel_layer_cd": 1,
-        "lin": "3T22.0R1.0S6C21_B6PT0L1_SQ3",
-        "acres": 80,
-        "legal_descr": "W2SE4",
-        "ADMIN": null,
-        "QUAD_LBL": "S W",
-        "merid": "SL",
-        "TRS_LABEL": "T22.0S R1.0W Sec6 SL",
-        "SHAPE.STArea()": 530782.2650663,
-        "SHAPE.STLength()": 3081.5367708910067,
-        "GlobalID": "{5AB114A7-46E7-4BB9-88EA-4F30EB2198A9}"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 2210265,
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -111.9523650754342,
-              38.91286889932217
-            ],
-            [
-              -111.95249034819554,
-              38.916416227295294
-            ],
-            [
-              -111.95669126662112,
-              38.91573180622819
-            ],
-            [
-              -111.956407116022,
-              38.91168007506972
-            ],
-            [
-              -111.9523650754342,
-              38.91286889932217
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "OBJECTID": 2210265,
-        "quad": 3,
-        "township": 22,
-        "range": 1,
-        "section_": 6,
-        "county_cd": 21,
-        "county_abrev": "SEVR",
-        "county_name": "Sevier              ",
-        "bene_cd": 6,
-        "bene_abrev": "NS  ",
-        "parcel_seq_nbr": 2,
-        "parcel_layer_cd": 1,
-        "lin": "3T22.0R1.0S6C21_B6PT0L1_SQ2",
-        "acres": 40,
-        "legal_descr": "SE4SW4",
-        "ADMIN": null,
-        "QUAD_LBL": "S W",
-        "merid": "SL",
-        "TRS_LABEL": "T22.0S R1.0W Sec6 SL",
-        "SHAPE.STArea()": 252453.73543332,
-        "SHAPE.STLength()": 2047.0509007286855,
-        "GlobalID": "{4D7994E2-538B-4B22-96E0-8D6C0EBE989C}"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 2210396,
+      "id": 2251832,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -1607,7 +1607,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2210396,
+        "OBJECTID": 2251832,
         "quad": 4,
         "township": 20,
         "range": 16,
@@ -1628,67 +1628,12 @@
         "TRS_LABEL": "T20.0S R16.0E Sec8 SL",
         "SHAPE.STArea()": 266801.2976329,
         "SHAPE.STLength()": 2066.5610391777077,
-        "GlobalID": "{92C1E18E-0FA1-440B-8B2F-DEA19C3D63CB}"
+        "GlobalID": "{C29047C0-44B6-43C5-8D98-C2EE278593BE}"
       }
     },
     {
       "type": "Feature",
-      "id": 2211003,
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -111.91633710969866,
-              39.1742309490788
-            ],
-            [
-              -111.92097993726027,
-              39.17423390181375
-            ],
-            [
-              -111.92082824504645,
-              39.17061859521563
-            ],
-            [
-              -111.91618182242708,
-              39.170614672194155
-            ],
-            [
-              -111.91633710969866,
-              39.1742309490788
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "OBJECTID": 2211003,
-        "quad": 3,
-        "township": 19,
-        "range": 1,
-        "section_": 9,
-        "county_cd": 20,
-        "county_abrev": "SANP",
-        "county_name": "Sanpete             ",
-        "bene_cd": 6,
-        "bene_abrev": "NS  ",
-        "parcel_seq_nbr": 2,
-        "parcel_layer_cd": 1,
-        "lin": "3T19.0R1.0S9C20_B6PT0L1_SQ2",
-        "acres": 40,
-        "legal_descr": "SW4NE4",
-        "ADMIN": null,
-        "QUAD_LBL": "S W",
-        "merid": "SL",
-        "TRS_LABEL": "T19.0S R1.0W Sec9 SL",
-        "SHAPE.STArea()": 268436.685162015,
-        "SHAPE.STLength()": 2073.034802974175,
-        "GlobalID": "{0736DB01-F5D9-4729-B78A-54C46243DF88}"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 2211023,
+      "id": 2252363,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -1717,7 +1662,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2211023,
+        "OBJECTID": 2252363,
         "quad": 3,
         "township": 25,
         "range": 3,
@@ -1738,67 +1683,122 @@
         "TRS_LABEL": "T25.0S R3.0W Sec30 SL",
         "SHAPE.STArea()": 269569.137418305,
         "SHAPE.STLength()": 2076.827259475727,
-        "GlobalID": "{B3D83D44-4443-4E9C-84D4-54B5ABF1162A}"
+        "GlobalID": "{7730EA5A-1593-424F-991F-0BAB114488E4}"
       }
     },
     {
       "type": "Feature",
-      "id": 2211038,
+      "id": 2252645,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -112.09914776985332,
-              38.775089752154685
+              -111.90800951231752,
+              38.99453199190237
             ],
             [
-              -112.09914283720408,
-              38.77873560677378
+              -111.90812583516364,
+              38.9982031199568
             ],
             [
-              -112.10373172452616,
-              38.778676222704235
+              -111.91273143294663,
+              38.99808400742858
             ],
             [
-              -112.10374797954123,
-              38.77503323572844
+              -111.91262243316669,
+              38.99439020966019
             ],
             [
-              -112.09914776985332,
-              38.775089752154685
+              -111.90800951231752,
+              38.99453199190237
             ]
           ]
         ]
       },
       "properties": {
-        "OBJECTID": 2211038,
+        "OBJECTID": 2252645,
         "quad": 3,
-        "township": 23,
-        "range": 3,
-        "section_": 26,
+        "township": 21,
+        "range": 1,
+        "section_": 9,
         "county_cd": 21,
         "county_abrev": "SEVR",
         "county_name": "Sevier              ",
         "bene_cd": 6,
         "bene_abrev": "NS  ",
-        "parcel_seq_nbr": 1,
+        "parcel_seq_nbr": 2,
         "parcel_layer_cd": 1,
-        "lin": "3T23.0R3.0S26C21_B6PT0L1_SQ1",
+        "lin": "3T21.0R1.0S9C21_B6PT0L1_SQ2",
         "acres": 40,
-        "legal_descr": "NE4NW4",
+        "legal_descr": "SE4NE4",
         "ADMIN": null,
         "QUAD_LBL": "S W",
         "merid": "SL",
-        "TRS_LABEL": "T23.0S R3.0W Sec26 SL",
-        "SHAPE.STArea()": 266152.899702255,
-        "SHAPE.STLength()": 2063.852895555234,
-        "GlobalID": "{EFDC7C35-5CEE-4FA9-85D3-ED06E3EBE335}"
+        "TRS_LABEL": "T21.0S R1.0W Sec9 SL",
+        "SHAPE.STArea()": 270871.00795769,
+        "SHAPE.STLength()": 2082.09183080109,
+        "GlobalID": "{396DBA45-3604-4BEC-ADDC-358DACB19532}"
       }
     },
     {
       "type": "Feature",
-      "id": 2211158,
+      "id": 2252692,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -111.91633710969866,
+              39.1742309490788
+            ],
+            [
+              -111.92097993726027,
+              39.17423390181375
+            ],
+            [
+              -111.92082824504645,
+              39.17061859521563
+            ],
+            [
+              -111.91618182242708,
+              39.170614672194155
+            ],
+            [
+              -111.91633710969866,
+              39.1742309490788
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 2252692,
+        "quad": 3,
+        "township": 19,
+        "range": 1,
+        "section_": 9,
+        "county_cd": 20,
+        "county_abrev": "SANP",
+        "county_name": "Sanpete             ",
+        "bene_cd": 6,
+        "bene_abrev": "NS  ",
+        "parcel_seq_nbr": 2,
+        "parcel_layer_cd": 1,
+        "lin": "3T19.0R1.0S9C20_B6PT0L1_SQ2",
+        "acres": 40,
+        "legal_descr": "SW4NE4",
+        "ADMIN": null,
+        "QUAD_LBL": "S W",
+        "merid": "SL",
+        "TRS_LABEL": "T19.0S R1.0W Sec9 SL",
+        "SHAPE.STArea()": 268436.685162015,
+        "SHAPE.STLength()": 2073.034802974175,
+        "GlobalID": "{B0700133-8196-4EBF-8D05-BBDFF3846EB9}"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2252703,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -1835,7 +1835,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2211158,
+        "OBJECTID": 2252703,
         "quad": 3,
         "township": 19,
         "range": 1,
@@ -1856,12 +1856,67 @@
         "TRS_LABEL": "T19.0S R1.0W Sec28 SL",
         "SHAPE.STArea()": 269646.866477165,
         "SHAPE.STLength()": 2077.5444986235443,
-        "GlobalID": "{E2026E3B-1A31-4DCD-BD19-2BCEFFB03EBC}"
+        "GlobalID": "{A90366E5-02EB-433A-8A61-584A7722436E}"
       }
     },
     {
       "type": "Feature",
-      "id": 2211593,
+      "id": 2252738,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -112.09914776985332,
+              38.775089752154685
+            ],
+            [
+              -112.09914283720408,
+              38.77873560677378
+            ],
+            [
+              -112.10373172452616,
+              38.778676222704235
+            ],
+            [
+              -112.10374797954123,
+              38.77503323572844
+            ],
+            [
+              -112.09914776985332,
+              38.775089752154685
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 2252738,
+        "quad": 3,
+        "township": 23,
+        "range": 3,
+        "section_": 26,
+        "county_cd": 21,
+        "county_abrev": "SEVR",
+        "county_name": "Sevier              ",
+        "bene_cd": 6,
+        "bene_abrev": "NS  ",
+        "parcel_seq_nbr": 1,
+        "parcel_layer_cd": 1,
+        "lin": "3T23.0R3.0S26C21_B6PT0L1_SQ1",
+        "acres": 40,
+        "legal_descr": "NE4NW4",
+        "ADMIN": null,
+        "QUAD_LBL": "S W",
+        "merid": "SL",
+        "TRS_LABEL": "T23.0S R3.0W Sec26 SL",
+        "SHAPE.STArea()": 266152.899702255,
+        "SHAPE.STLength()": 2063.852895555234,
+        "GlobalID": "{5E10EADE-6538-44B3-9F87-8C0ADFE2D38F}"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2252836,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -1894,7 +1949,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2211593,
+        "OBJECTID": 2252836,
         "quad": 1,
         "township": 15,
         "range": 7,
@@ -1915,67 +1970,12 @@
         "TRS_LABEL": "T15.0N R7.0E Sec31 SL",
         "SHAPE.STArea()": 319237.182946425,
         "SHAPE.STLength()": 2262.5856726915963,
-        "GlobalID": "{0B464981-9D01-43D9-A128-6F292F413279}"
+        "GlobalID": "{80F89EA0-267A-4498-86D9-750166C02E01}"
       }
     },
     {
       "type": "Feature",
-      "id": 2211900,
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -111.90800951231752,
-              38.99453199190237
-            ],
-            [
-              -111.90812583516364,
-              38.9982031199568
-            ],
-            [
-              -111.91273143294663,
-              38.99808400742858
-            ],
-            [
-              -111.91262243316669,
-              38.99439020966019
-            ],
-            [
-              -111.90800951231752,
-              38.99453199190237
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "OBJECTID": 2211900,
-        "quad": 3,
-        "township": 21,
-        "range": 1,
-        "section_": 9,
-        "county_cd": 21,
-        "county_abrev": "SEVR",
-        "county_name": "Sevier              ",
-        "bene_cd": 6,
-        "bene_abrev": "NS  ",
-        "parcel_seq_nbr": 2,
-        "parcel_layer_cd": 1,
-        "lin": "3T21.0R1.0S9C21_B6PT0L1_SQ2",
-        "acres": 40,
-        "legal_descr": "SE4NE4",
-        "ADMIN": null,
-        "QUAD_LBL": "S W",
-        "merid": "SL",
-        "TRS_LABEL": "T21.0S R1.0W Sec9 SL",
-        "SHAPE.STArea()": 270871.00795769,
-        "SHAPE.STLength()": 2082.09183080109,
-        "GlobalID": "{A4AAF5CE-8AB2-42B5-8CDB-2E69AE33D63C}"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 2212040,
+      "id": 2253139,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -2036,7 +2036,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2212040,
+        "OBJECTID": 2253139,
         "quad": 7,
         "township": 1,
         "range": 8,
@@ -2057,12 +2057,12 @@
         "TRS_LABEL": "T1.0S R8.0W Sec33 US",
         "SHAPE.STArea()": 2222675.9985021,
         "SHAPE.STLength()": 6323.781166825232,
-        "GlobalID": "{5956D834-1FBB-4FF3-9CA4-0AC68BCA1018}"
+        "GlobalID": "{CFA62229-FF44-4C65-AC9B-97362EDFBA4A}"
       }
     },
     {
       "type": "Feature",
-      "id": 2212074,
+      "id": 2253461,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -2103,7 +2103,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2212074,
+        "OBJECTID": 2253461,
         "quad": 3,
         "township": 10,
         "range": 1,
@@ -2124,12 +2124,12 @@
         "TRS_LABEL": "T10.0S R1.0W Sec34 SL",
         "SHAPE.STArea()": 560903.77162112,
         "SHAPE.STLength()": 3194.3980539990525,
-        "GlobalID": "{A8D91106-308C-4018-BE72-57DE94F60D56}"
+        "GlobalID": "{8DB971D9-221C-4C58-B099-6E47A8187971}"
       }
     },
     {
       "type": "Feature",
-      "id": 2212336,
+      "id": 2253507,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -2158,7 +2158,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2212336,
+        "OBJECTID": 2253507,
         "quad": 3,
         "township": 28,
         "range": 7,
@@ -2179,122 +2179,12 @@
         "TRS_LABEL": "T28.0S R7.0W Sec6 SL",
         "SHAPE.STArea()": 271262.8388088,
         "SHAPE.STLength()": 2083.4174290536193,
-        "GlobalID": "{6A30E5C0-85D3-4C4B-9046-1428B7BD64BA}"
+        "GlobalID": "{216EDA42-8E32-45A2-92E2-C524B2F98024}"
       }
     },
     {
       "type": "Feature",
-      "id": 2212400,
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -111.93087515949088,
-              39.897562389294094
-            ],
-            [
-              -111.9355616092427,
-              39.897545667700804
-            ],
-            [
-              -111.93541570577257,
-              39.89382626785261
-            ],
-            [
-              -111.93072707311462,
-              39.893853091533096
-            ],
-            [
-              -111.93087515949088,
-              39.897562389294094
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "OBJECTID": 2212400,
-        "quad": 3,
-        "township": 10,
-        "range": 1,
-        "section_": 34,
-        "county_cd": 25,
-        "county_abrev": "UTAH",
-        "county_name": "Utah                ",
-        "bene_cd": 6,
-        "bene_abrev": "NS  ",
-        "parcel_seq_nbr": 3,
-        "parcel_layer_cd": 1,
-        "lin": "3T10.0R1.0S34C25_B6PT0L1_SQ3",
-        "acres": 40,
-        "legal_descr": "SW4SW4",
-        "ADMIN": null,
-        "QUAD_LBL": "S W",
-        "merid": "SL",
-        "TRS_LABEL": "T10.0S R1.0W Sec34 SL",
-        "SHAPE.STArea()": 281276.78604643,
-        "SHAPE.STLength()": 2122.0197077719267,
-        "GlobalID": "{FF1D0A79-33AF-41FF-B139-E6DF776E7881}"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 2212446,
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -112.22928943324723,
-              38.23753015519392
-            ],
-            [
-              -112.23391337822157,
-              38.23748901756356
-            ],
-            [
-              -112.2338910092727,
-              38.233907506136724
-            ],
-            [
-              -112.22925482565091,
-              38.233934350677295
-            ],
-            [
-              -112.22928943324723,
-              38.23753015519392
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "OBJECTID": 2212446,
-        "quad": 3,
-        "township": 30,
-        "range": 3,
-        "section_": 5,
-        "county_cd": 16,
-        "county_abrev": "PIUT",
-        "county_name": "Piute               ",
-        "bene_cd": 6,
-        "bene_abrev": "NS  ",
-        "parcel_seq_nbr": 1,
-        "parcel_layer_cd": 1,
-        "lin": "3T30.0R3.0S5C16_B6PT0L1_SQ1",
-        "acres": 39.82,
-        "legal_descr": "LOT 4 (NW4NW4)",
-        "ADMIN": null,
-        "QUAD_LBL": "S W",
-        "merid": "SL",
-        "TRS_LABEL": "T30.0S R3.0W Sec5 SL",
-        "SHAPE.STArea()": 262154.022407275,
-        "SHAPE.STLength()": 2048.0926096983276,
-        "GlobalID": "{F4B72AB9-17A9-493E-9D69-73EB1769E85A}"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 2212528,
+      "id": 2253891,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -2323,7 +2213,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2212528,
+        "OBJECTID": 2253891,
         "quad": 1,
         "township": 14,
         "range": 6,
@@ -2344,71 +2234,122 @@
         "TRS_LABEL": "T14.0N R6.0E Sec12 SL",
         "SHAPE.STArea()": 289196.625177215,
         "SHAPE.STLength()": 2151.161147876506,
-        "GlobalID": "{772846ED-D893-420F-BE6A-1B7DAE5E4862}"
+        "GlobalID": "{71E94B2C-4884-42F3-A484-1E1A2E20FB8A}"
       }
     },
     {
       "type": "Feature",
-      "id": 2213053,
+      "id": 2253967,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -113.91916458143078,
-              37.96552219835996
+              -112.22928943324723,
+              38.23753015519392
             ],
             [
-              -113.91461228159191,
-              37.96555272665988
+              -112.23391337822157,
+              38.23748901756356
             ],
             [
-              -113.91461232021949,
-              37.96563426688934
+              -112.2338910092727,
+              38.233907506136724
             ],
             [
-              -113.91460569424594,
-              37.969347219863096
+              -112.22925482565091,
+              38.233934350677295
             ],
             [
-              -113.91915853756554,
-              37.96933595629295
-            ],
-            [
-              -113.91916458143078,
-              37.96552219835996
+              -112.22928943324723,
+              38.23753015519392
             ]
           ]
         ]
       },
       "properties": {
-        "OBJECTID": 2213053,
+        "OBJECTID": 2253967,
         "quad": 3,
-        "township": 33,
-        "range": 19,
-        "section_": 1,
-        "county_cd": 11,
-        "county_abrev": "IRON",
-        "county_name": "Iron                ",
+        "township": 30,
+        "range": 3,
+        "section_": 5,
+        "county_cd": 16,
+        "county_abrev": "PIUT",
+        "county_name": "Piute               ",
         "bene_cd": 6,
         "bene_abrev": "NS  ",
         "parcel_seq_nbr": 1,
         "parcel_layer_cd": 1,
-        "lin": "3T33.0R19.0S1C11_B6PT0L1_SQ1",
-        "acres": 42.11,
-        "legal_descr": "LOT 1 (NE4NE4)",
+        "lin": "3T30.0R3.0S5C16_B6PT0L1_SQ1",
+        "acres": 39.82,
+        "legal_descr": "LOT 4 (NW4NW4)",
         "ADMIN": null,
         "QUAD_LBL": "S W",
         "merid": "SL",
-        "TRS_LABEL": "T33.0S R19.0W Sec1 SL",
-        "SHAPE.STArea()": 272218.296060365,
-        "SHAPE.STLength()": 2087.9155686673275,
-        "GlobalID": "{0D7E2A8C-16F8-49D9-99EA-51CA8D14FDA0}"
+        "TRS_LABEL": "T30.0S R3.0W Sec5 SL",
+        "SHAPE.STArea()": 262154.022407275,
+        "SHAPE.STLength()": 2048.0926096983276,
+        "GlobalID": "{DAAEC8F6-BC89-4266-BDE7-E5E059A98F42}"
       }
     },
     {
       "type": "Feature",
-      "id": 2213186,
+      "id": 2254094,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -111.93087515949088,
+              39.897562389294094
+            ],
+            [
+              -111.9355616092427,
+              39.897545667700804
+            ],
+            [
+              -111.93541570577257,
+              39.89382626785261
+            ],
+            [
+              -111.93072707311462,
+              39.893853091533096
+            ],
+            [
+              -111.93087515949088,
+              39.897562389294094
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 2254094,
+        "quad": 3,
+        "township": 10,
+        "range": 1,
+        "section_": 34,
+        "county_cd": 25,
+        "county_abrev": "UTAH",
+        "county_name": "Utah                ",
+        "bene_cd": 6,
+        "bene_abrev": "NS  ",
+        "parcel_seq_nbr": 3,
+        "parcel_layer_cd": 1,
+        "lin": "3T10.0R1.0S34C25_B6PT0L1_SQ3",
+        "acres": 40,
+        "legal_descr": "SW4SW4",
+        "ADMIN": null,
+        "QUAD_LBL": "S W",
+        "merid": "SL",
+        "TRS_LABEL": "T10.0S R1.0W Sec34 SL",
+        "SHAPE.STArea()": 281276.78604643,
+        "SHAPE.STLength()": 2122.0197077719267,
+        "GlobalID": "{2DA662D3-1177-458F-BDA0-501D3C006A08}"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2254516,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -2437,7 +2378,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2213186,
+        "OBJECTID": 2254516,
         "quad": 1,
         "township": 14,
         "range": 6,
@@ -2458,12 +2399,12 @@
         "TRS_LABEL": "T14.0N R6.0E Sec1 SL",
         "SHAPE.STArea()": 284335.32211768,
         "SHAPE.STLength()": 2133.125214309337,
-        "GlobalID": "{71E57C93-650C-4F52-A282-9A0340E2B104}"
+        "GlobalID": "{A9836DBC-6FC5-4025-9823-C16341BB83C0}"
       }
     },
     {
       "type": "Feature",
-      "id": 2213517,
+      "id": 2254991,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -2492,7 +2433,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2213517,
+        "OBJECTID": 2254991,
         "quad": 1,
         "township": 14,
         "range": 6,
@@ -2513,71 +2454,12 @@
         "TRS_LABEL": "T14.0N R6.0E Sec1 SL",
         "SHAPE.STArea()": 283939.95412421,
         "SHAPE.STLength()": 2131.656903770883,
-        "GlobalID": "{B4600F58-8344-4B12-BBA9-446D1329C224}"
+        "GlobalID": "{CC8B6E1A-3DAC-447B-A5D2-06F168DD736C}"
       }
     },
     {
       "type": "Feature",
-      "id": 2213537,
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -111.956407116022,
-              38.91168007506972
-            ],
-            [
-              -111.95669126662112,
-              38.91573180622819
-            ],
-            [
-              -111.96090384248411,
-              38.9150454256674
-            ],
-            [
-              -111.9608110007012,
-              38.91407955623475
-            ],
-            [
-              -111.9604650190611,
-              38.91048016706234
-            ],
-            [
-              -111.956407116022,
-              38.91168007506972
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "OBJECTID": 2213537,
-        "quad": 3,
-        "township": 22,
-        "range": 1,
-        "section_": 6,
-        "county_cd": 21,
-        "county_abrev": "SEVR",
-        "county_name": "Sevier              ",
-        "bene_cd": 6,
-        "bene_abrev": "NS  ",
-        "parcel_seq_nbr": 1,
-        "parcel_layer_cd": 1,
-        "lin": "3T22.0R1.0S6C21_B6PT0L1_SQ1",
-        "acres": 40.14,
-        "legal_descr": "LOT 7 (SW4SW4)",
-        "ADMIN": null,
-        "QUAD_LBL": "S W",
-        "merid": "SL",
-        "TRS_LABEL": "T22.0S R1.0W Sec6 SL",
-        "SHAPE.STArea()": 289178.65122498,
-        "SHAPE.STLength()": 2197.8401539094925,
-        "GlobalID": "{32890FA9-59F6-40C6-AD34-656BAACB4953}"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 2213659,
+      "id": 2255110,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -2618,7 +2500,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2213659,
+        "OBJECTID": 2255110,
         "quad": 3,
         "township": 38,
         "range": 11,
@@ -2639,12 +2521,12 @@
         "TRS_LABEL": "T38.0S R11.0W Sec22 SL",
         "SHAPE.STArea()": 517336.472996215,
         "SHAPE.STLength()": 3052.843167350289,
-        "GlobalID": "{EEE52FB8-B7B8-437E-8727-4AC07A2171CB}"
+        "GlobalID": "{3EBBADD0-FB73-4543-8F15-6FCD52F12B00}"
       }
     },
     {
       "type": "Feature",
-      "id": 2213661,
+      "id": 2255112,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -2681,7 +2563,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2213661,
+        "OBJECTID": 2255112,
         "quad": 3,
         "township": 21,
         "range": 1,
@@ -2702,67 +2584,12 @@
         "TRS_LABEL": "T21.0S R1.0W Sec9 SL",
         "SHAPE.STArea()": 543122.585961925,
         "SHAPE.STLength()": 3140.060723858475,
-        "GlobalID": "{F8054095-4D6A-4842-88D0-0FEBB96C2F17}"
+        "GlobalID": "{0D0FF063-9E53-4C8E-9483-FD4A39CA97CE}"
       }
     },
     {
       "type": "Feature",
-      "id": 2213733,
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -111.57376085078617,
-              39.53451807202744
-            ],
-            [
-              -111.5738146068711,
-              39.53816397008272
-            ],
-            [
-              -111.57837925405354,
-              39.53808395032074
-            ],
-            [
-              -111.57831660824057,
-              39.53444728956906
-            ],
-            [
-              -111.57376085078617,
-              39.53451807202744
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "OBJECTID": 2213733,
-        "quad": 4,
-        "township": 15,
-        "range": 3,
-        "section_": 3,
-        "county_cd": 20,
-        "county_abrev": "SANP",
-        "county_name": "Sanpete             ",
-        "bene_cd": 6,
-        "bene_abrev": "NS  ",
-        "parcel_seq_nbr": 2,
-        "parcel_layer_cd": 1,
-        "lin": "4T15.0R3.0S3C20_B6PT0L1_SQ2",
-        "acres": 40,
-        "legal_descr": "SE4SW4",
-        "ADMIN": null,
-        "QUAD_LBL": "S E",
-        "merid": "SL",
-        "TRS_LABEL": "T15.0S R3.0E Sec3 SL",
-        "SHAPE.STArea()": 266880.121892785,
-        "SHAPE.STLength()": 2066.7710026695904,
-        "GlobalID": "{56CF283E-C775-4939-9749-8D829D5A229B}"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 2213973,
+      "id": 2255136,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -2791,7 +2618,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2213973,
+        "OBJECTID": 2255136,
         "quad": 4,
         "township": 20,
         "range": 1,
@@ -2812,12 +2639,126 @@
         "TRS_LABEL": "T20.0S R1.0E Sec3 SL",
         "SHAPE.STArea()": 275695.82996069,
         "SHAPE.STLength()": 2100.278515063469,
-        "GlobalID": "{17B54E04-4FAB-4A00-A884-1EBC7F053404}"
+        "GlobalID": "{A5A4FC7A-C3F0-4298-9F1C-83284019420E}"
       }
     },
     {
       "type": "Feature",
-      "id": 2214208,
+      "id": 2255270,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -111.57376085078617,
+              39.53451807202744
+            ],
+            [
+              -111.5738146068711,
+              39.53816397008272
+            ],
+            [
+              -111.57837925405354,
+              39.53808395032074
+            ],
+            [
+              -111.57831660824057,
+              39.53444728956906
+            ],
+            [
+              -111.57376085078617,
+              39.53451807202744
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 2255270,
+        "quad": 4,
+        "township": 15,
+        "range": 3,
+        "section_": 3,
+        "county_cd": 20,
+        "county_abrev": "SANP",
+        "county_name": "Sanpete             ",
+        "bene_cd": 6,
+        "bene_abrev": "NS  ",
+        "parcel_seq_nbr": 2,
+        "parcel_layer_cd": 1,
+        "lin": "4T15.0R3.0S3C20_B6PT0L1_SQ2",
+        "acres": 40,
+        "legal_descr": "SE4SW4",
+        "ADMIN": null,
+        "QUAD_LBL": "S E",
+        "merid": "SL",
+        "TRS_LABEL": "T15.0S R3.0E Sec3 SL",
+        "SHAPE.STArea()": 266880.121892785,
+        "SHAPE.STLength()": 2066.7710026695904,
+        "GlobalID": "{F3618B2A-9A96-47B4-B0BD-4784279115AF}"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2255398,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -113.91916458143078,
+              37.96552219835996
+            ],
+            [
+              -113.91461228159191,
+              37.96555272665988
+            ],
+            [
+              -113.91461232021949,
+              37.96563426688934
+            ],
+            [
+              -113.91460569424594,
+              37.969347219863096
+            ],
+            [
+              -113.91915853756554,
+              37.96933595629295
+            ],
+            [
+              -113.91916458143078,
+              37.96552219835996
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 2255398,
+        "quad": 3,
+        "township": 33,
+        "range": 19,
+        "section_": 1,
+        "county_cd": 11,
+        "county_abrev": "IRON",
+        "county_name": "Iron                ",
+        "bene_cd": 6,
+        "bene_abrev": "NS  ",
+        "parcel_seq_nbr": 1,
+        "parcel_layer_cd": 1,
+        "lin": "3T33.0R19.0S1C11_B6PT0L1_SQ1",
+        "acres": 42.11,
+        "legal_descr": "LOT 1 (NE4NE4)",
+        "ADMIN": null,
+        "QUAD_LBL": "S W",
+        "merid": "SL",
+        "TRS_LABEL": "T33.0S R19.0W Sec1 SL",
+        "SHAPE.STArea()": 272218.296060365,
+        "SHAPE.STLength()": 2087.9155686673275,
+        "GlobalID": "{132F6F80-FFF2-4C69-8FD7-678936E6CA99}"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2255614,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -2846,7 +2787,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2214208,
+        "OBJECTID": 2255614,
         "quad": 1,
         "township": 14,
         "range": 6,
@@ -2867,12 +2808,12 @@
         "TRS_LABEL": "T14.0N R6.0E Sec1 SL",
         "SHAPE.STArea()": 283562.595037255,
         "SHAPE.STLength()": 2130.264254673204,
-        "GlobalID": "{545DAB73-D6F4-474E-B8C1-F1802375E8F0}"
+        "GlobalID": "{7DF8E0A0-6807-4681-AA90-DC6EB43642AD}"
       }
     },
     {
       "type": "Feature",
-      "id": 2214365,
+      "id": 2255701,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -2901,7 +2842,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2214365,
+        "OBJECTID": 2255701,
         "quad": 7,
         "township": 1,
         "range": 8,
@@ -2922,12 +2863,12 @@
         "TRS_LABEL": "T1.0S R8.0W Sec16 US",
         "SHAPE.STArea()": 281072.95161954,
         "SHAPE.STLength()": 2120.7145494318233,
-        "GlobalID": "{0FE5D70B-AD5A-43FC-8071-7E1CADCD12E8}"
+        "GlobalID": "{FC31B1BC-C4D6-43A8-A31E-62A3850B90FA}"
       }
     },
     {
       "type": "Feature",
-      "id": 2214568,
+      "id": 2255851,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -2964,7 +2905,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2214568,
+        "OBJECTID": 2255851,
         "quad": 7,
         "township": 1,
         "range": 8,
@@ -2985,12 +2926,12 @@
         "TRS_LABEL": "T1.0S R8.0W Sec16 US",
         "SHAPE.STArea()": 561221.18487334,
         "SHAPE.STLength()": 3170.7486998178715,
-        "GlobalID": "{29963BE0-7E19-4CFE-9268-A2529F6CA5F2}"
+        "GlobalID": "{75004B67-6218-4961-909B-9719986DE2C3}"
       }
     },
     {
       "type": "Feature",
-      "id": 2214706,
+      "id": 2255884,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -3019,7 +2960,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2214706,
+        "OBJECTID": 2255884,
         "quad": 3,
         "township": 39,
         "range": 11,
@@ -3040,12 +2981,331 @@
         "TRS_LABEL": "T39.0S R11.0W Sec3 SL",
         "SHAPE.STArea()": 253994.95714226,
         "SHAPE.STLength()": 2015.9245732472266,
-        "GlobalID": "{F2507896-21F2-4760-BAB8-0A0040A382D8}"
+        "GlobalID": "{23F40B98-C4DF-434B-8474-C784C2D9ED4C}"
       }
     },
     {
       "type": "Feature",
-      "id": 2214753,
+      "id": 2255948,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -110.78350245512601,
+              40.39315806951811
+            ],
+            [
+              -110.78349136722046,
+              40.3968038819276
+            ],
+            [
+              -110.78348027751828,
+              40.400449602283494
+            ],
+            [
+              -110.78819215677916,
+              40.40046580648556
+            ],
+            [
+              -110.79290403783666,
+              40.40048190943746
+            ],
+            [
+              -110.79761592248744,
+              40.40049809037249
+            ],
+            [
+              -110.80232780893483,
+              40.4005142589899
+            ],
+            [
+              -110.80235856006364,
+              40.39684911000969
+            ],
+            [
+              -110.80238930670086,
+              40.39318395922877
+            ],
+            [
+              -110.79766753249713,
+              40.393177775693154
+            ],
+            [
+              -110.79294587776933,
+              40.39317139990501
+            ],
+            [
+              -110.78822410626054,
+              40.393164831179995
+            ],
+            [
+              -110.78350245512601,
+              40.39315806951811
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 2255948,
+        "quad": 7,
+        "township": 1,
+        "range": 8,
+        "section_": 16,
+        "county_cd": 7,
+        "county_abrev": "DUCH",
+        "county_name": "Duchesne            ",
+        "bene_cd": 6,
+        "bene_abrev": "NS  ",
+        "parcel_seq_nbr": 1,
+        "parcel_layer_cd": 1,
+        "lin": "7T1.0R8.0S16C7_B6PT0L1_SQ1",
+        "acres": 320,
+        "legal_descr": "N2",
+        "ADMIN": null,
+        "QUAD_LBL": "S W",
+        "merid": "US",
+        "TRS_LABEL": "T1.0S R8.0W Sec16 US",
+        "SHAPE.STArea()": 2244404.45588131,
+        "SHAPE.STLength()": 6337.898626412006,
+        "GlobalID": "{863C3F94-EE5A-4D56-888A-835B6160A0F1}"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2256036,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -112.17088402774574,
+              38.58134588489757
+            ],
+            [
+              -112.17093925706773,
+              38.5850225072513
+            ],
+            [
+              -112.17099461035723,
+              38.58869903546826
+            ],
+            [
+              -112.17563672196157,
+              38.58867394018283
+            ],
+            [
+              -112.1755850445782,
+              38.584983860355024
+            ],
+            [
+              -112.17553337348306,
+              38.58129359862569
+            ],
+            [
+              -112.17088402774574,
+              38.58134588489757
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 2256036,
+        "quad": 3,
+        "township": 25,
+        "range": 3,
+        "section_": 31,
+        "county_cd": 21,
+        "county_abrev": "SEVR",
+        "county_name": "Sevier              ",
+        "bene_cd": 6,
+        "bene_abrev": "NS  ",
+        "parcel_seq_nbr": 1,
+        "parcel_layer_cd": 1,
+        "lin": "3T25.0R3.0S31C21_B6PT0L1_SQ1",
+        "acres": 80,
+        "legal_descr": "E2NW4",
+        "ADMIN": null,
+        "QUAD_LBL": "S W",
+        "merid": "SL",
+        "TRS_LABEL": "T25.0S R3.0W Sec31 SL",
+        "SHAPE.STArea()": 542620.393021,
+        "SHAPE.STLength()": 3132.7164306146096,
+        "GlobalID": "{38107B71-2F1C-499D-A9B9-22D7D193C11B}"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2256098,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -111.956407116022,
+              38.91168007506972
+            ],
+            [
+              -111.95669126662112,
+              38.91573180622819
+            ],
+            [
+              -111.96090384248411,
+              38.9150454256674
+            ],
+            [
+              -111.9608110007012,
+              38.91407955623475
+            ],
+            [
+              -111.9604650190611,
+              38.91048016706234
+            ],
+            [
+              -111.956407116022,
+              38.91168007506972
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 2256098,
+        "quad": 3,
+        "township": 22,
+        "range": 1,
+        "section_": 6,
+        "county_cd": 21,
+        "county_abrev": "SEVR",
+        "county_name": "Sevier              ",
+        "bene_cd": 6,
+        "bene_abrev": "NS  ",
+        "parcel_seq_nbr": 1,
+        "parcel_layer_cd": 1,
+        "lin": "3T22.0R1.0S6C21_B6PT0L1_SQ1",
+        "acres": 40.14,
+        "legal_descr": "LOT 7 (SW4SW4)",
+        "ADMIN": null,
+        "QUAD_LBL": "S W",
+        "merid": "SL",
+        "TRS_LABEL": "T22.0S R1.0W Sec6 SL",
+        "SHAPE.STArea()": 289178.65122498,
+        "SHAPE.STLength()": 2197.8401539094925,
+        "GlobalID": "{BEC44753-C6D8-4A88-AE87-8364304BCE92}"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2256168,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -113.07304762447383,
+              37.423749176115955
+            ],
+            [
+              -113.0730320234323,
+              37.4273582145576
+            ],
+            [
+              -113.07757189597753,
+              37.427381759468965
+            ],
+            [
+              -113.07758308629101,
+              37.42376820414708
+            ],
+            [
+              -113.07304762447383,
+              37.423749176115955
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 2256168,
+        "quad": 3,
+        "township": 39,
+        "range": 11,
+        "section_": 3,
+        "county_cd": 27,
+        "county_abrev": "WASH",
+        "county_name": "Washington          ",
+        "bene_cd": 6,
+        "bene_abrev": "NS  ",
+        "parcel_seq_nbr": 2,
+        "parcel_layer_cd": 1,
+        "lin": "3T39.0R11.0S3C27_B6PT0L1_SQ2",
+        "acres": 40,
+        "legal_descr": "SE4NE4",
+        "ADMIN": null,
+        "QUAD_LBL": "S W",
+        "merid": "SL",
+        "TRS_LABEL": "T39.0S R11.0W Sec3 SL",
+        "SHAPE.STArea()": 255709.46474798,
+        "SHAPE.STLength()": 2022.7148350766718,
+        "GlobalID": "{F9F0A2E7-C7A2-43CB-9F0D-CAA5FED50367}"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2256180,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -111.91032688906942,
+              39.1379383429335
+            ],
+            [
+              -111.9149869876407,
+              39.13793113705098
+            ],
+            [
+              -111.91481044712779,
+              39.134312209515834
+            ],
+            [
+              -111.91015671401864,
+              39.134318996994985
+            ],
+            [
+              -111.91032688906942,
+              39.1379383429335
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 2256180,
+        "quad": 3,
+        "township": 19,
+        "range": 1,
+        "section_": 21,
+        "county_cd": 20,
+        "county_abrev": "SANP",
+        "county_name": "Sanpete             ",
+        "bene_cd": 6,
+        "bene_abrev": "NS  ",
+        "parcel_seq_nbr": 1,
+        "parcel_layer_cd": 1,
+        "lin": "3T19.0R1.0S21C20_B6PT0L1_SQ1",
+        "acres": 40,
+        "legal_descr": "SE4SE4",
+        "ADMIN": null,
+        "QUAD_LBL": "S W",
+        "merid": "SL",
+        "TRS_LABEL": "T19.0S R1.0W Sec21 SL",
+        "SHAPE.STArea()": 269284.92326789,
+        "SHAPE.STLength()": 2076.352040088906,
+        "GlobalID": "{C65A22E4-2637-4188-93BB-2C1D03ACAF19}"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2256295,
       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
@@ -3132,7 +3392,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2214753,
+        "OBJECTID": 2256295,
         "quad": 3,
         "township": 22,
         "range": 2,
@@ -3153,398 +3413,12 @@
         "TRS_LABEL": "T22.0S R2.0W Sec26 SL",
         "SHAPE.STArea()": 163372.63533018,
         "SHAPE.STLength()": 2632.8778781961264,
-        "GlobalID": "{66C32CF7-9F05-4A61-9C29-60F36E6DFF12}"
+        "GlobalID": "{E9143141-F193-4111-BCA0-B204D9A28E2B}"
       }
     },
     {
       "type": "Feature",
-      "id": 2214775,
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -110.78350245512601,
-              40.39315806951811
-            ],
-            [
-              -110.78349136722046,
-              40.3968038819276
-            ],
-            [
-              -110.78348027751828,
-              40.400449602283494
-            ],
-            [
-              -110.78819215677916,
-              40.40046580648556
-            ],
-            [
-              -110.79290403783666,
-              40.40048190943746
-            ],
-            [
-              -110.79761592248744,
-              40.40049809037249
-            ],
-            [
-              -110.80232780893483,
-              40.4005142589899
-            ],
-            [
-              -110.80235856006364,
-              40.39684911000969
-            ],
-            [
-              -110.80238930670086,
-              40.39318395922877
-            ],
-            [
-              -110.79766753249713,
-              40.393177775693154
-            ],
-            [
-              -110.79294587776933,
-              40.39317139990501
-            ],
-            [
-              -110.78822410626054,
-              40.393164831179995
-            ],
-            [
-              -110.78350245512601,
-              40.39315806951811
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "OBJECTID": 2214775,
-        "quad": 7,
-        "township": 1,
-        "range": 8,
-        "section_": 16,
-        "county_cd": 7,
-        "county_abrev": "DUCH",
-        "county_name": "Duchesne            ",
-        "bene_cd": 6,
-        "bene_abrev": "NS  ",
-        "parcel_seq_nbr": 1,
-        "parcel_layer_cd": 1,
-        "lin": "7T1.0R8.0S16C7_B6PT0L1_SQ1",
-        "acres": 320,
-        "legal_descr": "N2",
-        "ADMIN": null,
-        "QUAD_LBL": "S W",
-        "merid": "US",
-        "TRS_LABEL": "T1.0S R8.0W Sec16 US",
-        "SHAPE.STArea()": 2244404.45588131,
-        "SHAPE.STLength()": 6337.898626412006,
-        "GlobalID": "{AF960CAA-3A4C-4787-A9F1-FED923461E76}"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 2214831,
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -112.17088402774574,
-              38.58134588489757
-            ],
-            [
-              -112.17093925706773,
-              38.5850225072513
-            ],
-            [
-              -112.17099461035723,
-              38.58869903546826
-            ],
-            [
-              -112.17563672196157,
-              38.58867394018283
-            ],
-            [
-              -112.1755850445782,
-              38.584983860355024
-            ],
-            [
-              -112.17553337348306,
-              38.58129359862569
-            ],
-            [
-              -112.17088402774574,
-              38.58134588489757
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "OBJECTID": 2214831,
-        "quad": 3,
-        "township": 25,
-        "range": 3,
-        "section_": 31,
-        "county_cd": 21,
-        "county_abrev": "SEVR",
-        "county_name": "Sevier              ",
-        "bene_cd": 6,
-        "bene_abrev": "NS  ",
-        "parcel_seq_nbr": 1,
-        "parcel_layer_cd": 1,
-        "lin": "3T25.0R3.0S31C21_B6PT0L1_SQ1",
-        "acres": 80,
-        "legal_descr": "E2NW4",
-        "ADMIN": null,
-        "QUAD_LBL": "S W",
-        "merid": "SL",
-        "TRS_LABEL": "T25.0S R3.0W Sec31 SL",
-        "SHAPE.STArea()": 542620.393021,
-        "SHAPE.STLength()": 3132.7164306146096,
-        "GlobalID": "{35D1945C-7DC2-4797-9B6D-0787E8B4575E}"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 2214940,
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -113.07304762447383,
-              37.423749176115955
-            ],
-            [
-              -113.0730320234323,
-              37.4273582145576
-            ],
-            [
-              -113.07757189597753,
-              37.427381759468965
-            ],
-            [
-              -113.07758308629101,
-              37.42376820414708
-            ],
-            [
-              -113.07304762447383,
-              37.423749176115955
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "OBJECTID": 2214940,
-        "quad": 3,
-        "township": 39,
-        "range": 11,
-        "section_": 3,
-        "county_cd": 27,
-        "county_abrev": "WASH",
-        "county_name": "Washington          ",
-        "bene_cd": 6,
-        "bene_abrev": "NS  ",
-        "parcel_seq_nbr": 2,
-        "parcel_layer_cd": 1,
-        "lin": "3T39.0R11.0S3C27_B6PT0L1_SQ2",
-        "acres": 40,
-        "legal_descr": "SE4NE4",
-        "ADMIN": null,
-        "QUAD_LBL": "S W",
-        "merid": "SL",
-        "TRS_LABEL": "T39.0S R11.0W Sec3 SL",
-        "SHAPE.STArea()": 255709.46474798,
-        "SHAPE.STLength()": 2022.7148350766718,
-        "GlobalID": "{E67FF6DC-A69B-438F-BB21-8131AB01E4CF}"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 2214952,
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -111.91032688906942,
-              39.1379383429335
-            ],
-            [
-              -111.9149869876407,
-              39.13793113705098
-            ],
-            [
-              -111.91481044712779,
-              39.134312209515834
-            ],
-            [
-              -111.91015671401864,
-              39.134318996994985
-            ],
-            [
-              -111.91032688906942,
-              39.1379383429335
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "OBJECTID": 2214952,
-        "quad": 3,
-        "township": 19,
-        "range": 1,
-        "section_": 21,
-        "county_cd": 20,
-        "county_abrev": "SANP",
-        "county_name": "Sanpete             ",
-        "bene_cd": 6,
-        "bene_abrev": "NS  ",
-        "parcel_seq_nbr": 1,
-        "parcel_layer_cd": 1,
-        "lin": "3T19.0R1.0S21C20_B6PT0L1_SQ1",
-        "acres": 40,
-        "legal_descr": "SE4SE4",
-        "ADMIN": null,
-        "QUAD_LBL": "S W",
-        "merid": "SL",
-        "TRS_LABEL": "T19.0S R1.0W Sec21 SL",
-        "SHAPE.STArea()": 269284.92326789,
-        "SHAPE.STLength()": 2076.352040088906,
-        "GlobalID": "{C2C438D6-A9AD-43CD-9A7E-6F1700DA0749}"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 2215082,
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -112.2643470621691,
-              38.52843070250937
-            ],
-            [
-              -112.26491844099544,
-              38.529266843791454
-            ],
-            [
-              -112.26696812248764,
-              38.528112555050875
-            ],
-            [
-              -112.26631875911484,
-              38.527291686142924
-            ],
-            [
-              -112.2643470621691,
-              38.52843070250937
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "OBJECTID": 2215082,
-        "quad": 3,
-        "township": 26,
-        "range": 4,
-        "section_": 20,
-        "county_cd": 21,
-        "county_abrev": "SEVR",
-        "county_name": "Sevier              ",
-        "bene_cd": 6,
-        "bene_abrev": "NS  ",
-        "parcel_seq_nbr": 3,
-        "parcel_layer_cd": 1,
-        "lin": "3T26.0R4.0S20C21_B6PT0L1_SQ3",
-        "acres": 4.97,
-        "legal_descr": "UNPATENTED MINING CLAIM IN THE N2NW4",
-        "ADMIN": null,
-        "QUAD_LBL": "S W",
-        "merid": "SL",
-        "TRS_LABEL": "T26.0S R4.0W Sec20 SL",
-        "SHAPE.STArea()": 37474.639771095,
-        "SHAPE.STLength()": 826.267808026319,
-        "GlobalID": "{9E7BCB58-D38C-403D-AD56-DFC4C1606AA3}"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 2215164,
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -113.42545877745742,
-              37.179466943343485
-            ],
-            [
-              -113.42546546451636,
-              37.18037304870895
-            ],
-            [
-              -113.42774657268701,
-              37.18034243588387
-            ],
-            [
-              -113.4277512322484,
-              37.17943627861864
-            ],
-            [
-              -113.42775350588438,
-              37.17898320091988
-            ],
-            [
-              -113.42662119024853,
-              37.1789983887975
-            ],
-            [
-              -113.42662343334179,
-              37.17854765466258
-            ],
-            [
-              -113.4254519529562,
-              37.17855651407077
-            ],
-            [
-              -113.42545877745742,
-              37.179466943343485
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "OBJECTID": 2215164,
-        "quad": 3,
-        "township": 41,
-        "range": 14,
-        "section_": 33,
-        "county_cd": 27,
-        "county_abrev": "WASH",
-        "county_name": "Washington          ",
-        "bene_cd": 6,
-        "bene_abrev": "NS  ",
-        "parcel_seq_nbr": 1,
-        "parcel_layer_cd": 1,
-        "lin": "3T41.0R14.0S33C27_B6PT0L1_SQ1",
-        "acres": 8.75,
-        "legal_descr": "N2NW4SE4NE4, N2SW4NW4SE4NE4, SE4NW4SE4NE4",
-        "ADMIN": null,
-        "QUAD_LBL": "S W",
-        "merid": "SL",
-        "TRS_LABEL": "T41.0S R14.0W Sec33 SL",
-        "SHAPE.STArea()": 56655.22291563,
-        "SHAPE.STLength()": 1017.1416751214056,
-        "GlobalID": "{B115705F-8C5D-4B27-91FB-4D401FFC675A}"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 2215187,
+      "id": 2256441,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -3589,7 +3463,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2215187,
+        "OBJECTID": 2256441,
         "quad": 7,
         "township": 1,
         "range": 8,
@@ -3610,12 +3484,138 @@
         "TRS_LABEL": "T1.0S R8.0W Sec16 US",
         "SHAPE.STArea()": 1125968.98721745,
         "SHAPE.STLength()": 4244.623643627332,
-        "GlobalID": "{3CB53973-C75F-4802-B8BC-989E0EAC3FB7}"
+        "GlobalID": "{80ED8AB2-16E9-4F55-A17A-1D94C52DFF72}"
       }
     },
     {
       "type": "Feature",
-      "id": 2215609,
+      "id": 2256593,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -113.42545877745742,
+              37.179466943343485
+            ],
+            [
+              -113.42546546451636,
+              37.18037304870895
+            ],
+            [
+              -113.42774657268701,
+              37.18034243588387
+            ],
+            [
+              -113.4277512322484,
+              37.17943627861864
+            ],
+            [
+              -113.42775350588438,
+              37.17898320091988
+            ],
+            [
+              -113.42662119024853,
+              37.1789983887975
+            ],
+            [
+              -113.42662343334179,
+              37.17854765466258
+            ],
+            [
+              -113.4254519529562,
+              37.17855651407077
+            ],
+            [
+              -113.42545877745742,
+              37.179466943343485
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 2256593,
+        "quad": 3,
+        "township": 41,
+        "range": 14,
+        "section_": 33,
+        "county_cd": 27,
+        "county_abrev": "WASH",
+        "county_name": "Washington          ",
+        "bene_cd": 6,
+        "bene_abrev": "NS  ",
+        "parcel_seq_nbr": 1,
+        "parcel_layer_cd": 1,
+        "lin": "3T41.0R14.0S33C27_B6PT0L1_SQ1",
+        "acres": 8.75,
+        "legal_descr": "N2NW4SE4NE4, N2SW4NW4SE4NE4, SE4NW4SE4NE4",
+        "ADMIN": null,
+        "QUAD_LBL": "S W",
+        "merid": "SL",
+        "TRS_LABEL": "T41.0S R14.0W Sec33 SL",
+        "SHAPE.STArea()": 56655.22291563,
+        "SHAPE.STLength()": 1017.1416751214056,
+        "GlobalID": "{A8A4CDE0-2E27-4DF1-9F2B-45DD75A00FFE}"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2256618,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -112.2643470621691,
+              38.52843070250937
+            ],
+            [
+              -112.26491844099544,
+              38.529266843791454
+            ],
+            [
+              -112.26696812248764,
+              38.528112555050875
+            ],
+            [
+              -112.26631875911484,
+              38.527291686142924
+            ],
+            [
+              -112.2643470621691,
+              38.52843070250937
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 2256618,
+        "quad": 3,
+        "township": 26,
+        "range": 4,
+        "section_": 20,
+        "county_cd": 21,
+        "county_abrev": "SEVR",
+        "county_name": "Sevier              ",
+        "bene_cd": 6,
+        "bene_abrev": "NS  ",
+        "parcel_seq_nbr": 3,
+        "parcel_layer_cd": 1,
+        "lin": "3T26.0R4.0S20C21_B6PT0L1_SQ3",
+        "acres": 4.97,
+        "legal_descr": "UNPATENTED MINING CLAIM IN THE N2NW4",
+        "ADMIN": null,
+        "QUAD_LBL": "S W",
+        "merid": "SL",
+        "TRS_LABEL": "T26.0S R4.0W Sec20 SL",
+        "SHAPE.STArea()": 37474.639771095,
+        "SHAPE.STLength()": 826.267808026319,
+        "GlobalID": "{0567E879-A815-4538-B55B-1DFA9589D3C5}"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2257328,
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -3644,7 +3644,7 @@
         ]
       },
       "properties": {
-        "OBJECTID": 2215609,
+        "OBJECTID": 2257328,
         "quad": 4,
         "township": 21,
         "range": 16,
@@ -3665,7 +3665,7 @@
         "TRS_LABEL": "T21.0S R16.0E Sec14 SL",
         "SHAPE.STArea()": 276395.42227176,
         "SHAPE.STLength()": 2103.4222314500507,
-        "GlobalID": "{4A2469D1-0388-48DA-865B-8D4C3193C7F0}"
+        "GlobalID": "{E7B37B79-9B91-42D3-8690-6A7064273C3F}"
       }
     }
   ],
