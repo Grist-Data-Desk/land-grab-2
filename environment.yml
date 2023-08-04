@@ -1,4 +1,4 @@
-name: base
+name: land-grab
 channels:
   - conda-forge
 dependencies:
@@ -276,4 +276,3 @@ dependencies:
   - zstd=1.5.2=hf913c23_6
   - pip:
       - bmi-arcgis-restapi==2.3.4
-prefix: /Users/tushar/mambaforge
