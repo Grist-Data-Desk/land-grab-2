@@ -2066,96 +2066,6 @@
         "Address1": "9TH & COMMERCE MONCRIEF BLDG",
         "Address2": "FORT WORTH, TX 76102",
         "PhoneNumber": " 8173367232",
-        "STRM": "27-07N-07WIM",
-        "LeaseNumber": "RO91",
-        "GlobalID": "{C8393DE9-EDA3-46F8-94EB-B4E2E2F3FDFA}",
-        "OBJECTID": 1335,
-        "MineralsLeaseID": "{42A407B2-9296-E011-82A2-00155D28E806}"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": 1335,
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -97.90837004530317,
-              35.0367374866629
-            ],
-            [
-              -97.90395195159577,
-              35.03673663587865
-            ],
-            [
-              -97.90394939317268,
-              35.04036977127533
-            ],
-            [
-              -97.9083692864985,
-              35.04037062124787
-            ],
-            [
-              -97.9127891799391,
-              35.04037147244202
-            ],
-            [
-              -97.91278803874656,
-              35.03673813683254
-            ],
-            [
-              -97.9127869967726,
-              35.033104601641085
-            ],
-            [
-              -97.91730969242774,
-              35.03310465107132
-            ],
-            [
-              -97.9172907502185,
-              35.0294907162485
-            ],
-            [
-              -97.91278585524354,
-              35.02949456675416
-            ],
-            [
-              -97.90837156299746,
-              35.0294983157998
-            ],
-            [
-              -97.90395716929669,
-              35.02950216476029
-            ],
-            [
-              -97.9039545102339,
-              35.03310330091312
-            ],
-            [
-              -97.90837080410948,
-              35.033103851345814
-            ],
-            [
-              -97.90837004530317,
-              35.0367374866629
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "BeginDate": "1971-12-03",
-        "EndDate": "1976-12-03",
-        "TrustName": "Oklahoma State University",
-        "TractNumber": 1,
-        "CountyName": "GRADY",
-        "LegalDescription": "PLEASE SEE THIS SECTION'S INFORMATION FOR LEGAL DESCRIPTION. THIS SECTION HAS ALL M.R.                            ",
-        "GrossAcres": 423.34,
-        "NetAcres": 353.34,
-        "OwnerName": "W A MONCRIEF",
-        "Address1": "9TH & COMMERCE MONCRIEF BLDG",
-        "Address2": "FORT WORTH, TX 76102",
-        "PhoneNumber": " 8173367232",
         "STRM": "35-07N-07WIM",
         "LeaseNumber": "RO91",
         "GlobalID": "{C8393DE9-EDA3-46F8-94EB-B4E2E2F3FDFA}",
@@ -2246,7 +2156,7 @@
         "Address1": "9TH & COMMERCE MONCRIEF BLDG",
         "Address2": "FORT WORTH, TX 76102",
         "PhoneNumber": " 8173367232",
-        "STRM": "26-07N-07WIM",
+        "STRM": "27-07N-07WIM",
         "LeaseNumber": "RO91",
         "GlobalID": "{C8393DE9-EDA3-46F8-94EB-B4E2E2F3FDFA}",
         "OBJECTID": 1335,
@@ -2345,6 +2255,96 @@
     },
     {
       "type": "Feature",
+      "id": 1335,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -97.90837004530317,
+              35.0367374866629
+            ],
+            [
+              -97.90395195159577,
+              35.03673663587865
+            ],
+            [
+              -97.90394939317268,
+              35.04036977127533
+            ],
+            [
+              -97.9083692864985,
+              35.04037062124787
+            ],
+            [
+              -97.9127891799391,
+              35.04037147244202
+            ],
+            [
+              -97.91278803874656,
+              35.03673813683254
+            ],
+            [
+              -97.9127869967726,
+              35.033104601641085
+            ],
+            [
+              -97.91730969242774,
+              35.03310465107132
+            ],
+            [
+              -97.9172907502185,
+              35.0294907162485
+            ],
+            [
+              -97.91278585524354,
+              35.02949456675416
+            ],
+            [
+              -97.90837156299746,
+              35.0294983157998
+            ],
+            [
+              -97.90395716929669,
+              35.02950216476029
+            ],
+            [
+              -97.9039545102339,
+              35.03310330091312
+            ],
+            [
+              -97.90837080410948,
+              35.033103851345814
+            ],
+            [
+              -97.90837004530317,
+              35.0367374866629
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "BeginDate": "1971-12-03",
+        "EndDate": "1976-12-03",
+        "TrustName": "Oklahoma State University",
+        "TractNumber": 1,
+        "CountyName": "GRADY",
+        "LegalDescription": "PLEASE SEE THIS SECTION'S INFORMATION FOR LEGAL DESCRIPTION. THIS SECTION HAS ALL M.R.                            ",
+        "GrossAcres": 423.34,
+        "NetAcres": 353.34,
+        "OwnerName": "W A MONCRIEF",
+        "Address1": "9TH & COMMERCE MONCRIEF BLDG",
+        "Address2": "FORT WORTH, TX 76102",
+        "PhoneNumber": " 8173367232",
+        "STRM": "26-07N-07WIM",
+        "LeaseNumber": "RO91",
+        "GlobalID": "{C8393DE9-EDA3-46F8-94EB-B4E2E2F3FDFA}",
+        "OBJECTID": 1335,
+        "MineralsLeaseID": "{42A407B2-9296-E011-82A2-00155D28E806}"
+      }
+    },
+    {
+      "type": "Feature",
       "id": 1399,
       "geometry": {
         "type": "Polygon",
@@ -2398,10 +2398,10 @@
         "LegalDescription": "SE/4, less and except the Springer and Cherokee Formations",
         "GrossAcres": 160,
         "NetAcres": 80,
-        "OwnerName": "CITIZEN ENERGY III, LLC ",
-        "Address1": "320 S BOSTON AVE, SUITE 900 ",
-        "Address2": "TULSA, OK 74103",
-        "PhoneNumber": " 9189494680, 9185087474",
+        "OwnerName": null,
+        "Address1": null,
+        "Address2": null,
+        "PhoneNumber": null,
         "STRM": "12-13N-13WIM",
         "LeaseNumber": "30359",
         "GlobalID": "{7CCA3128-3E77-49C9-9DF9-F6ED176FD31B}",
@@ -3200,9 +3200,9 @@
         "LegalDescription": "N/2 NE/4                             ",
         "GrossAcres": 80,
         "NetAcres": 40,
-        "OwnerName": "BCE-MACH III LLC",
-        "Address1": "14201 WIRELESS WAY STE 300 ",
-        "Address2": "OKLAHOMA CITY, OK 73134",
+        "OwnerName": null,
+        "Address1": null,
+        "Address2": null,
         "PhoneNumber": null,
         "STRM": "28-08N-24WIM",
         "LeaseNumber": "OS1580",
@@ -3266,10 +3266,10 @@
         "LegalDescription": "N/2 NW/4; SE/4 NW/4; Lot 1, less and except all accretion and riparian rights lying outside of Section 12-13N-13WIM and also less and except the Springer and Cherokee Formations",
         "GrossAcres": 161.13,
         "NetAcres": 80.565,
-        "OwnerName": "CITIZEN ENERGY III, LLC ",
-        "Address1": "320 S BOSTON AVE, SUITE 900 ",
-        "Address2": "TULSA, OK 74103",
-        "PhoneNumber": " 9189494680, 9185087474",
+        "OwnerName": null,
+        "Address1": null,
+        "Address2": null,
+        "PhoneNumber": null,
         "STRM": "12-13N-13WIM",
         "LeaseNumber": "30358",
         "GlobalID": "{7B997132-9421-4F43-867C-9AECC256E5CA}",
@@ -4700,9 +4700,9 @@
         "LegalDescription": "NE/4 SE/4 (1/2 M.R.)                             ",
         "GrossAcres": 40,
         "NetAcres": 20,
-        "OwnerName": "RELEASED TO CLO",
-        "Address1": "14201 WIRELESS WAY STE 300 ",
-        "Address2": "OKLAHOMA CITY, OK 73134",
+        "OwnerName": null,
+        "Address1": null,
+        "Address2": null,
         "PhoneNumber": null,
         "STRM": "30-08N-24WIM",
         "LeaseNumber": "OS369",
@@ -6626,9 +6626,9 @@
         "LegalDescription": "N/2 SE/4",
         "GrossAcres": 80,
         "NetAcres": 40,
-        "OwnerName": "BLUE WATER RESOURCES LLC",
-        "Address1": "2508 E 71ST STREET SUITE A ",
-        "Address2": "TULSA, OK 74136",
+        "OwnerName": null,
+        "Address1": null,
+        "Address2": null,
         "PhoneNumber": null,
         "STRM": "36-09N-24EIM",
         "LeaseNumber": "31339",
@@ -7140,9 +7140,9 @@
         "LegalDescription": "E/2 SW/4; SW/4 SW/4; S/2 NW/4 SW/4; NE/4 NW/4 SW/4",
         "GrossAcres": 150,
         "NetAcres": 15,
-        "OwnerName": null,
-        "Address1": null,
-        "Address2": null,
+        "OwnerName": "NATIVE OIL & GAS LLC",
+        "Address1": "PO BOX 1693 ",
+        "Address2": "OKLAHOMA CITY, OK 73101",
         "PhoneNumber": null,
         "STRM": "05-09N-04WIM",
         "LeaseNumber": "31602",
@@ -7198,9 +7198,9 @@
         "LegalDescription": "Lot 3; SE/4 NW/4; SE/4 SW/4 NW/4",
         "GrossAcres": 90.3,
         "NetAcres": 9.03,
-        "OwnerName": null,
-        "Address1": null,
-        "Address2": null,
+        "OwnerName": "NATIVE OIL & GAS LLC",
+        "Address1": "PO BOX 1693 ",
+        "Address2": "OKLAHOMA CITY, OK 73101",
         "PhoneNumber": null,
         "STRM": "05-09N-04WIM",
         "LeaseNumber": "31601",

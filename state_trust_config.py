@@ -455,27 +455,7 @@ STATE_TRUST_CONFIGS = {
             'QQSEC': ALIQUOT,
         },
     },
-    'TX': {
-        DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
-        STATE: 'TX',
-        UNIVERSITY: 'Texas A&M',
-        MANAGING_AGENCY: 'General Land Office',
-        RIGHTS_TYPE: SURFACE_RIGHTS_TYPE + '+' + SUBSURFACE_RIGHTS_TYPE,
-        # found at https://universitylands.utsystem.edu/Resources/GIS
-        DATA_SOURCE:
-        'https://gisapps.universitylands.org/server/rest/services/Hosted/GrantTracts_SpatialJoin/FeatureServer/16',
-        ATTRIBUTE_LABEL_TO_FILTER_BY: ['tractid'],
-        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-            "*": None
-        },
-        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
-            'acres': ACRES,
-            'countyname': COUNTY,
-            'section': SECTION,
-            'block': BLOCK,
-        },
-    },
-    # 'TX-surface': {
+    # 'TX': {
     #     DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
     #     STATE: 'TX',
     #     UNIVERSITY: 'Texas A&M',
@@ -484,9 +464,9 @@ STATE_TRUST_CONFIGS = {
     #     # found at https://universitylands.utsystem.edu/Resources/GIS
     #     DATA_SOURCE:
     #     'https://gisapps.universitylands.org/server/rest/services/Hosted/GrantTracts_SpatialJoin/FeatureServer/16',
-    #     ATTRIBUTE_LABEL_TO_FILTER_BY: ['hassurfacerights'],
+    #     ATTRIBUTE_LABEL_TO_FILTER_BY: ['tractid'],
     #     ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-    #         "1": 'Surface and Subsurface'
+    #         "*": None
     #     },
     #     EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
     #         'acres': ACRES,
@@ -495,26 +475,48 @@ STATE_TRUST_CONFIGS = {
     #         'block': BLOCK,
     #     },
     # },
-    # 'TX-subsurface': {
-    #     DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
-    #     STATE: 'TX',
-    #     UNIVERSITY: 'Texas A&M',
-    #     MANAGING_AGENCY: 'General Land Office',
-    #     RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
-    #     # found at https://universitylands.utsystem.edu/Resources/GIS
-    #     DATA_SOURCE:
-    #     'https://gisapps.universitylands.org/server/rest/services/Hosted/GrantTracts_SpatialJoin/FeatureServer/16',
-    #     ATTRIBUTE_LABEL_TO_FILTER_BY: ['hassurfacerights'],
-    #     ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-    #         "0": 'Subsurface'
-    #     },
-    #     EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
-    #         'acres': ACRES,
-    #         'countyname': COUNTY,
-    #         'section': SECTION,
-    #         'block': BLOCK,
-    #     },
-    # },
+    'TX-surface': {
+        DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
+        STATE: 'TX',
+        UNIVERSITY: 'Texas A&M',
+        MANAGING_AGENCY: 'General Land Office',
+        RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
+        LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'TX',
+        # found at https://universitylands.utsystem.edu/Resources/GIS
+        DATA_SOURCE:
+        'https://gisapps.universitylands.org/server/rest/services/Hosted/GrantTracts_SpatialJoin/FeatureServer/16',
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['hassurface'],
+        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+            1: 'Texas A&M'
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'acres': ACRES,
+            'countyname': COUNTY,
+            'section': SECTION,
+            'block': BLOCK,
+        },
+    },
+    'TX-subsurface': {
+        DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
+        STATE: 'TX',
+        UNIVERSITY: 'Texas A&M',
+        MANAGING_AGENCY: 'General Land Office',
+        RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
+        LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'TX',
+        # found at https://universitylands.utsystem.edu/Resources/GIS
+        DATA_SOURCE:
+        'https://gisapps.universitylands.org/server/rest/services/Hosted/GrantTracts_SpatialJoin/FeatureServer/16',
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['hasmineral'],
+        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+            1: 'Texas A&M'
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'acres': ACRES,
+            'countyname': COUNTY,
+            'section': SECTION,
+            'block': BLOCK,
+        },
+    },
     'UT-surface': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
         STATE: 'UT',
