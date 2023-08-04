@@ -1,4 +1,5 @@
 import os
+import shutil
 
 os.environ['RESTAPI_USE_ARCPY'] = 'FALSE'
 
@@ -390,10 +391,12 @@ def _create_oklahoma_trust_fund_filter():
 
 def delete_files_and_subdirectories_in_directory(directory_path):
   try:
-    for root, dirs, files in os.walk(directory_path):
-      for file in files:
-        file_path = os.path.join(root, file)
-        os.remove(file_path)
+    with os.scandir(directory_path) as entries:
+      for entry in entries:
+        if entry.is_file():
+          os.unlink(entry.path)
+        else:
+          shutil.rmtree(entry.path)
     print("All files and subdirectories deleted successfully.")
   except OSError:
     print("Error occurred while deleting files and subdirectories.")
@@ -409,21 +412,6 @@ def _merge_dataframes(df_list):
   Merge multiple dataframes for a state, correctly merging the different
   rights type column values (surface, mineral, etc)
   '''
-
-  # get intersection of all columns
-  # columns_to_join_on = set.intersection(
-  #     *map(set, [df.columns for df in df_list]))
-  # for df in df_list:
-  #   for column in df.columns:
-  #     if df[column].dtype == int:
-  #       df[column] = df[column].astype(object)
-
-  # # convert to lists
-  # columns_to_join_on = [
-  #     column for column in columns_to_join_on if column not in [RIGHTS_TYPE]
-  # ]
-
-  # columns_to_join_on = [STATE, UNIVERSITY, GEOMETRY]
 
   # merge dataframes one by one until only 1 exists
   while len(df_list) > 1:
@@ -465,16 +453,6 @@ def _merge_dataframes(df_list):
     merged = merged.drop(columns_to_drop, axis=1)
 
     df_list.append(merged)
-
-  # if there are any rights type columns in the merged dataset,
-  # correctly merge those columns to cintain a readable rights type
-  # if merged.columns.str.contains(RIGHTS_TYPE).any():
-  #   merged[RIGHTS_TYPE] = merged.apply(_merge_rights_type, axis=1)
-
-  # remove remaining columns
-  # columns_to_drop = [
-  #     column for column in merged.columns if column not in COLUMNS
-  # ]
 
   # return the final merged dataset
   merged = df_list.pop()
