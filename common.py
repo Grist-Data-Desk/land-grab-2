@@ -9,7 +9,7 @@ import typer
 
 from constants import (
     ATTRIBUTE_LABEL_TO_FILTER_BY, ATTRIBUTE_CODE_TO_ALIAS_MAP, RIGHTS_TYPE,
-    TRUST_NAME, COLUMNS, DOWNLOAD_TYPE, SHAPEFILE_DOWNLOAD_TYPE,
+    TRUST_NAME, COLUMNS, DOWNLOAD_TYPE, SHAPEFILE_DOWNLOAD_TYPE, OBJECT_ID,
     API_QUERY_DOWNLOAD_TYPE, LAYER, OK_HOLDING_DETAIL_ID, OK_TRUST_FUND_ID,
     OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE, EXISTING_COLUMN_TO_FINAL_COLUMN_MAP,
     TOWNSHIP, SECTION, RANGE, MERIDIAN, COUNTY, ALIQUOT, LOCAL_DATA_SOURCE,
@@ -604,6 +604,9 @@ def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
 
   # merge all states to single geodataframe
   merged = pd.concat(state_datasets_to_merge, ignore_index=True)
+
+  # add a unique object id identifier columns
+  merged[OBJECT_ID] = merged.index + 1
 
   # reorder columns to desired order
   final_column_order = [
