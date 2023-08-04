@@ -3,10 +3,13 @@ import typer
 from common import (state_specific_directory,
                     extract_and_clean_single_source_helper,
                     merge_single_state_helper, merge_all_states_helper,
-                    delete_files_and_subdirectories_in_directory)
+                    delete_files_and_subdirectories_in_directory,
+                    calculate_summary_statistics_helper,
+                    merge_cessions_data_helper)
 
 from constants import (STATE, STATE_TRUST_DIRECTORY, CLEANED_DIRECTORY,
-                       MERGED_DIRECTORY, QUERIED_DIRECTORY)
+                       MERGED_DIRECTORY, QUERIED_DIRECTORY, CESSIONS_DIRECTORY,
+                       SUMMARY_STATISTICS_DIRECTORY)
 
 from state_trust_config import STATE_TRUST_CONFIGS
 
@@ -26,6 +29,39 @@ def _cleaned_data_directory(state=None):
 def _merged_data_directory(state=None):
   return state_specific_directory(STATE_TRUST_DIRECTORY + MERGED_DIRECTORY,
                                   state)
+
+
+def _cessions_data_directory(state=None):
+  return state_specific_directory(STATE_TRUST_DIRECTORY + CESSIONS_DIRECTORY,
+                                  state)
+
+
+def _summary_statistics_data_directory(state=None):
+  return state_specific_directory(
+      STATE_TRUST_DIRECTORY + SUMMARY_STATISTICS_DIRECTORY, state)
+
+
+@app.command()
+def extract_and_clean_single_source(source: str):
+  '''
+  Extract and clean data from a single data source
+  '''
+  # get state and correct config
+  config = STATE_TRUST_CONFIGS[source]
+  state = config[STATE]
+  queried_data_directory = _queried_data_directory(state)
+  cleaned_data_directory = _cleaned_data_directory(state)
+  extract_and_clean_single_source_helper(source, config, queried_data_directory,
+                                         cleaned_data_directory)
+
+
+@app.command()
+def extract_and_clean_all():
+  '''
+  Extract and clean data for the entire dataset
+  '''
+  for source in STATE_TRUST_CONFIGS.keys():
+    extract_and_clean_single_source(source)
 
 
 @app.command()
@@ -51,26 +87,21 @@ def merge_all_states():
 
 
 @app.command()
-def extract_and_clean_all():
-  '''
-  Extract and clean data for the entire dataset
-  '''
-  for source in STATE_TRUST_CONFIGS.keys():
-    extract_and_clean_single_source(source)
+def merge_cessions_data():
+  merge_cessions_data_helper(_cessions_data_directory())
 
 
 @app.command()
-def extract_and_clean_single_source(source: str):
+def calculate_summary_statistics():
   '''
-  Extract and clean data from a single data source
+  Calculate summary statistics based on the full dataset. Create two csvs. In the first,
+  for each university calculate total acreage of land held in trust, all present day tribes
+  and tribes listed in treaties associated with the university land, and which cessions
+  (represented by Royce IDs) overlap with land held in trust. In the second, for each present
+  day tribe, get total acreage of state land trust parcels, all associated cessions, and all
+  states and universities that have land taken from this tribe held in trust
   '''
-  # get state and correct config
-  config = STATE_TRUST_CONFIGS[source]
-  state = config[STATE]
-  queried_data_directory = _queried_data_directory(state)
-  cleaned_data_directory = _cleaned_data_directory(state)
-  extract_and_clean_single_source_helper(source, config, queried_data_directory,
-                                         cleaned_data_directory)
+  calculate_summary_statistics_helper(_summary_statistics_data_directory())
 
 
 @app.command()
@@ -86,6 +117,11 @@ def build_full_dataset():
   # extract, clean, and merge all data
   extract_and_clean_all()
   merge_all_states()
+
+  # merge with usfs cessions data and calculate_summary_statistics
+  # TODO: uncomment once this is finished
+  # merge_cessions_data()
+  calculate_summary_statistics()
 
 
 if __name__ == "__main__":
