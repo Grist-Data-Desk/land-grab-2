@@ -1,0 +1,99 @@
+university,gis_acres,present_day_tribe,tribe_named_in_land_cessions_1784-1894,Royce_ID
+Colorado State University,132536.51,"['Arapaho Tribe of the Wind River Reservation, Wyoming; Cheyenne and Arapaho Tribes, Oklahoma; Northern Cheyenne Tribe of the Northern Cheyenne Indian Reservation, Montana'
+ 'Ute Mountain Ute Tribe, Colorado, New Mexico, & Utah'
+ 'Southern Ute Indian Tribe of the Southern Ute Reservation, Colorado; Ute Indian Tribe of the Uintah & Ouray Reservation, Utah; Ute Mountain Ute Tribe, Colorado, New Mexico, & Utah'
+ 'Comanche Nation, Oklahoma; Kiowa Indian Tribe of Oklahoma']","['Arapaho; Cheyenne'
+ 'Uta (Tabeguache, Muache, Capote, Weeminuchi, Yampa, Grand River, and Uintah bands)'
+ 'Arapaho of Upper Arkansas; Cheyenne of Upper Arkansas' 'Uta'
+ 'Comanche; Kiowa']",['477' '515' '426' '566' '616' '478']
+Montana State University,104585.7,"['Blackfeet Tribe of the Blackfeet Indian Reservation of Montana; Keweenaw Bay Indian Community, Michigan; Lac Vieux Desert Band of Lake Superior Chippewa Indians, Michigan'
+ 'Blackfeet Tribe of the Blackfeet Indian Reservation of Montana; Crow Tribe of Montana; Fort Belknap Indian Community of the Fort Belknap Reservation of Montana'
+ 'Blackfeet Tribe of the Blackfeet Indian Reservation of Montana; Fort Belknap Indian Community of the Fort Belknap Reservation of Montana'
+ 'Blackfeet Tribe of the Blackfeet Indian Reservation of Montana; Confederated Salish & Kootenai Tribes of the Flathead Reservation, Montana; Nez Perce Tribe of Idaho'
+ 'Confederated Salish & Kootenai Tribes of the Flathead Reservation, Montana; Confederated Tribes of the Colville Reservation, Washington'
+ 'Northwestern Band of Shoshoni Nation of Utah (Washakie); Te-Moak Tribe of Western Shoshone Indians of Nevada'
+ 'Fort Belknap Indian Community of the Fort Belknap Reservation of Montana; Three Affiliated Tribes of the Fort Berthold Reservation, North Dakota'
+ 'Crow Tribe of Montana']","['Blackfoot; Chippewa, Ontonagon band'
+ 'Blackfoot; Blood; Gros Ventre; Piegan; River Crow' 'Gros Ventre; Piegan'
+ 'Nez Percè, Blackfoot and Flathead Nations'
+ ""Flathead; Kootenay; Upper Pend d'Orelles"" 'Shoshoni (Western bands)'
+ 'Arikara; Gros Ventre; Mandan' 'Crow']",['398' '574' '692' '399' '373' '444' '620' '529' '619' '517']
+New Mexico State University,149496.48,"['Apache Tribe of Oklahoma; Fort Sill Apache Tribe of Oklahoma; Jicarilla Apache Nation, New Mexico; Mescalero Apache Tribe of the Mescalero Reservation, New Mexico; White Mountain Apache Tribe of the Fort Apache Reservation, Arizona'
+ 'San Carlos Apache Tribe of the San Carlos Reservation, Arizona; Tonto Apache Tribe of Arizona; White Mountain Apache Tribe of the Fort Apache Reservation, Arizona'
+ 'Navajo Nation, Arizona, New Mexico & Utah'
+ 'Comanche Nation, Oklahoma; Kiowa Indian Tribe of Oklahoma']","['Apache (eastern bands)' 'Apache (western bands)' 'Navaho'
+ 'Comanche; Kiowa']",['688' '689' '519' '478']
+North Dakota State University,126487.03,"['Assiniboine and Sioux Tribes of the Fort Peck Indian Reservation, Montana; Cheyenne River Sioux Tribe of the Cheyenne River Reservation, South Dakota; Crow Creek Sioux Tribe of the Crow Creek Reservation, South Dakota; Flandreau Santee Sioux Tribe of Sou'
+ ''
+ 'Sisseton-Wahpeton Oyate of the Lake Traverse Reservation, South Dakota'
+ 'Fort Belknap Indian Community of the Fort Belknap Reservation of Montana; Three Affiliated Tribes of the Fort Berthold Reservation, North Dakota'
+ ""Chippewa Cree Indians of the Rocky Boy's Reservation, Montana; Red Lake Band of Chippewa Indians, Minnesota; Turtle Mountain Band of Chippewa Indians of North Dakota; White Earth Band of Minnesota Chippewa Tribe, Minnesota""
+ 'Turtle Mountain Band of Chippewa Indians of North Dakota']","['Sioux' '' 'Sioux, Sisseton' 'Arikara; Gros Ventre; Mandan'
+ 'Chippewa (Red Lake and Pembina bands)' 'Chippewa (Turtle Mountain band)'
+ 'Sioux (Wahpeton and Sisseton Bands)']","['516' '1005' '538' '1004' '1006' '529' '620' '699' '445' '' '654' '497'
+ '614']"
+Oklahoma State University,91011.13,"['Comanche Nation, Oklahoma; Kiowa Indian Tribe of Oklahoma'
+ 'The Osage Nation, Oklahoma' 'Quapaw Tribe of Indians, Oklahoma']",['Comanche; Kiowa' 'Great and Little Osage' 'Quapaw'],['511' '123' '94' '478']
+South Dakota State University,157506.74,"['Yankton Sioux Tribe of South Dakota'
+ 'Assiniboine and Sioux Tribes of the Fort Peck Indian Reservation, Montana; Cheyenne River Sioux Tribe of the Cheyenne River Reservation, South Dakota; Crow Creek Sioux Tribe of the Crow Creek Reservation, South Dakota; Flandreau Santee Sioux Tribe of Sou'
+ ''
+ 'Arapaho Tribe of the Wind River Reservation, Wyoming; Assiniboine and Sioux Tribes of the Fort Peck Indian Reservation, Montana; Cheyenne River Sioux Tribe of the Cheyenne River Reservation, South Dakota; Crow Creek Sioux Tribe of the Crow Creek Reservat'
+ 'Sisseton-Wahpeton Oyate of the Lake Traverse Reservation, South Dakota']","['Yankton Sioux' 'Sioux' '' 'Arapaho; Northern Cheyenne; Sioux'
+ 'Sioux (Wahpeton and Sisseton Bands)' 'Sioux, Sisseton']",['410' '614' '699' '1005' '653' '598' '289' '538']
+Texas A&M,1232562.55,"['Comanche Nation, Oklahoma; Kiowa Indian Tribe of Oklahoma' ''
+ 'Apache Tribe of Oklahoma; Fort Sill Apache Tribe of Oklahoma; Jicarilla Apache Nation, New Mexico; Mescalero Apache Tribe of the Mescalero Reservation, New Mexico; White Mountain Apache Tribe of the Fort Apache Reservation, Arizona']",['Comanche; Kiowa' '' 'Apache (eastern bands)'],['511' '478' '' '688']
+University of Arizona,1395000.19,"['San Carlos Apache Tribe of the San Carlos Reservation, Arizona; Tonto Apache Tribe of Arizona; White Mountain Apache Tribe of the Fort Apache Reservation, Arizona'
+ '' 'Navajo Nation, Arizona, New Mexico & Utah']","['Apache (western bands)' 'Maricopa; Papago; Pima' 'Cocopa' 'Apache'
+ 'Navaho' 'Walapai' '']",['689' '687' '686' '600' '519' '683' '']
+University of Idaho,266088.45,"['Northwestern Band of Shoshoni Nation of Utah (Washakie); Te-Moak Tribe of Western Shoshone Indians of Nevada'
+ 'Confederated Tribes of the Goshute Reservation; Shoshone-Bannock Tribes of the Fort Hall Reservation of Idaho'
+ 'Nez Perce Tribe of Idaho; Nez Perce Tribe, Idaho'
+ 'Nez Perce Tribe, Idaho' ""Coeur D'Alene Tribe, Idaho"" ''
+ 'Confederated Tribes of the Colville Reservation, Washington']","['Shoshoni (Western bands)' 'Bannock; Shoshoni' 'Nez Percé'
+ ""Coeur d'Alène"" '' 'Methow; Okanagan']",['444' '520' '441' '366' '552' '' '553' '532']
+University of Minnesota,50617.49,"['Sisseton-Wahpeton Oyate of the Lake Traverse Reservation, South Dakota'
+ 'Bad River Band of the Lake Superior Tribe of Chippewa Indians of the Bad River Reservation, Wisconsin; Lac Courte Oreilles Band of Lake Superior Chippewa Indians of Wisconsin; Lac du Flambeau Band of Lake Superior Chippewa Indians of the Lac du Flambeau'
+ 'Leech Lake Band of the Minnesota Chippewa Tribe, Minnesota; White Earth Band of Minnesota Chippewa Tribe, Minnesota'
+ 'Leech Lake Band of the Minnesota Chippewa Tribe, Minnesota; Mille Lacs Band of the Minnesota Chippewa Tribe, Minnesota; White Earth Band of Minnesota Chippewa Tribe, Minnesota'
+ ""Bad River Band of the Lake Superior Tribe of Chippewa Indians of the Bad River Reservation, Wisconsin; Bay Mills Indian Community, Michigan; Bois Forte Band (Nett Lake) of the Minnesota Chippewa Tribe, Minnesota; Chippewa Cree Indians of the Rocky Boy's""
+ 'Bois Forte Band (Nett Lake) of the Minnesota Chippewa Tribe, Minnesota'
+ ""Chippewa Cree Indians of the Rocky Boy's Reservation, Montana; Red Lake Band of Chippewa Indians, Minnesota; Turtle Mountain Band of Chippewa Indians of North Dakota; White Earth Band of Minnesota Chippewa Tribe, Minnesota""
+ 'Assiniboine and Sioux Tribes of the Fort Peck Indian Reservation, Montana; Cheyenne River Sioux Tribe of the Cheyenne River Reservation, South Dakota; Crow Creek Sioux Tribe of the Crow Creek Reservation, South Dakota; Flandreau Santee Sioux Tribe of Sou']","['Sioux (Wahpeton and Sisseton Bands)'
+ 'Chippewa of the Mississippi and Lake Superior'
+ 'Chippewa (Pillager band)' 'Chippewa of the Mississippi' 'Chippewa'
+ 'Chippewa (Bois Forte band)' 'Chippewa (Red Lake and Pembina bands)'
+ 'Sioux']",['289' '268' '269' '357' '242' '332' '482' '445' '243']
+University of Nebraska,9950.16,"['Omaha Tribe of Nebraska' 'Pawnee Nation of Oklahoma'
+ 'Kaw Nation, Oklahoma']",['Omaha' 'Pawnee (four confederated bands)' 'Kansas'],['315' '408' '124']
+University of Wisconsin,74726.34,"['Bad River Band of the Lake Superior Tribe of Chippewa Indians of the Bad River Reservation, Wisconsin; Lac Courte Oreilles Band of Lake Superior Chippewa Indians of Wisconsin; Lac du Flambeau Band of Lake Superior Chippewa Indians of the Lac du Flambeau'
+ ""Bad River Band of the Lake Superior Tribe of Chippewa Indians of the Bad River Reservation, Wisconsin; Bay Mills Indian Community, Michigan; Bois Forte Band (Nett Lake) of the Minnesota Chippewa Tribe, Minnesota; Chippewa Cree Indians of the Rocky Boy's""
+ 'Menominee Indian Tribe of Wisconsin'
+ 'Assiniboine and Sioux Tribes of the Fort Peck Indian Reservation, Montana; Cheyenne River Sioux Tribe of the Cheyenne River Reservation, South Dakota; Crow Creek Sioux Tribe of the Crow Creek Reservation, South Dakota; Flandreau Santee Sioux Tribe of Sou'
+ 'Ho-Chunk Nation of Wisconsin; Winnebago Tribe of Nebraska' '']","['Chippewa of the Mississippi and Lake Superior' 'Chippewa' 'Menomini'
+ 'Sioux' 'Winnebago' '']",['261' '242' '219' '243' '174' '271' '245' '160' '' '158']
+University of Wyoming,220676.76,"['Crow Tribe of Montana'
+ 'Arapaho Tribe of the Wind River Reservation, Wyoming; Cheyenne and Arapaho Tribes, Oklahoma; Northern Cheyenne Tribe of the Northern Cheyenne Indian Reservation, Montana'
+ 'Confederated Tribes of the Goshute Reservation; Shoshone-Bannock Tribes of the Fort Hall Reservation of Idaho'
+ 'Arapaho Tribe of the Wind River Reservation, Wyoming; Assiniboine and Sioux Tribes of the Fort Peck Indian Reservation, Montana; Cheyenne River Sioux Tribe of the Cheyenne River Reservation, South Dakota; Crow Creek Sioux Tribe of the Crow Creek Reservat']","['Crow' 'Arapaho of Upper Arkansas; Cheyenne of Upper Arkansas'
+ 'Bannock; Shoshoni' 'Arapaho; Northern Cheyenne; Sioux']",['517' '426' '520' '597']
+Utah State University,263466.15,"['Ute Indian Tribe of the Uintah & Ouray Reservation, Utah' ''
+ 'Confederated Tribes of the Goshute Reservation; Shoshone-Bannock Tribes of the Fort Hall Reservation of Idaho'
+ 'Big Pine Band of Owens Valley Paiute Shoshone Indians of the Big Pine Reservation, California; Bishop Paiute Tribe, California; Bridgeport Indian Colony, California; Bridgeport Paiute Indian Colony of California; Burns Paiute Tribe of the Burns Paiute In'
+ 'Southern Ute Indian Tribe of the Southern Ute Reservation, Colorado; Ute Indian Tribe of the Uintah & Ouray Reservation, Utah; Ute Mountain Ute Tribe, Colorado, New Mexico, & Utah'
+ 'Ute Mountain Ute Tribe, Colorado, New Mexico, & Utah'
+ 'Northwestern Band of Shoshoni Nation of Utah (Washakie); Te-Moak Tribe of Western Shoshone Indians of Nevada']","['Uintah Uta' 'Shoshone-Goship' 'Bannock; Shoshoni' 'Paiute' 'Uta'
+ 'Uta (Tabeguache, Muache, Capote, Weeminuchi, Yampa, Grand River, and Uintah bands)'
+ 'Shoshoni (Western bands)']",['432' '447' '520' '558' '451' '431' '515' '450' '444']
+Washington State University,212076.76,"['Confederated Tribes of the Colville Reservation, Washington'
+ 'Confederated Tribes and Bands of the Yakama Nation, Washington'
+ 'Confederated Tribes and Bands of the Yakama Nation; Confederated Tribes of the Chehalis Reservation, Washington; Quinault Indian Nation, Washington; Shoalwater Bay Tribe of the Shoalwater Bay Indian Reservation, Washington'
+ 'Duwamish Tribe of Indians [Unrecognized]; Suquamish Indian Tribe of the Port Madison Reservation, Washington'
+ ""Coeur D'Alene Tribe, Idaho""
+ 'Confederated Tribes of the Umatilla Indian Reservation, Oregon; Confederated Tribes of the Umatilla Reservation, Oregon'
+ 'Makah Indian Tribe of the Makah Indian Reservation, Washington'
+ 'Quileute Tribe of the Quileute Reservation, Washington; Quinault Tribe of the Quinault Reservation, Washington'
+ ""Jamestown S'Klallam Tribe, Washington; Lower Elwha Tribal Community, Washington; Port Gamble S'Klallam Tribe, Washington""
+ 'Nisqually Indian Tribe of the Nisqually Reservation, Washington; Nonfederally Recognized Indian Groups; Puyallup Tribe of the Puyallup Reservation, Washington; Squaxin Island Tribe of the Squaxin Island Reservation, Washington']","['Methow; Okanagan' 'Yakima' 'Chehalis; Chinook; Klatsop; Klikitat'
+ 'Dwamish; Suquamish' ""Coeur d'Alène"" 'Cayuse; Umatilla; Walla-walla'
+ 'Makah' 'Quil-leh-ute; Qui-nai-elt' 'Sklallam'
+ ""Niskwali; Puyallup; Sa-heh-wamish; S'Homamish; Squaxin; Squiaitl; Steh-chass; Steilacoom; T'Peeksin""]",['533' '364' '458' '347' '553' '362' '355' '371' '532' '353' '536' '345']

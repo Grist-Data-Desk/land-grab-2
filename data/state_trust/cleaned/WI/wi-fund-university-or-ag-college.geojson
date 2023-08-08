@@ -1,0 +1,7 @@
+{
+"type": "FeatureCollection",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::5070" } },
+"features": [
+{ "type": "Feature", "properties": { "acres": 36.9, "county": "Pepin", "section": "31", "township": "23N", "range": "14W", "aliquot": "SENE", "state": "WI", "state_enabling_act": "9 Stat.  56-58 (1846)", "managing_agency": "Board of Commissioners of Public Lands", "university": "University of Wisconsin", "data_source": "https://bcpl.wisconsin.gov/bcpl.wisconsin.gov%20Shared%20Documents/Maps/BCPLPropertyBoundariesShapefile.zip", "trust_name": "University or Ag College" }, "geometry": { "type": "Polygon", "coordinates": [ [ [ 308401.290386920096353, 2388680.68015621509403 ], [ 308002.376195281452965, 2388670.682331161107868 ], [ 307990.453210271021817, 2388942.023778764996678 ], [ 307986.405490750446916, 2389043.572833025362343 ], [ 308043.745209138898645, 2389042.747503515332937 ], [ 308101.591479417635128, 2389039.767798819579184 ], [ 308136.72160861978773, 2389036.67434703046456 ], [ 308204.878633647458628, 2389028.640651550609618 ], [ 308388.40142682834994, 2389004.898613637313247 ], [ 308391.107540375203826, 2388936.197344692889601 ], [ 308401.290386920096353, 2388680.68015621509403 ] ] ] } }
+]
+}

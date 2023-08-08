@@ -1,11 +1,12 @@
 # labels
+OBJECT_ID = 'object_id'
 STATE = 'state'
 UNIVERSITY = 'university'
 MANAGING_AGENCY = 'managing_agency'
 RIGHTS_TYPE = 'rights_type'
 ACTIVITY = 'activity'
 ACRES = 'acres'
-GIS_CALCULATED_ACRES = 'gis_calculated_acres'
+GIS_ACRES = 'gis_acres'
 COUNTY = 'county'
 MERIDIAN = 'meridian'
 ALIQUOT = 'aliquot'
@@ -16,6 +17,7 @@ BLOCK = 'block'
 GEOMETRY = 'geometry'
 ATTRIBUTE_FILTER = 'attribute_filter'
 TRUST_NAME = 'trust_name'
+STATE_ENABLING_ACT = 'state_enabling_act'
 SURFACE_RIGHTS_TYPE = 'surface'
 SUBSURFACE_RIGHTS_TYPE = 'subsurface'
 TIMBER_RIGHTS_TYPE = 'timber'
@@ -31,12 +33,6 @@ SUBSURFACE_ATTRIBUTE_LABEL_TO_FILTER_BY = 'subsurface_attribute_label_to_filter_
 ATTRIBUTE_CODE_TO_ALIAS_MAP = 'attribute_code_to_alias_map'
 EXISTING_COLUMN_TO_FINAL_COLUMN_MAP = 'existing_column_to_final_column_map'
 
-# cleaning oklahoma specific constants
-OK_TRUST_FUNDS_ID_MAP = {5: 'Oregon State University', 7: 'Langston University'}
-OK_TRUST_FUND_ID = 'TrustFundID'
-OK_HOLDING_DETAIL_ID = 'HoldingDetailID'
-OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE = '../../Downloads/All CLO Holdings.xlsx'
-
 # data directories
 DATA_DIRECTORY = 'data/'
 STATE_TRUST_DIRECTORY = DATA_DIRECTORY + 'state_trust/'
@@ -44,12 +40,31 @@ UNIVERSITY_DIRECTORY = DATA_DIRECTORY + 'university/'
 QUERIED_DIRECTORY = 'queried/'
 MERGED_DIRECTORY = 'merged/'
 CLEANED_DIRECTORY = 'cleaned/'
+CESSIONS_DIRECTORY = 'cessions/'
+SUMMARY_STATISTICS_DIRECTORY = 'summary_statistics/'
 SOURCE_DIRECTORY = 'source/'
 UNIVERSITY_DATA_SOURCE_DIRECTORY = UNIVERSITY_DIRECTORY + SOURCE_DIRECTORY
 STATE_TRUST_DATA_SOURCE_DIRECTORY = STATE_TRUST_DIRECTORY + SOURCE_DIRECTORY
 
-# final dataset columns
+# file names
+UNIVERSITY_SUMMARY = 'university-summary.csv'
+TRIBE_SUMMARY = 'tribe-summary.csv'
+ALL_STATES = 'all-states'
+
+# cleaning oklahoma specific constants
+OK_TRUST_FUND_ID = 'TrustFundID'
+OK_HOLDING_DETAIL_ID = 'HoldingDetailID'
+OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE = STATE_TRUST_DATA_SOURCE_DIRECTORY + 'All CLO Holdings.xlsx'
+
+# final dataset columns, in order we want them to be saved
 COLUMNS = [
-    STATE, UNIVERSITY, ACRES, GIS_CALCULATED_ACRES, RIGHTS_TYPE, ACTIVITY, MANAGING_AGENCY, TRUST_NAME, COUNTY,
-    MERIDIAN, TOWNSHIP, RANGE, SECTION, ALIQUOT, BLOCK, GEOMETRY, DATA_SOURCE
+    OBJECT_ID, STATE, STATE_ENABLING_ACT, TRUST_NAME, MANAGING_AGENCY,
+    UNIVERSITY, ACRES, GIS_ACRES, RIGHTS_TYPE, ACTIVITY, COUNTY, MERIDIAN,
+    TOWNSHIP, RANGE, SECTION, ALIQUOT, BLOCK, DATA_SOURCE, GEOMETRY
 ]
+
+# unit conversions
+ACRES_TO_SQUARE_METERS = 4046.8564224
+
+# map projection
+ALBERS_EQUAL_AREA = 'EPSG:5070'
