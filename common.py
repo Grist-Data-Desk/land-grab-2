@@ -1,4 +1,5 @@
 import os
+import shutil
 
 os.environ['RESTAPI_USE_ARCPY'] = 'FALSE'
 
@@ -7,14 +8,14 @@ import pandas as pd
 import restapi
 import typer
 
-from constants import (DATA_SOURCE, ATTRIBUTE_LABEL_TO_FILTER_BY,
-                       ATTRIBUTE_CODE_TO_ALIAS_MAP, UNIVERSITY, RIGHTS_TYPE,
-                       TRUST_NAME, COLUMNS, DOWNLOAD_TYPE,
-                       SHAPEFILE_DOWNLOAD_TYPE, API_QUERY_DOWNLOAD_TYPE, LAYER,
-                       OK_HOLDING_DETAIL_ID, OK_TRUST_FUNDS_ID_MAP,
-                       OK_TRUST_FUND_ID, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE,
-                       EXISTING_COLUMN_TO_FINAL_COLUMN_MAP, TOWNSHIP, SECTION,
-                       RANGE, MERIDIAN, COUNTY, ALIQUOT, LOCAL_DATA_SOURCE)
+from constants import (
+    ATTRIBUTE_LABEL_TO_FILTER_BY, ATTRIBUTE_CODE_TO_ALIAS_MAP, RIGHTS_TYPE,
+    TRUST_NAME, COLUMNS, DOWNLOAD_TYPE, SHAPEFILE_DOWNLOAD_TYPE, OBJECT_ID,
+    API_QUERY_DOWNLOAD_TYPE, LAYER, OK_HOLDING_DETAIL_ID, OK_TRUST_FUND_ID,
+    OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE, EXISTING_COLUMN_TO_FINAL_COLUMN_MAP,
+    TOWNSHIP, SECTION, RANGE, MERIDIAN, COUNTY, ALIQUOT, LOCAL_DATA_SOURCE,
+    GIS_ACRES, ACRES_TO_SQUARE_METERS, ALBERS_EQUAL_AREA, ACRES, ACTIVITY,
+    UNIVERSITY, STATE, ALL_STATES, UNIVERSITY_SUMMARY, TRIBE_SUMMARY)
 
 app = typer.Typer()
 
@@ -39,11 +40,11 @@ def _get_filename(state, label, alias, filetype):
     return f'{_to_kebab_case(state)}-{_to_kebab_case(label)}{filetype}'
 
 
-def _get_merged_dataset_filename(state=None):
+def _get_merged_dataset_filename(state=None, file_extension='.geojson'):
   if state:
-    return state.lower() + '-merged.geojson'
+    return state.lower() + file_extension
   else:
-    return 'all-states.geojson'
+    return ALL_STATES + file_extension
 
 
 ##############################################
@@ -74,15 +75,6 @@ def _query_arcgis_restapi(config, source, label, code, alias, directory):
   data_source = config['data_source']
   layer = restapi.MapServiceLayer(data_source)
 
-  # to get feature set as GeoJson, must set outSR to 4326 for geojson
-  # first get the state's metadata by submitting an incorrect query
-  features = layer.query(where='OBJECTID=20',
-                         outSR=4326,
-                         f='geojson',
-                         exceed_limit=True)
-  features.dump(directory + f'{_to_kebab_case(source)}-metadata.geojson',
-                indent=2)  # indent allows for pretty view
-
   # create desired attribute conditions to filter the query by
   attribute_filter = f'{label}={code}'
 
@@ -94,17 +86,12 @@ def _query_arcgis_restapi(config, source, label, code, alias, directory):
                            outSR=4326,
                            f='geojson',
                            exceed_limit=True)
-  # features = layer.query(where="bene_abrev = 'USU'", outSR=4326, f='geojson', exceed_limit=True)
 
   # count the number of features
   print(f'Found {len(features)} features with {attribute_filter}')
 
   # save geojson file, may save as json depending on the esri api version, needs 10.3 to saave as geojson
   features.dump(directory + filename, indent=2)  # indent allows for pretty view
-  # features.dump('test.json', indent=2) # indent allows for pretty view
-
-  # OR, you can save it directly to a shapefile (does not require arcpy)
-  # layer.export_layer('test.shp', where=attribute_filter)
 
 
 #############################################################
@@ -121,13 +108,16 @@ def _clean_queried_data(source, config, label, alias, queried_data_directory,
   filename = _get_filename(source, label, alias, '.json')
   gdf = gpd.read_file(queried_data_directory + filename)
 
+  if gdf.empty:
+    return gdf
+
   # custom cleaning
   if source == 'OK-surface':
     gdf = _filter_queried_oklahoma_data(gdf)
     gdf = _get_ok_surface_town_range(gdf)
   elif 'AZ' in source:
     gdf = _get_az_town_range_section(gdf)
-  elif source == 'MT':
+  elif 'MT' in source:
     gdf = _get_mt_town_range_section(gdf)
   elif source == 'OK-subsurface':
     gdf = _get_ok_subsurface_town_range(gdf)
@@ -141,19 +131,33 @@ def _clean_queried_data(source, config, label, alias, queried_data_directory,
   filename = _get_filename(source, label, alias, '.geojson')
   gdf.to_file(cleaned_data_directory + filename, driver='GeoJSON')
 
+  return gdf
+
 
 def _filter_and_clean_shapefile(gdf, config, source, label, code, alias,
                                 cleaned_data_directory):
-  if label != '*':
+  # adding projection info for wisconsin
+  if source == 'WI':
+    gdf = gdf.to_crs(ALBERS_EQUAL_AREA)
+
+  if code != '*':
     filtered_gdf = gdf[gdf[label] == code].copy()
   else:
     filtered_gdf = gdf
+
+  if filtered_gdf.empty:
+    return filtered_gdf
 
   # custom cleaning
   if source == 'NE':
     filtered_gdf = _get_ne_town_range_section(filtered_gdf)
   elif source == 'WI':
     filtered_gdf = _get_wi_town_range_section_aliquot(filtered_gdf)
+  elif 'MT' in source:
+    filtered_gdf = _get_mt_town_range_section(filtered_gdf)
+  elif 'SD' in source:
+    filtered_gdf = _get_sd_town_range_meridian(filtered_gdf)
+    filtered_gdf = _get_sd_rights_type(filtered_gdf)
 
   filtered_gdf = _format_columns(filtered_gdf, config, alias)
 
@@ -163,6 +167,8 @@ def _filter_and_clean_shapefile(gdf, config, source, label, code, alias,
 
   filename = _get_filename(source, label, alias, '.geojson')
   filtered_gdf.to_file(cleaned_data_directory + filename, driver='GeoJSON')
+
+  return filtered_gdf
 
 
 def _format_columns(gdf, config, alias):
@@ -315,6 +321,30 @@ def _get_wi_town_range_section_aliquot(gdf):
   return gdf
 
 
+def _get_sd_town_range_meridian(gdf):
+  '''
+  SD data has meridian, township, range together in a certain format in the PLSSID field
+  ex: "SD051130N0810W0": where the meridian is 5, township is 113N, range is 81W
+  '''
+  gdf[MERIDIAN] = gdf['PLSSID'].str.slice(start=3, stop=4)
+  gdf[TOWNSHIP] = gdf['PLSSID'].str.slice(
+      start=4, stop=7).str.strip('0') + gdf['PLSSID'].str.slice(start=8, stop=9)
+  gdf[RANGE] = gdf['PLSSID'].str.slice(
+      start=9, stop=12).str.strip('0') + gdf['PLSSID'].str.slice(start=13,
+                                                                 stop=14)
+
+  return gdf
+
+
+def _get_sd_rights_type(gdf):
+  '''
+  get and clean SD rights types to be consistent with the rest of the dataset
+  '''
+  gdf[RIGHTS_TYPE] = gdf['match_type'].str.replace('both', 'surface+subsurface')
+  gdf[RIGHTS_TYPE] = gdf[RIGHTS_TYPE].str.lower()
+  return gdf
+
+
 def _filter_queried_oklahoma_data(gdf):
   filter_df = _create_oklahoma_trust_fund_filter()
   # change id from from dictionary to string
@@ -337,9 +367,26 @@ def _create_oklahoma_trust_fund_filter():
   # clean and filter by the trust funds we care about, 5 for OSU
   df = df[[OK_HOLDING_DETAIL_ID, OK_TRUST_FUND_ID]].copy()
   df = df[df[OK_TRUST_FUND_ID].isin([5])]
-  df[UNIVERSITY] = df[OK_TRUST_FUND_ID].map(OK_TRUST_FUNDS_ID_MAP)
   df[OK_HOLDING_DETAIL_ID] = df[OK_HOLDING_DETAIL_ID].astype(str)
   return df
+
+
+###################################################
+##### helper functions for cleaning directory #####
+###################################################
+
+
+def delete_files_and_subdirectories_in_directory(directory_path):
+  try:
+    with os.scandir(directory_path) as entries:
+      for entry in entries:
+        if entry.is_file():
+          os.unlink(entry.path)
+        else:
+          shutil.rmtree(entry.path)
+    print("All files and subdirectories deleted successfully.")
+  except OSError:
+    print("Error occurred while deleting files and subdirectories.")
 
 
 #############################################
@@ -353,73 +400,77 @@ def _merge_dataframes(df_list):
   rights type column values (surface, mineral, etc)
   '''
 
-  # get intersection of all columns
-  columns_to_join_on = set.intersection(
-      *map(set, [df.columns for df in df_list]))
-  for df in df_list:
-    for column in df.columns:
-      if df[column].dtype == int:
-        df[column] = df[column].astype(object)
-
-  # convert to lists
-  columns_to_join_on = [
-      column for column in columns_to_join_on if column not in [RIGHTS_TYPE]
-  ]
-
-  # columns_to_join_on = [STATE, UNIVERSITY, GEOMETRY]
-
   # merge dataframes one by one until only 1 exists
   while len(df_list) > 1:
+    # get the first two datasets
     df1 = df_list.pop()
     df2 = df_list.pop()
+
+    # get intersection of all columns between these two datasets
+    columns_to_join_on = set.intersection(
+        *map(set, [df.columns for df in [df1, df2]]))
+    for df in [df1, df2]:
+      for column in df.columns:
+        if df[column].dtype == int:
+          df[column] = df[column].astype(object)
+
+    # convert to lists
+    columns_to_join_on = [
+        column for column in columns_to_join_on
+        if column not in [RIGHTS_TYPE, ACTIVITY]
+    ]
+
+    # merge on these columns
     merged = pd.merge(df1, df2, on=columns_to_join_on, how='outer')
+
+    # if there are any rights type columns in the merged dataset,
+    # correctly merge those columns to contain a readable rights type
+    if merged.columns.str.contains(RIGHTS_TYPE).any():
+      merged[RIGHTS_TYPE] = merged.apply(_merge_rights_type, axis=1)
+
+    # if there are any activity columns in the merged dataset,
+    # correctly merge those columns to contain a readable activity
+    if merged.columns.str.contains(ACTIVITY).any():
+      merged[ACTIVITY] = merged.apply(_merge_activity, axis=1)
+
+    # remove remaining columns
+    columns_to_drop = [
+        column for column in merged.columns if column not in COLUMNS
+    ]
+    merged = merged.drop(columns_to_drop, axis=1)
+
     df_list.append(merged)
 
+  # return the final merged dataset
   merged = df_list.pop()
-
-  # if there are any rights type columns in the merged dataset,
-  # correctly merge those columns to cintain a readable rights type
-  if merged.columns.str.contains(RIGHTS_TYPE).any():
-    merged[RIGHTS_TYPE] = merged.apply(_merge_rights_type, axis=1)
-
-  # remove remaining columns
-  columns_to_drop = [
-      column for column in merged.columns if column not in COLUMNS
-  ]
-  return merged.drop(columns_to_drop, axis=1)
+  return merged
 
 
 def _merge_rights_type(row):
   '''
-    Correctly merge the rights type columns, removing duplicated, etc
+  Correctly merge the rights type column, aggregating values and removing duplicated values
+  '''
+  return _merge_row_helper(row, column=RIGHTS_TYPE)
+
+
+def _merge_activity(row):
+  '''
+  Correctly merge the activity column, aggregating values and removing duplicated values
+  '''
+  return _merge_row_helper(row, column=ACTIVITY)
+
+
+def _merge_row_helper(row, column):
+  '''
+  Correctly merge a column, aggregating values and removing duplicated values
   '''
   # get all rights type values from datasets
-  rights_types = row.filter(like=RIGHTS_TYPE).dropna()
-  if rights_types.any():
-    rights_types = pd.unique(rights_types)
-    return '+'.join(rights_types)
+  values = row.filter(like=column).dropna()
+  if values.any():
+    values = pd.unique(values)
+    return '+'.join(values)
   else:
     return None
-  # see if there are any rights type columns
-  # rights_type_columns = [
-  #     column for column in row.index if RIGHTS_TYPE in column
-  # ]
-  # # if there are rights type columns, get all unique rights types, join them and return
-  # if rights_type_columns:
-  #   # print(row[rights_type_columns].fillna('').unique())
-  #   # return '+'.join(row[rights_type_columns].fillna('').unique())
-  #   row = row.fillna('')
-  #   rights_type = []
-  #   for column in rights_type_columns:
-  # for rights_type in rights_types:
-  #   if rights_type:
-  #     breakpoint()
-  #     if row[column]:
-  #       rights_type.append(row[column])
-  #   rights_type = pd.unique(rights_type)
-  #   return '+'.join(rights_type)
-  # else:
-  #   return None
 
 
 #################################################################
@@ -482,33 +533,108 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
   gdf = _merge_dataframes(gdfs)
   print(len(gdf))
 
-  filename = _get_merged_dataset_filename(state)
-  gdf.to_file(merged_data_directory + filename, driver='GeoJSON')
+  # compute gis calculated areas, rounded to 2 decimals
+  gdf[GIS_ACRES] = (gdf.to_crs(ALBERS_EQUAL_AREA).area /
+                    ACRES_TO_SQUARE_METERS).round(2)
+  # round acres to 2 decimals
+  if ACRES in gdf.columns:
+    gdf[ACRES] = gdf[ACRES].round(2)
+
+  # reorder columns to desired order
+  final_column_order = [column for column in COLUMNS if column in gdf.columns]
+  gdf = gdf[final_column_order]
+
+  # save to geojson and csv
+  gdf.to_file(merged_data_directory + _get_merged_dataset_filename(state),
+              driver='GeoJSON')
+  gdf.to_csv(merged_data_directory +
+             _get_merged_dataset_filename(state, '.csv'))
 
   return gdf
 
 
 def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
   state_datasets_to_merge = []
+
+  # grab data from each state directory
   for state in os.listdir(cleaned_data_directory):
     print(state)
     state_cleaned_data_directory = state_specific_directory(
         cleaned_data_directory, state)
-    # TODO: finalize which projection we want the data in
-    state_datasets_to_merge.append(
-        merge_single_state_helper(state, state_cleaned_data_directory,
-                                  merged_data_directory).to_crs('WGS 84'))
 
-  # merged_data_directory = _merged_data_directory()
-  # gdfs = []
-  # for state in os.listdir(merged_data_directory):
-  #   print(merged_data_directory + state)
-  #   merged_single_state_file = _merged_data_directory(
-  #       state) + get_single_state_merged_filename(state)
-  #   gdf = gpd.read_file(merged_single_state_file)
-  #   gdfs.append(gdf.to_crs('WGS 84'))
+    state_datasets_to_merge.append(
+        merge_single_state_helper(
+            state, state_cleaned_data_directory,
+            merged_data_directory).to_crs(ALBERS_EQUAL_AREA))
+
+  # merge all states to single geodataframe
   merged = pd.concat(state_datasets_to_merge, ignore_index=True)
-  print(merged)
-  filename = _get_merged_dataset_filename()
-  merged.to_file(merged_data_directory + filename, driver='GeoJSON')
+
+  # add a unique object id identifier columns
+  merged[OBJECT_ID] = merged.index + 1
+
+  # reorder columns to desired order
+  final_column_order = [
+      column for column in COLUMNS if column in merged.columns
+  ]
+  merged = merged[final_column_order]
+
+  # save to geojson and csv
+  merged.to_file(merged_data_directory + _get_merged_dataset_filename(),
+                 driver='GeoJSON')
+  merged.to_csv(merged_data_directory +
+                _get_merged_dataset_filename(file_extension='.csv'))
+
   return merged
+
+
+def merge_cessions_data_helper(cessions_directory):
+
+  # layer = restapi.MapServiceLayer(
+  #     'https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TribalCessionLands_01/MapServer/0'
+  # )
+
+  # # then filter by specific attributes
+  # features = layer.query(outSR=4326, f='geojson', exceed_limit=True)
+  # print(f'Found {len(features)} features.')
+  # # save json file, may save as json depending on the esri api version, needs 10.3 to saave as geojson
+  # features.dump(cessions_directory + 'data.json',
+  #               indent=2)  # indent allows for pretty view
+  gdf = gpd.read_file(cessions_directory + 'data.json')
+  breakpoint()
+
+
+def calculate_summary_statistics_helper(summary_statistics_data_directory):
+  '''
+  Calculate summary statistics based on the full dataset. Create two csvs. In the first,
+  for each university calculate total acreage of land held in trust, all present day tribes
+  and tribes listed in treaties associated with the university land, and which cessions
+  (represented by Royce IDs) overlap with land held in trust. In the second, for each present
+  day tribe, get total acreage of state land trust parcels, all associated cessions, and all
+  states and universities that have land taken from this tribe held in trust
+  '''
+  # gdf = gpd.read_file(merged_data_directory + _get_merged_dataset_filename())
+  # upload merged dataset
+  df = gpd.read_file('../../Downloads/national-stls.csv')
+  df[GIS_ACRES] = df['gis_calculated_acres'].astype(float)
+
+  # create first csv: university summary
+  university_summary = df.groupby([UNIVERSITY]).sum()[GIS_ACRES].to_frame()
+  university_summary['present_day_tribe'] = df.groupby(
+      [UNIVERSITY])['present_day_tribe'].unique()
+  university_summary['tribe_named_in_land_cessions_1784-1894'] = df.groupby(
+      [UNIVERSITY])['tribe_named_in_land_cessions_1784-1894'].unique()
+  university_summary['Royce_ID'] = df.groupby([UNIVERSITY])['Royce_ID'].unique()
+
+  university_summary.to_csv(summary_statistics_data_directory +
+                            UNIVERSITY_SUMMARY)
+
+  # second csv: tribal summary
+  tribe_summary = df.groupby(['present_day_tribe']).sum()[GIS_ACRES].to_frame()
+  tribe_summary['Royce_ID'] = df.groupby(['present_day_tribe'
+                                          ])['Royce_ID'].unique()
+  tribe_summary[STATE] = df.groupby(['present_day_tribe'])[STATE].unique()
+  tribe_summary[UNIVERSITY] = df.groupby(['present_day_tribe'
+                                          ])[UNIVERSITY].unique()
+
+  tribe_summary.to_csv(summary_statistics_data_directory + TRIBE_SUMMARY)
