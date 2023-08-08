@@ -1,17 +1,17 @@
 import typer
 
-from common import (state_specific_directory,
-                    extract_and_clean_single_source_helper,
-                    merge_single_state_helper, merge_all_states_helper,
-                    delete_files_and_subdirectories_in_directory,
-                    calculate_summary_statistics_helper,
-                    merge_cessions_data_helper)
+from land_grab.common import (state_specific_directory,
+                              extract_and_clean_single_source_helper,
+                              merge_single_state_helper, merge_all_states_helper,
+                              delete_files_and_subdirectories_in_directory,
+                              calculate_summary_statistics_helper,
+                              merge_cessions_data_helper)
 
-from constants import (STATE, STATE_TRUST_DIRECTORY, CLEANED_DIRECTORY,
-                       MERGED_DIRECTORY, QUERIED_DIRECTORY, CESSIONS_DIRECTORY,
-                       SUMMARY_STATISTICS_DIRECTORY)
+from land_grab.constants import (STATE, STATE_TRUST_DIRECTORY, CLEANED_DIRECTORY,
+                                 MERGED_DIRECTORY, QUERIED_DIRECTORY, CESSIONS_DIRECTORY,
+                                 SUMMARY_STATISTICS_DIRECTORY)
 
-from state_trust_config import STATE_TRUST_CONFIGS
+from land_grab.state_trust_lands.state_trust_config import STATE_TRUST_CONFIGS
 
 app = typer.Typer()
 
@@ -44,7 +44,7 @@ def _summary_statistics_data_directory(state=None):
 @app.command()
 def extract_and_clean_single_source(source: str):
   '''
-  Extract and clean data from a single data source
+  Extract and clean data from a single data parcel_ID_lists
   '''
   # get state and correct config
   config = STATE_TRUST_CONFIGS[source]

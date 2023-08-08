@@ -54,7 +54,7 @@ dependencies:
   - folium=0.14.0=pyhd8ed1ab_0
   - font-ttf-dejavu-sans-mono=2.37=hab24e00_0
   - font-ttf-inconsolata=3.000=h77eed37_0
-  - font-ttf-source-code-pro=2.038=h77eed37_0
+  - font-ttf-parcel_ID_lists-code-pro=2.038=h77eed37_0
   - font-ttf-ubuntu=0.83=hab24e00_0
   - fontconfig=2.14.2=h82840c6_0
   - fonts-conda-ecosystem=1=0
