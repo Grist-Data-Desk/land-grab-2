@@ -1,7 +1,7 @@
 # This program will accept two parameters:
 # -p is a string representing the appropriate parser to use on a university reported parcel dataset
 # -d is the path to the location of the university reported parcel dataset on the computer
-# This script will also use the parser requested by the -p that exists within the land_grab package to
+# This script will use the parser requested by the -p that exists within the land_grab package to
 #   parse the dataset located at the path specified by -d
 # Then it will also use the Regrid logic that exists within the land_grab package to match the cleaned parcel dataset
 #   to find the matches between Regrid
@@ -11,6 +11,7 @@ import csv
 from functools import partial
 from pathlib import Path
 
+from land_grab.university_real_estate.parcel_list_parsers.oh_ohiostateuniversity_parser import ohosu_parser
 from land_grab.university_real_estate.regrid_matching import regrid_matching
 from land_grab.university_real_estate.parcel_list_parsers.az_universityofarizona_parser import azua_parser
 from land_grab.university_real_estate.parcel_list_parsers.in_purdueuniversity_parser import inpu_parser
@@ -20,6 +21,8 @@ parser_mapping = {
     'azua_parser': azua_parser,
     'inpu_parser': inpu_parser,
     'moum_parser': moum_parser,
+    'ohos_parser': ohosu_parser,
+
 
 }  # azua_parser will change to reflect diff universities
 
@@ -29,7 +32,7 @@ def collect_database_csvs(parcel_database):  # parcel database is Regrid state f
     database_dir_contents = list(database_directory.glob('*.csv'))
     csvs = []
     for csv_file in database_dir_contents:
-        if '.' == csv_file.name[0]:
+        if '.' == csv_file.name[0]:  # did this to skip over "invisible files" (it was a problem with AZ.)
             continue
         if csv_file is not None:
             csvs.append(csv_file)
@@ -91,11 +94,13 @@ def main():
     parser = parser_mapping[requested_parser]
     clean_uni_parcel_id_list = do_on_csv(dataset_location, parser)  # the csv here is the cleaned parcel id list
 
-    regrid_matching_with_parcel_numbers = partial(regrid_matching, clean_uni_parcel_id_list)
+    regrid_matching_with_parcel_numbers = partial(regrid_matching, clean_uni_parcel_id_list) #creating a new function
+        #partial allows you to pass fewer params than it needs, partial allows me to fill in a new param with this function
+        #... new function only has one parameter
     csvs = collect_database_csvs(parcel_database)
-    regrid_matched_parcels_parcel_id = []
+    regrid_matched_parcels_parcel_id = []  # these are parcels that have been matched on the parcel_id field
     for csv in csvs:
-        results = do_on_csv_as_csv(csv, regrid_matching_with_parcel_numbers)
+        results = do_on_csv_as_csv(csv, regrid_matching_with_parcel_numbers) #second param is a function
         regrid_matched_parcels_parcel_id += results  # += to join at list level not item level
 
     write_csv(regrid_matched_parcels_parcel_id, Path(output_location) / 'regrid_matched_parcels_parcel_id.csv')
@@ -108,3 +113,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+# to change things just changed stuff in the config - parameters:
+# -p "azua_parser" -d "data_input/az_ua_parcel_list_raw.csv"
+# -o "data_output" -db "/Users/mpr/Documents/01_Current Projects/Grist_LGU2/AZ"

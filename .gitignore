@@ -131,7 +131,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-data_output/
+data/university/data_output/
 data_local/
 output/
 .idea/
+data_input
+data
