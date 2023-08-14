@@ -1,3 +1,9 @@
 typer
 geopandas
 bmi-arcgis-restapi
+urllib3[secure]==1.26.16
+pandas
+requests
+thefuzz
+python-Levenshtein
+
