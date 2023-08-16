@@ -32,6 +32,7 @@ class GristDB:
     def execute(self, statement: str, results_type: Optional[GristDbResults] = None):
         result = None
 
+
         with self.db:
             with self.db.cursor() as cursor:
                 cursor.execute(statement)
@@ -47,13 +48,24 @@ class GristDB:
     def update_table(self, table: GristTable, data: Dict[str, Any]):
         if not self.table_exists(table.name):
             raise Exception('UnknownTableError: Must create table before attempting to fill it with data.')
-        raw_field_names = [f.name for f in table.fields]
-        values = ', '.join(
-            [f'{data[k]}' if isinstance(data[k], str) else data[k]
-             for k in raw_field_names if k in data]
-        )
+
+        raw_field_names = [f.name for f in table.fields if f.name in data.keys()]
+
+        values_raw = []
+        for k in raw_field_names:
+            if k in data:
+                raw_val = data[k]
+                if not raw_val:
+                    val = 'NULL'
+                else:
+                    val = f"'{data[k]}'" if isinstance(data[k], str) else f'{data[k]}'
+                values_raw.append(val)
+
+        values = ', '.join(values_raw)
         field_names = ', '.join(raw_field_names)
+
         insert_sql = f'INSERT INTO {table.name}({field_names}) VALUES ({values})'
+
         return self.execute(insert_sql)
 
     def fetch_all_data(self, table_name: str):
@@ -80,3 +92,27 @@ class GristDB:
     def delete_table(self, table_name: str):
         del_table_sql = f'DROP TABLE {table_name};'
         return self.execute(del_table_sql)
+
+    def create_index(self, table_name: str, column: str):
+        index_sql = f'CREATE UNIQUE INDEX {column}_idx ON {table_name} ({column});'
+        return self.execute(index_sql)
+
+    def delete_index(self, column: str):
+        index_sql = f'DROP INDEX {column}_idx;'
+        return self.execute(index_sql)
+
+    def list_indexes(self):
+        list_sql = f'''
+        SELECT
+            tablename,
+            indexname,
+            indexdef
+        FROM
+            pg_indexes
+        WHERE
+            schemaname = 'public'
+        ORDER BY
+            tablename,
+            indexname;
+        '''
+        return self.execute(list_sql, results_type=GristDbResults.ALL)
