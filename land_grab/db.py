@@ -1,5 +1,5 @@
 import enum
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Dict, Any, List, Optional
 
 import psycopg2
@@ -7,6 +7,7 @@ import psycopg2
 from local_config.db_cred import DB_CREDS
 
 
+# TODO add bulk insert
 @dataclass
 class GristDbField:
     name: str
@@ -16,6 +17,12 @@ class GristDbField:
 class GristDbResults(enum.Enum):
     ONE = 'one'
     ALL = 'all'
+
+
+@dataclass
+class GristTable:
+    name: str
+    fields: List[GristDbField] = field(default_factory=list)
 
 
 class GristDB:
@@ -37,12 +44,17 @@ class GristDB:
 
         return result
 
-    def update_table(self, table_name: str, data):
-        # TODO TODO TODO
-        if not self.table_exists(table_name):
-            fields = {}  # TODO: get schema from data
-            self.create_table(table_name, fields=fields)
-        self.update_table(table_name, data)
+    def update_table(self, table: GristTable, data: Dict[str, Any]):
+        if not self.table_exists(table.name):
+            raise Exception('UnknownTableError: Must create table before attempting to fill it with data.')
+        raw_field_names = [f.name for f in table.fields]
+        values = ', '.join(
+            [f'{data[k]}' if isinstance(data[k], str) else data[k]
+             for k in raw_field_names if k in data]
+        )
+        field_names = ', '.join(raw_field_names)
+        insert_sql = f'INSERT INTO {table.name}({field_names}) VALUES ({values})'
+        return self.execute(insert_sql)
 
     def fetch_all_data(self, table_name: str):
         fetch_sql = f'SELECT * FROM {table_name};'
@@ -60,9 +72,9 @@ class GristDB:
         WHERE table_schema = 'public' AND table_name   = '{table_name}';"""
         return self.execute(list_sql, results_type=GristDbResults.ALL)
 
-    def create_table(self, table_name: str, fields: List[GristDbField]):
-        fields_sql = ',\n'.join([f"{f.name}\t{f.constraints}" for f in fields])
-        create_table_sql = f'CREATE TABLE {table_name} (id  INT GENERATED ALWAYS AS IDENTITY, {fields_sql});'
+    def create_table(self, table: GristTable):
+        fields_sql = ',\n'.join([f"{f.name}\t{f.constraints}" for f in table.fields])
+        create_table_sql = f'CREATE TABLE {table.name} (id  INT GENERATED ALWAYS AS IDENTITY, {fields_sql});'
         return self.execute(create_table_sql)
 
     def delete_table(self, table_name: str):
