@@ -137,3 +137,5 @@ output/
 .idea/
 data_input
 data
+local_config
+notebooks
