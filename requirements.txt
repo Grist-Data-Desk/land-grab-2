@@ -7,3 +7,4 @@ requests
 pymupdf
 psycopg2-binary
 pysftp
+tqdm

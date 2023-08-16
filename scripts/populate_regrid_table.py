@@ -8,6 +8,7 @@ from typing import Optional
 import pysftp
 
 from land_grab.db import GristDB, GristTable, GristDbField
+from tqdm import tqdm
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -25,13 +26,13 @@ REGRID_TABLE = GristTable(name='Regrid',
                                   GristDbField(name='yearbuilt', constraints='integer'),
                                   GristDbField(name='structstyle', constraints='varchar(200)'),
                                   GristDbField(name='parvaltype', constraints='varchar(200)'),
-                                  GristDbField(name='improvval', constraints='double'),
-                                  GristDbField(name='landval', constraints='double'),
-                                  GristDbField(name='parval', constraints='double'),
-                                  GristDbField(name='agval', constraints='double'),
-                                  GristDbField(name='saleprice', constraints='double'),
+                                  GristDbField(name='improvval', constraints='double precision'),
+                                  GristDbField(name='landval', constraints='double precision'),
+                                  GristDbField(name='parval', constraints='double precision'),
+                                  GristDbField(name='agval', constraints='double precision'),
+                                  GristDbField(name='saleprice', constraints='double precision'),
                                   GristDbField(name='saledate', constraints='date'),
-                                  GristDbField(name='taxamt', constraints='double'),
+                                  GristDbField(name='taxamt', constraints='double precision'),
                                   GristDbField(name='owntype', constraints='varchar(200)'),
                                   GristDbField(name='owner', constraints='varchar(200)'),
                                   GristDbField(name='ownfrst', constraints='varchar(200)'),
@@ -56,11 +57,11 @@ REGRID_TABLE = GristTable(name='Regrid',
                                   GristDbField(name='census_blockgroup', constraints='varchar(200)'),
                                   GristDbField(name='census_tract', constraints='varchar(200)'),
                                   GristDbField(name='sourceurl', constraints='varchar(200)'),
-                                  GristDbField(name='recrdareano', constraints='double'),
-                                  GristDbField(name='gisacre', constraints='double'),
-                                  GristDbField(name='ll_gisacre', constraints='double'),
-                                  GristDbField(name='sqft', constraints='double'),
-                                  GristDbField(name='ll_gissqft', constraints='double'),
+                                  GristDbField(name='recrdareano', constraints='double precision'),
+                                  GristDbField(name='gisacre', constraints='double precision'),
+                                  GristDbField(name='ll_gisacre', constraints='double precision'),
+                                  GristDbField(name='sqft', constraints='double precision'),
+                                  GristDbField(name='ll_gissqft', constraints='double precision'),
                                   GristDbField(name='reviseddate', constraints='date'),
                                   GristDbField(name='ll_uuid', constraints='varchar(200)'),
                                   GristDbField(name='padus_public_access', constraints='varchar(200)'),
@@ -86,7 +87,7 @@ REGRID_TABLE = GristTable(name='Regrid',
                                   GristDbField(name='plss_township', constraints='varchar(200)'),
                                   GristDbField(name='plss_section', constraints='varchar(200)'),
                                   GristDbField(name='plss_range', constraints='varchar(200)'),
-                                  GristDbField(name='geometry', constraints='geometry'),
+                                  GristDbField(name='geometry', constraints='json'),
                                   GristDbField(name='geometryType', constraints='varchar(50)'),
                                   GristDbField(name='isRegrid', constraints='bool')])
 
@@ -100,7 +101,7 @@ def fetch_regrid_geojsons():
     with pysftp.Connection(ftp_url, username=uname, password=pword) as sftp:
         with sftp.cd(geojson_path):
             zip_paths = sftp.listdir()
-            for zip_name in zip_paths:
+            for zip_name in tqdm(zip_paths):
                 zip_path = str(Path(geojson_path) / zip_name)
                 with tempfile.NamedTemporaryFile(mode='w+b') as tmp:
                     sftp.get(zip_path, tmp.name)
@@ -117,11 +118,22 @@ def main():
 
     log.info('Attempting to create Regrid table')
     db.create_table(REGRID_TABLE)
+
+    indexes = [i[1] for i in db.list_indexes()]
+    index_col = 'parcelnumb'
+    if f'{index_col}_idx' not in indexes:
+        log.info(f'Attempting to create index on {index_col}')
+        db.create_index(REGRID_TABLE.name, index_col)
+
     for geojson in fetch_regrid_geojsons():
         try:
-            db.update_table(REGRID_TABLE.name, geojson)
-        except:
+            for feature in geojson['features']:
+                record = feature['properties']
+                record['geometry'] = json.dumps(feature['geometry']['coordinates'])
+                db.update_table(REGRID_TABLE, record)
+        except Exception as err:
             log.error('Failed while attempting to insert geojson to regrid table')
+            log.error(err)
 
 
 if __name__ == '__main__':
