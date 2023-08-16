@@ -119,11 +119,11 @@ def main():
     log.info('Attempting to create Regrid table')
     db.create_table(REGRID_TABLE)
 
-    indexes = [i[1] for i in db.list_indexes()]
-    index_col = 'parcelnumb'
-    if f'{index_col}_idx' not in indexes:
-        log.info(f'Attempting to create index on {index_col}')
-        db.create_index(REGRID_TABLE.name, index_col)
+    # indexes = [i[1] for i in db.list_indexes()]
+    # index_col = 'parcelnumb'
+    # if f'{index_col}_idx' not in indexes:
+    #     log.info(f'Attempting to create index on {index_col}')
+    #     db.create_index(REGRID_TABLE.name, index_col)
 
     for geojson in fetch_regrid_geojsons():
         try:
