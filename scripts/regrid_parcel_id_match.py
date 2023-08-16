@@ -8,6 +8,7 @@
 # Then it will write the matched parcels to a .csv file.
 import argparse
 import csv
+import itertools
 from functools import partial
 from pathlib import Path
 
@@ -58,7 +59,7 @@ def do_on_csv(dataset_location, action):
             result = action(l)
             if result is not None:
                 results.append(result)
-    return results
+    return list(itertools.chain.from_iterable(results))
 
 
 def write_csv(data, output_location):
