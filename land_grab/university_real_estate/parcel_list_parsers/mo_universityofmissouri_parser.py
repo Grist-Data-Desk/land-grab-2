@@ -154,7 +154,7 @@ def moum_parser(l):
         return parse_case_1(parcel_number)
 
     case_7_result = parse_case_7(parcel_number)
-    case_4_result = parse_case_4(parcel_number)  # 4 and 7 should fall through here
+    case_4_result = parse_case_4(parcel_number)
     case_6_result = parse_case_6(parcel_number)
 
     all_results = [
