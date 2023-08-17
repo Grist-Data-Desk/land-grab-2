@@ -28,16 +28,15 @@ class GristTable:
 
 
 class GristDB:
-    def __init__(self):
-        self.db = psycopg2.connect(**DB_CREDS)
 
     def execute(self, statement: str,
                 results_type: Optional[GristDbResults] = None,
                 insertion_data: Optional[Any] = None):
         result = None
+        db_connection = psycopg2.connect(**DB_CREDS)
 
-        with self.db:
-            with self.db.cursor() as cursor:
+        with db_connection:
+            with db_connection.cursor() as cursor:
                 if insertion_data:
                     cursor.execute(statement, insertion_data)
                 else:
@@ -48,6 +47,8 @@ class GristDB:
 
                 if results_type and results_type == GristDbResults.ALL:
                     result = cursor.fetchall()
+
+        db_connection.close()
 
         return result
 
