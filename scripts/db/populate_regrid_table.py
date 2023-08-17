@@ -18,7 +18,7 @@ log = logging.getLogger(__name__)
 FAILED_ZIP = []
 
 
-def insert_geojson(zip_name, geojson, retry=5) -> bool:
+def insert_geojson(zip_name, geojson, retry=5):
     try:
         records = []
         for feature in geojson['features']:
@@ -30,7 +30,7 @@ def insert_geojson(zip_name, geojson, retry=5) -> bool:
         log.error(f'Failed while attempting to insert geojson to regrid table: retry={retry}')
         log.error(err)
         if retry > 0:
-            insert_geojson(geojson, retry=retry - 1)
+            insert_geojson(zip_name, geojson, retry=retry - 1)
         else:
             log.error(f'No more tries. Failed while attempting to insert geojson to regrid table: retry={retry}')
             log.error(err)
