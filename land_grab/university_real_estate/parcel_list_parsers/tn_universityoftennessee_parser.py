@@ -5,7 +5,7 @@ def tnut_parser(l):
 
   parcel_number = l[2]
 
-  if 'Parcel Code' in l:
+  if 'Parcel Code' in parcel_number:
     return None
 
   if ' ' in parcel_number:
