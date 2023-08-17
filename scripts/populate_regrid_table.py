@@ -1,14 +1,14 @@
+import concurrent.futures
 import json
 import logging
 import shutil
 import tempfile
 from pathlib import Path
-from typing import Optional
 
 import pysftp
+from tqdm import tqdm
 
 from land_grab.db import GristDB, GristTable, GristDbField
-from tqdm import tqdm
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -113,11 +113,23 @@ def fetch_regrid_geojsons():
                             yield hydrated_json
 
 
-def main():
-    db = GristDB()
+def insert_geojson(geojson):
+    try:
+        db = GristDB()
+        records = []
+        for feature in geojson['features']:
+            record = feature['properties']
+            record['geometry'] = json.dumps(feature['geometry']['coordinates'])
+            records.append(record)
+        db.update_table(REGRID_TABLE, records)
+    except Exception as err:
+        log.error('Failed while attempting to insert geojson to regrid table')
+        log.error(err)
 
+
+def main():
     log.info('Attempting to create Regrid table')
-    db.create_table(REGRID_TABLE)
+    GristDB().create_table(REGRID_TABLE)
 
     # indexes = [i[1] for i in db.list_indexes()]
     # index_col = 'parcelnumb'
@@ -125,15 +137,10 @@ def main():
     #     log.info(f'Attempting to create index on {index_col}')
     #     db.create_index(REGRID_TABLE.name, index_col)
 
-    for geojson in fetch_regrid_geojsons():
-        try:
-            for feature in geojson['features']:
-                record = feature['properties']
-                record['geometry'] = json.dumps(feature['geometry']['coordinates'])
-                db.update_table(REGRID_TABLE, record)
-        except Exception as err:
-            log.error('Failed while attempting to insert geojson to regrid table')
-            log.error(err)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
+        futures = [executor.submit(insert_geojson, geojson) for geojson in fetch_regrid_geojsons()]
+        done, incomplete = concurrent.futures.wait(futures)
+        log.info(f'All records inserted done: {done}, incomplete:{incomplete}')
 
 
 if __name__ == '__main__':
