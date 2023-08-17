@@ -1,3 +1,4 @@
+import atexit
 import concurrent.futures
 import json
 import logging
@@ -58,15 +59,17 @@ def main():
                             json_path = next(Path(tmpdir).iterdir(), None)
                             if json_path:
                                 hydrated_json = json.load(Path(json_path).open())
-                                futures.append(executor.submit(insert_geojson, zip_name, hydrated_json))
+                                futures.append(executor.submit(insert_geojson, zip_name, hydrated_json, 5))
                 done, incomplete = concurrent.futures.wait(futures)
                 log.info(f'done: {len(done)} incomplete: {incomplete}')
 
-    df = pd.DataFrame({
-        'failed_uploads': FAILED_ZIP
-    })
-    df.to_csv('failed_zips.csv', index=False)
+
+def write_fails():
+    if FAILED_ZIP:
+        df = pd.DataFrame({'failed_uploads': FAILED_ZIP})
+        df.to_csv('failed_zips.csv', index=False)
 
 
 if __name__ == '__main__':
+    atexit.register(write_fails)
     main()
