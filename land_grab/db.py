@@ -1,4 +1,6 @@
 import enum
+import itertools
+import json
 from dataclasses import dataclass, field
 from typing import Dict, Any, List, Optional
 
@@ -29,13 +31,17 @@ class GristDB:
     def __init__(self):
         self.db = psycopg2.connect(**DB_CREDS)
 
-    def execute(self, statement: str, results_type: Optional[GristDbResults] = None):
+    def execute(self, statement: str,
+                results_type: Optional[GristDbResults] = None,
+                insertion_data: Optional[Any] = None):
         result = None
-
 
         with self.db:
             with self.db.cursor() as cursor:
-                cursor.execute(statement)
+                if insertion_data:
+                    cursor.execute(statement, insertion_data)
+                else:
+                    cursor.execute(statement)
 
                 if results_type and results_type == GristDbResults.ONE:
                     result = cursor.fetchone()
@@ -45,28 +51,25 @@ class GristDB:
 
         return result
 
-    def update_table(self, table: GristTable, data: Dict[str, Any]):
+    def _data_values_to_sql(self, table_fields: List[str], data: Dict[str, Any]) -> List[Any]:
+        return [None if not data[k] else data[k] for k in table_fields if k in data]
+
+    def update_table(self, table: GristTable, data: List[Dict[str, Any]]):
+        if not data:
+            return
+
         if not self.table_exists(table.name):
             raise Exception('UnknownTableError: Must create table before attempting to fill it with data.')
 
-        raw_field_names = [f.name for f in table.fields if f.name in data.keys()]
-
-        values_raw = []
-        for k in raw_field_names:
-            if k in data:
-                raw_val = data[k]
-                if not raw_val:
-                    val = 'NULL'
-                else:
-                    val = f"'{data[k]}'" if isinstance(data[k], str) else f'{data[k]}'
-                values_raw.append(val)
-
-        values = ', '.join(values_raw)
+        raw_field_names = [f.name for f in table.fields if f.name in data[0].keys()]
         field_names = ', '.join(raw_field_names)
+        row_width_sub_vars = '(' + ', '.join(['%s'] * len(raw_field_names)) + ')'
+        data_len_insertion_rows = ', '.join([row_width_sub_vars] * len(data))
+        insert_sql = f'INSERT INTO {table.name}({field_names}) VALUES {data_len_insertion_rows}'
 
-        insert_sql = f'INSERT INTO {table.name}({field_names}) VALUES ({values})'
+        all_values = tuple(itertools.chain.from_iterable([self._data_values_to_sql(raw_field_names, d) for d in data]))
 
-        return self.execute(insert_sql)
+        return self.execute(insert_sql, insertion_data=all_values)
 
     def fetch_all_data(self, table_name: str):
         fetch_sql = f'SELECT * FROM {table_name};'
