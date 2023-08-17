@@ -1,15 +1,17 @@
 import enum
 import itertools
-import json
+import logging
 from dataclasses import dataclass, field
 from typing import Dict, Any, List, Optional
 
 import psycopg2
+import psycopg2.pool
 
 from local_config.db_cred import DB_CREDS
 
+log = logging.getLogger(__name__)
 
-# TODO add bulk insert
+
 @dataclass
 class GristDbField:
     name: str
@@ -33,22 +35,42 @@ class GristDB:
                 results_type: Optional[GristDbResults] = None,
                 insertion_data: Optional[Any] = None):
         result = None
-        db_connection = psycopg2.connect(**DB_CREDS)
 
-        with db_connection:
-            with db_connection.cursor() as cursor:
+        conn_pool = None
+        try:
+            conn_pool = psycopg2.pool.ThreadedConnectionPool(5, 10, **DB_CREDS)
+
+            # Use getconn() method to Get Connection from connection pool
+            ps_connection = conn_pool.getconn()
+
+            if (ps_connection):
+
+                ps_cursor = ps_connection.cursor()
+
                 if insertion_data:
-                    cursor.execute(statement, insertion_data)
+                    ps_cursor.execute(statement, insertion_data)
                 else:
-                    cursor.execute(statement)
+                    ps_cursor.execute(statement)
 
                 if results_type and results_type == GristDbResults.ONE:
-                    result = cursor.fetchone()
+                    result = ps_cursor.fetchone()
 
                 if results_type and results_type == GristDbResults.ALL:
-                    result = cursor.fetchall()
+                    result = ps_cursor.fetchall()
 
-        db_connection.close()
+                ps_cursor.close()
+                log.info('Txn Success')
+
+                # Use this method to release the connection object and send back ti connection pool
+                conn_pool.putconn(ps_connection)
+
+        except (Exception, psycopg2.DatabaseError) as error:
+            log.error("Error while connecting to PostgreSQL", error)
+
+        finally:
+            if conn_pool:
+                conn_pool.closeall()
+                log.info("Threaded PostgreSQL connection pool is closed")
 
         return result
 
