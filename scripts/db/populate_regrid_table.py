@@ -32,7 +32,7 @@ def insert_geojson(zip_name, geojson, retry=5):
         if retry > 0:
             insert_geojson(zip_name, geojson, retry=retry - 1)
         else:
-            log.error(f'No more tries. Failed while attempting to insert geojson to regrid table: retry={retry}')
+            log.error(f'No more tries. Zip name: {zip_name} retry={retry}')
             log.error(err)
             FAILED_ZIP.append(zip_name)
 
