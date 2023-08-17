@@ -92,27 +92,6 @@ REGRID_TABLE = GristTable(name='Regrid',
                                   GristDbField(name='isRegrid', constraints='bool')])
 
 
-def fetch_regrid_geojsons():
-    ftp_url = 'sftp.regrid.com'
-    uname = 'grist'
-    pword = 'sweeping-clamour-beheld-mesmeric'
-
-    geojson_path = '/download/geoJSON'
-    with pysftp.Connection(ftp_url, username=uname, password=pword) as sftp:
-        with sftp.cd(geojson_path):
-            zip_paths = sftp.listdir()
-            for zip_name in tqdm(zip_paths):
-                zip_path = str(Path(geojson_path) / zip_name)
-                with tempfile.NamedTemporaryFile(mode='w+b') as tmp:
-                    sftp.get(zip_path, tmp.name)
-                    with tempfile.TemporaryDirectory() as tmpdir:
-                        shutil.unpack_archive(tmp.name, tmpdir, format='zip')
-                        json_path = next(Path(tmpdir).iterdir(), None)
-                        if json_path:
-                            hydrated_json = json.load(Path(json_path).open())
-                            yield hydrated_json
-
-
 def insert_geojson(geojson):
     try:
         db = GristDB()
@@ -127,6 +106,32 @@ def insert_geojson(geojson):
         log.error(err)
 
 
+def fetch_and_upload_regrid_geojsons():
+    ftp_url = 'sftp.regrid.com'
+    uname = 'grist'
+    pword = 'sweeping-clamour-beheld-mesmeric'
+
+    geojson_path = '/download/geoJSON'
+    with pysftp.Connection(ftp_url, username=uname, password=pword) as sftp:
+        with sftp.cd(geojson_path):
+            zip_paths = sftp.listdir()
+            with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
+                futures = []
+                for zip_name in tqdm(zip_paths):
+                    zip_path = str(Path(geojson_path) / zip_name)
+                    with tempfile.NamedTemporaryFile(mode='w+b') as tmp:
+                        sftp.get(zip_path, tmp.name)
+                        with tempfile.TemporaryDirectory() as tmpdir:
+                            shutil.unpack_archive(tmp.name, tmpdir, format='zip')
+                            json_path = next(Path(tmpdir).iterdir(), None)
+                            if json_path:
+                                hydrated_json = json.load(Path(json_path).open())
+                                futures.append(executor.submit(insert_geojson, hydrated_json))
+
+                done, incomplete = concurrent.futures.wait(futures)
+                log.info(f'All records inserted done: {done}, incomplete:{incomplete}')
+
+
 def main():
     log.info('Attempting to create Regrid table')
     GristDB().create_table(REGRID_TABLE)
@@ -137,10 +142,7 @@ def main():
     #     log.info(f'Attempting to create index on {index_col}')
     #     db.create_index(REGRID_TABLE.name, index_col)
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
-        futures = [executor.submit(insert_geojson, geojson) for geojson in fetch_regrid_geojsons()]
-        done, incomplete = concurrent.futures.wait(futures)
-        log.info(f'All records inserted done: {done}, incomplete:{incomplete}')
+    fetch_and_upload_regrid_geojsons()
 
 
 if __name__ == '__main__':
