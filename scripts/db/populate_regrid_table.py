@@ -5,6 +5,7 @@ import shutil
 import tempfile
 from pathlib import Path
 
+import pandas as pd
 import pysftp
 from tqdm import tqdm
 
@@ -14,8 +15,10 @@ from land_grab.db.tables import REGRID_TABLE
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
+FAILED_ZIP = []
 
-def insert_geojson(geojson):
+
+def insert_geojson(zip_name, geojson, retry=5) -> bool:
     try:
         records = []
         for feature in geojson['features']:
@@ -24,8 +27,14 @@ def insert_geojson(geojson):
             records.append(record)
         GristDB().update_table(REGRID_TABLE, records)
     except Exception as err:
-        log.error('Failed while attempting to insert geojson to regrid table')
+        log.error(f'Failed while attempting to insert geojson to regrid table: retry={retry}')
         log.error(err)
+        if retry > 0:
+            insert_geojson(geojson, retry=retry - 1)
+        else:
+            log.error(f'No more tries. Failed while attempting to insert geojson to regrid table: retry={retry}')
+            log.error(err)
+            FAILED_ZIP.append(zip_name)
 
 
 def main():
@@ -49,9 +58,14 @@ def main():
                             json_path = next(Path(tmpdir).iterdir(), None)
                             if json_path:
                                 hydrated_json = json.load(Path(json_path).open())
-                                futures.append(executor.submit(insert_geojson, hydrated_json))
+                                futures.append(executor.submit(insert_geojson, zip_name, hydrated_json))
                 done, incomplete = concurrent.futures.wait(futures)
                 log.info(f'done: {len(done)} incomplete: {incomplete}')
+
+    df = pd.DataFrame({
+        'failed_uploads': FAILED_ZIP
+    })
+    df.to_csv('failed_zips.csv', index=False)
 
 
 if __name__ == '__main__':
