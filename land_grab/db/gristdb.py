@@ -1,6 +1,7 @@
 import enum
 import itertools
 import logging
+from contextlib import contextmanager
 from dataclasses import dataclass, field
 from typing import Dict, Any, List, Optional
 
@@ -31,22 +32,13 @@ class GristTable:
 
 class GristDB:
 
-    def execute(self, statement: str,
+    def execute(self,
+                statement: str,
                 results_type: Optional[GristDbResults] = None,
                 insertion_data: Optional[Any] = None):
         result = None
-
-        conn_pool = None
-        try:
-            conn_pool = psycopg2.pool.ThreadedConnectionPool(5, 10, **DB_CREDS)
-
-            # Use getconn() method to Get Connection from connection pool
-            ps_connection = conn_pool.getconn()
-
-            if (ps_connection):
-
-                ps_cursor = ps_connection.cursor()
-
+        with psycopg2.connect(**DB_CREDS) as conn:
+            with conn.cursor() as ps_cursor:
                 if insertion_data:
                     ps_cursor.execute(statement, insertion_data)
                 else:
@@ -58,26 +50,15 @@ class GristDB:
                 if results_type and results_type == GristDbResults.ALL:
                     result = ps_cursor.fetchall()
 
-                ps_cursor.close()
                 log.info('Txn Success')
-
-                # Use this method to release the connection object and send back ti connection pool
-                conn_pool.putconn(ps_connection)
-
-        except (Exception, psycopg2.DatabaseError) as error:
-            log.error("Error while connecting to PostgreSQL", error)
-
-        finally:
-            if conn_pool:
-                conn_pool.closeall()
-                log.info("Threaded PostgreSQL connection pool is closed")
+        conn.close()
 
         return result
 
     def _data_values_to_sql(self, table_fields: List[str], data: Dict[str, Any]) -> List[Any]:
         return [None if not data[k] else data[k] for k in table_fields if k in data]
 
-    def update_table(self, table: GristTable, data: List[Dict[str, Any]]):
+    def update_table(self, table: GristTable, data: List[Dict[str, Any]], conn=None):
         if not data:
             return
 
@@ -113,6 +94,7 @@ class GristDB:
     def create_table(self, table: GristTable):
         fields_sql = ',\n'.join([f"{f.name}\t{f.constraints}" for f in table.fields])
         create_table_sql = f'CREATE TABLE {table.name} (id  INT GENERATED ALWAYS AS IDENTITY, {fields_sql});'
+
         return self.execute(create_table_sql)
 
     def delete_table(self, table_name: str):

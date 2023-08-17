@@ -1,4 +1,4 @@
-from land_grab.db import GristDB, GristDbField, GristTable
+from land_grab.db.gristdb import GristTable, GristDbField, GristDB
 
 
 # TODO: move to mocked unit-test eventually....
