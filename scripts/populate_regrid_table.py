@@ -88,7 +88,7 @@ REGRID_TABLE = GristTable(name='Regrid',
                                   GristDbField(name='plss_section', constraints='text'),
                                   GristDbField(name='plss_range', constraints='text'),
                                   GristDbField(name='geometry', constraints='json'),
-                                  GristDbField(name='geometryType', constraints='varchar(50)'),
+                                  GristDbField(name='geometryType', constraints='text'),
                                   GristDbField(name='isRegrid', constraints='bool')])
 
 
