@@ -15,14 +15,14 @@ logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
 
-def insert_geojson(db, geojson):
+def insert_geojson(geojson):
     try:
         records = []
         for feature in geojson['features']:
             record = feature['properties']
             record['geometry'] = json.dumps(feature['geometry']['coordinates'])
             records.append(record)
-        db.update_table(REGRID_TABLE, records)
+        GristDB().update_table(REGRID_TABLE, records)
     except Exception as err:
         log.error('Failed while attempting to insert geojson to regrid table')
         log.error(err)
@@ -35,12 +35,10 @@ def main():
 
     geojson_path = '/download/geoJSON'
 
-    db = GristDB()
-
     with pysftp.Connection(ftp_url, username=uname, password=pword) as sftp:
         with sftp.cd(geojson_path):
             zip_paths = sftp.listdir()
-            with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
+            with concurrent.futures.ThreadPoolExecutor() as executor:
                 futures = []
                 for zip_name in tqdm(zip_paths):
                     zip_path = str(Path(geojson_path) / zip_name)
@@ -51,10 +49,9 @@ def main():
                             json_path = next(Path(tmpdir).iterdir(), None)
                             if json_path:
                                 hydrated_json = json.load(Path(json_path).open())
-                                futures.append(executor.submit(insert_geojson, db, hydrated_json))
-
+                                futures.append(executor.submit(insert_geojson, hydrated_json))
                 done, incomplete = concurrent.futures.wait(futures)
-                log.info(f'All records inserted done: {done}, incomplete:{incomplete}')
+                log.info(f'done: {len(done)} incomplete: {incomplete}')
 
 
 if __name__ == '__main__':
