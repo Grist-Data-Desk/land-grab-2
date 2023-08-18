@@ -4,7 +4,6 @@ import json
 import logging
 import os
 import shutil
-import tempfile
 from pathlib import Path
 from typing import Any
 
@@ -41,21 +40,15 @@ def insert_geojson(zip_name, geojson, retry=20):
             FAILED_ZIP.append(zip_name)
 
 
-def remote_zip_path_to_db(sftp: Any, zip_path: Any):
+def unzip_to_json(zip_path_local: Path):
     json_path = None
     tmp = None
     try:
-        tmp = Path('./zips/county.zip').resolve()
-        log.info('fetch zip file')
-        sftp.get(zip_path, str(tmp))
-
         tmpdir = Path('./downloads').resolve()
-        log.info('unzip to json on disk')
-        shutil.unpack_archive(str(tmp), tmpdir, format='zip')
+        shutil.unpack_archive(str(zip_path_local), tmpdir, format='zip')
 
-        json_path = next(tmpdir.iterdir(), None)
+        json_path = next((j for j in tmpdir.iterdir() if zip_path_local.name.split('.')[-3] in str(j)), None)
         if json_path:
-            log.info('hydrate json')
             hydrated_json = json.load(Path(json_path).open())
             return hydrated_json
     except Exception as err:
@@ -76,20 +69,36 @@ def main():
     pword = 'sweeping-clamour-beheld-mesmeric'
 
     geojson_path = '/download/geoJSON'
-
+    batch_size = 10
     with pysftp.Connection(ftp_url, username=uname, password=pword) as sftp:
         with sftp.cd(geojson_path):
-            with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
-                futures = []
+            with concurrent.futures.ThreadPoolExecutor(max_workers=batch_size) as t_pool:
+                zip_paths_local = []
                 for zip_name in tqdm(sftp.listdir()):
-                    zip_path = str(Path(geojson_path) / zip_name)
-                    hydrated_json = remote_zip_path_to_db(sftp, zip_path)
-                    futures.append(executor.submit(insert_geojson, zip_name, hydrated_json, retry=20))
-                done, incomplete = concurrent.futures.wait(futures)
-                log.info(f'done: {len(done)} incomplete: {incomplete}')
+                    if len(zip_paths_local) == batch_size:
+                        futures = []
+                        for p in zip_paths_local:
+                            futures.append(t_pool.submit(insert_geojson, zip_name, unzip_to_json(p), retry=20))
+                        _ = [f.result() for f in concurrent.futures.as_completed(futures)]
+                        zip_paths_local = []
+
+                    zip_path_remote = str(Path(geojson_path) / zip_name)
+                    zip_path_local = Path(f'./zips/{zip_name}').resolve()
+                    sftp.get(zip_path_remote, str(zip_path_local))
+                    zip_paths_local.append(zip_path_local)
 
 
 def write_fails():
+    tmp = Path('./zips/county.zip').resolve()
+    tmpdir = Path('./downloads').resolve()
+    try:
+        for f in tmpdir.iterdir():
+            os.remove(str(f))
+        if tmp:
+            os.remove(str(tmp))
+    except:
+        pass
+
     if FAILED_ZIP:
         df = pd.DataFrame({'failed_uploads': FAILED_ZIP})
         df.to_csv('failed_zips.csv', index=False)
