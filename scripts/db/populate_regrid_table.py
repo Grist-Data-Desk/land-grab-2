@@ -2,9 +2,11 @@ import atexit
 import concurrent.futures
 import json
 import logging
+import os
 import shutil
 import tempfile
 from pathlib import Path
+from typing import Any
 
 import pandas as pd
 import pysftp
@@ -19,13 +21,14 @@ log = logging.getLogger(__name__)
 FAILED_ZIP = []
 
 
-def insert_geojson(zip_name, geojson, retry=5):
+def insert_geojson(zip_name, geojson, retry=20):
     try:
         records = []
         for feature in geojson['features']:
             record = feature['properties']
             record['geometry'] = json.dumps(feature['geometry']['coordinates'])
             records.append(record)
+
         GristDB().update_table(REGRID_TABLE, records)
     except Exception as err:
         log.error(f'Failed while attempting to insert geojson to regrid table: retry={retry}')
@@ -38,6 +41,35 @@ def insert_geojson(zip_name, geojson, retry=5):
             FAILED_ZIP.append(zip_name)
 
 
+def remote_zip_path_to_db(sftp: Any, zip_path: Any):
+    json_path = None
+    tmp = None
+    try:
+        tmp = Path('./zips/county.zip').resolve()
+        log.info('fetch zip file')
+        sftp.get(zip_path, str(tmp))
+
+        tmpdir = Path('./downloads').resolve()
+        log.info('unzip to json on disk')
+        shutil.unpack_archive(str(tmp), tmpdir, format='zip')
+
+        json_path = next(tmpdir.iterdir(), None)
+        if json_path:
+            log.info('hydrate json')
+            hydrated_json = json.load(Path(json_path).open())
+            return hydrated_json
+    except Exception as err:
+        log.error(f'error while remote_zip_path_to_db err: {err}')
+    finally:
+        try:
+            if json_path:
+                os.remove(json_path)
+            if tmp:
+                os.remove(str(tmp))
+        except:
+            pass
+
+
 def main():
     ftp_url = 'sftp.regrid.com'
     uname = 'grist'
@@ -47,19 +79,12 @@ def main():
 
     with pysftp.Connection(ftp_url, username=uname, password=pword) as sftp:
         with sftp.cd(geojson_path):
-            zip_paths = sftp.listdir()
-            with concurrent.futures.ThreadPoolExecutor() as executor:
+            with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
                 futures = []
-                for zip_name in tqdm(zip_paths):
+                for zip_name in tqdm(sftp.listdir()):
                     zip_path = str(Path(geojson_path) / zip_name)
-                    with tempfile.NamedTemporaryFile(mode='w+b') as tmp:
-                        sftp.get(zip_path, tmp.name)
-                        with tempfile.TemporaryDirectory() as tmpdir:
-                            shutil.unpack_archive(tmp.name, tmpdir, format='zip')
-                            json_path = next(Path(tmpdir).iterdir(), None)
-                            if json_path:
-                                hydrated_json = json.load(Path(json_path).open())
-                                futures.append(executor.submit(insert_geojson, zip_name, hydrated_json, 5))
+                    hydrated_json = remote_zip_path_to_db(sftp, zip_path)
+                    futures.append(executor.submit(insert_geojson, zip_name, hydrated_json, retry=20))
                 done, incomplete = concurrent.futures.wait(futures)
                 log.info(f'done: {len(done)} incomplete: {incomplete}')
 

@@ -1,7 +1,7 @@
 import enum
 import itertools
 import logging
-from contextlib import contextmanager
+import time
 from dataclasses import dataclass, field
 from typing import Dict, Any, List, Optional
 
@@ -37,21 +37,29 @@ class GristDB:
                 results_type: Optional[GristDbResults] = None,
                 insertion_data: Optional[Any] = None):
         result = None
-        with psycopg2.connect(**DB_CREDS) as conn:
-            with conn.cursor() as ps_cursor:
-                if insertion_data:
-                    ps_cursor.execute(statement, insertion_data)
-                else:
-                    ps_cursor.execute(statement)
+        try:
+            with psycopg2.connect(connect_timeout=60, **DB_CREDS) as conn:
+                with conn.cursor() as ps_cursor:
+                    if insertion_data:
+                        ps_cursor.execute(statement, insertion_data)
+                    else:
+                        ps_cursor.execute(statement)
 
-                if results_type and results_type == GristDbResults.ONE:
-                    result = ps_cursor.fetchone()
+                    if results_type and results_type == GristDbResults.ONE:
+                        result = ps_cursor.fetchone()
 
-                if results_type and results_type == GristDbResults.ALL:
-                    result = ps_cursor.fetchall()
+                    if results_type and results_type == GristDbResults.ALL:
+                        result = ps_cursor.fetchall()
 
-                log.info('Txn Success')
-        conn.close()
+            log.info('Txn Success')
+        except Exception as err:
+            log.info(f'db error during write NOT IGNORING: {err}')
+            raise err
+
+        try:
+            conn.close()
+        except Exception as err:
+            log.info(f'failed while closing db conn with {err}')
 
         return result
 
