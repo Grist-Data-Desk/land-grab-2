@@ -5,6 +5,6 @@ urllib3[secure]==1.26.16
 pandas
 requests
 pymupdf
-psycopg2-binary
+psycopg[binary]
 pysftp
 tqdm

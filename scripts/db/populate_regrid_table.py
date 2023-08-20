@@ -5,22 +5,35 @@ import logging
 import os
 import shutil
 from pathlib import Path
-from typing import Any
 
 import pandas as pd
+logging.getLogger('pysftp').setLevel(logging.WARNING)
+logging.getLogger('paramiko').setLevel(logging.WARNING)
+logging.getLogger('__mp_main__').setLevel(logging.WARNING)
+logging.getLogger('land_grab').setLevel(logging.WARNING)
+try:
+    logging.getLogger('gristdb').setLevel(logging.WARNING)
+    logging.getLogger('land_grab.db.gristdb').setLevel(logging.WARNING)
+except:
+    pass
 import pysftp
 from tqdm import tqdm
 
 from land_grab.db.gristdb import GristDB
 from land_grab.db.tables import REGRID_TABLE
-
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
 FAILED_ZIP = []
 
 
-def insert_geojson(zip_name, geojson, retry=20):
+def insert_geojson(zip_name, zip_path_local, retry=20):
+    try:
+        geojson = unzip_to_json(zip_path_local)
+    except Exception as err:
+        FAILED_ZIP.append(zip_name)
+        return
+
     try:
         records = []
         for feature in geojson['features']:
@@ -28,7 +41,7 @@ def insert_geojson(zip_name, geojson, retry=20):
             record['geometry'] = json.dumps(feature['geometry']['coordinates'])
             records.append(record)
 
-        GristDB().update_table(REGRID_TABLE, records)
+        GristDB().copy_to(REGRID_TABLE, records)
     except Exception as err:
         log.error(f'Failed while attempting to insert geojson to regrid table: retry={retry}')
         log.error(err)
@@ -42,7 +55,6 @@ def insert_geojson(zip_name, geojson, retry=20):
 
 def unzip_to_json(zip_path_local: Path):
     json_path = None
-    tmp = None
     try:
         tmpdir = Path('./downloads').resolve()
         shutil.unpack_archive(str(zip_path_local), tmpdir, format='zip')
@@ -57,35 +69,42 @@ def unzip_to_json(zip_path_local: Path):
         try:
             if json_path:
                 os.remove(json_path)
-            if tmp:
-                os.remove(str(tmp))
+            os.remove(str(zip_path_local))
         except:
             pass
 
 
-def main():
+def upload(zip_remote_path: str):
+    log.info('Worker working')
+
     ftp_url = 'sftp.regrid.com'
     uname = 'grist'
     pword = 'sweeping-clamour-beheld-mesmeric'
 
-    geojson_path = '/download/geoJSON'
-    batch_size = 10
+    geojson_path = Path('/download/geoJSON')
+    zip_remote_path = geojson_path / zip_remote_path
     with pysftp.Connection(ftp_url, username=uname, password=pword) as sftp:
-        with sftp.cd(geojson_path):
-            with concurrent.futures.ThreadPoolExecutor(max_workers=batch_size) as t_pool:
-                zip_paths_local = []
-                for zip_name in tqdm(sftp.listdir()):
-                    if len(zip_paths_local) == batch_size:
-                        futures = []
-                        for p in zip_paths_local:
-                            futures.append(t_pool.submit(insert_geojson, zip_name, unzip_to_json(p), retry=20))
-                        _ = [f.result() for f in concurrent.futures.as_completed(futures)]
-                        zip_paths_local = []
+        zip_path_local = Path(
+            f'/Users/marcellebonterre/Projects/land-grab-2/scripts/zips/{zip_remote_path.name}'
+        ).resolve()
+        sftp.get(str(zip_remote_path), str(zip_path_local))
+        insert_geojson(zip_remote_path.name, zip_path_local)
 
-                    zip_path_remote = str(Path(geojson_path) / zip_name)
-                    zip_path_local = Path(f'./zips/{zip_name}').resolve()
-                    sftp.get(zip_path_remote, str(zip_path_local))
-                    zip_paths_local.append(zip_path_local)
+    return True
+
+
+def main():
+    ziplist = Path('/Users/marcellebonterre/Projects/land-grab-2/scripts/db/zip_remote_paths.csv')
+    df = pd.read_csv(ziplist)
+    zipnames = df.zip_remote_path.tolist()
+
+    batch_size = 10
+    batches = [zipnames[i:i + batch_size] for i in range(0, len(zipnames), batch_size)]
+    for batch in tqdm(batches):
+        with concurrent.futures.ProcessPoolExecutor(max_workers=batch_size) as t_pool:
+            fs = [t_pool.submit(upload, z) for z in batch]
+            for f in concurrent.futures.as_completed(fs):
+                f.result()
 
 
 def write_fails():

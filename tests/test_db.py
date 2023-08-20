@@ -1,7 +1,39 @@
+from datetime import datetime
+
+import pandas as pd
+
 from land_grab.db.gristdb import GristTable, GristDbField, GristDB
 
 
 # TODO: move to mocked unit-test eventually....
+def test_copy_insert_syntax():
+    table = GristTable(name='testcase_table',
+                       fields=[GristDbField(name='foo', constraints='integer'),
+                               GristDbField(name='bar', constraints='varchar(10)')])
+
+    db = GristDB()
+    db.create_table(table)
+
+    exists_res = db.table_exists(table.name)
+    assert exists_res
+
+    columns = db.list_columns(table.name)
+    col_names = [col[0] for col in columns]
+    assert all(f.name in col_names for f in table.fields)
+
+    s0 = datetime.now()
+    db.update_table(table, [{'foo': 123, 'bar': 'abc'}, {'foo': 987, 'bar': 'xyz'}])
+    s1 = datetime.now() - s0
+
+    t0 = datetime.now()
+    db.copy_to(table, [{'foo': 123, 'bar': 'abc'}, {'foo': 987, 'bar': 'xyz'}])
+    t1 = datetime.now() - t0
+
+    assert t1 < s1
+
+    db.delete_table(table.name)
+
+
 def test_multi_row_insert_syntax():
     table = GristTable(name='testcase_table',
                        fields=[GristDbField(name='foo', constraints='integer'),

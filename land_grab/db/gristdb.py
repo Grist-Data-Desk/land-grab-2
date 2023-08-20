@@ -1,12 +1,10 @@
 import enum
 import itertools
 import logging
-import time
 from dataclasses import dataclass, field
 from typing import Dict, Any, List, Optional
 
-import psycopg2
-import psycopg2.pool
+import psycopg
 
 from local_config.db_cred import DB_CREDS
 
@@ -38,7 +36,7 @@ class GristDB:
                 insertion_data: Optional[Any] = None):
         result = None
         try:
-            with psycopg2.connect(connect_timeout=60, **DB_CREDS) as conn:
+            with psycopg.connect(connect_timeout=60, **DB_CREDS) as conn:
                 with conn.cursor() as ps_cursor:
                     if insertion_data:
                         ps_cursor.execute(statement, insertion_data)
@@ -132,3 +130,26 @@ class GristDB:
             indexname;
         '''
         return self.execute(list_sql, results_type=GristDbResults.ALL)
+
+    def copy_to(self, table: GristTable, data: List[Dict[str, Any]]):
+        raw_field_names = [f.name for f in table.fields if f.name in data[0].keys()]
+        rows = [tuple([d[f] for f in raw_field_names]) for d in data]
+
+        field_names = ', '.join(raw_field_names)
+
+        try:
+            with psycopg.connect(connect_timeout=60, **DB_CREDS) as conn:
+                with conn.cursor() as ps_cursor:
+                    with ps_cursor.copy(f"COPY {table.name} ({field_names}) FROM STDIN;") as copy:
+                        for row in rows:
+                            copy.write_row(row)
+
+            log.info('Txn Success')
+        except Exception as err:
+            log.info(f'db error during write NOT IGNORING: {err}')
+            raise err
+
+        try:
+            conn.close()
+        except Exception as err:
+            log.info(f'failed while closing db conn with {err}')
