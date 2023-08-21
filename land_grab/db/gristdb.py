@@ -28,28 +28,36 @@ class GristTable:
     fields: List[GristDbField] = field(default_factory=list)
 
 
+class GristDbIndexType(enum.Enum):
+    TEXT = 'text'
+
+
 class GristDB:
 
     def execute(self,
                 statement: str,
                 results_type: Optional[GristDbResults] = None,
-                insertion_data: Optional[Any] = None):
+                data: Optional[Any] = None):
         result = None
         try:
             with psycopg.connect(connect_timeout=60, **DB_CREDS) as conn:
                 with conn.cursor() as ps_cursor:
-                    if insertion_data:
-                        ps_cursor.execute(statement, insertion_data)
+                    if data:
+                        ps_cursor.execute(statement, data)
                     else:
                         ps_cursor.execute(statement)
 
                     if results_type and results_type == GristDbResults.ONE:
                         result = ps_cursor.fetchone()
+                        if ps_cursor.description:
+                            columns = ps_cursor.description
+                            result = {col.name: result[i] for i, col in enumerate(columns)}
 
                     if results_type and results_type == GristDbResults.ALL:
                         result = ps_cursor.fetchall()
-
-            log.info('Txn Success')
+                        if ps_cursor.description:
+                            columns = ps_cursor.description
+                            result = [{col.name: row[i] for i, col in enumerate(columns)} for row in result]
         except Exception as err:
             log.info(f'db error during write NOT IGNORING: {err}')
             raise err
@@ -61,10 +69,11 @@ class GristDB:
 
         return result
 
-    def _data_values_to_sql(self, table_fields: List[str], data: Dict[str, Any]) -> List[Any]:
+    @staticmethod
+    def _data_values_to_sql(table_fields: List[str], data: Dict[str, Any]) -> List[Any]:
         return [None if not data[k] else data[k] for k in table_fields if k in data]
 
-    def update_table(self, table: GristTable, data: List[Dict[str, Any]], conn=None):
+    def update_table(self, table: GristTable, data: List[Dict[str, Any]]):
         if not data:
             return
 
@@ -79,7 +88,7 @@ class GristDB:
 
         all_values = tuple(itertools.chain.from_iterable([self._data_values_to_sql(raw_field_names, d) for d in data]))
 
-        return self.execute(insert_sql, insertion_data=all_values)
+        return self.execute(insert_sql, data=all_values)
 
     def fetch_all_data(self, table_name: str):
         fetch_sql = f'SELECT * FROM {table_name};'
@@ -107,8 +116,10 @@ class GristDB:
         del_table_sql = f'DROP TABLE {table_name};'
         return self.execute(del_table_sql)
 
-    def create_index(self, table_name: str, column: str):
-        index_sql = f'CREATE UNIQUE INDEX {column}_idx ON {table_name} ({column});'
+    def create_index(self, table_name: str, column: str, type: Optional[GristDbIndexType] = None):
+        index_sql = f'CREATE INDEX {column}_idx ON {table_name} ({column});'
+        if type == GristDbIndexType.TEXT:
+            index_sql = f"CREATE INDEX {column}_idx ON {table_name} USING GIN (to_tsvector('english', {column}));"
         return self.execute(index_sql)
 
     def delete_index(self, column: str):
@@ -153,3 +164,21 @@ class GristDB:
             conn.close()
         except Exception as err:
             log.info(f'failed while closing db conn with {err}')
+
+    def search_indexed_text_column(self, table_name, column_name, query):
+        search_sql = f"""
+            SELECT * 
+            FROM {table_name} 
+            WHERE to_tsvector('english', {column_name}) @@ plainto_tsquery('english', '{query}');
+        """
+
+        return self.execute(search_sql, results_type=GristDbResults.ALL)
+
+    def search_column_by_values(self, table_name: str, column_name: str, search_items: List[str]):
+        formatted_search_items = search_items
+        row_width_sub_vars = ', '.join([f"'{i}'" for i in formatted_search_items])
+
+        search_sql = f"""
+        SELECT * FROM {table_name} WHERE {column_name} IN ({row_width_sub_vars});
+        """
+        return self.execute(search_sql, results_type=GristDbResults.ALL)

@@ -11,3 +11,5 @@ def tnut_parser(l):
     if ' ' in parcel_number:
         parcel_number = ''.join(parcel_number.split(' '))
         return parcel_number
+
+    return parcel_number

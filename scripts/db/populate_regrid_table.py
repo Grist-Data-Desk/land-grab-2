@@ -7,6 +7,7 @@ import shutil
 from pathlib import Path
 
 import pandas as pd
+
 logging.getLogger('pysftp').setLevel(logging.WARNING)
 logging.getLogger('paramiko').setLevel(logging.WARNING)
 logging.getLogger('__mp_main__').setLevel(logging.WARNING)
@@ -19,8 +20,9 @@ except:
 import pysftp
 from tqdm import tqdm
 
-from land_grab.db.gristdb import GristDB
+from land_grab.db.gristdb import GristDB, GristDbIndexType
 from land_grab.db.tables import REGRID_TABLE
+
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
@@ -105,6 +107,31 @@ def main():
             fs = [t_pool.submit(upload, z) for z in batch]
             for f in concurrent.futures.as_completed(fs):
                 f.result()
+
+    try:
+        log.info('preparing to create database indexes')
+        db = GristDB()
+
+        log.info('Creating database index on id column')
+        db.create_index('regrid', 'id')
+
+        log.info('Creating database index on parcelnumb column')
+        db.create_index('regrid', 'parcelnumb')
+
+        log.info('Creating database index on parcelnumb_no_formatting column')
+        db.create_index('regrid', 'parcelnumb_no_formatting')
+
+        log.info('Creating database index on owner column')
+        db.create_index('regrid', 'owner', type=GristDbIndexType.TEXT)
+
+        log.info('Creating database index on mailadd column')
+        db.create_index('regrid', 'mailadd', type=GristDbIndexType.TEXT)
+
+        log.info('done creating database indexes')
+        log.info('Current database indexes listing:')
+        log.info(db.list_indexes())
+    except Exception as err:
+        log.error(err)
 
 
 def write_fails():
