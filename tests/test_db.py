@@ -125,5 +125,5 @@ def test_index_creation_deletion():
 
 def test_reverse_search():
     db = GristDB()
-    res = db.search_indexed_text_column('regrid', 'owner', 'ArKaNsAs')
+    res = db.search_text_column_has_query('regrid', 'owner', 'ArKaNsAs')
     assert len(res) > 0

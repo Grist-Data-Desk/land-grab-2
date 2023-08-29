@@ -1,8 +1,10 @@
 import fitz
 import re
 
+from land_grab.university_real_estate.entities import Parcel
 
-def cauc_parser(l):
+
+def cauc_parser(l) -> Parcel:
     # take out - and spaces, concatenate
     # commas and semicolons are usually delimiters, but sometimes it separates the last few digits, which
     # technically are like additional parcel IDs, with a slight change at the end
@@ -11,16 +13,17 @@ def cauc_parser(l):
     # return cells with weird strings for additional parsing
 
     parcel_number = l[2]  # TODO
+    p = Parcel(original_number=parcel_number)
+    return p
 
 
 def find_parcel_number_candidates(text):
     # text = text.replace('\n', ' ')
-    delims = {',',';'}
+    delims = {',', ';'}
     # greedily consume,
     # tokenize at delims,
     # strip newlines before storing tokens,
     # three or more groups
-
 
     # parcel num & \d+
     c1 = re.findall(r'\d+-\d+\-\d+', text)

@@ -1,15 +1,22 @@
-def tnut_parser(l):
+from land_grab.university_real_estate.entities import Parcel
+
+
+def tnut_parser(l) -> Parcel:
     # take out spaces and concatenate
     # parcel code column 3 (or [2])
     # ignore header cell
 
     parcel_number = l[2]
+    alt_county_parcel = l[3]
+    p = Parcel(original_number=parcel_number, county=l[1], alt_county_parcel=alt_county_parcel)
 
-    if 'Parcel Code' in parcel_number:
+    if 'Parcel Code' in parcel_number or 'ParcelCode' in parcel_number:
         return None
 
     if ' ' in parcel_number:
         parcel_number = ''.join(parcel_number.split(' '))
-        return parcel_number
+        p.normalized_number = parcel_number
+        return p
 
-    return parcel_number
+    p.normalized_number = parcel_number
+    return p
