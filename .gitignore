@@ -137,5 +137,5 @@ output/
 .idea/
 data_input
 data
-local_config
+land_grab/db/local_config
 notebooks
