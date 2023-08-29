@@ -1,12 +1,13 @@
+import concurrent.futures
 import enum
 import itertools
 import logging
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Dict, Any, List, Optional
 
 import psycopg
 
-from local_config.db_cred import DB_CREDS
+from land_grab.db.local_config.db_cred import DB_CREDS
 
 log = logging.getLogger(__name__)
 
@@ -20,12 +21,13 @@ class GristDbField:
 class GristDbResults(enum.Enum):
     ONE = 'one'
     ALL = 'all'
+    CALLBACK = 'callback'
 
 
-@dataclass
 class GristTable:
-    name: str
-    fields: List[GristDbField] = field(default_factory=list)
+    def __init__(self, name: str, fields: List[GristDbField]):
+        self.name = name
+        self.fields = fields or []
 
 
 class GristDbIndexType(enum.Enum):
@@ -37,7 +39,8 @@ class GristDB:
     def execute(self,
                 statement: str,
                 results_type: Optional[GristDbResults] = None,
-                data: Optional[Any] = None):
+                data: Optional[Any] = None,
+                callback: Optional[Any] = None):
         result = None
         try:
             with psycopg.connect(connect_timeout=60, **DB_CREDS) as conn:
@@ -58,6 +61,14 @@ class GristDB:
                         if ps_cursor.description:
                             columns = ps_cursor.description
                             result = [{col.name: row[i] for i, col in enumerate(columns)} for row in result]
+
+                    if results_type and results_type == GristDbResults.CALLBACK and callback is not None:
+                        if ps_cursor.description:
+                            columns = ps_cursor.description
+                            for row in ps_cursor:
+                                row_dict = {col.name: row[i] for i, col in enumerate(columns)}
+                                callback(row_dict)
+
         except Exception as err:
             log.info(f'db error during write NOT IGNORING: {err}')
             raise err
@@ -119,11 +130,13 @@ class GristDB:
     def create_index(self, table_name: str, column: str, type: Optional[GristDbIndexType] = None):
         index_sql = f'CREATE INDEX {column}_idx ON {table_name} ({column});'
         if type == GristDbIndexType.TEXT:
-            index_sql = f"CREATE INDEX {column}_idx ON {table_name} USING GIN (to_tsvector('english', {column}));"
+            index_sql = f"CREATE INDEX {column}_gin_idx ON {table_name} USING GIN (to_tsvector('english', {column}));"
         return self.execute(index_sql)
 
-    def delete_index(self, column: str):
+    def delete_index(self, column: str, type: Optional[GristDbIndexType] = None):
         index_sql = f'DROP INDEX {column}_idx;'
+        if type == GristDbIndexType.TEXT:
+            index_sql = f'DROP INDEX {column}_gin_idx;'
         return self.execute(index_sql)
 
     def list_indexes(self):
@@ -152,10 +165,8 @@ class GristDB:
             with psycopg.connect(connect_timeout=60, **DB_CREDS) as conn:
                 with conn.cursor() as ps_cursor:
                     with ps_cursor.copy(f"COPY {table.name} ({field_names}) FROM STDIN;") as copy:
-                        for row in rows:
-                            copy.write_row(row)
+                        [copy.write_row(row) for row in rows]
 
-            log.info('Txn Success')
         except Exception as err:
             log.info(f'db error during write NOT IGNORING: {err}')
             raise err
@@ -165,20 +176,37 @@ class GristDB:
         except Exception as err:
             log.info(f'failed while closing db conn with {err}')
 
-    def search_indexed_text_column(self, table_name, column_name, query):
+    def search_text_column_has_query(self, table_name: str, column_name: str, queries: List[str]):
+        if not queries:
+            return None
+
+        proper_quotes_queries = (q.replace("'", "''") for q in queries)
+        query_template = f"to_tsvector('english', {column_name}) @@ "
+        predicates = ' OR '.join([
+            (query_template + f"plainto_tsquery('english', '{q}')").format((column_name, q))
+            for q in proper_quotes_queries
+        ])
+
         search_sql = f"""
             SELECT * 
             FROM {table_name} 
-            WHERE to_tsvector('english', {column_name}) @@ plainto_tsquery('english', '{query}');
+            WHERE {predicates};
         """
 
         return self.execute(search_sql, results_type=GristDbResults.ALL)
 
-    def search_column_by_values(self, table_name: str, column_name: str, search_items: List[str]):
+    def search_column_value_in_set(self,
+                                   table_name: str,
+                                   column_name: str,
+                                   search_items: List[str],
+                                   callback: Optional[Any] = None):
         formatted_search_items = search_items
         row_width_sub_vars = ', '.join([f"'{i}'" for i in formatted_search_items])
 
         search_sql = f"""
         SELECT * FROM {table_name} WHERE {column_name} IN ({row_width_sub_vars});
         """
+        if callback:
+            return self.execute(search_sql, results_type=GristDbResults.CALLBACK, callback=callback)
+
         return self.execute(search_sql, results_type=GristDbResults.ALL)

@@ -1,5 +1,9 @@
-def azua_parser(l):
+from land_grab.university_real_estate.entities import Parcel
+
+
+def normalize_parcel_number(l):
     parcel_number = l[0]
+    p = Parcel(original_number=parcel_number)
     if len(l) < 2:
         return None
 
@@ -12,4 +16,12 @@ def azua_parser(l):
 
     if '-' in parcel_number:
         parcel_number = ''.join(parcel_number.split('-'))
-        return parcel_number
+        p.normalized_number = parcel_number
+        return p
+
+    return p
+
+
+def azua_parser(l) -> Parcel:
+    parcel = normalize_parcel_number(l)
+    return parcel
