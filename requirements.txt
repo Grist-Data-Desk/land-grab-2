@@ -8,3 +8,4 @@ pymupdf
 psycopg[binary]
 pysftp
 tqdm
+dask[complete]==2023.8.1
