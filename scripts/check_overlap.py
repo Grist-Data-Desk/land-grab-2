@@ -1,11 +1,16 @@
+import functools
+import itertools
+import json
 import logging
+import traceback
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 
 import geopandas
+import numpy as np
 from shapely import Polygon
 
-from land_grab.db.gristdb import GristDB
+from land_grab.db.gristdb import GristDB, GristDbResults
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -30,16 +35,71 @@ def state_code_from_filename(p):
         return 'WA'
 
 
-def overlap_evaluation(row: Dict[str, Any]):
-    a_row = row.get('geometry')
-    if not a_row:
-        log.error('NO GEOMETRY COLUMN')
+def db_list_counties(state_code):
+    return GristDB().fetch_from_col_where_val('county', 'state2', state_code, distinct=True)
+
+
+def db_get_county_all(county, cb=None):
+    return GristDB().fetch_from_col_where_val('*', 'county', county, callback=cb)
+
+
+def db_info_to_geoseries(parcel) -> Optional[geopandas.GeoSeries]:
+    geometry_json = parcel.get('geometry')
+    if not geometry_json:
         return
-    # polys1 = geopandas.GeoSeries([Polygon([(0, 0), (2, 0), (2, 2), (0, 2)]),
-    #                               Polygon([(2, 2), (4, 2), (4, 4), (2, 4)])])
-    # df1 = geopandas.GeoDataFrame({'geometry': polys1, 'df1': [1, 2]})
-    # res = gdf.overlay(df1, how='intersection')
-    assert 1
+
+    try:
+        geojson = json.loads(geometry_json)
+        all_polys = [Polygon([[float(x), float(y)] for x, y in points]) for points in geojson]
+        return geopandas.GeoSeries(all_polys).set_crs(epsg=4326)
+    except Exception as err:
+        log.error(err)
+
+
+def db_info_to_geoseries_2(parcel) -> Optional[geopandas.GeoSeries]:
+    geometry = parcel.get('geometry')
+    if not geometry:
+        return
+
+    coordinates = geometry.get('coordinates')
+    if not coordinates:
+        return
+
+    if isinstance(coordinates, tuple):
+        coordinates = [coordinates]
+
+    try:
+        all_polys_0 = [[Polygon([[float(x), float(y)] for x, y in points]) for points in p] for p in coordinates]
+        all_polys = list(itertools.chain.from_iterable(all_polys_0))
+        return geopandas.GeoSeries(all_polys).set_crs(epsg=3742)  # 4326)
+    except Exception as err:
+        log.error(err)
+
+
+
+
+def check_parcel_overlap(overlapping_parcels, gdf, parcel):
+    parcel_geoseries = db_info_to_geoseries(parcel)
+    if parcel_geoseries is None:
+        return
+    intersection = parcel_geoseries.intersects(gdf.geometry)
+    has_intersection = any(intersection.to_list())
+    if has_intersection:
+        overlapping_parcels.append(parcel)
+
+
+def find_overlapping_parcels(gdf, state_code):
+    overlapping_parcels = []
+    counties = db_list_counties(state_code)
+    for county_raw in counties:
+        county = county_raw.get('county')
+        if not county:
+            continue
+
+        check_overlap = functools.partial(check_parcel_overlap, overlapping_parcels, gdf)
+        db_get_county_all(county, cb=check_overlap)
+
+    return overlapping_parcels
 
 
 def process(p: Path):
@@ -59,12 +119,10 @@ def process(p: Path):
         if not state_code:
             return
 
-        GristDB().search_column_value_in_set('regrid',
-                                             'state2',
-                                             [state_code],
-                                             callback=overlap_evaluation)
-
+        overlapping_parcels = find_overlapping_parcels(gdf, state_code)
+        print(overlapping_parcels)
     except Exception as err:
+        print(traceback.format_exc())
         log.error(err)
 
 
@@ -87,3 +145,4 @@ def main(data_dir: Path):
 if __name__ == '__main__':
     data_dir = Path('/Users/marcellebonterre/Downloads/univs_shapes')
     main(data_dir)
+    # hydrate_geometry(None)

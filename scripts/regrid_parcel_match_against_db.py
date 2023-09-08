@@ -1,15 +1,10 @@
 import concurrent.futures
-import itertools
 import logging
-from dataclasses import dataclass
-
-import numpy as np
 import traceback
 from pathlib import Path
-from typing import Optional, List, Tuple, Any, Union
+from typing import Optional, List, Any, Union
 
 import pandas as pd
-from pandas.core.dtypes.common import is_numeric_dtype
 
 from land_grab.db.gristdb import GristDB
 from land_grab.university_real_estate.entities import Parcel

@@ -6,12 +6,14 @@ from pathlib import Path
 from typing import Any, Dict, List
 
 import pandas as pd
+import typer
 
 from land_grab.db.gristdb import GristDB
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
+app = typer.Typer()
 OUT_DIR = Path('.').resolve()
 
 
@@ -86,22 +88,26 @@ def process_university(row):
             # to perform an address search,
             # addresses = [a.strip() for a in mailadd.split(';')]
             print(f'[univ: {univ}] owner-address searching {len(owner_addresses_for_search)}: queries')
-            address_results_from_owner_search = db.search_text_column_has_query('regrid',
-                                                                                'mailadd',
-                                                                                list(owner_addresses_for_search),
-                                                                                callback=foo)
+            address_results_from_owner_search = []
+            db.search_text_column_has_query('regrid',
+                                            'mailadd',
+                                            list(owner_addresses_for_search),
+                                            callback=lambda a_row: address_results_from_owner_search.append(a_row))
 
-            uniq_results = [r for r in address_results_from_owner_search if r.get('id') and r.get('id') not in all_ids]
+            # uniq_results = [
+            # r for r in address_results_from_owner_search if r.get('id') and r.get('id') not in all_ids
+            # ]
 
             write_search_results(out_dir,
                                  'address_results_from_owner_search',
                                  univ,
                                  list(owner_addresses_for_search),
-                                 uniq_results)
+                                 address_results_from_owner_search)
     except Exception as err:
         log.error(err)
 
 
+@app.command()
 def main(csv_path: str):
     try:
         global OUT_DIR
@@ -113,4 +119,5 @@ def main(csv_path: str):
 
 
 if __name__ == '__main__':
+    # app()
     main('/Users/marcellebonterre/Projects/land-grab-2/tests/foo/Reverse_Search_Guide_01.csv')

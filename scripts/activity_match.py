@@ -23,7 +23,7 @@ logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
 STL_COMPARISON_BASE_DIR = Path('.')
-STATE_OUT_COLS = ['object_id', 'state', 'university', 'Activity', 'activities', 'Sub-activity', 'Use Purpose',
+STATE_OUT_COLS = ['object_id', 'state', 'university', 'Activity', 'Sub-activity', 'Use Purpose',
                   'Lessee or Owner or Manager', 'Lessee Name 2', 'Owner Address or Location', 'Lessor',
                   'Transaction Type', 'Lease Status', 'Lease Start Date', 'Lease End Date', 'Lease Extension Date',
                   'Commodity', 'Source', 'LandClass', 'Rights-Type']
@@ -628,7 +628,7 @@ def capture_state_data(activity_state: str,
 
             activity_record = {}
             if activity.use_name_as_activity:
-                activity_record['activity'] = activity.name
+                activity_record['Activity'] = activity.name
 
             activity_record['object_id'] = grist_match['object_id']
             activity_record['state'] = grist_match['state']
@@ -746,12 +746,12 @@ def main(stl_path: Path, column_rename_rules_path: Path, out_dir: Path):
     column_rename_rules = read_json(column_rename_rules_path)
 
     debug_acts = {}
-    # debug_acts['AZ'] = state_activities['AZ']
+    debug_acts['AZ'] = state_activities['AZ']
     debug_acts['NM'] = state_activities['NM']
 
-    updated_grist_stl, state_data = match_all_activities(debug_acts, gdf, column_rename_rules)
-    # updated_grist_stl, state_data = match_all_activities(state_activities, gdf, column_rename_rules)
-    assert 1
+    # updated_grist_stl, state_data = match_all_activities(debug_acts, gdf, column_rename_rules)
+    updated_grist_stl, state_data = match_all_activities(state_activities, gdf, column_rename_rules)
+
     state_data = state_data[[col for col in STATE_OUT_COLS if col in state_data.columns]]
     updated_grist_stl.drop('joinidx_1', inplace=True, axis=1)
     updated_grist_stl = updated_grist_stl.apply(activity_to_str, axis=1)
@@ -769,6 +769,6 @@ def main(stl_path: Path, column_rename_rules_path: Path, out_dir: Path):
 if __name__ == '__main__':
     stl = Path('/Users/marcellebonterre/Downloads/230815_nationals_STLs/0815_national_stls_deduplicated.geojson')
     STL_COMPARISON_BASE_DIR = Path('/Users/marcellebonterre/Downloads/STL_Activity_Layers')
-    column_rename_rules_path = Path('/scripts/activity_match_extras/rewrite_rules.json')
+    column_rename_rules_path = Path('/Users/marcellebonterre/Projects/land-grab-2/scripts/activity_match_extras/rewrite_rules.json')
     out_dir = Path('/Users/marcellebonterre/Projects/land-grab-2/tests/foo')
     main(stl, column_rename_rules_path, out_dir)

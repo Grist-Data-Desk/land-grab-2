@@ -139,3 +139,5 @@ data_input
 data
 land_grab/db/local_config
 notebooks
+*.sqlite
+foo
