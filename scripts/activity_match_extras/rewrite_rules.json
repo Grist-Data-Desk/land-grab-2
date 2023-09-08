@@ -1,0 +1,318 @@
+{
+    "id": {
+        "water": {
+            "TypeGroup": "Rights-Type",
+            "Status": "Lease Status",
+            "WaterUse": "Sub-activity",
+            "Source": "Source"
+        },
+        "roads": {
+            "Easement Right": "Rights-Type",
+            "TypeGroup": "Transaction Type",
+            "Status": "Lease Status",
+            "Easement Purpose": "Activity",
+            "Parties": "Lessee or Owner or Manager",
+            "DteGranted": "Lease Start Date",
+            "DteExpires": "Lease End Date"
+        },
+        "misc": {
+            "TypeGroup": "Transaction Type",
+            "Status": "Lease Status",
+            "Type": "Activity",
+            "Commodities": "Commodity",
+            "Name": "Lessee or Owner or Manager",
+            "DteGranted": "Lease Start Date",
+            "DteExpires": "Lease End Date"
+        }
+    },
+    "co": {
+        "misc": {
+            "Transaction Type": "Transaction Type",
+            "Lease Status": "Lease Status",
+            "Lease Type": "Activity",
+            "Lease Subtype": "Sub-activity",
+            "Lessee Name": "Lessee or Owner or Manager",
+            "Lease State Date": "Lease Start Date",
+            "Lease End Date": "Lease End Date"
+        }
+    },
+    "mn": {
+        "aggmin": {
+            "Status_1": "Lease Status",
+            "Type": "Sub-activity",
+            "Status_2": "Use Purpose"
+        },
+        "peat": {
+            "T_LEASETYP": "Activity",
+            "T_PNAMES": "Lessee or Owner or Manager",
+            "T_STARTDAT": "Lease Start Date",
+            "T_EXPDAT": "Lease End Date"
+        },
+        "rec": {
+            "AREA_NAME": "Sub-activity",
+            "AREA_TYPE": "Use Purpose"
+        },
+        "dnrrec": {
+            "UNIT_NAME": "Sub-activity",
+            "UNIT_TYPE": "Use Purpose",
+            "ADMINISTRA": "Lessee or Owner or Manager"
+        },
+        "actmin": {
+            "T_LEASETYP": "Commodity",
+            "T_PNAMES": "Lessee or Owner or Manager",
+            "T_STARTDAT": "Lease Start Date",
+            "T_EXPDAT": "Lease End Date",
+            "ML_SU_LAND": "LandClass"
+        },
+        "hismin": {
+            "T_LEASETYP": "Commodity",
+            "T_PNAMES": "Lessee or Owner or Manager",
+            "T_STARTDAT": "Lease Start Date",
+            "T_EXPDAT": "Lease End Date",
+            "ML_SU_LAND": "LandClass"
+        }
+    },
+    "nd": {
+        "min": {
+            "LEASE_STATUS": "Lease Status",
+            "LESSEE": "Lessee or Owner or Manager",
+            "LEASE_EFFECTIVE": "Lease Start Date",
+            "LEASE_EXPIRATION": "Lease End Date",
+            "LEASE_EXTENDED": "Lease Extension Date"
+        },
+        "rec": {
+            "UNIT_NAME": "Sub-activity"
+        }
+    },
+    "ne": {
+        "water": {
+            "RightStatu": "Lease Status",
+            "RightUse": "Sub-activity",
+            "FirstName": "Lessee or Owner or Manager",
+            "LastName": "Lessee Name 2"
+        },
+        "rec": {
+            "Status": "Lease Status",
+            "AreaName": "Sub-activity",
+            "StartDate": "Lease Start Date"
+        }
+    },
+    "ok": {
+        "misc": {
+            "EasementType": "Lease Status",
+            "Purpose": "Activity",
+            "Grantee": "Lessee or Owner or Manager"
+        },
+        "ag": {
+            "Lease Type": "Activity",
+            "OwnerName": "Lessee or Owner or Manager",
+            "Address2": "Owner Address or Location",
+            "Begin Date": "Lease Start Date",
+            "End Date": "Lease End Date"
+        },
+        "min": {
+            "OwnerName": "Lessee or Owner or Manager",
+            "Address2": "Owner Address or Location",
+            "Begin Date": "Lease Start Date",
+            "End Date": "Lease End Date"
+        }
+    },
+    "tx": {
+        "misc": {
+            "LEASE_STAT": "Lease Status",
+            "ACTIVITY": "Activity",
+            "PURPOSE": "Sub-activity",
+            "PRIMARY_LE": "Lessee or Owner or Manager"
+        },
+        "hardmin": {
+            "LEASE_STAT": "Lease Status",
+            "ORIGINAL_L": "Lessee or Owner or Manager",
+            "EFFECTIVE_": "Lease Start Date"
+        },
+        "oilgas": {
+            "LEASE_STAT": "Lease Status",
+            "ORIGINAL_L": "Lessee or Owner or Manager",
+            "LESSOR": "Lessor",
+            "EFFECTIVE_": "Lease Start Date"
+        },
+        "coastal": {
+            "ACTIVITY_T": "Activity",
+            "PROJECT_NA": "Sub-activity",
+            "GRANTEE": "Lessee or Owner or Manager"
+        }
+    },
+    "az": {
+        "misc": {
+            "leased": "Lease Status",
+            "ke": "Activity",
+            "full_name": "Lessee or Owner or Manager",
+            "effdate": "Lease Start Date",
+            "expdate": "Lease End Date"
+        },
+        "min": {
+            "leased": "Lease Status",
+            "ke": "Activity",
+            "full_name": "Lessee or Owner or Manager",
+            "effdate": "Lease Start Date",
+            "expdate": "Lease End Date"
+        },
+        "oilgas": {
+            "leased": "Lease Status",
+            "type": "Activity",
+            "full_name": "Lessee or Owner or Manager",
+            "effdate": "Lease Start Date",
+            "expdate": "Lease End Date"
+        },
+        "solar": {
+            "status": "Lease Status",
+            "technology": "Sub-activity",
+            "projectnam": "Lessee or Owner or Manager"
+        },
+        "ag": {
+            "name": "Sub-activity"
+        }
+    },
+    "wy": {
+        "metallicnonmet": {
+            "LeaseStatusLabel": "Lease Status",
+            "MineralTypeLabel": "Activity",
+            "MetallicNonMetallicLeaseSubType": "Sub-activity",
+            "CompanyName": "Lessee or Owner or Manager",
+            "CompanyZipCode": "Owner Address or Location",
+            "LeaseIssueDate": "Lease Start Date",
+            "LeaseExpirationDate": "Lease End Date"
+        },
+        "oilgas": {
+            "LeaseStatusLabel": "Lease Status",
+            "MineralTypeLabel": "Activity",
+            "CompanyName": "Lessee or Owner or Manager",
+            "CompanyZipCode": "Owner Address or Location",
+            "LeaseIssueDate": "Lease Start Date",
+            "LeaseExpirationDate": "Lease End Date"
+        },
+        "easement": {
+            "Status_LU": "Lease Status",
+            "Sub_Group_LU": "Activity",
+            "Use_Type_LU": "Sub-activity",
+            "Leaseholder_LU": "Lessee or Owner or Manager",
+            "Issue_Date_LU": "Lease Start Date",
+            "Expiration_Date_LU": "Lease End Date"
+        },
+        "grazing": {
+            "Status_LU": "Lease Status",
+            "Leaseholder_LU": "Lessee or Owner or Manager",
+            "Start_Date_LU": "Lease Start Date",
+            "Expiration_Date_LU": "Lease End Date"
+        },
+        "special": {
+            "Status_LU": "Lease Status",
+            "Type_LU": "Activity",
+            "Purpose_LU": "Sub-activity",
+            "Leaseholder_LU": "Lessee or Owner or Manager",
+            "Start_Date_LU": "Lease Start Date",
+            "Expiration_Date_LU": "Lease End Date"
+        },
+        "wind": {
+            "Status_LU": "Lease Status",
+            "Leaseholder_LU": "Lessee or Owner or Manager",
+            "Start_Date_LU": "Lease Start Date",
+            "Expiration_Date_LU": "Lease End Date"
+        }
+    },
+    "wa": {
+        "metal": {
+            "PRODUCTION": "Lease Status",
+            "ORE_MINERA": "Sub-activity",
+            "COMMODITIE": "Commodity"
+        },
+        "oilgas": {
+            "WELL_STATU": "Lease Status",
+            "COMPANY_NA": "Lessee or Owner or Manager"
+        },
+        "ag": {
+            "CropType": "Activity",
+            "CropGroup": "Sub-activity"
+        },
+        "mining": {
+            "MINE_NAME": "Sub-activity",
+            "COMMODITY_": "Commodity",
+            "APPLICANT_": "Lessee or Owner or Manager"
+        },
+        "nonmetal": {
+            "MINERAL": "Sub-activity"
+        }
+    },
+    "ut": {
+        "oilgasfields": {
+            "STATUS": "Lease Status"
+        },
+        "rec": {
+            "STATUS": "Lease Status",
+            "TYPE": "Activity",
+            "NAME": "Sub-activity"
+        },
+        "water": {
+            "LU_Group": "Lease Status",
+            "Descriptio": "Sub-activity"
+        },
+        "grazing": {
+            "AllotName": "Sub-activity",
+            "Manager": "Lessee or Owner or Manager"
+        },
+        "oilgaswell": {
+            "Operator": "Lessee or Owner or Manager"
+        }
+    },
+    "nm": {
+        "ag": {
+            "STATUS": "Lease Status",
+            "OGRID_NAM": "Lessee or Owner or Manager"
+        },
+        "com": {
+            "STATUS": "Lease Status",
+            "OGRID_NAM": "Lessee or Owner or Manager",
+            "VEREFF_DTE": "Lease Start Date",
+            "VERTRM_DTE": "Lease End Date"
+        },
+        "energy": {
+            "STATUS": "Lease Status",
+            "LEASE_TYPE": "Activity",
+            "OGRID_NAM": "Lessee or Owner or Manager"
+        },
+        "mineral": {
+            "STATUS": "Lease Status",
+            "LEASE_TYPE": "Activity",
+            "SUB_TYPE": "Sub-activity",
+            "OGRID_NAM": "Lessee or Owner or Manager",
+            "VEREFF_DTE": "Lease Start Date",
+            "VERTRM_DTE": "Lease End Date"
+        },
+        "oilgas": {
+            "STATUS": "Lease Status",
+            "OGRID_NAM": "Lessee or Owner or Manager",
+            "VEREFF_DTE": "Lease Start Date",
+            "VERTRM_DTE": "Lease End Date"
+        },
+        "row": {
+            "STATUS": "Lease Status",
+            "OGRID_NAM": "Lessee or Owner or Manager"
+        }
+    },
+    "mt": {
+        "misc": {
+            "UNITTYPE": "Activity",
+            "MANAME": "Sub-activity",
+            "INST": "Lessee or Owner or Manager"
+        }
+    },
+    "wi": {
+        "misc": {
+            "PROP_NAME": "Activity"
+        }
+    },
+    "sd": {
+        "rec": {
+            "ParkName": "Sub-activity"
+        }
+    }
+}
