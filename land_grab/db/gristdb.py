@@ -176,7 +176,12 @@ class GristDB:
         except Exception as err:
             log.info(f'failed while closing db conn with {err}')
 
-    def search_text_column_has_query(self, table_name: str, column_name: str, queries: List[str]):
+    def search_text_column_has_query(self,
+                                     table_name: str,
+                                     column_name: str,
+                                     queries: List[str],
+                                     exclusion_ids: Optional[List[str]] = None,
+                                     callback: Optional[Any] = None):
         if not queries:
             return None
 
@@ -187,11 +192,18 @@ class GristDB:
             for q in proper_quotes_queries
         ])
 
+        exclusion_ids_fmttd = ', '.join([f"'{i}'" for i in exclusion_ids])
+        id_exclude_predicate = '' if not exclusion_ids else f'AND id NOT IN ({exclusion_ids_fmttd})'
+
         search_sql = f"""
             SELECT * 
             FROM {table_name} 
-            WHERE {predicates};
+            WHERE {predicates}
+            {id_exclude_predicate};
         """
+
+        if callback:
+            return self.execute(search_sql, results_type=GristDbResults.CALLBACK, callback=callback)
 
         return self.execute(search_sql, results_type=GristDbResults.ALL)
 
@@ -210,3 +222,16 @@ class GristDB:
             return self.execute(search_sql, results_type=GristDbResults.CALLBACK, callback=callback)
 
         return self.execute(search_sql, results_type=GristDbResults.ALL)
+
+    def fetch_from_col_where_val(self,
+                                 select_col,
+                                 where_col,
+                                 val,
+                                 distinct: bool = False,
+                                 callback: Optional[Any] = None):
+        distinct_clause = 'DISTINCT' if distinct else ''
+        list_all_sql = f"SELECT {distinct_clause} {select_col} FROM regrid WHERE {where_col} = '{val}';"
+        if callback:
+            return self.execute(list_all_sql, results_type=GristDbResults.CALLBACK, callback=callback)
+
+        return self.execute(list_all_sql, results_type=GristDbResults.ALL)

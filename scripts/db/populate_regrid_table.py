@@ -24,7 +24,7 @@ except:
     pass
 import pysftp
 
-from land_grab.db.gristdb import GristDB, GristDbIndexType
+from land_grab.db.gristdb import GristDB
 
 logging.basicConfig(level=logging.WARNING)
 log = logging.getLogger(__name__)
