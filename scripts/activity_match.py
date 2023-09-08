@@ -4,7 +4,6 @@ import logging
 import time
 from collections import defaultdict
 from dataclasses import dataclass, field
-from functools import partial
 from pathlib import Path
 from typing import List, Optional, Union, Any, Dict
 
@@ -23,7 +22,7 @@ logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
 STL_COMPARISON_BASE_DIR = Path('.')
-STATE_OUT_COLS = ['object_id', 'state', 'university', 'Activity', 'Sub-activity', 'Use Purpose',
+STATE_OUT_COLS = ['object_id', 'state', 'university', 'Activity', 'activities', 'Sub-activity', 'Use Purpose',
                   'Lessee or Owner or Manager', 'Lessee Name 2', 'Owner Address or Location', 'Lessor',
                   'Transaction Type', 'Lease Status', 'Lease Start Date', 'Lease End Date', 'Lease Extension Date',
                   'Commodity', 'Source', 'LandClass', 'Rights-Type']
@@ -37,7 +36,9 @@ class StateActivityDataLocation(enum.Enum):
 
 def safe_geopandas_load(p):
     try:
-        return geopandas.read_file(p)
+        g = geopandas.read_file(p)
+        if g is not None:
+            return g
     except Exception as err:
         log.error(f'THIS IS WHERE THE ERROR IS {err}')
 
@@ -69,6 +70,33 @@ class StateActivityDataSource:
 
         return gdf
 
+    def load_remote(self):
+        ids_resp = self.fetch_all_parcel_ids()
+        if ids_resp:
+            ids = ids_resp.get('objectIds', [])
+            log.info(f'fetching remote activity data for {self.name} from: {self.location}')
+            activity_data = in_parallel(ids,
+                                        self.fetch_remote,
+                                        batched=False,
+                                        scheduler='threads')
+
+            log.info(f'hydrating geodataframes activity data for {self.name} from: {self.location}')
+            activity_data = in_parallel(activity_data,
+                                        safe_geopandas_load,
+                                        batched=False,
+                                        scheduler='threads')
+
+            if activity_data:
+                try:
+                    log.info(f'concat-ing geodataframes activity data for {self.name} from: {self.location}')
+                    activity_data = geopandas.GeoDataFrame(pd.concat(activity_data, ignore_index=True),
+                                                           crs=activity_data[0].crs)
+                    return activity_data
+                except Exception as err:
+                    log.error(f'Failed with {err} initing geodf for {self.name} from: {self.location}')
+                    print(f'Failed with {err} initing geodf for {self.name} from: {self.location}')
+                    return
+
     def query_data(self) -> Optional[Union[geopandas.GeoDataFrame, List[geopandas.GeoDataFrame]]]:
         if not self.location:
             return
@@ -78,25 +106,8 @@ class StateActivityDataSource:
             return activity_data
 
         if self.loc_type == StateActivityDataLocation.REMOTE:
-            log.info(f'fetching remote activity data for {self.name} from: {self.location}')
-            ids_resp = self.fetch_all_parcel_ids()
-            if ids_resp:
-                ids = ids_resp.get('objectIds', [])
-                activity_data = in_parallel(ids,
-                                            self.fetch_remote,
-                                            postprocess=safe_geopandas_load,
-                                            batched=False,
-                                            scheduler='threads')
-                activity_data = [a for a in activity_data if a is not None]
-                if activity_data:
-                    try:
-                        activity_data = geopandas.GeoDataFrame(pd.concat(activity_data, ignore_index=True),
-                                                               crs=activity_data[0].crs)
-                        return activity_data
-                    except Exception as err:
-                        log.error(f'Failed with {err} initing geodf for {self.name} from: {self.location}')
-                        print(f'Failed with {err} initing geodf for {self.name} from: {self.location}')
-                        return
+            activity_data = self.load_remote()
+            return activity_data
 
     @RateLimiter(max_calls=6000, period=60)
     def fetch_remote(self, parcel_id: Optional[str] = None, retries=10, response_type='text'):
@@ -244,21 +255,21 @@ state_activities = {
                                 location='http://gis.azland.gov/arcgis/rest/services/StateTrust/SurfaceParcels/MapServer/0/query',
                                 keep_cols=['leased', 'ke', 'effdate', 'expdate', 'full_name'],
                                 use_name_as_activity=False),
-        StateActivityDataSource(name='min',
+        StateActivityDataSource(name='Minerals',
                                 location='http://gis.azland.gov/arcgis/rest/services/StateTrust/MineralParcels/MapServer/0/query',
                                 keep_cols=['leased', 'ke', 'effdate', 'expdate', 'full_name'],
                                 use_name_as_activity=False),
-        StateActivityDataSource(name='oilgas',
+        StateActivityDataSource(name='Oil and gas',
                                 location='http://gis.azland.gov/arcgis/rest/services/StateTrust/OilGasParcels/MapServer/0/query',
                                 keep_cols=['type', 'leased', 'effdate',
                                            'expdate',
                                            'full_name'],
                                 use_name_as_activity=False),
-        StateActivityDataSource(name='ag',
+        StateActivityDataSource(name='Agriculture',
                                 location='http://gis.azland.gov/arcgis/rest/services/StateTrust/GrazingAllotments/MapServer/0/query',
                                 keep_cols=['name'],
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='solar',
+        StateActivityDataSource(name='Solar',
                                 location='http://gis.azland.gov/arcgis/rest/services/Renewable/SolarProjects/MapServer/0/query',
                                 keep_cols=['technology', 'projectnam', 'status'],
                                 use_name_as_activity=True),
@@ -283,86 +294,86 @@ state_activities = {
                                 keep_cols=['TypeGroup', 'Status', 'DteGranted', 'DteExpires', 'Parties',
                                            'Easement Right', 'Easement Purpose'],
                                 use_name_as_activity=False),
-        StateActivityDataSource(name='water',
+        StateActivityDataSource(name='Water',
                                 location='http://gis1.idl.idaho.gov/arcgis/rest/services/Portal/Landfolio_Data_Layers/MapServer/5/query',
                                 keep_cols=['TypeGroup', 'Status', 'WaterUse', 'Source'],
                                 use_name_as_activity=True),
 
     ]),
     'MN': StateForActivity(name='minnesota', activities=[
-        StateActivityDataSource(name='peat',
+        StateActivityDataSource(name='Peat',
                                 location='Minnesota_All/shp_plan_state_peatleases',
                                 keep_cols=['T_LEASETYP', 'T_STARTDAT', 'T_EXPDAT', 'T_PNAMES'],
                                 use_name_as_activity=False),
-        StateActivityDataSource(name='rec',
+        StateActivityDataSource(name='Recreation',
                                 location='Minnesota_All/shp_bdry_dnr_managed_areas/dnr_stat_plan_areas.shp',
                                 keep_cols=['AREA_NAME', 'AREA_TYPE'],
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='dnrrec',
+        StateActivityDataSource(name='Recreation-DNR Managed',
                                 location='Minnesota_All/shp_bdry_dnr_managed_areas/dnr_management_units.shp',
                                 keep_cols=['UNIT_NAME', 'UNIT_TYPE', 'ADMINISTRA'],
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='aggmin',
+        StateActivityDataSource(name='Aggregate Minerals',
                                 location='Minnesota_All/shp_geos_aggregate_mapping',
                                 keep_cols=['Type', 'Status_1', 'Status_2'],
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='actmin',
+        StateActivityDataSource(name='Active Minerals',
                                 location='Minnesota_All/shp_plan_state_minleases/active_minLeases.shp',
                                 keep_cols=['T_LEASETYP', 'T_STARTDAT', 'T_EXPDAT', 'T_PNAMES', 'ML_SU_LAND'],
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='hismin',
+        StateActivityDataSource(name='Historic Mineral Leases',
                                 location='Minnesota_All/shp_plan_state_minleases/historic_minLeases.shp',
                                 keep_cols=['T_LEASETYP', 'T_STARTDAT', 'T_EXPDAT', 'T_PNAMES', 'ML_SU_LAND'],
                                 use_name_as_activity=True)
 
     ]),
     'ND': StateForActivity(name='north dakota', activities=[
-        StateActivityDataSource(name='min',
+        StateActivityDataSource(name='Minerals',
                                 location='https://ndgishub.nd.gov/arcgis/rest/services/All_GovtLands_State/MapServer/2/query',
                                 keep_cols=['LEASE_STATUS', 'LEASE_EFFECTIVE', 'LEASE_EXPIRATION', 'LEASE_EXTENDED',
                                            'LESSEE'],
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='rec',
+        StateActivityDataSource(name='Recreation',
                                 location='https://ndgishub.nd.gov/arcgis/rest/services/All_GovtLands_State/MapServer/4/query',
                                 keep_cols=['UNIT_NAME'],
                                 use_name_as_activity=True),
 
     ]),
     'NE': StateForActivity(name='nebraska', activities=[
-        StateActivityDataSource(name='water',
+        StateActivityDataSource(name='Water',
                                 location='Nebraska_All/LOC_SurfaceWaterRightsDiversionsExternal_DNR.shp',
                                 keep_cols=['RightStatu', 'RightUse', 'FirstName', 'LastName'],
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='rec',
+        StateActivityDataSource(name='Recreation',
                                 location='Nebraska_All/Park_Areas.shp',
                                 keep_cols=['AreaName', 'StartDate', 'Status'],
                                 use_name_as_activity=True),
 
     ]),
     'NM': StateForActivity(name='new mexico', activities=[
-        StateActivityDataSource(name='ag',
+        StateActivityDataSource(name='Agriculture',
                                 location='NewMexico_All/Ag_Leases',
                                 use_name_as_activity=True,
                                 keep_cols=['STATUS', 'OGRID_NAM']),
-        StateActivityDataSource(name='com',
+        StateActivityDataSource(name='Commercial Leases',
                                 location='NewMexico_All/Commercial_Leases',
                                 use_name_as_activity=True,
                                 keep_cols=['STATUS', 'OGRID_NAM', 'VEREFF_DTE', 'VERTRM_DTE']),
-        StateActivityDataSource(name='energy',
+        StateActivityDataSource(name='Energy',
                                 location='NewMexico_All/Energy_Leases',
                                 use_name_as_activity=False,
                                 keep_cols=['STATUS', 'LEASE_TYPE',
                                            'OGRID_NAM']),
-        StateActivityDataSource(name='mineral',
+        StateActivityDataSource(name='Minerals',
                                 location='NewMexico_All/Mineral_Leases',
                                 use_name_as_activity=False,
                                 keep_cols=['STATUS', 'LEASE_TYPE', 'OGRID_NAM', 'SUB_TYPE',
                                            'VEREFF_DTE', 'VERTRM_DTE']),
-        StateActivityDataSource(name='oilgas',
+        StateActivityDataSource(name='Oil and gas',
                                 location='NewMexico_All/OilGas_Leases',
                                 use_name_as_activity=True,
                                 keep_cols=['STATUS', 'VEREFF_DTE', 'VERTRM_DTE', 'OGRID_NAM']),
-        StateActivityDataSource(name='row',
+        StateActivityDataSource(name='Roads',
                                 location='NewMexico_All/slo_rwleased',
                                 use_name_as_activity=True,
                                 keep_cols=['STATUS', 'OGRID_NAM']),
@@ -374,11 +385,11 @@ state_activities = {
                                 keep_cols=['Purpose', 'Grantee',
                                            'EasementType'],
                                 use_name_as_activity=False),
-        StateActivityDataSource(name='min',
+        StateActivityDataSource(name='Minerals',
                                 location='https://gis.clo.ok.gov/arcgis/rest/services/Public/OKLeaseData_ExternalProd/MapServer/1/query',
                                 keep_cols=['Begin Date', 'End Date', 'OwnerName', 'Address2'],
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='ag',
+        StateActivityDataSource(name='Agriculture',
                                 location='https://gis.clo.ok.gov/arcgis/rest/services/Public/OKLeaseData_ExternalProd/MapServer/0/query',
                                 keep_cols=['Lease Type', 'Begin Date', 'End Date', 'OwnerName',
                                            'Address2'],
@@ -386,14 +397,14 @@ state_activities = {
 
     ]),
     'SD': StateForActivity(name='south dakota', activities=[
-        StateActivityDataSource(name='rec',
+        StateActivityDataSource(name='Recreation',
                                 location='SouthDakota_All',
                                 keep_cols=['ParkName'],
                                 use_name_as_activity=True),
 
     ]),
     'TX': StateForActivity(name='texas', activities=[
-        StateActivityDataSource(name='coastal',
+        StateActivityDataSource(name='Coastal',
                                 location='Texas_All/NonMineralPoly',
                                 keep_cols=['PROJECT_NA', 'GRANTEE', 'ACTIVITY_T'],
                                 use_name_as_activity=False),
@@ -402,74 +413,74 @@ state_activities = {
                                 keep_cols=['LEASE_STAT', 'PRIMARY_LE',
                                            'ALL_LESSEE', 'PURPOSE'],
                                 use_name_as_activity=False),
-        StateActivityDataSource(name='hardmin',
+        StateActivityDataSource(name='Hard Minerals',
                                 location='Texas_All/HardMinerals',
                                 keep_cols=['LEASE_STAT', 'ORIGINAL_L', 'EFFECTIVE_'],
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='oilgas',
+        StateActivityDataSource(name='Oil and gas',
                                 location='Texas_All/ActiveLeases',
                                 keep_cols=['LEASE_STAT', 'EFFECTIVE_', 'ORIGINAL_L', 'LESSOR'],
                                 use_name_as_activity=True),
 
     ]),
     'UT': StateForActivity(name='utah', activities=[
-        StateActivityDataSource(name='water',
+        StateActivityDataSource(name='Water',
                                 location='Utah_All/Utah_Water_Related_Land_Use',
                                 keep_cols=['Descriptio',
                                            'LU_Group'],
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='geothermal',
+        StateActivityDataSource(name='Geothermal',
                                 location='Utah_All/Utah_UREZ_Phase_2_Geothermal',
                                 keep_cols=[],
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='wind_zone',
+        StateActivityDataSource(name='Wind Zones',
                                 location='Utah_All/Utah_UREZ_Phase_1_Wind_Zones',
                                 keep_cols=[],
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='solar_zones',
+        StateActivityDataSource(name='Solar Zones',
                                 location='Utah_All/Utah_UREZ_Phase_1_Solar_Zones',
                                 keep_cols=[],
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='rec',
+        StateActivityDataSource(name='Recreation',
                                 location='Utah_All/Utah_Parks_Local',
                                 keep_cols=['NAME', 'TYPE', 'STATUS'],
                                 use_name_as_activity=False),
-        StateActivityDataSource(name='oilgaswell',
+        StateActivityDataSource(name='Oil and gas wells',
                                 location='Utah_All/Utah_Oil_and_Gas_Well_Locations',
                                 keep_cols=['Operator'],
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='oilgasfields',
+        StateActivityDataSource(name='Oil and gas fields',
                                 location='Utah_All/Utah_Oil_and_Gas_Fields-shp',
                                 keep_cols=['STATUS'],
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='grazing',
+        StateActivityDataSource(name='Grazing',
                                 location='Utah_All/Utah_Grazing_Allotments',
                                 keep_cols=['Manager', 'AllotName'],
                                 use_name_as_activity=True)
 
     ]),
     'WA': StateForActivity(name='washington', activities=[
-        StateActivityDataSource(name='ag',
+        StateActivityDataSource(name='Agriculture',
                                 location='https://fortress.wa.gov/agr/gis/wsdagis/rest/services/NRAS/SectionsWithCrops2022/MapServer/0/query',
                                 keep_cols=['CropType', 'CropGroup'],
                                 use_name_as_activity=False),
-        StateActivityDataSource(name='nonmetal',
+        StateActivityDataSource(name='Non-Metallic Minerals',
                                 location='Washington_All',
                                 keep_cols=['MINERAL'],
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='metal',
+        StateActivityDataSource(name='Metallic Minerals',
                                 location='Washington_All',
                                 keep_cols=['COMMODITIE', 'PRODUCTION', 'ORE_MINERA'],
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='mining',
+        StateActivityDataSource(name='Mining',
                                 location='Washington_All',
                                 keep_cols=['APPLICANT_', 'MINE_NAME', 'COMMODITY_'],
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='oilgas',
+        StateActivityDataSource(name='Oil and gas',
                                 location='Washington_All',
                                 keep_cols=['COMPANY_NA', 'WELL_STATU'],
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='coal',
+        StateActivityDataSource(name='Coal',
                                 location='Washington_All',
                                 keep_cols=[],
                                 use_name_as_activity=True),
@@ -483,42 +494,42 @@ state_activities = {
 
     ]),
     'WY': StateForActivity(name='wyoming', activities=[
-        StateActivityDataSource(name='metallicnonmet',
+        StateActivityDataSource(name='Metallic and Nonmetallic Minerals',
                                 location='https://gis2.statelands.wyo.gov/arcgis/rest/services/Services/MapViewerService2/MapServer/14/query',
                                 keep_cols=['MetallicNonMetallicLeaseSubType',
                                            'LeaseIssueDate',
                                            'LeaseExpirationDate', 'CompanyName', 'LeaseStatusLabel', 'CompanyZipCode',
                                            'MineralTypeLabel'],
                                 use_name_as_activity=False),
-        StateActivityDataSource(name='oilgas',
+        StateActivityDataSource(name='Oil and gas',
                                 location='https://gis2.statelands.wyo.gov/arcgis/rest/services/Services/MapViewerService2/MapServer/12/query',
                                 keep_cols=['LeaseIssueDate',
                                            'LeaseExpirationDate', 'CompanyName', 'LeaseStatusLabel', 'CompanyZipCode',
                                            'MineralTypeLabel'],
                                 use_name_as_activity=False),
-        StateActivityDataSource(name='easement',
+        StateActivityDataSource(name='Easements',
                                 location='https://gis2.statelands.wyo.gov/arcgis/rest/services/Services/MapViewerService2/MapServer/7/query',
                                 keep_cols=['Leaseholder_LU', 'Issue_Date_LU', 'Expiration_Date_LU', 'Status_LU',
                                            'Sub_Group_LU',
                                            'Use_Type_LU'],
                                 use_name_as_activity=False),
-        StateActivityDataSource(name='grazing',
+        StateActivityDataSource(name='Grazing',
                                 location='https://gis2.statelands.wyo.gov/arcgis/rest/services/Services/MapViewerService2/MapServer/10/query',
                                 keep_cols=['Leaseholder_LU', 'Start_Date_LU', 'Expiration_Date_LU', 'Status_LU'],
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='special',
+        StateActivityDataSource(name='Special',
                                 location='https://gis2.statelands.wyo.gov/arcgis/rest/services/Services/MapViewerService2/MapServer/8/query',
                                 keep_cols=['Leaseholder_LU', 'Start_Date_LU', 'Expiration_Date_LU', 'Status_LU',
                                            'Type_LU', 'Purpose_LU'],
                                 use_name_as_activity=False),
-        StateActivityDataSource(name='wind',
+        StateActivityDataSource(name='Wind',
                                 location='https://gis2.statelands.wyo.gov/arcgis/rest/services/Services/MapViewerService2/MapServer/9/query',
                                 keep_cols=['Leaseholder_LU', 'Start_Date_LU', 'Expiration_Date_LU', 'Status_LU'],
                                 use_name_as_activity=True)
     ]),
 
     'MT': StateForActivity(name='Montana', activities=[
-        StateActivityDataSource(name='oilgas',
+        StateActivityDataSource(name='Oil and gas',
                                 location='https://services2.arcgis.com/DRQySz3VhPgOv7Bo/ArcGIS/rest/services/MMB_Oil_and_Gas/FeatureServer/1/query',
                                 keep_cols=[],
                                 use_name_as_activity=True),
@@ -745,10 +756,10 @@ def main(stl_path: Path, column_rename_rules_path: Path, out_dir: Path):
     gdf = geopandas.read_file(str(stl_path))
     column_rename_rules = read_json(column_rename_rules_path)
 
-    debug_acts = {}
-    debug_acts['AZ'] = state_activities['AZ']
-    debug_acts['NM'] = state_activities['NM']
-
+    # debug_acts = {}
+    # debug_acts['AZ'] = state_activities['AZ']
+    # debug_acts['NM'] = state_activities['NM']
+    #
     # updated_grist_stl, state_data = match_all_activities(debug_acts, gdf, column_rename_rules)
     updated_grist_stl, state_data = match_all_activities(state_activities, gdf, column_rename_rules)
 
@@ -769,6 +780,7 @@ def main(stl_path: Path, column_rename_rules_path: Path, out_dir: Path):
 if __name__ == '__main__':
     stl = Path('/Users/marcellebonterre/Downloads/230815_nationals_STLs/0815_national_stls_deduplicated.geojson')
     STL_COMPARISON_BASE_DIR = Path('/Users/marcellebonterre/Downloads/STL_Activity_Layers')
-    column_rename_rules_path = Path('/Users/marcellebonterre/Projects/land-grab-2/scripts/activity_match_extras/rewrite_rules.json')
+    column_rename_rules_path = Path(
+        '/Users/marcellebonterre/Projects/land-grab-2/scripts/activity_match_extras/rewrite_rules.json')
     out_dir = Path('/Users/marcellebonterre/Projects/land-grab-2/tests/foo')
     main(stl, column_rename_rules_path, out_dir)
