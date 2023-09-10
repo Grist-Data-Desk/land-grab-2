@@ -99,6 +99,8 @@ class StateActivityDataSource:
     location: str
     use_name_as_activity: bool = False
     keep_cols: List[str] = field(default_factory=list)
+    scheduler: str = None
+    use_cache: bool = True
 
     @property
     def loc_type(self) -> StateActivityDataLocation:
@@ -120,10 +122,10 @@ class StateActivityDataSource:
 
         return gdf
 
-    def load_remote(self):
+    def load_remote(self, scheduler=None):
         cache = GristCache(self.location)
         activity_data_geopandas = cache.cache_read('activity_data_geopandas', '.feather')
-        if activity_data_geopandas is not None:
+        if self.use_cache and activity_data_geopandas is not None:
             return activity_data_geopandas
 
         cached_ids_resp = cache.cache_read('ids_resp')
@@ -132,13 +134,15 @@ class StateActivityDataSource:
             cache.cache_write(ids_resp, 'ids_resp')
 
         if ids_resp:
-            ids = ids_resp.get('objectIds', [])
             log.info(f'fetching remote activity data for {self.name} from: {self.location}')
-            cached_activity_data = cache.cache_read('activity_data')
+            ids = ids_resp.get('objectIds', [])
+            cached_activity_data = None
+            if self.use_cache:
+                cached_activity_data = cache.cache_read('activity_data')
             activity_data = cached_activity_data or in_parallel(ids,
                                                                 self.fetch_remote,
                                                                 batched=False,
-                                                                scheduler='threads')
+                                                                scheduler=self.scheduler or 'threads')
             if not cached_activity_data:
                 cache.cache_write(activity_data, 'activity_data')
 
@@ -309,6 +313,8 @@ class StateActivityDataSource:
 class StateForActivity:
     name: str
     activities: List[StateActivityDataSource]
+    scheduler: str = None
+    use_cache: bool = True
 
 
 state_activities = {
@@ -354,7 +360,7 @@ state_activities = {
         StateActivityDataSource(name='roads',
                                 location='http://gis1.idl.idaho.gov/arcgis/rest/services/Portal/Landfolio_Data_Layers/MapServer/6/query',
                                 keep_cols=['TypeGroup', 'Status', 'DteGranted', 'DteExpires', 'Parties',
-                                           'Easement Right', 'EasementPurpose'],
+                                           'EasementRight', 'EasementPurpose'],
                                 use_name_as_activity=False),
         StateActivityDataSource(name='Water',
                                 location='http://gis1.idl.idaho.gov/arcgis/rest/services/Portal/Landfolio_Data_Layers/MapServer/5/query',
@@ -608,6 +614,9 @@ def in_parallel(work_items, a_callable, scheduler='processes', postprocess=None,
     if postprocess:
         a_callable = compose(postprocess, a_callable)
 
+    if scheduler == 'synchronous':
+        log.info('Using Dask synchronous scheduler')
+
     all_results = []
     if not batched:
         with dask.config.set(scheduler=scheduler):
@@ -661,7 +670,8 @@ def find_overlaps(activity_data, grist_data):
         if overlapping_regions.shape[0] > 0:
             return GristOverlapMatch.extract_matches(activity_data, grist_data, overlapping_regions)
     except Exception as err:
-        print(f'BIG SCARY {err}')
+        activity_data = activity_data.set_crs(grist_data.crs)
+        return find_overlaps(activity_data, grist_data)
 
 
 def single_activity_match(state=None, grist_data=None, activity=None):
@@ -670,6 +680,7 @@ def single_activity_match(state=None, grist_data=None, activity=None):
         log.error(f'NO ACTIVITY DATA FOR {state}')
         return
 
+    log.info(f'finding overlap matches for state: {state} activity: {activity.name}')
     matches = find_overlaps(activity_data, grist_data)
 
     if matches:
@@ -743,11 +754,10 @@ def get_activity_column(activity, state, column_rename_rules):
 
 
 def update_grist_rows(grist_data_0, activity, state, matches, column_rename_rules):
-    rename_rules = {'Coal': 'coal',
-                    'OilAndGas': 'oilgas',
-                    'OtherMin': 'othermin',
-                    'OtherMinerals': 'othermin',
-                    'Oil & Gas': 'oilgas'}
+    rename_rules = {'OilAndGas': 'Oil and gas',
+                    'OtherMin': 'Other Minerals',
+                    'OtherMinerals': 'Other Minerals',
+                    'Oil & Gas': 'Oil and gas'}
 
     obj_id_to_activities = defaultdict(set)
     for m in matches:
@@ -793,11 +803,10 @@ def update_grist_rows(grist_data_0, activity, state, matches, column_rename_rule
 
 
 def simple_activity_rename(row):
-    rename_rules = {'Coal': 'coal',
-                    'OilAndGas': 'oilgas',
-                    'OtherMin': 'othermin',
-                    'OtherMinerals': 'othermin',
-                    'Oil & Gas': 'oilgas'}
+    rename_rules = {'OilAndGas': 'Oil and gas',
+                    'OtherMin': 'Other Minerals',
+                    'OtherMinerals': 'Other Minerals',
+                    'Oil & Gas': 'Oil and gas'}
 
     incumbent_activity_val = row['activity']
     if isinstance(incumbent_activity_val, str) and len(incumbent_activity_val) > 0:
@@ -822,6 +831,12 @@ def match_all_activities(states_data=None, grist_data=None, column_rename_rules=
         grist_data_0 = grist_data_original[grist_data_original.state.isin([activity_state, activity_state.lower()])]
 
         for activity in activity_info.activities:
+            if activity_info.scheduler:
+                activity.scheduler = activity_info.scheduler
+
+            if not activity_info.use_cache:
+                activity.use_cache = activity_info.use_cache
+
             matches = single_activity_match(activity_state, grist_data_0, activity)
             if matches is not None:
                 updated_grist = update_grist_rows(grist_data_0, activity, activity_state, matches, column_rename_rules)
@@ -877,10 +892,13 @@ def main(stl_path: Path, the_column_rename_rules_path: Path, the_out_dir: Path):
         gdf = geopandas.read_file(str(stl_path))
         GristCache(f'{stl_path}').cache_write(gdf, 'stl_file', '.feather')
 
+    state_activities['WY'].scheduler = 'synchronous'
+    state_activities['WY'].use_cache = False
     # debug_acts = {
-    #     'AZ': state_activities['AZ'],
-    #     'TX': state_activities['TX'],
-    #     'MN': state_activities['MN'],
+    #     'UT': state_activities['UT'],
+    # 'AZ': state_activities['AZ'],
+    # 'TX': state_activities['TX'],
+    # 'MN': state_activities['MN'],
     # }
     # updated_grist_stl, state_data = match_all_activities(debug_acts, gdf, column_rename_rules)
 

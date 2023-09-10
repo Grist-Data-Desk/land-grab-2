@@ -7,7 +7,7 @@
             "Source": "Source"
         },
         "roads": {
-            "Easement Right": "Rights-Type",
+            "EasementRight": "Rights-Type",
             "TypeGroup": "Transaction Type",
             "Status": "Lease Status",
             "EasementPurpose": "Activity",
