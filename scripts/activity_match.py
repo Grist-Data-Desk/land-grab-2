@@ -104,6 +104,8 @@ class StateActivityDataSource:
             return json.load(fp)
 
     def load_remote(self):
+        # TODO if cached geodf in feather fmt, hydrate and return
+
         ids_resp = self.cache_read('ids_resp') or self.fetch_all_parcel_ids()
         self.cache_write(ids_resp, 'ids_resp')
         if ids_resp:
@@ -126,6 +128,7 @@ class StateActivityDataSource:
                     log.info(f'concat-ing geodataframes activity data for {self.name} from: {self.location}')
                     activity_data = geopandas.GeoDataFrame(pd.concat(activity_data, ignore_index=True),
                                                            crs=activity_data[0].crs)
+                    # TODO: cache in feather fmt maybe
                     return activity_data
                 except Exception as err:
                     log.error(f'Failed with {err} initing geodf for {self.name} from: {self.location}')
