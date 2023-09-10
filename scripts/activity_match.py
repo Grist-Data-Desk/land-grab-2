@@ -336,7 +336,7 @@ state_activities = {
     'MN': StateForActivity(name='minnesota', activities=[
         StateActivityDataSource(name='Peat',
                                 location='Minnesota_All/shp_plan_state_peatleases',
-                                keep_cols=['T_LEASETYP', 'T_STARTDATE', 'T_EXPDATE', 'T_PNAMES'],
+                                keep_cols=['T_LEASETYP', 'T_STARTDAT', 'T_EXPDATE', 'T_PNAMES'],
                                 use_name_as_activity=False),
         StateActivityDataSource(name='Recreation',
                                 location='Minnesota_All/shp_bdry_dnr_managed_areas/dnr_stat_plan_areas.shp',
@@ -352,11 +352,11 @@ state_activities = {
                                 use_name_as_activity=True),
         StateActivityDataSource(name='Active Minerals',
                                 location='Minnesota_All/shp_plan_state_minleases/active_minLeases.shp',
-                                keep_cols=['T_LEASETYP', 'T_STARTDATE', 'T_EXPDATE', 'T_PNAMES', 'ML_SU_LAND'],
+                                keep_cols=['T_LEASETYP', 'T_STARTDAT', 'T_EXPDATE', 'T_PNAMES', 'ML_SU_LAND'],
                                 use_name_as_activity=True),
         StateActivityDataSource(name='Historic Mineral Leases',
                                 location='Minnesota_All/shp_plan_state_minleases/historic_minLeases.shp',
-                                keep_cols=['T_LEASETYP', 'T_STARTDATE', 'T_EXPDATE', 'T_PNAMES', 'ML_SU_LAND'],
+                                keep_cols=['T_LEASETYP', 'T_STARTDAT', 'T_EXPDATE', 'T_PNAMES', 'ML_SU_LAND'],
                                 use_name_as_activity=True)
 
     ]),
@@ -662,6 +662,7 @@ def capture_state_data(activity_state: str,
                        activity: StateActivityDataSource,
                        matches: List[GristOverlapMatch],
                        column_rename_rules: Dict[str, Any]):
+    missing_cols = set([])
     activity_records = []
     for m in matches:
         if m is None:
@@ -685,11 +686,14 @@ def capture_state_data(activity_state: str,
                     renamed_col = maybe_rename_column(col, activity_state, column_rename_rules, activity)
                     activity_record[renamed_col] = m.activity_row[col].tolist()[0]
                 else:
-                    log.error(f'missing col in state-data. expected {col}'
-                              f' for state: {activity_state} activity: {activity.name} '
-                              f'which had cols: {m.activity_row.keys()}')
+                    missing_cols.add(col)
 
             activity_records.append(activity_record)
+
+    if missing_cols:
+        log.error(f'missing col in state-data. expected {missing_cols}'
+                  f' for state: {activity_state} activity: {activity.name} '
+                  f'which had cols: {m.activity_row.keys()}')
 
     return activity_records
 
@@ -842,6 +846,7 @@ def main(stl_path: Path, column_rename_rules_path: Path, out_dir: Path):
     # debug_acts = {}
     # debug_acts['AZ'] = state_activities['AZ']
     # debug_acts['TX'] = state_activities['TX']
+    # debug_acts['MN'] = state_activities['MN']
     # updated_grist_stl, state_data = match_all_activities(debug_acts, gdf, column_rename_rules)
 
     updated_grist_stl, state_data = match_all_activities(state_activities, gdf, column_rename_rules)
