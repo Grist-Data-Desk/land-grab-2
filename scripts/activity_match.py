@@ -44,9 +44,9 @@ class GristCache:
 
         cached_file = here / f'{name}{file_ext}'
 
+        log.info(f'writing to cache: {str(cached_file)}')
         if 'json' in file_ext:
             with cached_file.open('w') as fp:
-                log.info(f'writing to cache: {str(cached_file)}')
                 json.dump(obj, fp)
 
         try:
@@ -68,9 +68,9 @@ class GristCache:
             log.info(f'cache-miss for: {str(cached_file)}')
             return None
 
+        log.info(f'reading from cache: {str(cached_file)}')
         if 'json' in file_ext:
             with cached_file.open('r') as fp:
-                log.info(f'reading from cache: {str(cached_file)}')
                 return json.load(fp)
         try:
             if 'feather' in file_ext:
@@ -872,9 +872,9 @@ def main(stl_path: Path, the_column_rename_rules_path: Path, the_out_dir: Path):
     log.info(f'reading {stl_path}')
     column_rename_rules = read_json(the_column_rename_rules_path)
 
-    cached_gdf = GristCache(f'{stl_path}').cache_read('stl_file', '.feather')
-    gdf = cached_gdf or geopandas.read_file(str(stl_path))
-    if not cached_gdf:
+    gdf = GristCache(f'{stl_path}').cache_read('stl_file', '.feather')
+    if gdf is None:
+        gdf = geopandas.read_file(str(stl_path))
         GristCache(f'{stl_path}').cache_write(gdf, 'stl_file', '.feather')
 
     # debug_acts = {
