@@ -29,6 +29,8 @@ STATE_OUT_COLS = ['object_id', 'state', 'university', 'Activity', 'Sub-activity'
 DONT_USE_COLS = ['TypeGroup', 'Type', 'Status', 'DteGranted', 'DteExpires', 'Name', 'ALL_LESSEE']
 
 
+# TODO: check that PYTHONHASHSEED is set and disallow run otherwise
+
 class StateActivityDataLocation(enum.Enum):
     LOCAL = 'local'
     REMOTE = 'remote'
@@ -71,6 +73,9 @@ class StateActivityDataSource:
         return gdf
 
     def cache_write(self, obj, name):
+        """
+        this function requires the ENV var: PYTHONHASHSEED to be set to ensure stable hashing between runs
+        """
         here = Path(f'./cache/{hash(self.location)}')
         if not here.exists():
             here.mkdir(exist_ok=True, parents=True)
@@ -82,12 +87,16 @@ class StateActivityDataSource:
             json.dump(obj, fp)
 
     def cache_read(self, name):
+        """
+        this function requires the ENV var: PYTHONHASHSEED to be set to ensure stable hashing between runs
+        """
         here = Path(f'./cache/{hash(self.location)}')
         if not here.exists():
             here.mkdir(exist_ok=True, parents=True)
 
         cached_file = here / f'{name}.json'
         if not cached_file.exists():
+            log.info(f'cache-miss for: {str(cached_file)}')
             return None
 
         with cached_file.open('r') as fp:
@@ -316,7 +325,7 @@ state_activities = {
         StateActivityDataSource(name='roads',
                                 location='http://gis1.idl.idaho.gov/arcgis/rest/services/Portal/Landfolio_Data_Layers/MapServer/6/query',
                                 keep_cols=['TypeGroup', 'Status', 'DteGranted', 'DteExpires', 'Parties',
-                                           'Easement Right', 'Easement Purpose'],
+                                           'Easement Right', 'EasementPurpose'],
                                 use_name_as_activity=False),
         StateActivityDataSource(name='Water',
                                 location='http://gis1.idl.idaho.gov/arcgis/rest/services/Portal/Landfolio_Data_Layers/MapServer/5/query',
