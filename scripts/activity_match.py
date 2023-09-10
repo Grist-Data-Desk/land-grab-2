@@ -336,7 +336,7 @@ state_activities = {
     'MN': StateForActivity(name='minnesota', activities=[
         StateActivityDataSource(name='Peat',
                                 location='Minnesota_All/shp_plan_state_peatleases',
-                                keep_cols=['T_LEASETYP', 'T_STARTDAT', 'T_EXPDATE', 'T_PNAMES'],
+                                keep_cols=['T_LEASETYP', 'T_STARTDATE', 'T_EXPDATE', 'T_PNAMES'],
                                 use_name_as_activity=False),
         StateActivityDataSource(name='Recreation',
                                 location='Minnesota_All/shp_bdry_dnr_managed_areas/dnr_stat_plan_areas.shp',
@@ -352,11 +352,11 @@ state_activities = {
                                 use_name_as_activity=True),
         StateActivityDataSource(name='Active Minerals',
                                 location='Minnesota_All/shp_plan_state_minleases/active_minLeases.shp',
-                                keep_cols=['T_LEASETYP', 'T_STARTDAT', 'T_EXPDATE', 'T_PNAMES', 'ML_SU_LAND'],
+                                keep_cols=['T_LEASETYP', 'T_STARTDATE', 'T_EXPDATE', 'T_PNAMES', 'ML_SU_LAND'],
                                 use_name_as_activity=True),
         StateActivityDataSource(name='Historic Mineral Leases',
                                 location='Minnesota_All/shp_plan_state_minleases/historic_minLeases.shp',
-                                keep_cols=['T_LEASETYP', 'T_STARTDAT', 'T_EXPDATE', 'T_PNAMES', 'ML_SU_LAND'],
+                                keep_cols=['T_LEASETYP', 'T_STARTDATE', 'T_EXPDATE', 'T_PNAMES', 'ML_SU_LAND'],
                                 use_name_as_activity=True)
 
     ]),

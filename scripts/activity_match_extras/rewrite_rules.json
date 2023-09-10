@@ -60,14 +60,14 @@
         "Active Minerals": {
             "T_LEASETYP": "Commodity",
             "T_PNAMES": "Lessee or Owner or Manager",
-            "T_STARTDAT": "Lease Start Date",
+            "T_STARTDATE": "Lease Start Date",
             "T_EXPDATE": "Lease End Date",
             "ML_SU_LAND": "LandClass"
         },
         "Historic Mineral Leases": {
             "T_LEASETYP": "Commodity",
             "T_PNAMES": "Lessee or Owner or Manager",
-            "T_STARTDAT": "Lease Start Date",
+            "T_STARTDATE": "Lease Start Date",
             "T_EXPDAT": "Lease End Date",
             "ML_SU_LAND": "LandClass"
         }
