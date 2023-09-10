@@ -141,3 +141,4 @@ land_grab/db/local_config
 notebooks
 *.sqlite
 foo
+scripts/cache/

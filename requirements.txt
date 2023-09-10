@@ -12,4 +12,4 @@ dask[complete]==2023.8.1
 compose
 openpyxl
 ratelimiter
-requests-cache
+
