@@ -12,7 +12,7 @@ import dask.bag
 import geopandas
 import numpy as np
 import pandas as pd
-import requests_cache
+import requests
 from compose import compose
 from dask.diagnostics import ProgressBar
 from ratelimiter import RateLimiter
@@ -22,7 +22,7 @@ logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
 STL_COMPARISON_BASE_DIR = Path('.')
-STATE_OUT_COLS = ['object_id', 'state', 'university', 'Activity', 'activities', 'Sub-activity', 'Use Purpose',
+STATE_OUT_COLS = ['object_id', 'state', 'university', 'Activity', 'Sub-activity', 'Use Purpose',
                   'Lessee or Owner or Manager', 'Lessee Name 2', 'Owner Address or Location', 'Lessor',
                   'Transaction Type', 'Lease Status', 'Lease Start Date', 'Lease End Date', 'Lease Extension Date',
                   'Commodity', 'Source', 'LandClass', 'Rights-Type']
@@ -70,15 +70,41 @@ class StateActivityDataSource:
 
         return gdf
 
+    def cache_write(self, obj, name):
+        here = Path(f'./cache/{hash(self.location)}')
+        if not here.exists():
+            here.mkdir(exist_ok=True, parents=True)
+
+        cached_file = here / f'{name}.json'
+
+        with cached_file.open('w') as fp:
+            log.info(f'writing to cache: {str(cached_file)}')
+            json.dump(obj, fp)
+
+    def cache_read(self, name):
+        here = Path(f'./cache/{hash(self.location)}')
+        if not here.exists():
+            here.mkdir(exist_ok=True, parents=True)
+
+        cached_file = here / f'{name}.json'
+        if not cached_file.exists():
+            return None
+
+        with cached_file.open('r') as fp:
+            log.info(f'reading from cache: {str(cached_file)}')
+            return json.load(fp)
+
     def load_remote(self):
-        ids_resp = self.fetch_all_parcel_ids()
+        ids_resp = self.cache_read('ids_resp') or self.fetch_all_parcel_ids()
+        self.cache_write(ids_resp, 'ids_resp')
         if ids_resp:
             ids = ids_resp.get('objectIds', [])
             log.info(f'fetching remote activity data for {self.name} from: {self.location}')
-            activity_data = in_parallel(ids,
-                                        self.fetch_remote,
-                                        batched=False,
-                                        scheduler='threads')
+            activity_data = self.cache_read('activity_data') or in_parallel(ids,
+                                                                            self.fetch_remote,
+                                                                            batched=False,
+                                                                            scheduler='threads')
+            self.cache_write(activity_data, 'activity_data')
 
             log.info(f'hydrating geodataframes activity data for {self.name} from: {self.location}')
             activity_data = in_parallel(activity_data,
@@ -164,8 +190,7 @@ class StateActivityDataSource:
         # Respose, call on the server; data is the info if response returns something.
         try:
 
-            session = requests_cache.CachedSession('grist_http_cache')
-            response = session.get(url=url_base, params=url_query)
+            response = requests.get(url=url_base, params=url_query)
             if response_type == 'json':
                 data = response.json()
             else:
@@ -230,8 +255,7 @@ class StateActivityDataSource:
 
         # If there is a failure while calling the server for a row, we wait 5 seconds, then check again. Repeat 5 times.
         try:
-            session = requests_cache.CachedSession('grist_http_cache')
-            response = session.get(url=url_base, params=url_query)
+            response = requests.get(url=url_base, params=url_query)
             data = response.json()
             return data
         except Exception as err:
@@ -303,7 +327,7 @@ state_activities = {
     'MN': StateForActivity(name='minnesota', activities=[
         StateActivityDataSource(name='Peat',
                                 location='Minnesota_All/shp_plan_state_peatleases',
-                                keep_cols=['T_LEASETYP', 'T_STARTDAT', 'T_EXPDAT', 'T_PNAMES'],
+                                keep_cols=['T_LEASETYP', 'T_STARTDAT', 'T_EXPDATE', 'T_PNAMES'],
                                 use_name_as_activity=False),
         StateActivityDataSource(name='Recreation',
                                 location='Minnesota_All/shp_bdry_dnr_managed_areas/dnr_stat_plan_areas.shp',
@@ -319,11 +343,11 @@ state_activities = {
                                 use_name_as_activity=True),
         StateActivityDataSource(name='Active Minerals',
                                 location='Minnesota_All/shp_plan_state_minleases/active_minLeases.shp',
-                                keep_cols=['T_LEASETYP', 'T_STARTDAT', 'T_EXPDAT', 'T_PNAMES', 'ML_SU_LAND'],
+                                keep_cols=['T_LEASETYP', 'T_STARTDAT', 'T_EXPDATE', 'T_PNAMES', 'ML_SU_LAND'],
                                 use_name_as_activity=True),
         StateActivityDataSource(name='Historic Mineral Leases',
                                 location='Minnesota_All/shp_plan_state_minleases/historic_minLeases.shp',
-                                keep_cols=['T_LEASETYP', 'T_STARTDAT', 'T_EXPDAT', 'T_PNAMES', 'ML_SU_LAND'],
+                                keep_cols=['T_LEASETYP', 'T_STARTDAT', 'T_EXPDATE', 'T_PNAMES', 'ML_SU_LAND'],
                                 use_name_as_activity=True)
 
     ]),
@@ -411,7 +435,7 @@ state_activities = {
         StateActivityDataSource(name='misc',
                                 location='Texas_All/ME',
                                 keep_cols=['LEASE_STAT', 'PRIMARY_LE',
-                                           'ALL_LESSEE', 'PURPOSE'],
+                                           'ALL_LESSEE', 'Purpose'],
                                 use_name_as_activity=False),
         StateActivityDataSource(name='Hard Minerals',
                                 location='Texas_All/HardMinerals',
@@ -634,6 +658,7 @@ def capture_state_data(activity_state: str,
         if m is None:
             continue
 
+        activity_col_names = [c.lower() for c in m.activity_row.keys().tolist()]
         for grist_match in m.grist_rows.iterrows():
             grist_match = grist_match[1]
 
@@ -647,16 +672,33 @@ def capture_state_data(activity_state: str,
             # TODO where is county?
 
             for col in activity.keep_cols:
-                if col in m.activity_row.keys().tolist():
+                if col in activity_col_names:
                     renamed_col = maybe_rename_column(col, activity_state, column_rename_rules, activity)
                     activity_record[renamed_col] = m.activity_row[col].tolist()[0]
+                else:
+                    log.error(f'missing col in state-data. expected {col}'
+                              f'for state: {activity_state} activity: {activity.name} '
+                              f'which had cols: {m.activity_row.keys()}')
 
             activity_records.append(activity_record)
 
     return activity_records
 
 
-def update_grist_rows(grist_data_0, activity, matches):
+def get_activity_column(activity, state, column_rename_rules):
+    # which col in the rewrite rules is the one that becomes activity
+    activity_rewrite_rules = column_rename_rules.get(state.lower()).get(activity.name.lower())
+    if not activity_rewrite_rules:
+        activity_rewrite_rules = column_rename_rules.get(state.lower()).get(activity.name)
+        if not activity_rewrite_rules:
+            return
+
+    for original_col, output_column, in activity_rewrite_rules.items():
+        if output_column.lower() == 'activity':
+            return original_col
+
+
+def update_grist_rows(grist_data_0, activity, state, matches, column_rename_rules):
     rename_rules = {'Coal': 'coal',
                     'OilAndGas': 'oilgas',
                     'OtherMin': 'othermin',
@@ -688,10 +730,20 @@ def update_grist_rows(grist_data_0, activity, matches):
                     if isinstance(incumbent_activity_val, list) and len(incumbent_activity_val) > 0:
                         obj_id_to_activities[update_row].update(incumbent_activity_val)
 
-                obj_id_to_activities[update_row].add(activity.name)  # TODO: guard with if use activity name
+                if activity.use_name_as_activity:
+                    obj_id_to_activities[update_row].add(activity.name)
+                else:
+                    activity_col = get_activity_column(activity, state, column_rename_rules)
+                    if activity_col and activity_col in m.activity_row.keys():
+                        activity_name = m.activity_row[activity_col].tolist()
+                        if activity_name and isinstance(activity_name, str):
+                            activity_name = activity_name[0]
+                            obj_id_to_activities[update_row].add(activity_name)
+                    else:
+                        obj_id_to_activities[update_row].add(activity.name)
 
-                for update_row, activities in obj_id_to_activities.items():
-                    grist_data_0.at[update_row, 'activity'] = list(activities)
+    for update_row, activities in obj_id_to_activities.items():
+        grist_data_0.at[update_row, 'activity'] = list(activities)
 
     return grist_data_0
 
@@ -728,7 +780,8 @@ def match_all_activities(states_data=None, grist_data=None, column_rename_rules=
         for activity in activity_info.activities:
             matches = single_activity_match(activity_state, grist_data_0, activity)
             if matches is not None:
-                grist_data.append(update_grist_rows(grist_data_0, activity, matches))
+                updated_grist = update_grist_rows(grist_data_0, activity, activity_state, matches, column_rename_rules)
+                grist_data.append(updated_grist)
                 state_data += capture_state_data(activity_state, activity, matches, column_rename_rules)
             else:
                 grist_data.append(grist_data_0.apply(simple_activity_rename, axis=1))
@@ -751,30 +804,50 @@ def activity_to_str(row):
     return row
 
 
+def find_missing_cols(rewrite_rules, current_cols, out_dir):
+    missing_cols = set(STATE_OUT_COLS) - set(current_cols)
+
+    locs = []
+    for state, acts in rewrite_rules.items():
+        state_dict = defaultdict(list)
+        for act, cols in acts.items():
+            for in_col, out_col in cols.items():
+                if out_col in missing_cols:
+                    state_dict[out_col].append([state, act, in_col])
+        if len(state_dict.keys()) > 0:
+            locs.append(state_dict)
+
+    with (out_dir / 'missing_col_info.json').open('w') as fh:
+        json.dump(locs, fh)
+
+
 def main(stl_path: Path, column_rename_rules_path: Path, out_dir: Path):
-    log.info(f'reading {stl_path}')
-    gdf = geopandas.read_file(str(stl_path))
-    column_rename_rules = read_json(column_rename_rules_path)
-
-    # debug_acts = {}
-    # debug_acts['AZ'] = state_activities['AZ']
-    # debug_acts['NM'] = state_activities['NM']
-    #
-    # updated_grist_stl, state_data = match_all_activities(debug_acts, gdf, column_rename_rules)
-    updated_grist_stl, state_data = match_all_activities(state_activities, gdf, column_rename_rules)
-
-    state_data = state_data[[col for col in STATE_OUT_COLS if col in state_data.columns]]
-    updated_grist_stl.drop('joinidx_1', inplace=True, axis=1)
-    updated_grist_stl = updated_grist_stl.apply(activity_to_str, axis=1)
-
-    updated_grist_stl.drop_duplicates()
-    state_data.drop_duplicates()
-
     if not out_dir.exists():
         out_dir.mkdir(parents=True, exist_ok=True)
 
-    updated_grist_stl.to_csv(str(out_dir / 'updated_grist_stl.csv'), index=False)
+    log.info(f'reading {stl_path}')
+    column_rename_rules = read_json(column_rename_rules_path)
+
+    gdf = geopandas.read_file(str(stl_path))
+
+    # debug_acts = {}
+    # debug_acts['AZ'] = state_activities['AZ']
+    # debug_acts['TX'] = state_activities['TX']
+    # updated_grist_stl, state_data = match_all_activities(debug_acts, gdf, column_rename_rules)
+
+    updated_grist_stl, state_data = match_all_activities(state_activities, gdf, column_rename_rules)
+
+    state_data = state_data.drop_duplicates([c for c in state_data.columns if 'object_id' not in c], ignore_index=True)
+    state_data.to_csv(str(out_dir / 'state_data_all_cols.csv'), index=False)
+    state_data = state_data[[col for col in STATE_OUT_COLS if col in state_data.columns]]
     state_data.to_csv(str(out_dir / 'state_data.csv'), index=False)
+    find_missing_cols(column_rename_rules, state_data.columns.tolist(), out_dir)
+
+    updated_grist_stl.drop('joinidx_1', inplace=True, axis=1)
+    updated_grist_stl = updated_grist_stl.apply(activity_to_str, axis=1)
+    grist_data_cols = [c for c in updated_grist_stl.columns if 'object_id' not in c]
+    updated_grist_stl = updated_grist_stl.drop_duplicates(grist_data_cols, ignore_index=True)
+    updated_grist_stl.to_csv(str(out_dir / 'updated_grist_stl.csv'), index=False)
 
 
 if __name__ == '__main__':

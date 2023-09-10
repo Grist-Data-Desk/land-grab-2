@@ -121,7 +121,7 @@
         "misc": {
             "LEASE_STAT": "Lease Status",
             "ACTIVITY": "Activity",
-            "PURPOSE": "Sub-activity",
+            "Purpose": "Sub-activity",
             "PRIMARY_LE": "Lessee or Owner or Manager"
         },
         "Hard Minerals": {
