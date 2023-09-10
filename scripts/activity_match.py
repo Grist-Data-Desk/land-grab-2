@@ -30,6 +30,54 @@ DONT_USE_COLS = ['TypeGroup', 'Type', 'Status', 'DteGranted', 'DteExpires', 'Nam
 
 
 # TODO: check that PYTHONHASHSEED is set and disallow run otherwise
+class GristCache:
+    def __init__(self, location):
+        self.location = location
+
+    def cache_write(self, obj, name, file_ext='.json'):
+        """
+        this function requires the ENV var: PYTHONHASHSEED to be set to ensure stable hashing between runs
+        """
+        here = Path(f'./cache/{hash(self.location)}')
+        if not here.exists():
+            here.mkdir(exist_ok=True, parents=True)
+
+        cached_file = here / f'{name}{file_ext}'
+
+        if 'json' in file_ext:
+            with cached_file.open('w') as fp:
+                log.info(f'writing to cache: {str(cached_file)}')
+                json.dump(obj, fp)
+
+        try:
+            if 'feather' in file_ext:
+                obj.to_feather(str(cached_file))
+        except Exception as err:
+            log.error(f'CacheWriteError during feather WRITE path: {str(cached_file)} err: {err}')
+
+    def cache_read(self, name, file_ext='.json'):
+        """
+        this function requires the ENV var: PYTHONHASHSEED to be set to ensure stable hashing between runs
+        """
+        here = Path(f'./cache/{hash(self.location)}')
+        if not here.exists():
+            here.mkdir(exist_ok=True, parents=True)
+
+        cached_file = here / f'{name}{file_ext}'
+        if not cached_file.exists():
+            log.info(f'cache-miss for: {str(cached_file)}')
+            return None
+
+        if 'json' in file_ext:
+            with cached_file.open('r') as fp:
+                log.info(f'reading from cache: {str(cached_file)}')
+                return json.load(fp)
+        try:
+            if 'feather' in file_ext:
+                return geopandas.read_feather(str(cached_file))
+        except Exception as err:
+            log.error(f'CacheReadError during feather READ path: {str(cached_file)} err: {err}')
+
 
 class StateActivityDataLocation(enum.Enum):
     LOCAL = 'local'
@@ -72,50 +120,27 @@ class StateActivityDataSource:
 
         return gdf
 
-    def cache_write(self, obj, name):
-        """
-        this function requires the ENV var: PYTHONHASHSEED to be set to ensure stable hashing between runs
-        """
-        here = Path(f'./cache/{hash(self.location)}')
-        if not here.exists():
-            here.mkdir(exist_ok=True, parents=True)
-
-        cached_file = here / f'{name}.json'
-
-        with cached_file.open('w') as fp:
-            log.info(f'writing to cache: {str(cached_file)}')
-            json.dump(obj, fp)
-
-    def cache_read(self, name):
-        """
-        this function requires the ENV var: PYTHONHASHSEED to be set to ensure stable hashing between runs
-        """
-        here = Path(f'./cache/{hash(self.location)}')
-        if not here.exists():
-            here.mkdir(exist_ok=True, parents=True)
-
-        cached_file = here / f'{name}.json'
-        if not cached_file.exists():
-            log.info(f'cache-miss for: {str(cached_file)}')
-            return None
-
-        with cached_file.open('r') as fp:
-            log.info(f'reading from cache: {str(cached_file)}')
-            return json.load(fp)
-
     def load_remote(self):
-        # TODO if cached geodf in feather fmt, hydrate and return
+        cache = GristCache(self.location)
+        activity_data_geopandas = cache.cache_read('activity_data_geopandas', '.feather')
+        if activity_data_geopandas is not None:
+            return activity_data_geopandas
 
-        ids_resp = self.cache_read('ids_resp') or self.fetch_all_parcel_ids()
-        self.cache_write(ids_resp, 'ids_resp')
+        cached_ids_resp = cache.cache_read('ids_resp')
+        ids_resp = cached_ids_resp or self.fetch_all_parcel_ids()
+        if not cached_ids_resp:
+            cache.cache_write(ids_resp, 'ids_resp')
+
         if ids_resp:
             ids = ids_resp.get('objectIds', [])
             log.info(f'fetching remote activity data for {self.name} from: {self.location}')
-            activity_data = self.cache_read('activity_data') or in_parallel(ids,
-                                                                            self.fetch_remote,
-                                                                            batched=False,
-                                                                            scheduler='threads')
-            self.cache_write(activity_data, 'activity_data')
+            cached_activity_data = cache.cache_read('activity_data')
+            activity_data = cached_activity_data or in_parallel(ids,
+                                                                self.fetch_remote,
+                                                                batched=False,
+                                                                scheduler='threads')
+            if not cached_activity_data:
+                cache.cache_write(activity_data, 'activity_data')
 
             log.info(f'hydrating geodataframes activity data for {self.name} from: {self.location}')
             activity_data = in_parallel(activity_data,
@@ -128,7 +153,8 @@ class StateActivityDataSource:
                     log.info(f'concat-ing geodataframes activity data for {self.name} from: {self.location}')
                     activity_data = geopandas.GeoDataFrame(pd.concat(activity_data, ignore_index=True),
                                                            crs=activity_data[0].crs)
-                    # TODO: cache in feather fmt maybe
+                    cache.cache_write(activity_data, 'activity_data_geopandas', '.feather')
+
                     return activity_data
                 except Exception as err:
                     log.error(f'Failed with {err} initing geodf for {self.name} from: {self.location}')
@@ -147,7 +173,7 @@ class StateActivityDataSource:
             activity_data = self.load_remote()
             return activity_data
 
-    @RateLimiter(max_calls=6000, period=60)
+    @RateLimiter(max_calls=5000, period=60)
     def fetch_remote(self, parcel_id: Optional[str] = None, retries=10, response_type='text'):
         """
         response_type: str - either `json` or `text`
@@ -423,11 +449,11 @@ state_activities = {
                                 use_name_as_activity=False),
         StateActivityDataSource(name='Minerals',
                                 location='https://gis.clo.ok.gov/arcgis/rest/services/Public/OKLeaseData_ExternalProd/MapServer/1/query',
-                                keep_cols=['Begin Date', 'End Date', 'OwnerName', 'Address2'],
+                                keep_cols=['BeginDate', 'EndDate', 'OwnerName', 'Address2'],
                                 use_name_as_activity=True),
         StateActivityDataSource(name='Agriculture',
                                 location='https://gis.clo.ok.gov/arcgis/rest/services/Public/OKLeaseData_ExternalProd/MapServer/0/query',
-                                keep_cols=['Lease Type', 'Begin Date', 'End Date', 'OwnerName',
+                                keep_cols=['LeaseType', 'BeginDate', 'EndDate', 'OwnerName',
                                            'Address2'],
                                 use_name_as_activity=False),
 
@@ -578,15 +604,15 @@ state_activities = {
 }
 
 
-def in_parallel(work_items, callable, scheduler='processes', postprocess=None, batched=True):
+def in_parallel(work_items, a_callable, scheduler='processes', postprocess=None, batched=True):
     if postprocess:
-        callable = compose(postprocess, callable)
+        a_callable = compose(postprocess, a_callable)
 
     all_results = []
     if not batched:
         with dask.config.set(scheduler=scheduler):
             with ProgressBar():
-                all_results = dask.bag.from_sequence(work_items).map(callable).compute()
+                all_results = dask.bag.from_sequence(work_items).map(a_callable).compute()
                 return all_results
 
     batch_size = 100
@@ -595,7 +621,7 @@ def in_parallel(work_items, callable, scheduler='processes', postprocess=None, b
     for batch in tqdm(batches):
         with dask.config.set(scheduler=scheduler):
             with ProgressBar():
-                results = dask.bag.from_sequence(batch, partition_size=batch_size // 4).map(callable).compute()
+                results = dask.bag.from_sequence(batch, partition_size=batch_size // 4).map(a_callable).compute()
                 all_results += results
     return all_results
 
@@ -666,6 +692,7 @@ def capture_state_data(activity_state: str,
                        matches: List[GristOverlapMatch],
                        column_rename_rules: Dict[str, Any]):
     missing_cols = set([])
+    expected_cols = set([])
     activity_records = []
     for m in matches:
         if m is None:
@@ -690,13 +717,14 @@ def capture_state_data(activity_state: str,
                     activity_record[renamed_col] = m.activity_row[col].tolist()[0]
                 else:
                     missing_cols.add(col)
+                    expected_cols.update(list(m.activity_row.keys()))
 
             activity_records.append(activity_record)
 
     if missing_cols:
         log.error(f'missing col in state-data. expected {missing_cols}'
                   f' for state: {activity_state} activity: {activity.name} '
-                  f'which had cols: {m.activity_row.keys()}')
+                  f'which had cols: {expected_cols}')
 
     return activity_records
 
@@ -820,7 +848,7 @@ def activity_to_str(row):
     return row
 
 
-def find_missing_cols(rewrite_rules, current_cols, out_dir):
+def find_missing_cols(rewrite_rules, current_cols, the_out_dir):
     missing_cols = set(STATE_OUT_COLS) - set(current_cols)
 
     locs = []
@@ -833,38 +861,42 @@ def find_missing_cols(rewrite_rules, current_cols, out_dir):
         if len(state_dict.keys()) > 0:
             locs.append(state_dict)
 
-    with (out_dir / 'missing_col_info.json').open('w') as fh:
+    with (the_out_dir / 'missing_col_info.json').open('w') as fh:
         json.dump(locs, fh)
 
 
-def main(stl_path: Path, column_rename_rules_path: Path, out_dir: Path):
-    if not out_dir.exists():
-        out_dir.mkdir(parents=True, exist_ok=True)
+def main(stl_path: Path, the_column_rename_rules_path: Path, the_out_dir: Path):
+    if not the_out_dir.exists():
+        the_out_dir.mkdir(parents=True, exist_ok=True)
 
     log.info(f'reading {stl_path}')
-    column_rename_rules = read_json(column_rename_rules_path)
+    column_rename_rules = read_json(the_column_rename_rules_path)
 
-    gdf = geopandas.read_file(str(stl_path))
+    cached_gdf = GristCache(f'{stl_path}').cache_read('stl_file', '.feather')
+    gdf = cached_gdf or geopandas.read_file(str(stl_path))
+    if not cached_gdf:
+        GristCache(f'{stl_path}').cache_write(gdf, 'stl_file', '.feather')
 
-    # debug_acts = {}
-    # debug_acts['AZ'] = state_activities['AZ']
-    # debug_acts['TX'] = state_activities['TX']
-    # debug_acts['MN'] = state_activities['MN']
+    # debug_acts = {
+    #     'AZ': state_activities['AZ'],
+    #     'TX': state_activities['TX'],
+    #     'MN': state_activities['MN'],
+    # }
     # updated_grist_stl, state_data = match_all_activities(debug_acts, gdf, column_rename_rules)
 
     updated_grist_stl, state_data = match_all_activities(state_activities, gdf, column_rename_rules)
 
     state_data = state_data.drop_duplicates([c for c in state_data.columns if 'object_id' not in c], ignore_index=True)
-    state_data.to_csv(str(out_dir / 'state_data_all_cols.csv'), index=False)
+    state_data.to_csv(str(the_out_dir / 'state_data_all_cols.csv'), index=False)
     state_data = state_data[[col for col in STATE_OUT_COLS if col in state_data.columns]]
-    state_data.to_csv(str(out_dir / 'state_data.csv'), index=False)
-    find_missing_cols(column_rename_rules, state_data.columns.tolist(), out_dir)
+    state_data.to_csv(str(the_out_dir / 'state_data.csv'), index=False)
+    find_missing_cols(column_rename_rules, state_data.columns.tolist(), the_out_dir)
 
     updated_grist_stl.drop('joinidx_1', inplace=True, axis=1)
     updated_grist_stl = updated_grist_stl.apply(activity_to_str, axis=1)
     grist_data_cols = [c for c in updated_grist_stl.columns if 'object_id' not in c]
     updated_grist_stl = updated_grist_stl.drop_duplicates(grist_data_cols, ignore_index=True)
-    updated_grist_stl.to_csv(str(out_dir / 'updated_grist_stl.csv'), index=False)
+    updated_grist_stl.to_csv(str(the_out_dir / 'updated_grist_stl.csv'), index=False)
 
 
 if __name__ == '__main__':
