@@ -104,17 +104,17 @@
             "Grantee": "Lessee or Owner or Manager"
         },
         "Agriculture": {
-            "Lease Type": "Activity",
+            "LeaseType": "Activity",
             "OwnerName": "Lessee or Owner or Manager",
             "Address2": "Owner Address or Location",
-            "Begin Date": "Lease Start Date",
-            "End Date": "Lease End Date"
+            "BeginDate": "Lease Start Date",
+            "EndDate": "Lease End Date"
         },
         "Minerals": {
             "OwnerName": "Lessee or Owner or Manager",
             "Address2": "Owner Address or Location",
-            "Begin Date": "Lease Start Date",
-            "End Date": "Lease End Date"
+            "BeginDate": "Lease Start Date",
+            "EndDate": "Lease End Date"
         }
     },
     "tx": {
