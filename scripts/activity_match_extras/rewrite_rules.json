@@ -10,7 +10,7 @@
             "Easement Right": "Rights-Type",
             "TypeGroup": "Transaction Type",
             "Status": "Lease Status",
-            "Easement Purpose": "Activity",
+            "EasementPurpose": "Activity",
             "Parties": "Lessee or Owner or Manager",
             "DteGranted": "Lease Start Date",
             "DteExpires": "Lease End Date"
@@ -45,8 +45,8 @@
         "Peat": {
             "T_LEASETYP": "Activity",
             "T_PNAMES": "Lessee or Owner or Manager",
-            "T_STARTDAT": "Lease Start Date",
-            "T_EXPDAT": "Lease End Date"
+            "T_STARTDATE": "Lease Start Date",
+            "T_EXPDATE": "Lease End Date"
         },
         "Recreation": {
             "AREA_NAME": "Sub-activity",
@@ -61,7 +61,7 @@
             "T_LEASETYP": "Commodity",
             "T_PNAMES": "Lessee or Owner or Manager",
             "T_STARTDAT": "Lease Start Date",
-            "T_EXPDAT": "Lease End Date",
+            "T_EXPDATE": "Lease End Date",
             "ML_SU_LAND": "LandClass"
         },
         "Historic Mineral Leases": {
