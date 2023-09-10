@@ -658,7 +658,7 @@ def capture_state_data(activity_state: str,
         if m is None:
             continue
 
-        activity_col_names = [c.lower() for c in m.activity_row.keys().tolist()]
+        activity_col_names = [c for c in m.activity_row.keys().tolist()]
         for grist_match in m.grist_rows.iterrows():
             grist_match = grist_match[1]
 
@@ -677,7 +677,7 @@ def capture_state_data(activity_state: str,
                     activity_record[renamed_col] = m.activity_row[col].tolist()[0]
                 else:
                     log.error(f'missing col in state-data. expected {col}'
-                              f'for state: {activity_state} activity: {activity.name} '
+                              f' for state: {activity_state} activity: {activity.name} '
                               f'which had cols: {m.activity_row.keys()}')
 
             activity_records.append(activity_record)
