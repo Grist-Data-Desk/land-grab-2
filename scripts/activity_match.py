@@ -1,9 +1,11 @@
 import enum
+import itertools
 import json
 import logging
 import time
 from collections import defaultdict
 from dataclasses import dataclass, field
+from functools import partial
 from pathlib import Path
 from typing import List, Optional, Union, Any, Dict
 
@@ -27,6 +29,69 @@ STATE_OUT_COLS = ['object_id', 'state', 'university', 'Activity', 'Sub-activity'
                   'Transaction Type', 'Lease Status', 'Lease Start Date', 'Lease End Date', 'Lease Extension Date',
                   'Commodity', 'Source', 'LandClass', 'Rights-Type']
 DONT_USE_COLS = ['TypeGroup', 'Type', 'Status', 'DteGranted', 'DteExpires', 'Name', 'ALL_LESSEE']
+
+GRIST_DATA_UPDATE = defaultdict(set)
+COLUMN_RENAME_RULES = {}
+AZ_KEY = {
+    '0': 'Unleased Parcels',
+    '1': 'Agriculture',
+    '3': 'Commercial Lease',
+    '5': 'Grazing Lease',
+    '8': 'Prospecting Permit',
+    '66': 'US Govt Exclusive Use',
+    '89': 'Institutional Use',
+    '0.0': 'Unleased Parcels',
+    '1.0': 'Agriculture',
+    '3.0': 'Commercial Lease',
+    '5.0': 'Grazing Lease',
+    '8.0': 'Prospecting Permit',
+    '66.0': 'US Govt Exclusive Use',
+    '89.0': 'Institutional Use',
+}
+
+
+def read_json(p: Path):
+    with p.open('r') as fh:
+        return json.load(fh)
+
+
+def batch_iterable(work_items, batch_size):
+    return [work_items[i:i + batch_size] for i in range(0, len(work_items), batch_size)]
+
+
+def in_parallel(work_items, a_callable, scheduler='processes', postprocess=None, batched=True):
+    if postprocess:
+        a_callable = compose(postprocess, a_callable)
+
+    if scheduler == 'synchronous':
+        log.info('Using Dask synchronous scheduler')
+
+    all_results = []
+    if not batched:
+        with dask.config.set(scheduler=scheduler):
+            with ProgressBar():
+                all_results = dask.bag.from_sequence(work_items).map(a_callable).compute()
+                return all_results
+
+    batch_size = 100
+    batches = batch_iterable(work_items, batch_size)
+
+    for batch in tqdm(batches):
+        with dask.config.set(scheduler=scheduler):
+            with ProgressBar():
+                results = dask.bag.from_sequence(batch, partition_size=batch_size // 4).map(a_callable).compute()
+                all_results += results
+    return all_results
+
+
+def safe_geopandas_load(p):
+    try:
+        time.sleep(0.25)
+        g = geopandas.read_file(p)
+        if g is not None:
+            return g
+    except Exception as err:
+        log.error(f'THIS IS WHERE THE ERROR IS {err}')
 
 
 # TODO: check that PYTHONHASHSEED is set and disallow run otherwise
@@ -84,15 +149,6 @@ class StateActivityDataLocation(enum.Enum):
     REMOTE = 'remote'
 
 
-def safe_geopandas_load(p):
-    try:
-        g = geopandas.read_file(p)
-        if g is not None:
-            return g
-    except Exception as err:
-        log.error(f'THIS IS WHERE THE ERROR IS {err}')
-
-
 @dataclass
 class StateActivityDataSource:
     name: str
@@ -139,15 +195,15 @@ class StateActivityDataSource:
             cached_activity_data = None
             if self.use_cache:
                 cached_activity_data = cache.cache_read('activity_data')
-            activity_data = cached_activity_data or in_parallel(ids,
-                                                                self.fetch_remote,
-                                                                batched=False,
-                                                                scheduler=self.scheduler or 'threads')
+            activity_data_raw = cached_activity_data or in_parallel(ids,
+                                                                    self.fetch_remote,
+                                                                    batched=False,
+                                                                    scheduler=self.scheduler or 'threads')
             if not cached_activity_data:
-                cache.cache_write(activity_data, 'activity_data')
+                cache.cache_write(activity_data_raw, 'activity_data_raw')
 
             log.info(f'hydrating geodataframes activity data for {self.name} from: {self.location}')
-            activity_data = in_parallel(activity_data,
+            activity_data = in_parallel(activity_data_raw,
                                         safe_geopandas_load,
                                         batched=False,
                                         scheduler='threads')
@@ -155,8 +211,13 @@ class StateActivityDataSource:
             if activity_data:
                 try:
                     log.info(f'concat-ing geodataframes activity data for {self.name} from: {self.location}')
-                    activity_data = geopandas.GeoDataFrame(pd.concat(activity_data, ignore_index=True),
-                                                           crs=activity_data[0].crs)
+                    gdfs = pd.concat(activity_data, ignore_index=True)
+
+                    crs = activity_data[0].crs
+                    # if 'spatialReference' in activity_data_raw and 'wkid' in activity_data_raw['spatialReference']:
+                    #     crs = activity_data_raw['spatialReference']['wkid']
+
+                    activity_data = geopandas.GeoDataFrame(gdfs, crs=crs).to_crs(crs)
                     cache.cache_write(activity_data, 'activity_data_geopandas', '.feather')
 
                     return activity_data
@@ -317,34 +378,35 @@ class StateForActivity:
     use_cache: bool = True
 
 
-state_activities = {
+STATE_ACTIVITIES = {
     'AZ': StateForActivity(name='arizona', activities=[
         StateActivityDataSource(name='misc',
-                                location='http://gis.azland.gov/arcgis/rest/services/StateTrust/SurfaceParcels/MapServer/0/query',
+                                location='/Users/marcellebonterre/Downloads/shapefiles_state/Arizona_All/Miscellaneous.shp',
                                 keep_cols=['leased', 'ke', 'effdate', 'expdate', 'full_name'],
                                 use_name_as_activity=False),
         StateActivityDataSource(name='Minerals',
-                                location='http://gis.azland.gov/arcgis/rest/services/StateTrust/MineralParcels/MapServer/0/query',
+                                location='/Users/marcellebonterre/Downloads/shapefiles_state/Arizona_All/Minerals.shp',
                                 keep_cols=['leased', 'ke', 'effdate', 'expdate', 'full_name'],
                                 use_name_as_activity=False),
         StateActivityDataSource(name='Oil and gas',
-                                location='http://gis.azland.gov/arcgis/rest/services/StateTrust/OilGasParcels/MapServer/0/query',
+                                location='/Users/marcellebonterre/Downloads/shapefiles_state/Arizona_All/OilGas.shp',
                                 keep_cols=['type', 'leased', 'effdate',
                                            'expdate',
                                            'full_name'],
                                 use_name_as_activity=False),
         StateActivityDataSource(name='Agriculture',
+                                # location='/Users/marcellebonterre/Downloads/shapefiles_state/Arizona_All/Grazing.shp',
                                 location='http://gis.azland.gov/arcgis/rest/services/StateTrust/GrazingAllotments/MapServer/0/query',
                                 keep_cols=['name'],
                                 use_name_as_activity=True),
         StateActivityDataSource(name='Solar',
-                                location='http://gis.azland.gov/arcgis/rest/services/Renewable/SolarProjects/MapServer/0/query',
+                                location='/Users/marcellebonterre/Downloads/shapefiles_state/Arizona_All/Solar.shp',
                                 keep_cols=['technology', 'projectnam', 'status'],
                                 use_name_as_activity=True),
     ]),
     'CO': StateForActivity(name='colorado', activities=[
         StateActivityDataSource(name='misc',
-                                location='https://services5.arcgis.com/rqsYvPKZmvSrSWbw/ArcGIS/rest/services/Leases_ALL_USE/FeatureServer/query',
+                                location='/Users/marcellebonterre/Downloads/shapefiles_state/Colorado_All/Miscellaneous.shp',
                                 keep_cols=['Transaction Type', 'Lease Type', 'Lease Subtype', 'Lessee Name',
                                            'Lease State Date',
                                            'Lease End Date', 'Lease Status'],
@@ -353,17 +415,17 @@ state_activities = {
     ]),
     'ID': StateForActivity(name='idaho', activities=[
         StateActivityDataSource(name='misc',
-                                location='http://gis1.idl.idaho.gov/arcgis/rest/services/Portal/Landfolio_Data_Layers/MapServer/4/query',
+                                location='/Users/marcellebonterre/Downloads/shapefiles_state/Idaho_All/Miscellaneous.shp',
                                 keep_cols=['TypeGroup', 'Type', 'Status', 'DteGranted', 'DteExpires', 'Name',
                                            'Commodities'],
                                 use_name_as_activity=False),
         StateActivityDataSource(name='roads',
-                                location='http://gis1.idl.idaho.gov/arcgis/rest/services/Portal/Landfolio_Data_Layers/MapServer/6/query',
+                                location='/Users/marcellebonterre/Downloads/shapefiles_state/Idaho_All/Roads.shp',
                                 keep_cols=['TypeGroup', 'Status', 'DteGranted', 'DteExpires', 'Parties',
                                            'EasementRight', 'EasementPurpose'],
                                 use_name_as_activity=False),
         StateActivityDataSource(name='Water',
-                                location='http://gis1.idl.idaho.gov/arcgis/rest/services/Portal/Landfolio_Data_Layers/MapServer/5/query',
+                                location='/Users/marcellebonterre/Downloads/shapefiles_state/Idaho_All/Water.shp',
                                 keep_cols=['TypeGroup', 'Status', 'WaterUse', 'Source'],
                                 use_name_as_activity=True),
 
@@ -382,7 +444,7 @@ state_activities = {
                                 keep_cols=['UNIT_NAME', 'UNIT_TYPE', 'ADMINISTRA'],
                                 use_name_as_activity=True),
         StateActivityDataSource(name='Aggregate Minerals',
-                                location='Minnesota_All/shp_geos_aggregate_mapping',
+                                location='Minnesota_All/shp_geos_aggregate_mapping/armp_aggmines.shp',
                                 keep_cols=['Type', 'Status_1', 'Status_2'],
                                 use_name_as_activity=True),
         StateActivityDataSource(name='Active Minerals',
@@ -397,12 +459,12 @@ state_activities = {
     ]),
     'ND': StateForActivity(name='north dakota', activities=[
         StateActivityDataSource(name='Minerals',
-                                location='https://ndgishub.nd.gov/arcgis/rest/services/All_GovtLands_State/MapServer/2/query',
+                                location='/Users/marcellebonterre/Downloads/shapefiles_state/NorthDakota_All/Minerals.shp',
                                 keep_cols=['LEASE_STATUS', 'LEASE_EFFECTIVE', 'LEASE_EXPIRATION', 'LEASE_EXTENDED',
                                            'LESSEE'],
                                 use_name_as_activity=True),
         StateActivityDataSource(name='Recreation',
-                                location='https://ndgishub.nd.gov/arcgis/rest/services/All_GovtLands_State/MapServer/4/query',
+                                location='/Users/marcellebonterre/Downloads/shapefiles_state/NorthDakota_All/Recreation.shp',
                                 keep_cols=['UNIT_NAME'],
                                 use_name_as_activity=True),
 
@@ -449,16 +511,16 @@ state_activities = {
     ]),
     'OK': StateForActivity(name='oklahoma', activities=[
         StateActivityDataSource(name='misc',
-                                location='https://gis.clo.ok.gov/arcgis/rest/services/Public/OKLeaseData_ExternalProd/MapServer/21/query',
+                                location='/Users/marcellebonterre/Downloads/shapefiles_state/Oklahoma_All/Miscellaneous.shp',
                                 keep_cols=['Purpose', 'Grantee',
                                            'EasementType'],
                                 use_name_as_activity=False),
         StateActivityDataSource(name='Minerals',
-                                location='https://gis.clo.ok.gov/arcgis/rest/services/Public/OKLeaseData_ExternalProd/MapServer/1/query',
+                                location='/Users/marcellebonterre/Downloads/shapefiles_state/Oklahoma_All/Minerals.shp',
                                 keep_cols=['BeginDate', 'EndDate', 'OwnerName', 'Address2'],
                                 use_name_as_activity=True),
         StateActivityDataSource(name='Agriculture',
-                                location='https://gis.clo.ok.gov/arcgis/rest/services/Public/OKLeaseData_ExternalProd/MapServer/0/query',
+                                location='/Users/marcellebonterre/Downloads/shapefiles_state/Oklahoma_All/Miscellaneous.shp',
                                 keep_cols=['LeaseType', 'BeginDate', 'EndDate', 'OwnerName',
                                            'Address2'],
                                 use_name_as_activity=False),
@@ -529,69 +591,69 @@ state_activities = {
     ]),
     'WA': StateForActivity(name='washington', activities=[
         StateActivityDataSource(name='Agriculture',
-                                location='https://fortress.wa.gov/agr/gis/wsdagis/rest/services/NRAS/SectionsWithCrops2022/MapServer/0/query',
+                                location='/Users/marcellebonterre/Downloads/shapefiles_state/Washington_All/Agriculture.shp',
                                 keep_cols=['CropType', 'CropGroup'],
                                 use_name_as_activity=False),
         StateActivityDataSource(name='Non-Metallic Minerals',
-                                location='Washington_All',
+                                location='Washington_All/NonMetallic_Minerals.shp',
                                 keep_cols=['MINERAL'],
                                 use_name_as_activity=True),
         StateActivityDataSource(name='Metallic Minerals',
-                                location='Washington_All',
+                                location='Washington_All/Metallic_Minerals.shp',
                                 keep_cols=['COMMODITIE', 'PRODUCTION', 'ORE_MINERA'],
                                 use_name_as_activity=True),
         StateActivityDataSource(name='Mining',
-                                location='Washington_All',
+                                location='Washington_All/Active_Surface_Mine_Permit_Sites.shp',
                                 keep_cols=['APPLICANT_', 'MINE_NAME', 'COMMODITY_'],
                                 use_name_as_activity=True),
         StateActivityDataSource(name='Oil and gas',
-                                location='Washington_All',
+                                location='Washington_All/Oil_and_Gas_Wells.shp',
                                 keep_cols=['COMPANY_NA', 'WELL_STATU'],
                                 use_name_as_activity=True),
         StateActivityDataSource(name='Coal',
-                                location='Washington_All',
+                                location='Washington_All/Coal.shp',
                                 keep_cols=[],
                                 use_name_as_activity=True),
 
     ]),
     'WI': StateForActivity(name='wisconsin', activities=[
         StateActivityDataSource(name='misc',
-                                location='https://dnrmaps.wi.gov/arcgis/rest/services/LF_DML/LF_DNR_PARCEL_DETAIL_WTM_Ext/MapServer/2/query',
+                                location='/Users/marcellebonterre/Downloads/shapefiles_state/Wisconson_All/Miscellaneous.shp',
                                 keep_cols=['PROP_NAME'],
                                 use_name_as_activity=False),
 
     ]),
     'WY': StateForActivity(name='wyoming', activities=[
         StateActivityDataSource(name='Metallic and Nonmetallic Minerals',
-                                location='https://gis2.statelands.wyo.gov/arcgis/rest/services/Services/MapViewerService2/MapServer/14/query',
+                                location='/Users/marcellebonterre/Downloads/shapefiles_state/Wyoming_All/MetallicNonMetallic.shp',
                                 keep_cols=['MetallicNonMetallicLeaseSubType',
                                            'LeaseIssueDate',
                                            'LeaseExpirationDate', 'CompanyName', 'LeaseStatusLabel', 'CompanyZipCode',
                                            'MineralTypeLabel'],
                                 use_name_as_activity=False),
         StateActivityDataSource(name='Oil and gas',
-                                location='https://gis2.statelands.wyo.gov/arcgis/rest/services/Services/MapViewerService2/MapServer/12/query',
+                                location='/Users/marcellebonterre/Downloads/shapefiles_state/Wyoming_All/OilandGas.shp',
                                 keep_cols=['LeaseIssueDate',
                                            'LeaseExpirationDate', 'CompanyName', 'LeaseStatusLabel', 'CompanyZipCode',
                                            'MineralTypeLabel'],
                                 use_name_as_activity=False),
         StateActivityDataSource(name='Easements',
-                                location='https://gis2.statelands.wyo.gov/arcgis/rest/services/Services/MapViewerService2/MapServer/7/query',
+                                location='/Users/marcellebonterre/Downloads/shapefiles_state/Wyoming_All/Easements.shp',
                                 keep_cols=['Leaseholder_LU', 'Issue_Date_LU', 'Expiration_Date_LU', 'Status_LU',
                                            'Sub_Group_LU',
                                            'Use_Type_LU'],
                                 use_name_as_activity=False),
         StateActivityDataSource(name='Grazing',
-                                location='https://gis2.statelands.wyo.gov/arcgis/rest/services/Services/MapViewerService2/MapServer/10/query',
+                                location='/Users/marcellebonterre/Downloads/shapefiles_state/Wyoming_All/Grazing.shp',
                                 keep_cols=['Leaseholder_LU', 'Start_Date_LU', 'Expiration_Date_LU', 'Status_LU'],
                                 use_name_as_activity=True),
         StateActivityDataSource(name='Special',
-                                location='https://gis2.statelands.wyo.gov/arcgis/rest/services/Services/MapViewerService2/MapServer/8/query',
+                                location='/Users/marcellebonterre/Downloads/shapefiles_state/Wyoming_All/SpecialUse.shp',
                                 keep_cols=['Leaseholder_LU', 'Start_Date_LU', 'Expiration_Date_LU', 'Status_LU',
                                            'Type_LU', 'Purpose_LU'],
                                 use_name_as_activity=False),
         StateActivityDataSource(name='Wind',
-                                location='https://gis2.statelands.wyo.gov/arcgis/rest/services/Services/MapViewerService2/MapServer/9/query',
+                                location='/Users/marcellebonterre/Downloads/shapefiles_state/Wyoming_All/Wind.shp',
                                 keep_cols=['Leaseholder_LU', 'Start_Date_LU', 'Expiration_Date_LU', 'Status_LU'],
                                 use_name_as_activity=True)
     ]),
@@ -610,150 +672,49 @@ state_activities = {
 }
 
 
-def in_parallel(work_items, a_callable, scheduler='processes', postprocess=None, batched=True):
-    if postprocess:
-        a_callable = compose(postprocess, a_callable)
-
-    if scheduler == 'synchronous':
-        log.info('Using Dask synchronous scheduler')
-
-    all_results = []
-    if not batched:
-        with dask.config.set(scheduler=scheduler):
-            with ProgressBar():
-                all_results = dask.bag.from_sequence(work_items).map(a_callable).compute()
-                return all_results
-
-    batch_size = 100
-    batches = [work_items[i:i + batch_size] for i in range(0, len(work_items), batch_size)]
-
-    for batch in tqdm(batches):
-        with dask.config.set(scheduler=scheduler):
-            with ProgressBar():
-                results = dask.bag.from_sequence(batch, partition_size=batch_size // 4).map(a_callable).compute()
-                all_results += results
-    return all_results
-
-
-@dataclass
-class GristOverlapMatch:
-    grist_rows: Any
-    activity_row: Any
-
-    @staticmethod
-    def extract_matches(activity_data, grist_data, overlap_report) -> List['GristOverlapMatch']:
-        matches = []
-        for name, group in overlap_report.groupby("joinidx_0")[["joinidx_1"]]:
-            grist_row_idxs = group['joinidx_1'].tolist()
-            grist_rows = grist_data[grist_data['joinidx_1'].isin(grist_row_idxs)]
-            grist_rows.drop('joinidx_1', inplace=True, axis=1)
-
-            intersecting_activity = activity_data[activity_data['joinidx_0'] == name]
-            intersecting_activity.drop('joinidx_0', inplace=True, axis=1)
-
-            matches.append(GristOverlapMatch(grist_rows=grist_rows, activity_row=intersecting_activity))
-
-        return matches
+# def capture_state_data(activity_state: str,
+#                        activity: StateActivityDataSource,
+#                        # matches: List[GristOverlapMatch],
+#                        column_rename_rules: Dict[str, Any]):
+#     missing_cols = set([])
+#     expected_cols = set([])
+#     activity_records = []
+#     for m in matches:
+#         if m is None:
+#             continue
+#
+#         activity_col_names = [c for c in m.activity_row.keys().tolist()]
+#         for grist_match in m.grist_rows.iterrows():
+#             grist_match = grist_match[1]
+#
+#             activity_record = {}
+#             if activity.use_name_as_activity:
+#                 activity_record['Activity'] = activity.name
+#
+#             activity_record['object_id'] = grist_match['object_id']
+#             activity_record['state'] = grist_match['state']
+#             activity_record['university'] = grist_match['university']
+#             # TODO where is county?
+#
+#             for col in activity.keep_cols:
+#                 if col in activity_col_names:
+#                     renamed_col = maybe_rename_column(col, activity_state, column_rename_rules, activity)
+#                     activity_record[renamed_col] = m.activity_row[col].tolist()[0]
+#                 else:
+#                     missing_cols.add(col)
+#                     expected_cols.update(list(m.activity_row.keys()))
+#
+#             activity_records.append(activity_record)
+#
+#     if missing_cols:
+#         log.error(f'missing col in state-data. expected {missing_cols}'
+#                   f' for state: {activity_state} activity: {activity.name} '
+#                   f'which had cols: {expected_cols}')
+#
+#     return activity_records
 
 
-def find_overlaps(activity_data, grist_data):
-    try:
-        activity_data["joinidx_0"] = np.arange(0, activity_data.shape[0]).astype(int)
-        grist_data["joinidx_1"] = np.arange(0, grist_data.shape[0]).astype(int).astype(str)
-
-        activity_data_cmp = activity_data.to_crs(grist_data.crs)
-        overlapping_regions = geopandas.sjoin(activity_data_cmp[['joinidx_0', 'geometry']],
-                                              grist_data[['joinidx_1', 'geometry']],
-                                              how="left",
-                                              op='intersects').dropna()
-
-        if overlapping_regions.shape[0] > 0:
-            return GristOverlapMatch.extract_matches(activity_data, grist_data, overlapping_regions)
-    except Exception as err:
-        activity_data = activity_data.set_crs(grist_data.crs)
-        return find_overlaps(activity_data, grist_data)
-
-
-def single_activity_match(state=None, grist_data=None, activity=None):
-    activity_data = activity.query_data()
-    if activity_data is None or len(activity_data) == 0:
-        log.error(f'NO ACTIVITY DATA FOR {state}')
-        return
-
-    log.info(f'finding overlap matches for state: {state} activity: {activity.name}')
-    matches = find_overlaps(activity_data, grist_data)
-
-    if matches:
-        log.info(f'found {len(matches)} matches for state: {state} for activity: {activity.name}')
-        return matches
-    else:
-        log.info(f'found NO matches for state: {state} for activity: {activity.name}')
-
-
-def maybe_rename_column(col, activity_state=None, column_rename_rules=None, activity=None):
-    state = activity_state.lower()
-    name = activity.name.lower()
-    if state in column_rename_rules and name in column_rename_rules[state] and col in column_rename_rules[state][name]:
-        return column_rename_rules[state][name][col]
-    return col
-
-
-def capture_state_data(activity_state: str,
-                       activity: StateActivityDataSource,
-                       matches: List[GristOverlapMatch],
-                       column_rename_rules: Dict[str, Any]):
-    missing_cols = set([])
-    expected_cols = set([])
-    activity_records = []
-    for m in matches:
-        if m is None:
-            continue
-
-        activity_col_names = [c for c in m.activity_row.keys().tolist()]
-        for grist_match in m.grist_rows.iterrows():
-            grist_match = grist_match[1]
-
-            activity_record = {}
-            if activity.use_name_as_activity:
-                activity_record['Activity'] = activity.name
-
-            activity_record['object_id'] = grist_match['object_id']
-            activity_record['state'] = grist_match['state']
-            activity_record['university'] = grist_match['university']
-            # TODO where is county?
-
-            for col in activity.keep_cols:
-                if col in activity_col_names:
-                    renamed_col = maybe_rename_column(col, activity_state, column_rename_rules, activity)
-                    activity_record[renamed_col] = m.activity_row[col].tolist()[0]
-                else:
-                    missing_cols.add(col)
-                    expected_cols.update(list(m.activity_row.keys()))
-
-            activity_records.append(activity_record)
-
-    if missing_cols:
-        log.error(f'missing col in state-data. expected {missing_cols}'
-                  f' for state: {activity_state} activity: {activity.name} '
-                  f'which had cols: {expected_cols}')
-
-    return activity_records
-
-
-def get_activity_column(activity, state, column_rename_rules):
-    # which col in the rewrite rules is the one that becomes activity
-    activity_rewrite_rules = column_rename_rules.get(state.lower()).get(activity.name.lower())
-    if not activity_rewrite_rules:
-        activity_rewrite_rules = column_rename_rules.get(state.lower()).get(activity.name)
-        if not activity_rewrite_rules:
-            return
-
-    for original_col, output_column, in activity_rewrite_rules.items():
-        if output_column.lower() == 'activity':
-            return original_col
-
-
-def update_grist_rows(grist_data_0, activity, state, matches, column_rename_rules):
+def update_grist_rows(grist_data_0, activity, state, matches):
     rename_rules = {'OilAndGas': 'Oil and gas',
                     'OtherMin': 'Other Minerals',
                     'OtherMinerals': 'Other Minerals',
@@ -784,14 +745,17 @@ def update_grist_rows(grist_data_0, activity, state, matches, column_rename_rule
                     if isinstance(incumbent_activity_val, list) and len(incumbent_activity_val) > 0:
                         obj_id_to_activities[update_row].update(incumbent_activity_val)
 
+                    if isinstance(incumbent_activity_val, int):
+                        obj_id_to_activities[update_row].update(str(incumbent_activity_val))
+
                 if activity.use_name_as_activity:
                     obj_id_to_activities[update_row].add(activity.name)
                 else:
-                    activity_col = get_activity_column(activity, state, column_rename_rules)
+                    activity_col = get_activity_column(activity, state)
                     if activity_col and activity_col in m.activity_row.keys():
                         activity_name = m.activity_row[activity_col].tolist()
-                        if activity_name and isinstance(activity_name, str):
-                            activity_name = activity_name[0]
+                        if activity_name and (isinstance(activity_name, str) or isinstance(activity_name, int)):
+                            activity_name = str(activity_name[0])
                             obj_id_to_activities[update_row].add(activity_name)
                     else:
                         obj_id_to_activities[update_row].add(activity.name)
@@ -799,68 +763,10 @@ def update_grist_rows(grist_data_0, activity, state, matches, column_rename_rule
     for update_row, activities in obj_id_to_activities.items():
         grist_data_0.at[update_row, 'activity'] = list(activities)
 
+    match_rows = set(
+        list(itertools.chain.from_iterable([[r[1]['object_id'] for r in m.grist_rows.iterrows()] for m in matches])))
+    assert len(obj_id_to_activities.keys()) == len(match_rows)
     return grist_data_0
-
-
-def simple_activity_rename(row):
-    rename_rules = {'OilAndGas': 'Oil and gas',
-                    'OtherMin': 'Other Minerals',
-                    'OtherMinerals': 'Other Minerals',
-                    'Oil & Gas': 'Oil and gas'}
-
-    incumbent_activity_val = row['activity']
-    if isinstance(incumbent_activity_val, str) and len(incumbent_activity_val) > 0:
-        for rename_trigger, new_name in rename_rules.items():
-            if rename_trigger in incumbent_activity_val:
-                row['activity'] = new_name
-
-    return row
-
-
-def match_all_activities(states_data=None, grist_data=None, column_rename_rules=None):
-    log.info(f'processing states {states_data.keys()}')
-
-    grist_data_original = grist_data.copy(deep=True)
-    grist_data = []
-    state_data = []
-    for activity_state, activity_info in states_data.items():
-        if not activity_info:
-            log.error(f'NO ACTIVITY CONFIG FOR {activity_state}')
-            continue
-
-        grist_data_0 = grist_data_original[grist_data_original.state.isin([activity_state, activity_state.lower()])]
-
-        for activity in activity_info.activities:
-            if activity_info.scheduler:
-                activity.scheduler = activity_info.scheduler
-
-            if not activity_info.use_cache:
-                activity.use_cache = activity_info.use_cache
-
-            matches = single_activity_match(activity_state, grist_data_0, activity)
-            if matches is not None:
-                updated_grist = update_grist_rows(grist_data_0, activity, activity_state, matches, column_rename_rules)
-                grist_data.append(updated_grist)
-                state_data += capture_state_data(activity_state, activity, matches, column_rename_rules)
-            else:
-                grist_data.append(grist_data_0.apply(simple_activity_rename, axis=1))
-
-    grist_data_gdf = pd.concat(grist_data)
-    state_data_gdf = geopandas.GeoDataFrame(data=state_data)
-
-    return grist_data_gdf, state_data_gdf
-
-
-def read_json(p: Path):
-    with p.open('r') as fh:
-        return json.load(fh)
-
-
-def activity_to_str(row):
-    activity = row['activity']
-    if isinstance(activity, list):
-        row['activity'] = ','.join(row['activity'])
-    return row
 
 
 def find_missing_cols(rewrite_rules, current_cols, the_out_dir):
@@ -880,41 +786,166 @@ def find_missing_cols(rewrite_rules, current_cols, the_out_dir):
         json.dump(locs, fh)
 
 
+def maybe_rename_column(col, activity_state=None, column_rename_rules=None, activity=None):
+    state = activity_state.lower()
+    name = activity.name.lower()
+    if state in column_rename_rules and name in column_rename_rules[state] and col in column_rename_rules[state][name]:
+        return column_rename_rules[state][name][col]
+    return col
+
+
+def simple_activity_rename(row):
+    rename_rules = {'OilAndGas': 'Oil and gas',
+                    'OtherMin': 'Other Minerals',
+                    'OtherMinerals': 'Other Minerals',
+                    'Oil & Gas': 'Oil and gas'}
+
+    incumbent_activity_val = row['activity']
+    if isinstance(incumbent_activity_val, str) and len(incumbent_activity_val) > 0:
+        for rename_trigger, new_name in rename_rules.items():
+            if rename_trigger in incumbent_activity_val:
+                row['activity'] = new_name
+
+    return row
+
+
+def get_activity_column(activity, state):
+    # which col in the rewrite rules is the one that becomes activity
+    activity_rewrite_rules = COLUMN_RENAME_RULES.get(state.lower()).get(activity.name.lower())
+    if not activity_rewrite_rules:
+        activity_rewrite_rules = COLUMN_RENAME_RULES.get(state.lower()).get(activity.name)
+        if not activity_rewrite_rules:
+            return
+
+    for original_col, output_column, in activity_rewrite_rules.items():
+        if output_column.lower() == 'activity':
+            return original_col
+
+
+def get_activity_name(state, activity, activity_row):
+    if activity.use_name_as_activity:
+        return activity.name
+
+    activity_col = get_activity_column(activity, state)
+    if activity_col and activity_col in activity_row.keys():
+        activity_name_row = activity_row[activity_col].tolist()
+        if activity_name_row is not None and isinstance(activity_name_row, list):
+            activity_name = activity_name_row[0]
+            if activity_name and activity_name is not np.nan:
+                activity_name = str(activity_name)
+                if activity_name in AZ_KEY:
+                    return AZ_KEY[activity_name]
+                return activity_name
+
+
+def extract_matches(state, activity, activity_data, grist_data, overlap_report):
+    for name, group in overlap_report.groupby("joinidx_0")[["joinidx_1"]]:
+        activity_row = activity_data[activity_data['joinidx_0'] == name]
+        activity_name = get_activity_name(state, activity, activity_row)
+
+        grist_row_idxs = group['joinidx_1'].tolist()
+        grist_rows = grist_data[grist_data['joinidx_1'].isin(grist_row_idxs)].index.tolist()
+        for g_row_idx in grist_rows:
+            if activity_name:
+                try:
+                    existing_activity = grist_data.at[g_row_idx, 'activity']
+                    if existing_activity is not None:
+                        assert 1
+                except Exception as err:
+                    assert 1
+                GRIST_DATA_UPDATE[g_row_idx].add(activity_name)
+
+
+def find_overlaps(state, activity, activity_data, grist_data):
+    try:
+        activity_data = activity_data.drop_duplicates([c for c in activity_data.columns if 'object' not in c])
+        grist_data_0 = grist_data[grist_data.state.isin([state, state.lower()])]
+        activity_data["joinidx_0"] = np.arange(0, activity_data.shape[0]).astype(int)
+
+        activity_data = activity_data.to_crs(grist_data.crs)
+        overlapping_regions = geopandas.sjoin(activity_data[['joinidx_0', 'geometry']],
+                                              grist_data_0[['joinidx_1', 'geometry']],
+                                              how="left",
+                                              op='intersects').dropna()
+
+        if overlapping_regions.shape[0] > 0:
+            log.info(f'found {overlapping_regions.shape[0]} matches'
+                     f' for state: {state} for activity: {activity.name}')
+
+            return extract_matches(state, activity, activity_data, grist_data, overlapping_regions)
+        else:
+            log.info(f'found NO matches for state: {state} for activity: {activity.name}')
+    except Exception as err:
+        try:
+            activity_data = activity_data.set_crs(grist_data.crs).to_crs(grist_data.crs)
+            overlay = geopandas.overlay(activity_data, grist_data, how='intersection')
+            res = find_overlaps(state, activity, activity_data, grist_data)
+            return res
+        except Exception as err:
+            assert 1
+
+
+def match_all_activities(states_data=None, grist_data=None):
+    log.info(f'processing states {states_data.keys()}')
+    grist_data["joinidx_1"] = np.arange(0, grist_data.shape[0]).astype(int).astype(str)
+
+    for activity_state, activity_info in states_data.items():
+        if not activity_info:
+            log.error(f'NO ACTIVITY CONFIG FOR {activity_state}')
+            continue
+
+        for activity in activity_info.activities:
+            if activity_info.scheduler:
+                activity.scheduler = activity_info.scheduler
+
+            if not activity_info.use_cache:
+                activity.use_cache = activity_info.use_cache
+
+            try:
+                activity_data = activity.query_data()
+                if activity_data is None or len(activity_data) == 0:
+                    log.error(f'NO ACTIVITY DATA FOR {activity_state} {activity.name}')
+
+                find_overlaps(activity_state, activity, activity_data, grist_data)
+            except Exception as err:
+                assert 1
+
+
 def main(stl_path: Path, the_column_rename_rules_path: Path, the_out_dir: Path):
     if not the_out_dir.exists():
         the_out_dir.mkdir(parents=True, exist_ok=True)
 
     log.info(f'reading {stl_path}')
-    column_rename_rules = read_json(the_column_rename_rules_path)
+    global COLUMN_RENAME_RULES
+    COLUMN_RENAME_RULES = read_json(the_column_rename_rules_path)
 
     gdf = GristCache(f'{stl_path}').cache_read('stl_file', '.feather')
     if gdf is None:
         gdf = geopandas.read_file(str(stl_path))
         GristCache(f'{stl_path}').cache_write(gdf, 'stl_file', '.feather')
 
-    state_activities['WY'].scheduler = 'synchronous'
-    state_activities['WY'].use_cache = False
+    # TODO for debugging -- remove eventually
     # debug_acts = {
-    #     'UT': state_activities['UT'],
-    # 'AZ': state_activities['AZ'],
-    # 'TX': state_activities['TX'],
-    # 'MN': state_activities['MN'],
+    #     'AZ': state_activities['AZ'],
+    #     'MN': state_activities['MN'],
+    #     'WA': state_activities['WA'],
+    #     'MN': state_activities['MN'],
     # }
-    # updated_grist_stl, state_data = match_all_activities(debug_acts, gdf, column_rename_rules)
+    # match_all_activities(debug_acts, gdf)
+    # for row_idx, activity_list in GRIST_DATA_UPDATE.items():
+    #     gdf.at[row_idx, 'activity'] = ','.join(activity_list)
 
-    updated_grist_stl, state_data = match_all_activities(state_activities, gdf, column_rename_rules)
+    # global STATE_ACTIVITIES
+    # STATE_ACTIVITIES = {k: v for k, v in STATE_ACTIVITIES.items() if k != 'CO'}
+    match_all_activities(STATE_ACTIVITIES, gdf)
+    for row_idx, activity_list in GRIST_DATA_UPDATE.items():
+        gdf.at[row_idx, 'activity'] = ','.join(activity_list)
 
-    state_data = state_data.drop_duplicates([c for c in state_data.columns if 'object_id' not in c], ignore_index=True)
-    state_data.to_csv(str(the_out_dir / 'state_data_all_cols.csv'), index=False)
-    state_data = state_data[[col for col in STATE_OUT_COLS if col in state_data.columns]]
-    state_data.to_csv(str(the_out_dir / 'state_data.csv'), index=False)
-    find_missing_cols(column_rename_rules, state_data.columns.tolist(), the_out_dir)
+    gdf.drop('joinidx_1', inplace=True, axis=1)
+    log.info(f'final grist_data row_count: {gdf.shape[0]}')
+    gdf.to_csv(str(the_out_dir / 'updated_grist_stl.csv'), index=False)
 
-    updated_grist_stl.drop('joinidx_1', inplace=True, axis=1)
-    updated_grist_stl = updated_grist_stl.apply(activity_to_str, axis=1)
-    grist_data_cols = [c for c in updated_grist_stl.columns if 'object_id' not in c]
-    updated_grist_stl = updated_grist_stl.drop_duplicates(grist_data_cols, ignore_index=True)
-    updated_grist_stl.to_csv(str(the_out_dir / 'updated_grist_stl.csv'), index=False)
+    log.info(f'original grist_data row_count: {gdf.shape[0]}')
 
 
 if __name__ == '__main__':
