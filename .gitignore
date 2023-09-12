@@ -142,3 +142,4 @@ notebooks
 *.sqlite
 foo
 scripts/cache/
+*.zip

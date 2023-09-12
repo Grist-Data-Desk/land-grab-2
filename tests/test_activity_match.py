@@ -1,4 +1,4 @@
-from scripts.check_overlap import check_parcel_overlap
+from tasks.to_be_moved.scripts.check_overlap import check_parcel_overlap
 
 
 def test_activity_parcel_overlaps_itself():
