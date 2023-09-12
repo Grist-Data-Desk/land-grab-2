@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from land_grab.db.gristdb import GristTable, GristDbField, GristDB, GristDbIndexType
+from tasks.init_database.db import GristTable, GristDbField, GristDB, GristDbIndexType
 
 
 # TODO: move to mocked unit-test eventually....

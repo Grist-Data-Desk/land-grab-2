@@ -1,4 +1,4 @@
-from land_grab.university_real_estate.parcel_list_parsers.mo_universityofmissouri_parser import moum_parser
+from tasks.to_be_moved.land_grab.university_real_estate.parcel_list_parsers.mo_universityofmissouri_parser import moum_parser
 
 
 def test_handles_all_weird_cases_of_parcel_number_column():
