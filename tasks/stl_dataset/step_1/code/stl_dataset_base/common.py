@@ -21,7 +21,7 @@ from .constants import (
     OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE, EXISTING_COLUMN_TO_FINAL_COLUMN_MAP,
     TOWNSHIP, SECTION, RANGE, MERIDIAN, COUNTY, ALIQUOT, LOCAL_DATA_SOURCE,
     GIS_ACRES, ACRES_TO_SQUARE_METERS, ALBERS_EQUAL_AREA, ACRES, ACTIVITY,
-    UNIVERSITY, STATE, ALL_STATES, UNIVERSITY_SUMMARY, TRIBE_SUMMARY)
+    UNIVERSITY, STATE, ALL_STATES, UNIVERSITY_SUMMARY, TRIBE_SUMMARY, DATA_DIRECTORY)
 
 app = typer.Typer()
 
@@ -690,6 +690,13 @@ def construct_single_tribe_info(row):
         print(err)
 
 
+def prettyify_list_of_strings(row):
+    for col in row.keys():
+        if isinstance(row[col], list):
+            row[col] = ', '.join(list(set(row[col])))
+    return row
+
+
 def pivot_on_tribe(df):
     results = list(itertools.chain.from_iterable([
         construct_single_tribe_info(row.to_dict())
@@ -697,9 +704,14 @@ def pivot_on_tribe(df):
     ]))
     tribe_summary_tmp = pd.DataFrame(results)
     group_cols = [c for c in list(tribe_summary_tmp.columns) if GIS_ACRES not in c and 'cession_number' not in c]
-    tribe_summary = tribe_summary_tmp.groupby(group_cols)[GIS_ACRES].sum().reset_index()
+    tribe_summary_semi_aggd = tribe_summary_tmp.groupby(group_cols)[GIS_ACRES].sum().reset_index()
     # tribe_summary['cession_number'] = tribe_summary.groupby(group_cols)['cession_number'].agg(lambda g: g)
-    return tribe_summary
+
+    tribe_summary_full_agg = tribe_summary_tmp.groupby(['present_day_tribe']).agg(list).reset_index()
+    tribe_summary_full_agg[GIS_ACRES] = tribe_summary_full_agg[GIS_ACRES].map(sum)
+    tribe_summary_full_agg = tribe_summary_full_agg.apply(prettyify_list_of_strings, axis=1)
+
+    return tribe_summary_semi_aggd, tribe_summary_full_agg
 
 
 def calculate_summary_statistics_helper(summary_statistics_data_directory, merged_data_directory):
@@ -711,8 +723,8 @@ def calculate_summary_statistics_helper(summary_statistics_data_directory, merge
     day tribe, get total acreage of state land trust parcels, all associated cessions, and all
     states and universities that have land taken from this tribe held in trust
     '''
-    df_0 = gpd.read_file(merged_data_directory + _get_merged_dataset_filename())
-    # df_0 = gpd.read_file('/Users/marcellebonterre/Downloads/national_stls.csv')  # TODO: parameterize
+    # df_0 = gpd.read_file(merged_data_directory + _get_merged_dataset_filename())
+    df_0 = gpd.read_file(DATA_DIRECTORY + '/national_stls.csv')  # TODO: parameterize
 
     df = df_0.copy(deep=True)
     df_1 = df_0.copy(deep=True)
@@ -721,7 +733,8 @@ def calculate_summary_statistics_helper(summary_statistics_data_directory, merge
     if not stats_dir.exists():
         stats_dir.mkdir(parents=True, exist_ok=True)
 
-    df[GIS_ACRES] = df[GIS_ACRES].astype(float)
+    gis_acres_col = GIS_ACRES if GIS_ACRES in df.columns else 'gis_calculated_acres'
+    df[GIS_ACRES] = df[gis_acres_col].astype(float)
 
     # create first csv: university summary
     university_summary = pd.DataFrame()
@@ -732,5 +745,6 @@ def calculate_summary_statistics_helper(summary_statistics_data_directory, merge
     university_summary.to_csv(summary_statistics_data_directory + UNIVERSITY_SUMMARY)
 
     # second csv: tribal summary
-    tribe_summary = pivot_on_tribe(df_1)
-    tribe_summary.to_csv(summary_statistics_data_directory + TRIBE_SUMMARY)
+    tribe_summary_semi_aggd, tribe_summary_full_agg = pivot_on_tribe(df_1)
+    tribe_summary_semi_aggd.to_csv(summary_statistics_data_directory + TRIBE_SUMMARY)
+    tribe_summary_full_agg.to_csv(summary_statistics_data_directory + 'tribe-summary-condensed.csv')
