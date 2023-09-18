@@ -61,7 +61,7 @@ ALL_STATES = 'all-states'
 # cleaning oklahoma specific constants
 OK_TRUST_FUND_ID = 'TrustFundID'
 OK_HOLDING_DETAIL_ID = 'HoldingDetailID'
-OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE = STATE_TRUST_DATA_SOURCE_DIRECTORY + 'All CLO Holdings.xlsx'
+OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE = STATE_TRUST_DATA_SOURCE_DIRECTORY + 'All_OSU_Holdings.csv'
 
 # final dataset columns, in order we want them to be saved
 COLUMNS = [
