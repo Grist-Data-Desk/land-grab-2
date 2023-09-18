@@ -119,7 +119,10 @@ def _clean_queried_data(source, config, label, alias, queried_data_directory,
         return gdf
 
     # custom cleaning
-    if source == 'OK-unleased-mineral-lands':
+    if source == 'OK-surface':
+        gdf = _filter_queried_oklahoma_data(gdf)
+        gdf = _get_ok_surface_town_range(gdf)
+    elif source == 'OK-unleased-mineral-lands':
         gdf = _filter_queried_oklahoma_data_unleased_min_lands(gdf)
         gdf = _get_ok_surface_town_range(gdf)
     elif source == 'OK-real-estate-subdivs':
@@ -373,6 +376,32 @@ def _filter_queried_oklahoma_data_unleased_min_lands(gdf):
     gdf = gdf.merge(filter_df[[OK_HOLDING_DETAIL_ID, 'LeaseType']], how='left', on=OK_HOLDING_DETAIL_ID)
     gdf[ACTIVITY] = gdf['LeaseType']
     return gdf
+
+
+def _filter_queried_oklahoma_data(gdf):
+    filter_df = _create_oklahoma_trust_fund_filter()
+    # change id from dictionary to string
+    gdf[OK_HOLDING_DETAIL_ID] = gdf[OK_HOLDING_DETAIL_ID].str.replace('}', '')
+    gdf[OK_HOLDING_DETAIL_ID] = gdf[OK_HOLDING_DETAIL_ID].str.replace('{', '')
+    gdf[OK_HOLDING_DETAIL_ID] = gdf[OK_HOLDING_DETAIL_ID].astype(str)
+
+    # filter dataframe by specific ids
+    gdf = gdf[gdf[OK_HOLDING_DETAIL_ID].isin(filter_df[OK_HOLDING_DETAIL_ID])]
+
+    # merge on ids
+    gdf = gdf.merge(filter_df, on=OK_HOLDING_DETAIL_ID, how='left')
+    return gdf
+
+
+def _create_oklahoma_trust_fund_filter():
+    # get the custom Excel file
+    df = pd.read_excel(OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE)
+
+    # clean and filter by the trust funds we care about, 5 for OSU
+    df = df[[OK_HOLDING_DETAIL_ID, OK_TRUST_FUND_ID]].copy()
+    df = df[df[OK_TRUST_FUND_ID].isin([5])]
+    df[OK_HOLDING_DETAIL_ID] = df[OK_HOLDING_DETAIL_ID].astype(str)
+    return df
 
 
 ###################################################
