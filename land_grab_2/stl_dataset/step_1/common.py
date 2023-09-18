@@ -21,7 +21,8 @@ from land_grab_2.stl_dataset.step_1.constants import (
     OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE, EXISTING_COLUMN_TO_FINAL_COLUMN_MAP,
     TOWNSHIP, SECTION, RANGE, MERIDIAN, COUNTY, ALIQUOT, LOCAL_DATA_SOURCE,
     GIS_ACRES, ACRES_TO_SQUARE_METERS, ALBERS_EQUAL_AREA, ACRES, ACTIVITY,
-    UNIVERSITY, STATE, ALL_STATES, UNIVERSITY_SUMMARY, TRIBE_SUMMARY, DATA_DIRECTORY)
+    UNIVERSITY, STATE, ALL_STATES, UNIVERSITY_SUMMARY, TRIBE_SUMMARY, DATA_DIRECTORY,
+    OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_2)
 
 app = typer.Typer()
 
@@ -395,7 +396,7 @@ def _filter_queried_oklahoma_data(gdf):
 
 def _create_oklahoma_trust_fund_filter():
     # get the custom Excel file
-    df = pd.read_excel(OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE)
+    df = pd.read_excel(OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_2)
 
     # clean and filter by the trust funds we care about, 5 for OSU
     df = df[[OK_HOLDING_DETAIL_ID, OK_TRUST_FUND_ID]].copy()
