@@ -26,6 +26,7 @@ openpyxl = "^3.1.2"
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.2"
 pytest-mock = "^3.11.1"
+snakeviz = "^2.2.0"
 
 
 [tool.poetry.scripts]

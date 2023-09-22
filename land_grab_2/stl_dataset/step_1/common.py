@@ -6,6 +6,9 @@ import traceback
 
 from pathlib import Path
 
+import math
+import numpy as np
+
 os.environ['RESTAPI_USE_ARCPY'] = 'FALSE'
 
 import geopandas as gpd
@@ -86,20 +89,23 @@ def _query_arcgis_restapi(config, source, label, code, alias, directory):
     # create desired attribute conditions to filter the query by
     attribute_filter = f'{label}={code}'
 
-    # then filter by specific attributes
-    if code == '*':
-        features = layer.query(outSR=4326, f='geojson', exceed_limit=True)
-    else:
-        features = layer.query(where=attribute_filter,
-                               outSR=4326,
-                               f='geojson',
-                               exceed_limit=True)
+    try:
+        # then filter by specific attributes
+        if code == '*':
+            features = layer.query(outSR=4326, f='geojson', exceed_limit=True)
+        else:
+            features = layer.query(where=attribute_filter,
+                                   outSR=4326,
+                                   f='geojson',
+                                   exceed_limit=True)
 
-    # count the number of features
-    print(f'Found {len(features)} features with {attribute_filter}')
+        # count the number of features
+        print(f'Found {len(features)} features with {attribute_filter}')
 
-    # save geojson file, may save as json depending on the esri api version, needs 10.3 to saave as geojson
-    features.dump(directory + filename, indent=2)  # indent allows for pretty view
+        # save geojson file, may save as json depending on the esri api version, needs 10.3 to saave as geojson
+        features.dump(directory + filename, indent=2)  # indent allows for pretty view
+    except Exception as err:
+        print(f'encountered error while querying {data_source}:\n{err}')
 
 
 #############################################################
@@ -427,6 +433,32 @@ def delete_files_and_subdirectories_in_directory(directory_path):
 ##### helper functions for merging data #####
 #############################################
 
+def everything_but_activity(inthing):
+    uniq_vals = [
+        v
+        for v in list(set(inthing.tolist()))
+        if (v is not None and
+            not (not isinstance(v, str) and math.isnan(v)))
+    ]
+    uniq_vals = list(set([str(s) for s in uniq_vals]))
+
+    n_uniq_vals = len(uniq_vals)
+    if n_uniq_vals == 0:
+        return float('nan')
+
+    if n_uniq_vals == 1:
+        return inthing.tolist()[0]
+
+    uniq_vals_s = ', '.join(uniq_vals)
+    return uniq_vals_s
+
+
+def condense_activity(merged):
+    groupby_term = ['geometry'] if ACRES not in merged.columns else ['geometry', 'acres']
+    m2 = merged.groupby(groupby_term).agg(everything_but_activity).reset_index()
+    m2 = gpd.GeoDataFrame(m2, geometry=m2['geometry'], crs=merged.crs)
+    return m2
+
 
 def _merge_dataframes(df_list):
     '''
@@ -477,6 +509,7 @@ def _merge_dataframes(df_list):
 
     # return the final merged dataset
     merged = df_list.pop()
+    merged = condense_activity(merged)
     merged = merged.drop_duplicates()
     return merged
 

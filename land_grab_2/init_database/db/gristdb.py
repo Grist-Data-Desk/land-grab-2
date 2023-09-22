@@ -6,7 +6,7 @@ from typing import Dict, Any, List, Optional
 
 import psycopg
 
-from land_grab_2.init_database.db.local_config.db_cred import DB_CREDS
+from land_grab_2.init_database.db.db_cred import DB_CREDS
 
 log = logging.getLogger(__name__)
 
@@ -69,7 +69,7 @@ class GristDB:
                                 callback(row_dict)
 
         except Exception as err:
-            log.info(f'db error during write NOT IGNORING: {err}')
+            log.info(f'db error during txn NOT IGNORING: {err}')
             raise err
 
         try:
@@ -227,10 +227,36 @@ class GristDB:
                                  where_col,
                                  val,
                                  distinct: bool = False,
-                                 callback: Optional[Any] = None):
-        distinct_clause = 'DISTINCT' if distinct else ''
-        list_all_sql = f"SELECT {distinct_clause} {select_col} FROM regrid WHERE {where_col} = '{val}';"
-        if callback:
-            return self.execute(list_all_sql, results_type=GristDbResults.CALLBACK, callback=callback)
+                                 pagination_row_id: Optional[str] = None,
+                                 limit: int = None):
+        distinct_clause = 'DISTINCT' if distinct else 'id,'
+        order_by_col = select_col if distinct else 'id'
+        limit_clause = '' if not limit else f'LIMIT {limit}'
+        list_all_sql = f"SELECT {distinct_clause} {select_col} FROM regrid WHERE {where_col} = '{val}' ORDER BY {order_by_col} ASC {limit_clause};"
+        if pagination_row_id:
+            list_all_sql = f"""
+            SELECT {distinct_clause} {select_col} FROM regrid WHERE {where_col} = '{val}' AND id > {pagination_row_id} ORDER BY {order_by_col} ASC {limit_clause};
+            """
 
+        return self.execute(list_all_sql, results_type=GristDbResults.ALL)
+
+    def count_where(self,
+                    where_col,
+                    val):
+        list_all_sql = f"SELECT COUNT(id) FROM regrid WHERE {where_col} = '{val}';"
+        return self.execute(list_all_sql, results_type=GristDbResults.ONE)
+
+    def ids_where(self,
+                  where_col,
+                  val):
+        list_all_sql = f"SELECT id FROM regrid WHERE {where_col} = '{val}';"
+        return self.execute(list_all_sql, results_type=GristDbResults.ALL)
+
+    def hydrate_ids(self, search_items):
+        row_width_sub_vars = ', '.join([f"'{i}'" for i in search_items])
+        list_all_sql = f"SELECT * FROM regrid WHERE id IN ({row_width_sub_vars});"
+        return self.execute(list_all_sql, results_type=GristDbResults.ALL)
+
+    def fetch_all_unique(self, select_col):
+        list_all_sql = f"SELECT DISTINCT {select_col} FROM regrid  ORDER BY {select_col} ASC;"
         return self.execute(list_all_sql, results_type=GristDbResults.ALL)
