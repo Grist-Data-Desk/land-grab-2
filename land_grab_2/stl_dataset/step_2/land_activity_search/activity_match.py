@@ -1,5 +1,4 @@
 import enum
-import itertools
 import json
 import logging
 import os
@@ -9,16 +8,13 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import List, Optional, Union
 
-import dask
-import dask.bag
 import geopandas
 import numpy as np
 import pandas as pd
-import requests
-from compose import compose
-from dask.diagnostics import ProgressBar
 from ratelimiter import RateLimiter
-from tqdm import tqdm
+
+from land_grab_2.utils import in_parallel, read_json, GristCache, geodf_overlap_cmp_keep_left, fetch_remote, \
+    fetch_all_parcel_ids
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -51,40 +47,6 @@ AZ_KEY = {
 }
 
 
-def read_json(p: Path):
-    with p.open('r') as fh:
-        return json.load(fh)
-
-
-def batch_iterable(work_items, batch_size):
-    return [work_items[i:i + batch_size] for i in range(0, len(work_items), batch_size)]
-
-
-def in_parallel(work_items, a_callable, scheduler='processes', postprocess=None, batched=True):
-    if postprocess:
-        a_callable = compose(postprocess, a_callable)
-
-    if scheduler == 'synchronous':
-        log.info('Using Dask synchronous scheduler')
-
-    all_results = []
-    if not batched:
-        with dask.config.set(scheduler=scheduler):
-            with ProgressBar():
-                all_results = dask.bag.from_sequence(work_items).map(a_callable).compute()
-                return all_results
-
-    batch_size = 100
-    batches = batch_iterable(work_items, batch_size)
-
-    for batch in tqdm(batches):
-        with dask.config.set(scheduler=scheduler):
-            with ProgressBar():
-                results = dask.bag.from_sequence(batch, partition_size=batch_size // 4).map(a_callable).compute()
-                all_results += results
-    return all_results
-
-
 def safe_geopandas_load(p):
     try:
         time.sleep(0.25)
@@ -96,55 +58,6 @@ def safe_geopandas_load(p):
 
 
 # TODO: check that PYTHONHASHSEED is set and disallow run otherwise
-class GristCache:
-    def __init__(self, location):
-        self.location = location
-        self.base_dir = CACHE_DIR
-
-    def cache_write(self, obj, name, file_ext='.json'):
-        """
-        this function requires the ENV var: PYTHONHASHSEED to be set to ensure stable hashing between runs
-        """
-        here = self.base_dir / f'{hash(self.location)}'
-        if not here.exists():
-            here.mkdir(exist_ok=True, parents=True)
-
-        cached_file = here / f'{name}{file_ext}'
-
-        log.info(f'writing to cache: {str(cached_file)}')
-        if 'json' in file_ext:
-            with cached_file.open('w') as fp:
-                json.dump(obj, fp)
-
-        try:
-            if 'feather' in file_ext:
-                obj.to_feather(str(cached_file))
-        except Exception as err:
-            log.error(f'CacheWriteError during feather WRITE path: {str(cached_file)} err: {err}')
-
-    def cache_read(self, name, file_ext='.json'):
-        """
-        this function requires the ENV var: PYTHONHASHSEED to be set to ensure stable hashing between runs
-        """
-        here = self.base_dir / f'{hash(self.location)}'
-
-        if not here.exists():
-            here.mkdir(exist_ok=True, parents=True)
-
-        cached_file = here / f'{name}{file_ext}'
-        if not cached_file.exists():
-            log.info(f'cache-miss for: {str(cached_file)}')
-            return None
-
-        log.info(f'reading from cache: {str(cached_file)}')
-        if 'json' in file_ext:
-            with cached_file.open('r') as fp:
-                return json.load(fp)
-        try:
-            if 'feather' in file_ext:
-                return geopandas.read_feather(str(cached_file))
-        except Exception as err:
-            log.error(f'CacheReadError during feather READ path: {str(cached_file)} err: {err}')
 
 
 class StateActivityDataLocation(enum.Enum):
@@ -242,135 +155,11 @@ class StateActivityDataSource:
             return activity_data
 
     @RateLimiter(max_calls=5000, period=60)
-    def fetch_remote(self, parcel_id: Optional[str] = None, retries=10, response_type='text'):
-        """
-        response_type: str - either `json` or `text`
-        """
-        url_base = f'{self.location}?'
+    def fetch_remote(self, parcel_id: Optional[str] = None):
+        return fetch_remote(self.location)
 
-        url_query = {'where': '1=1',
-                     'objectIds': f'{parcel_id}',
-                     'time': '',
-                     'geometry': '',
-                     'geometryType': 'esriGeometryEnvelope',
-                     'inSR': '',
-                     'spatialRel': 'esriSpatialRelIntersects',
-                     'resultType': 'none',
-                     'distance': 0.0,
-                     'units': 'esriSRUnit_Meter',
-                     'relationParam': '',
-                     'returnGeodetic': 'false',
-                     'outFields': '*',
-                     'returnGeometry': 'true',
-                     'returnCentroid': 'false',
-                     'featureEncoding': 'esriDefault',
-                     'multipatchOption': 'xyFootprint',
-                     'maxAllowableOffset': '',
-                     'geometryPrecision': '',
-                     'outSR': '',
-                     'defaultSR': '',
-                     'datumTransformation': '',
-                     'applyVCSProjection': 'false',
-                     'returnIdsOnly': 'false',
-                     'returnUniqueIdsOnly': 'false',
-                     'returnCountOnly': 'false',
-                     'returnExtentOnly': 'false',
-                     'returnQueryGeometry': 'false',
-                     'returnDistinctValues': 'false',
-                     'cacheHint': 'false',
-                     'orderByFields': '',
-                     'groupByFieldsForStatistics': '',
-                     'outStatistics': '',
-                     'having': '',
-                     'resultOffset': '',
-                     'resultRecordCount': '',
-                     'returnZ': 'false',
-                     'returnM': 'false',
-                     'returnExceededLimitFeatures': 'true',
-                     'quantizationParameters': '',
-                     'sqlFormat': 'none',
-                     'f': 'pjson',
-                     'token': ''
-                     }
-
-        # Respose, call on the server; data is the info if response returns something.
-        try:
-
-            response = requests.get(url=url_base, params=url_query)
-            if response_type == 'json':
-                data = response.json()
-            else:
-                data = response.text
-            return data
-        except Exception as err:
-            if retries > 0:
-                time.sleep(5)
-                return self.fetch_remote(parcel_id=parcel_id, retries=retries - 1, response_type=response_type)
-            else:
-                log.error(err)
-                return None
-
-    # Here, we want to call on the SD PLSS quarter-quarter server.
-    def fetch_all_parcel_ids(self, retries=10):
-        url_base = f'{self.location}?'
-
-        url_query = {'where': '1=1',
-                     'objectIds': '',
-                     'time': '',
-                     'geometry': '',
-                     'geometryType': 'esriGeometryEnvelope',
-                     'inSR': '',
-                     'spatialRel': 'esriSpatialRelIntersects',
-                     'resultType': 'none',
-                     'distance': 0.0,
-                     'units': 'esriSRUnit_Meter',
-                     'relationParam': '',
-                     'returnGeodetic': 'false',
-                     'outFields': '*',
-                     'returnGeometry': 'true',
-                     'returnCentroid': 'false',
-                     'featureEncoding': 'esriDefault',
-                     'multipatchOption': 'xyFootprint',
-                     'maxAllowableOffset': '',
-                     'geometryPrecision': '',
-                     'outSR': '',
-                     'defaultSR': '',
-                     'datumTransformation': '',
-                     'applyVCSProjection': 'false',
-                     'returnIdsOnly': 'true',
-                     'returnUniqueIdsOnly': 'false',
-                     'returnCountOnly': 'false',
-                     'returnExtentOnly': 'false',
-                     'returnQueryGeometry': 'false',
-                     'returnDistinctValues': 'false',
-                     'cacheHint': 'false',
-                     'orderByFields': '',
-                     'groupByFieldsForStatistics': '',
-                     'outStatistics': '',
-                     'having': '',
-                     'resultOffset': '',
-                     'resultRecordCount': '',
-                     'returnZ': 'false',
-                     'returnM': 'false',
-                     'returnExceededLimitFeatures': 'true',
-                     'quantizationParameters': '',
-                     'sqlFormat': 'none',
-                     'f': 'json',
-                     'token': ''
-                     }
-
-        # If there is a failure while calling the server for a row, we wait 5 seconds, then check again. Repeat 5 times.
-        try:
-            response = requests.get(url=url_base, params=url_query)
-            data = response.json()
-            return data
-        except Exception as err:
-            if retries > 0:
-                time.sleep(5)
-                return self.fetch_all_parcel_ids(retries=retries - 1)
-            else:
-                log.error(err)
-                return None
+    def fetch_all_parcel_ids(self):
+        return fetch_all_parcel_ids(self.location)
 
 
 @dataclass
@@ -753,61 +542,6 @@ STATE_ACTIVITIES = {
 #     return activity_records
 
 
-# def update_grist_rows(grist_data_0, activity, state, matches):
-#     rename_rules = {'OilAndGas': 'Oil and gas',
-#                     'OtherMin': 'Other Minerals',
-#                     'OtherMinerals': 'Other Minerals',
-#                     'Oil & Gas': 'Oil and gas'}
-#
-#     obj_id_to_activities = defaultdict(set)
-#     for m in matches:
-#         if m is None:
-#             continue
-#
-#         for grist_match in m.grist_rows.iterrows():
-#             grist_match = grist_match[1]
-#
-#             row_loc = grist_data_0.loc[grist_data_0['object_id'] == grist_match['object_id']].index.tolist()
-#             if row_loc:
-#                 update_row = row_loc[0]
-#                 incumbent_activity_val = grist_data_0.loc[update_row, 'activity']
-#
-#                 if isinstance(incumbent_activity_val, str) and len(incumbent_activity_val) > 0:
-#                     for rename_trigger, new_name in rename_rules.items():
-#                         if rename_trigger in incumbent_activity_val:
-#                             obj_id_to_activities[update_row].add(new_name)
-#
-#                 if len(obj_id_to_activities[update_row]) == 0:
-#                     if isinstance(incumbent_activity_val, str) and len(incumbent_activity_val) > 0:
-#                         obj_id_to_activities[update_row].add(incumbent_activity_val)
-#
-#                     if isinstance(incumbent_activity_val, list) and len(incumbent_activity_val) > 0:
-#                         obj_id_to_activities[update_row].update(incumbent_activity_val)
-#
-#                     if isinstance(incumbent_activity_val, int):
-#                         obj_id_to_activities[update_row].update(str(incumbent_activity_val))
-#
-#                 if activity.use_name_as_activity:
-#                     obj_id_to_activities[update_row].add(activity.name)
-#                 else:
-#                     activity_col = get_activity_column(activity, state)
-#                     if activity_col and activity_col in m.activity_row.keys():
-#                         activity_name = m.activity_row[activity_col].tolist()
-#                         if activity_name and (isinstance(activity_name, str) or isinstance(activity_name, int)):
-#                             activity_name = str(activity_name[0])
-#                             obj_id_to_activities[update_row].add(activity_name)
-#                     else:
-#                         obj_id_to_activities[update_row].add(activity.name)
-#
-#     for update_row, activities in obj_id_to_activities.items():
-#         grist_data_0.at[update_row, 'activity'] = list(activities)
-#
-#     match_rows = set(
-#         list(itertools.chain.from_iterable([[r[1]['object_id'] for r in m.grist_rows.iterrows()] for m in matches])))
-#     assert len(obj_id_to_activities.keys()) == len(match_rows)
-#     return grist_data_0
-
-
 def find_missing_cols(rewrite_rules, current_cols, the_out_dir):
     missing_cols = set(STATE_OUT_COLS) - set(current_cols)
 
@@ -897,31 +631,13 @@ def extract_matches(state, activity, activity_data, grist_data, overlap_report):
 
 def find_overlaps(state, activity, activity_data, grist_data):
     try:
-        activity_data = activity_data.drop_duplicates([c for c in activity_data.columns if 'object' not in c])
-        grist_data_0 = grist_data[grist_data.state.isin([state, state.lower()])]
-        activity_data["joinidx_0"] = np.arange(0, activity_data.shape[0]).astype(int)
+        overlapping_regions = geodf_overlap_cmp_keep_left(activity_data, grist_data)
 
-        activity_data = activity_data.to_crs(grist_data.crs)
-        overlapping_regions = geopandas.sjoin(activity_data[['joinidx_0', 'geometry']],
-                                              grist_data_0[['joinidx_1', 'geometry']],
-                                              how="left",
-                                              op='intersects').dropna()
-
-        if overlapping_regions.shape[0] > 0:
-            log.info(f'found {overlapping_regions.shape[0]} matches'
-                     f' for state: {state} for activity: {activity.name}')
-
-            return extract_matches(state, activity, activity_data, grist_data, overlapping_regions)
-        else:
-            log.info(f'found NO matches for state: {state} for activity: {activity.name}')
+        return (extract_matches(state, activity, activity_data, grist_data, overlapping_regions)
+                if overlapping_regions.shape[0] > 0
+                else [])
     except Exception as err:
-        try:
-            activity_data = activity_data.set_crs(grist_data.crs).to_crs(grist_data.crs)
-            # overlay = geopandas.overlay(activity_data, grist_data, how='intersection')
-            res = find_overlaps(state, activity, activity_data, grist_data)
-            return res
-        except Exception as err:
-            assert 1
+        print(f'failing on mysterious except in find_overlaps()')
 
 
 def match_all_activities(states_data=None, grist_data=None):

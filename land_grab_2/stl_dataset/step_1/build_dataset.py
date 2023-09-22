@@ -129,6 +129,15 @@ def run():
 
 
 if __name__ == "__main__":
-    app()
-    # extract_and_clean_single_source('OK-mineral-leases')
+    # app()
+
+    extract_and_clean_single_source('OK-mineral-leases')
+
+    # delete_files_and_subdirectories_in_directory(_queried_data_directory())
+    # delete_files_and_subdirectories_in_directory(_cleaned_data_directory())
+    # delete_files_and_subdirectories_in_directory(_merged_data_directory())
+    # for source in [k for k in STATE_TRUST_CONFIGS.keys()]:
+    #     extract_and_clean_single_source(source)
+    merge_all_states()
+
 
