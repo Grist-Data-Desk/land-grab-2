@@ -24,7 +24,6 @@ from land_grab_2.stl_dataset.step_1.constants import STATE_TRUST_DIRECTORY, QUER
     MERGED_DIRECTORY, CESSIONS_DIRECTORY, SUMMARY_STATISTICS_DIRECTORY
 
 log = logging.getLogger(__name__)
-os.environ['RESTAPI_USE_ARCPY'] = 'FALSE'
 memory = Memory(str(Path(os.environ.get('DATA')) / 'cache'))
 
 
@@ -275,19 +274,6 @@ def geodf_overlap_cmp_keep_left(left, right):
         except Exception as err:
             print(f'failing on mysterious except')
             assert 1
-
-
-def df_diff(bigger_df, smaller_df, cmp_col):
-    bigger_df = bigger_df.copy(deep=True)
-    smaller_df = smaller_df.copy(deep=True)
-    missing_rows_df = bigger_df[~bigger_df[cmp_col].isin(smaller_df[cmp_col])]
-    return missing_rows_df
-
-
-if __name__ == '__main__':
-    bigger_df = pd.DataFrame([{'a': 1, 'b': 2, 'c': 3}, {'a': 4, 'b': 5, 'c': 6}])
-    smaller_df = pd.DataFrame([{'a': 1, 'b': 2, 'c': 3}])
-    missing_rows_df = df_diff(bigger_df, smaller_df, 'c')
 
 
 def _to_kebab_case(string):
