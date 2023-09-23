@@ -1,44 +1,20 @@
+from datetime import datetime
+
 import typer
 
-from land_grab_2.stl_dataset.step_1.common import (state_specific_directory,
-                                                   extract_and_clean_single_source_helper,
-                                                   merge_single_state_helper, merge_all_states_helper,
-                                                   delete_files_and_subdirectories_in_directory,
-                                                   calculate_summary_statistics_helper,
-                                                   merge_cessions_data_helper)
+from land_grab_2.stl_dataset.step_1.dataset_summary_stats import calculate_summary_statistics_helper
+from land_grab_2.stl_dataset.step_1.dataset_merge import merge_single_state_helper, merge_all_states_helper, \
+    merge_cessions_data_helper
+from land_grab_2.stl_dataset.step_1.dataset_extraction import extract_and_clean_single_source_helper
 
-from land_grab_2.stl_dataset.step_1.constants import (STATE, STATE_TRUST_DIRECTORY, CLEANED_DIRECTORY,
-                                                      MERGED_DIRECTORY, QUERIED_DIRECTORY, CESSIONS_DIRECTORY,
-                                                      SUMMARY_STATISTICS_DIRECTORY)
+from land_grab_2.stl_dataset.step_1.constants import (STATE)
 
 from land_grab_2.stl_dataset.step_1.state_trust_config import STATE_TRUST_CONFIGS
+from land_grab_2.utils import in_parallel, delete_files_and_subdirectories_in_directory, _queried_data_directory, \
+    _cleaned_data_directory, _merged_data_directory, _cessions_data_directory, \
+    _summary_statistics_data_directory
 
 app = typer.Typer()
-
-
-def _queried_data_directory(state=None):
-    return state_specific_directory(STATE_TRUST_DIRECTORY + QUERIED_DIRECTORY,
-                                    state)
-
-
-def _cleaned_data_directory(state=None):
-    return state_specific_directory(STATE_TRUST_DIRECTORY + CLEANED_DIRECTORY,
-                                    state)
-
-
-def _merged_data_directory(state=None):
-    return state_specific_directory(STATE_TRUST_DIRECTORY + MERGED_DIRECTORY,
-                                    state)
-
-
-def _cessions_data_directory(state=None):
-    return state_specific_directory(STATE_TRUST_DIRECTORY + CESSIONS_DIRECTORY,
-                                    state)
-
-
-def _summary_statistics_data_directory(state=None):
-    return state_specific_directory(
-        STATE_TRUST_DIRECTORY + SUMMARY_STATISTICS_DIRECTORY, state)
 
 
 @app.command()
@@ -60,8 +36,9 @@ def extract_and_clean_all():
     '''
     Extract and clean data for the entire dataset
     '''
-    for source in STATE_TRUST_CONFIGS.keys():
-        extract_and_clean_single_source(source)
+    st = datetime.now()
+    in_parallel(STATE_TRUST_CONFIGS.keys(), extract_and_clean_single_source, batched=False)
+    print(f'extract_and_clean_all took: {datetime.now() - st}')
 
 
 @app.command()
@@ -131,13 +108,21 @@ def run():
 if __name__ == "__main__":
     # app()
 
-    extract_and_clean_single_source('OK-mineral-leases')
-
     # delete_files_and_subdirectories_in_directory(_queried_data_directory())
     # delete_files_and_subdirectories_in_directory(_cleaned_data_directory())
     # delete_files_and_subdirectories_in_directory(_merged_data_directory())
-    # for source in [k for k in STATE_TRUST_CONFIGS.keys()]:
-    #     extract_and_clean_single_source(source)
+
+    # states = ['AZ', 'MT', 'OR', 'UT', 'OK', 'NM']
+    # states = ['UT']
+    # keys = [k for k in STATE_TRUST_CONFIGS.keys() if
+    #         any(k.startswith(prefix) for prefix in states)]
+
+    keys = STATE_TRUST_CONFIGS.keys()
+
+    st = datetime.now()
+    # in_parallel(keys, extract_and_clean_single_source, batched=False, scheduler='synchronous')
+    in_parallel(keys, extract_and_clean_single_source, batched=False)
+    print(f'extract_and_clean_all took: {datetime.now() - st}')
+
+    # extract_and_clean_all()
     merge_all_states()
-
-

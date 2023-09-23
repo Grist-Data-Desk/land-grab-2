@@ -445,7 +445,7 @@ STATE_TRUST_CONFIGS = {
         RIGHTS_TYPE: 'Mineral Subdivisions',
         STATE_ENABLING_ACT: '34. Stat. 267-286 , esp. 272, 274-75 (1906)',
         DATA_SOURCE:
-            'https://gis.clo.ok.gov/arcgis/rest/services/Public/OKLeaseData_ExternalProd/MapServer/3/',
+            'https://gis.clo.ok.gov/arcgis/rest/services/Public/OKLeaseData_ExternalProd/MapServer/3',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['*'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "*": 'All'
@@ -459,10 +459,6 @@ STATE_TRUST_CONFIGS = {
         },
     },
     'OK-surface': {
-        # for oklahoma's real estate (surface) lease holdings, we query the API below, but the API does not
-        # contain information on which trust fund the land belongs to. The CLO gavbe us a list of which
-        # parcels, by HoldingDetailID, map to different funds which is not publicly available, so we
-        # create a custom filter here.
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
         STATE: 'OK',
         UNIVERSITY: 'Oklahoma State University',
