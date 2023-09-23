@@ -12,19 +12,19 @@ import dask
 import dask.bag
 import geopandas
 import numpy as np
-import pandas as pd
 import requests
 import restapi
 from compose import compose
 from dask.diagnostics import ProgressBar
-from joblib import Memory
 from tqdm import tqdm
 
 from land_grab_2.stl_dataset.step_1.constants import STATE_TRUST_DIRECTORY, QUERIED_DIRECTORY, CLEANED_DIRECTORY, \
     MERGED_DIRECTORY, CESSIONS_DIRECTORY, SUMMARY_STATISTICS_DIRECTORY
 
 log = logging.getLogger(__name__)
-memory = Memory(str(Path(os.environ.get('DATA')) / 'cache'))
+
+
+# memory = Memory(str(Path(os.environ.get('DATA')) / 'cache'))
 
 
 def in_parallel(work_items, a_callable, scheduler='processes', postprocess=None, batched=True, batch_size=10):
@@ -306,7 +306,8 @@ def _query_arcgis_restapi(config, source, label, code, alias, directory):
     # create desired attribute conditions to filter the query by
     attribute_filter = f'{label}={code}'
 
-    cached_layer_query = memory.cache(layer.query)
+    # cached_layer_query = memory.cache(layer.query)
+    cached_layer_query = layer.query
     try:
         # then filter by specific attributes
         if code == '*':
