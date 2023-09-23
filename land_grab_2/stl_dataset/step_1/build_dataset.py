@@ -106,7 +106,7 @@ def run():
 
 
 if __name__ == "__main__":
-    # app()
+    app()
 
     # delete_files_and_subdirectories_in_directory(_queried_data_directory())
     # delete_files_and_subdirectories_in_directory(_cleaned_data_directory())
@@ -117,12 +117,12 @@ if __name__ == "__main__":
     # keys = [k for k in STATE_TRUST_CONFIGS.keys() if
     #         any(k.startswith(prefix) for prefix in states)]
 
-    keys = STATE_TRUST_CONFIGS.keys()
+    # keys = STATE_TRUST_CONFIGS.keys()
 
-    st = datetime.now()
+    # st = datetime.now()
     # in_parallel(keys, extract_and_clean_single_source, batched=False, scheduler='synchronous')
-    in_parallel(keys, extract_and_clean_single_source, batched=False)
-    print(f'extract_and_clean_all took: {datetime.now() - st}')
+    # in_parallel(keys, extract_and_clean_single_source, batched=False)
+    # print(f'extract_and_clean_all took: {datetime.now() - st}')
 
     # extract_and_clean_all()
-    merge_all_states()
+    # merge_all_states()
