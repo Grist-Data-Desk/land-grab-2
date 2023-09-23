@@ -106,7 +106,7 @@ def run():
 
 
 if __name__ == "__main__":
-    app()
+    run()
 
     # delete_files_and_subdirectories_in_directory(_queried_data_directory())
     # delete_files_and_subdirectories_in_directory(_cleaned_data_directory())
