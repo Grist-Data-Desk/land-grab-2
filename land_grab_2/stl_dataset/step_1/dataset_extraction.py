@@ -31,8 +31,8 @@ def extract_and_clean_single_source_helper(source: str, config: dict,
             # if querying from rest api
             if config[DOWNLOAD_TYPE] == API_QUERY_DOWNLOAD_TYPE:
 
-                # _query_arcgis_restapi(config, source, label, code, alias, # TODO uncomment
-                #                       queried_data_directory)
+                _query_arcgis_restapi(config, source, label, code, alias,
+                                      queried_data_directory)
 
                 _clean_queried_data(source, config, label, alias,
                                     queried_data_directory, cleaned_data_directory)
