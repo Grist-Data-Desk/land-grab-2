@@ -8,7 +8,7 @@ from typing import Any, Dict, List
 import pandas as pd
 import typer
 
-from tasks.init_database.db import GristDB
+from land_grab_2.init_database.db.gristdb import GristDB
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)

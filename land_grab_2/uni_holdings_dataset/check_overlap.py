@@ -9,7 +9,6 @@ from pathlib import Path
 from typing import Optional
 
 import geopandas
-import numpy as np
 import pandas as pd
 from shapely import MultiPolygon, Polygon
 

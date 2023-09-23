@@ -57,9 +57,6 @@ def safe_geopandas_load(p):
         log.error(f'THIS IS WHERE THE ERROR IS {err}')
 
 
-# TODO: check that PYTHONHASHSEED is set and disallow run otherwise
-
-
 class StateActivityDataLocation(enum.Enum):
     LOCAL = 'local'
     REMOTE = 'remote'
@@ -156,7 +153,7 @@ class StateActivityDataSource:
 
     @RateLimiter(max_calls=5000, period=60)
     def fetch_remote(self, parcel_id: Optional[str] = None):
-        return fetch_remote(self.location)
+        return fetch_remote(self.location, parcel_id)
 
     def fetch_all_parcel_ids(self):
         return fetch_all_parcel_ids(self.location)
