@@ -37,7 +37,9 @@ def extract_and_clean_all():
     Extract and clean data for the entire dataset
     '''
     st = datetime.now()
-    in_parallel(STATE_TRUST_CONFIGS.keys(), extract_and_clean_single_source, batched=False, scheduler='synchronous')
+    # in_parallel(STATE_TRUST_CONFIGS.keys(), extract_and_clean_single_source, batched=False, scheduler='synchronous')
+    for state in STATE_TRUST_CONFIGS.keys():
+        extract_and_clean_single_source(state)
     print(f'extract_and_clean_all took: {datetime.now() - st}')
 
 
