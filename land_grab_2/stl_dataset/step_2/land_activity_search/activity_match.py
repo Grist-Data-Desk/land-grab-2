@@ -256,6 +256,8 @@ def run():
     global STL_COMPARISON_BASE_DIR, CACHE_DIR
     STL_COMPARISON_BASE_DIR = base_data_dir / 'input/stl_activity_layers'
     CACHE_DIR = base_data_dir / 'input/cache'
+    # set cache dir
+    GristCache('', CACHE_DIR)
 
     stl = base_data_dir / 'input/230815_nationals_STLs/0815_national_stls_deduplicated.geojson'
     out_dir = base_data_dir / 'output'

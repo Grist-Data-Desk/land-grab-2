@@ -67,9 +67,13 @@ def read_json(p: Path):
 
 
 class GristCache:
+    CACHE_DIR = None
+
     def __init__(self, location, cache_dir=None):
         self.location = location
-        self.base_dir = cache_dir
+        if not GristCache.CACHE_DIR:
+            GristCache.CACHE_DIR = cache_dir
+        self.base_dir = GristCache.CACHE_DIR
 
     def cache_write(self, obj, name, file_ext='.json'):
         """
