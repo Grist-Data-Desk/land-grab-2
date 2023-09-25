@@ -137,4 +137,4 @@ notebooks
 *.sqlite
 foo
 *.zip
-data/**
+data/
