@@ -312,6 +312,25 @@ rewrite_rules = {
             "UNITTYPE": "Activity",
             "MANAME": "Sub-activity",
             "INST": "Lessee or Owner or Manager"
+        },
+        "Oil and Gas Wells": {
+            "Status": "Lease Status",
+            "Type": 'Sub-activity',
+            "CoName": "Lessee or Owner or Manager",
+            "Completed": "Lease End Date"
+        },
+        "Timber": {
+            "LandOffice": "Lessee or Owner or Manager",
+            "HarvestPrescription": "Sub-activity",
+            "DateSold": "Lease Start Date",
+            "DateClosed": "Lease End Date"
+        },
+        "Lumber Mill": {
+            "facilname": "Lessee or Owner or Manager",
+            "milltypeDe": "Sub-activity"
+        },
+        "Oil and Gas Active Lease": {
+            "PrimaryCustomer": "Lessee or Owner or Manager",
         }
     },
     "wi": {
