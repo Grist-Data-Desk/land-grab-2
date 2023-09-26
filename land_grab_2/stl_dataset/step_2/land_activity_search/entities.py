@@ -1,4 +1,6 @@
 import enum
+import logging
+import time
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import List, Optional, Union
@@ -7,9 +9,10 @@ import geopandas
 import pandas as pd
 from ratelimiter import RateLimiter
 
-from land_grab_2.stl_dataset.step_2.land_activity_search.activity_match import STL_COMPARISON_BASE_DIR, log, \
-    safe_geopandas_load
 from land_grab_2.utils import GristCache, in_parallel, fetch_remote, fetch_all_parcel_ids
+
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger(__name__)
 
 
 class StateActivityDataLocation(enum.Enum):
@@ -30,18 +33,18 @@ class StateActivityDataSource:
     def loc_type(self) -> StateActivityDataLocation:
         return StateActivityDataLocation.REMOTE if 'http' in self.location else StateActivityDataLocation.LOCAL
 
-    def load_local(self):
+    def load_local(self, stl_comparison_base_dir):
         loc_path = Path(self.location)
         if loc_path.name.endswith('.shp'):
             if loc_path.name.startswith('/'):
                 shapefile = self.location
                 gdf = geopandas.read_file(str(shapefile))
             else:
-                shapefile = STL_COMPARISON_BASE_DIR / self.location
+                shapefile = stl_comparison_base_dir / self.location
                 gdf = geopandas.read_file(str(shapefile))
         else:
             shapefile = next(
-                (f for f in (STL_COMPARISON_BASE_DIR / self.location).iterdir() if f.name.endswith('.shp')), None)
+                (f for f in (stl_comparison_base_dir / self.location).iterdir() if f.name.endswith('.shp')), None)
             gdf = geopandas.read_file(str(shapefile))
 
         return gdf
@@ -94,12 +97,13 @@ class StateActivityDataSource:
                     print(f'Failed with {err} initing geodf for {self.name} from: {self.location}')
                     return
 
-    def query_data(self) -> Optional[Union[geopandas.GeoDataFrame, List[geopandas.GeoDataFrame]]]:
+    def query_data(self, stl_comparison_base_dir) -> Optional[
+        Union[geopandas.GeoDataFrame, List[geopandas.GeoDataFrame]]]:
         if not self.location:
             return
 
         if self.loc_type == StateActivityDataLocation.LOCAL:
-            activity_data = self.load_local()
+            activity_data = self.load_local(stl_comparison_base_dir)
             return activity_data
 
         if self.loc_type == StateActivityDataLocation.REMOTE:
@@ -120,3 +124,13 @@ class StateForActivity:
     activities: List[StateActivityDataSource]
     scheduler: str = None
     use_cache: bool = True
+
+
+def safe_geopandas_load(p):
+    try:
+        time.sleep(0.25)
+        g = geopandas.read_file(p)
+        if g is not None:
+            return g
+    except Exception as err:
+        log.error(f'THIS IS WHERE THE ERROR IS {err}')

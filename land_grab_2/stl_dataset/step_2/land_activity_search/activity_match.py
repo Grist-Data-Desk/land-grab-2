@@ -1,15 +1,15 @@
 import json
 import logging
 import os
-import time
 from collections import defaultdict
 from pathlib import Path
 
 import geopandas
 import numpy as np
+from tqdm import tqdm
 
 from land_grab_2.stl_dataset.step_2.land_activity_search.state_data_sources import STATE_ACTIVITIES, rewrite_rules
-from land_grab_2.utils import read_json, GristCache, geodf_overlap_cmp_keep_left
+from land_grab_2.utils import GristCache, geodf_overlap_cmp_keep_left
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -40,16 +40,6 @@ AZ_KEY = {
     '66.0': 'US Govt Exclusive Use',
     '89.0': 'Institutional Use',
 }
-
-
-def safe_geopandas_load(p):
-    try:
-        time.sleep(0.25)
-        g = geopandas.read_file(p)
-        if g is not None:
-            return g
-    except Exception as err:
-        log.error(f'THIS IS WHERE THE ERROR IS {err}')
 
 
 # def capture_state_data(activity_state: str,
@@ -183,25 +173,25 @@ def extract_matches(state, activity, activity_data, grist_data, overlap_report):
 
 def find_overlaps(state, activity, activity_data, grist_data):
     try:
-        overlapping_regions = geodf_overlap_cmp_keep_left(activity_data, grist_data)
+        overlapping_regions, left, right = geodf_overlap_cmp_keep_left(activity_data, grist_data, return_inputs=True)
+        activity_data, grist_data = left, right
 
         return (extract_matches(state, activity, activity_data, grist_data, overlapping_regions)
                 if overlapping_regions.shape[0] > 0
                 else [])
     except Exception as err:
-        print(f'failing on mysterious except in find_overlaps()')
+        print(f'failing on mysterious except in find_overlaps(): {err}')
 
 
 def match_all_activities(states_data=None, grist_data=None):
     log.info(f'processing states {states_data.keys()}')
-    grist_data["joinidx_1"] = np.arange(0, grist_data.shape[0]).astype(int).astype(str)
 
     for activity_state, activity_info in states_data.items():
         if not activity_info:
             log.error(f'NO ACTIVITY CONFIG FOR {activity_state}')
             continue
 
-        for activity in activity_info.activities:
+        for activity in tqdm(activity_info.activities):
             if activity_info.scheduler:
                 activity.scheduler = activity_info.scheduler
 
@@ -209,12 +199,14 @@ def match_all_activities(states_data=None, grist_data=None):
                 activity.use_cache = activity_info.use_cache
 
             try:
-                activity_data = activity.query_data()
+                activity_data = activity.query_data(STL_COMPARISON_BASE_DIR)
                 if activity_data is None or len(activity_data) == 0:
                     log.error(f'NO ACTIVITY DATA FOR {activity_state} {activity.name}')
+                    continue
 
                 find_overlaps(activity_state, activity, activity_data, grist_data)
             except Exception as err:
+                print(f'random err: {err}')
                 assert 1
 
 
@@ -236,7 +228,11 @@ def main(stl_path: Path, the_out_dir: Path):
         # gdf.at[row_idx, 'activity'] = ','.join(activity_list)
         gdf.loc[row_idx, 'activity'] = ','.join(activity_list)
 
-    gdf.drop('joinidx_1', inplace=True, axis=1)
+    if 'joinidx_1' in gdf.columns:
+        gdf.drop('joinidx_1', inplace=True, axis=1)
+    if 'joinidx_0' in gdf.columns:
+        gdf.drop('joinidx_0', inplace=True, axis=1)
+
     log.info(f'final grist_data row_count: {gdf.shape[0]}')
     gdf.to_csv(str(the_out_dir / 'updated_grist_stl.csv'), index=False)
 
@@ -254,8 +250,9 @@ def run():
     base_data_dir = Path(data_directory).resolve()
 
     global STL_COMPARISON_BASE_DIR, CACHE_DIR
-    STL_COMPARISON_BASE_DIR = base_data_dir / 'input/stl_activity_layers'
     CACHE_DIR = base_data_dir / 'input/cache'
+    STL_COMPARISON_BASE_DIR = base_data_dir / 'input/stl_activity_layers'
+
     # set cache dir
     GristCache('', CACHE_DIR)
 

@@ -253,24 +253,28 @@ def fetch_all_parcel_ids(url_base, retries=10):
             return None
 
 
-def geodf_overlap_cmp_keep_left(left, right):
+def geodf_overlap_cmp_keep_left(left, right, return_inputs=False):
     try:
-        if not 'joinidx_1' in left.index:
-            left["joinidx_1"] = np.arange(0, left.shape[0]).astype(int).astype(str)
+        if 'joinidx_0' not in left.index:
+            left["joinidx_0"] = np.arange(0, left.shape[0]).astype(int).astype(str)
 
         right = right.drop_duplicates([
             c
             for c in right.columns
             if 'object' not in c
         ])
-        right["joinidx_0"] = np.arange(0, right.shape[0]).astype(int)
+        if 'joinidx_1' not in right.index:
+            right["joinidx_1"] = np.arange(0, right.shape[0]).astype(int).astype(str)
 
-        right = right.to_crs(left.crs)
-        overlapping_regions = geopandas.sjoin(right[['joinidx_0', 'geometry']],
-                                              left[['joinidx_1', 'geometry']],
+        left_original = left.copy(deep=True)
+        right_original = right.copy(deep=True)
+
+        left = left.to_crs(right.crs)
+        overlapping_regions = geopandas.sjoin(left[['joinidx_0', 'geometry']],
+                                              right[['joinidx_1', 'geometry']],
                                               how="left",
                                               predicate='intersects').dropna()
-        return overlapping_regions
+        return overlapping_regions, left_original, right_original if return_inputs else overlapping_regions
     except Exception as err:
         try:
             right = right.set_crs(left.crs).to_crs(left.crs)

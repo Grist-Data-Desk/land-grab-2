@@ -662,14 +662,6 @@ STATE_ACTIVITIES = {
     ]),
 
     'MT': StateForActivity(name='Montana', activities=[
-        # StateActivityDataSource(name='Oil and gas',
-        #                         location='https://services2.arcgis.com/DRQySz3VhPgOv7Bo/ArcGIS/rest/services/MMB_Oil_and_Gas/FeatureServer/1/query',
-        #                         keep_cols=[],
-        #                         use_name_as_activity=True),
-        # StateActivityDataSource(name='misc',
-        #                         location='Montana_All/ManagedAreas.shp',
-        #                         keep_cols=['MANAME', 'INST', 'UNITTYPE'],
-        #                         use_name_as_activity=False),
         StateActivityDataSource(name='Oil and Gas Wells',
                                 location='Montana_All/wells/wells.shp',
                                 keep_cols=['CoName', 'Status', 'Type', 'Completed'],
