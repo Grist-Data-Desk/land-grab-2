@@ -20,9 +20,10 @@ def _get_merged_dataset_filename(state=None, file_extension='.geojson'):
 
 def take_first_val(row):
     for col in row.keys():
-        if 'rights_type' not in col:
+        if 'activity' not in col:
             if isinstance(row[col], list):
                 if len(row[col]) == 0:
+                    # row[col] = None
                     pass
                 else:
                     row[col] = row[col][0]
@@ -31,7 +32,7 @@ def take_first_val(row):
 
 
 def condense_activity(merged):
-    if 'rights_type' not in merged.columns:
+    if 'activity' not in merged.columns:
         return merged
 
     # chlk = ['parcel', 'parcelid', 'globalid', 'objectid']
@@ -43,7 +44,8 @@ def condense_activity(merged):
     # m2 = merged.groupby([groupby_col, 'geometry'], as_index=False).agg(list).reset_index()
     m2 = merged.groupby(['geometry'], as_index=False).agg(list).reset_index()
     m2 = m2.apply(take_first_val, axis=1)
-    m2['rights_type'] = m2.rights_type.map(lambda v: prettyify_list_of_strings({'rights_type': v})['rights_type'])
+    m2[ACTIVITY] = m2.activity.map(lambda v: prettyify_list_of_strings({'activity': v})['activity'])
+    # m2['rights_type'] = m2.rights_type.map(lambda v: prettyify_list_of_strings({'activity': v})['activity'])
     m2 = gpd.GeoDataFrame(m2, geometry=m2['geometry'], crs=merged.crs)
     return m2
 
@@ -169,6 +171,17 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
     return gdf
 
 
+def uniq(row):
+    for col in row.keys():
+        if isinstance(row[col], list):
+            if len(row[col]) == 0:
+                # row[col] = None
+                pass
+            else:
+                row[col] = row[col][0]
+    return row
+
+
 def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
     state_datasets_to_merge = []
 
@@ -185,7 +198,10 @@ def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
 
     # merge all states to single geodataframe
     merged = pd.concat(state_datasets_to_merge, ignore_index=True)
-    merged = condense_activity(merged)
+    # merged = condense_activity(merged)
+    m2 = merged.groupby(['geometry'], as_index=False).agg(list).reset_index()
+    m2 = m2.apply(uniq, axis=1)
+    merged = gpd.GeoDataFrame(m2, geometry=m2['geometry'], crs=merged.crs)
 
     # add a unique object id identifier columns
     merged[OBJECT_ID] = merged.index + 1

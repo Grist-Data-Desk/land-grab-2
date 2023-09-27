@@ -256,7 +256,9 @@ def run():
     # set cache dir
     GristCache('', CACHE_DIR)
 
-    stl = base_data_dir / 'input/230815_nationals_STLs/0815_national_stls_deduplicated.geojson'
+    # stl = base_data_dir / 'input/230815_nationals_STLs/0815_national_stls_deduplicated.geojson'
+    stl = base_data_dir / 'input/all-states.geojson'
+
     out_dir = base_data_dir / 'output'
 
     main(stl, out_dir)
