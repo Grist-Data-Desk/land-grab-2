@@ -116,6 +116,7 @@ if __name__ == "__main__":
 
     # states = ['AZ', 'MT', 'OR', 'UT', 'OK', 'NM']
     # states = ['UT']
+    # states = ['OK']
     # keys = [k for k in STATE_TRUST_CONFIGS.keys() if
     #         any(k.startswith(prefix) for prefix in states)]
 
@@ -128,3 +129,4 @@ if __name__ == "__main__":
 
     # extract_and_clean_all()
     # merge_all_states()
+    # merge_single_state('OK')

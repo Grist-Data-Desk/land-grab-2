@@ -1,5 +1,6 @@
 import os
 
+import geopandas
 import geopandas as gpd
 import pandas as pd
 
@@ -30,10 +31,18 @@ def take_first_val(row):
 
 
 def condense_activity(merged):
-    if 'uuid' not in merged.columns:
-        assert 1
-    m2 = merged.groupby(['uuid']).agg(list).reset_index()
-    m2 = merged.apply(take_first_val, axis=1)
+    if 'rights_type' not in merged.columns:
+        return merged
+
+    # chlk = ['parcel', 'parcelid', 'globalid', 'objectid']
+    # groupby_col = next((c for c in merged.columns for l in chlk if l.lower() in c.lower()), None)
+    # if not groupby_col:
+    #     return merged
+
+    # m2 = merged.dissolve(by=groupby_col, aggfunc=list).reset_index()
+    # m2 = merged.groupby([groupby_col, 'geometry'], as_index=False).agg(list).reset_index()
+    m2 = merged.groupby(['geometry'], as_index=False).agg(list).reset_index()
+    m2 = m2.apply(take_first_val, axis=1)
     m2['rights_type'] = m2.rights_type.map(lambda v: prettyify_list_of_strings({'rights_type': v})['rights_type'])
     m2 = gpd.GeoDataFrame(m2, geometry=m2['geometry'], crs=merged.crs)
     return m2
@@ -88,8 +97,8 @@ def _merge_dataframes(df_list):
 
     # return the final merged dataset
     merged = df_list.pop()
-    # merged = condense_activity(merged)
     merged = merged.drop_duplicates()
+    merged = geopandas.GeoDataFrame(merged)
     return merged
 
 
@@ -176,6 +185,7 @@ def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
 
     # merge all states to single geodataframe
     merged = pd.concat(state_datasets_to_merge, ignore_index=True)
+    merged = condense_activity(merged)
 
     # add a unique object id identifier columns
     merged[OBJECT_ID] = merged.index + 1

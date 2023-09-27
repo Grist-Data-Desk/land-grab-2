@@ -48,8 +48,6 @@ def _clean_queried_data(source, config, label, alias, queried_data_directory,
         gdf = _get_ut_town_range_section_county(gdf)
 
     gdf = _format_columns(gdf, config, alias)
-    if 'uuid' not in gdf.columns:
-        assert 1
 
     if not gdf.empty:
         filename = _get_filename(source, label, alias, '.geojson')
@@ -84,8 +82,6 @@ def _filter_and_clean_shapefile(gdf, config, source, label, code, alias,
         filtered_gdf = _get_sd_rights_type(filtered_gdf)
 
     filtered_gdf = _format_columns(filtered_gdf, config, alias)
-    if 'uuid' not in filtered_gdf.columns:
-        assert 1
 
     # more custom cleaning
     if 'NM' in source:
@@ -97,37 +93,10 @@ def _filter_and_clean_shapefile(gdf, config, source, label, code, alias,
     return filtered_gdf
 
 
-def add_uuid_col(gdf):
-    uuid_cols = ['OBJECTID', 'objectid', 'HoldingDetailID', 'GlobalID', 'SU_SUID', 'TRACT_ID']
-    uuid_cols_paired = [('STR', 'Shape_Leng'), ('DTRSQQ', 'CALCACRES')]
-    uuid_cols_paired_gen = ((c1, c2) for c1, c2 in uuid_cols_paired if (c1 in gdf.columns and c2 in gdf.columns))
-
-    if any(col for col in uuid_cols if col in gdf.columns):
-        uuid_col = next((col for col in uuid_cols if col in gdf.columns), None)
-        gdf['uuid'] = gdf[uuid_col].map(lambda v: add_uuid(*[v]))
-    else:
-        if any((c1, c2) for c1, c2 in uuid_cols_paired if (c1 in gdf.columns and c2 in gdf.columns)):
-            uuid_col_1, uuid_col_2 = next(uuid_cols_paired_gen, None)
-            gdf['uuid'] = gdf.apply(lambda row: add_uuid(*[uuid_col_1, uuid_col_2]), axis=1)
-        else:
-            if 'Meridian' in gdf.columns or 'meridian' in gdf.columns:
-                gdf['uuid'] = gdf.apply(lambda row: add_uuid(*[v for k, v in row.items() if 'geometry' not in k]),
-                                        axis=1)
-            else:
-                print('NO UUID EFFECTIVE COLUMN!!!!')
-                print(gdf.columns)
-
-    return gdf
-
-
 def _format_columns(gdf, config, alias):
     '''
     Column formatting used in final dataset
     '''
-
-    gdf = add_uuid_col(gdf)
-    if 'uuid' not in gdf.columns:
-        assert 1
 
     # if the initial dataset contains any columns that can be used in our final
     # dataset, rename them to the final dataset column name
@@ -139,8 +108,11 @@ def _format_columns(gdf, config, alias):
         if ((column not in gdf.columns) and config.get(column)):
             gdf[column] = config[column]
 
+    chlk = ['parcel', 'parcelid', 'globalid', 'objectid']
+    groupby_col = next((c for c in gdf.columns for l in chlk if l.lower() in c.lower()), None)
+
     # remove remaining columns
-    columns_to_drop = [column for column in gdf.columns if column not in COLUMNS + ['uuid']]
+    columns_to_drop = [column for column in gdf.columns if column not in COLUMNS + [groupby_col]]
 
     # add trust name columns
     if alias:
