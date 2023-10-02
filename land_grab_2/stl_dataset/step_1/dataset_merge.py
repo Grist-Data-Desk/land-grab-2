@@ -6,7 +6,7 @@ import pandas as pd
 
 from land_grab_2.stl_dataset.step_1.constants import ALL_STATES, RIGHTS_TYPE, ACTIVITY, COLUMNS, GIS_ACRES, \
     ALBERS_EQUAL_AREA, ACRES_TO_SQUARE_METERS, ACRES, OBJECT_ID
-from land_grab_2.utils import prettyify_list_of_strings, state_specific_directory
+from land_grab_2.utilities.utils import prettyify_list_of_strings, state_specific_directory
 
 os.environ['RESTAPI_USE_ARCPY'] = 'FALSE'
 

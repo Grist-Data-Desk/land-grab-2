@@ -10,7 +10,7 @@ from compose import compose
 
 from land_grab_2.stl_dataset.step_1.constants import UNIVERSITY, GIS_ACRES, STATE, DATA_DIRECTORY, UNIVERSITY_SUMMARY, \
     TRIBE_SUMMARY
-from land_grab_2.utils import prettyify_list_of_strings
+from land_grab_2.utilities.utils import prettyify_list_of_strings
 
 os.environ['RESTAPI_USE_ARCPY'] = 'FALSE'
 

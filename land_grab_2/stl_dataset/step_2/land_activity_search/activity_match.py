@@ -9,7 +9,8 @@ import numpy as np
 from tqdm import tqdm
 
 from land_grab_2.stl_dataset.step_2.land_activity_search.state_data_sources import STATE_ACTIVITIES, rewrite_rules
-from land_grab_2.utils import GristCache, geodf_overlap_cmp_keep_left
+from land_grab_2.utilities.utils import GristCache
+from land_grab_2.utilities.overlap import eval_overlap_keep_left
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -173,7 +174,7 @@ def extract_matches(state, activity, activity_data, grist_data, overlap_report):
 
 def find_overlaps(state, activity, activity_data, grist_data):
     try:
-        overlapping_regions, left, right = geodf_overlap_cmp_keep_left(activity_data, grist_data, return_inputs=True)
+        overlapping_regions, left, right = eval_overlap_keep_left(activity_data, grist_data, return_inputs=True)
         activity_data, grist_data = left, right
 
         return (extract_matches(state, activity, activity_data, grist_data, overlapping_regions)
@@ -235,6 +236,7 @@ def main(stl_path: Path, the_out_dir: Path):
 
     log.info(f'final grist_data row_count: {gdf.shape[0]}')
     gdf.to_csv(str(the_out_dir / 'updated_grist_stl.csv'), index=False)
+    gdf.to_file(str(the_out_dir / 'updated_grist_stl.geojson'), driver='GeoJSON')
 
     log.info(f'original grist_data row_count: {gdf.shape[0]}')
 

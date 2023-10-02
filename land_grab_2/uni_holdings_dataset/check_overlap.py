@@ -13,7 +13,8 @@ import pandas as pd
 from shapely import MultiPolygon, Polygon
 
 from land_grab_2.init_database.db.gristdb import GristDB
-from land_grab_2.utils import in_parallel, batch_iterable, geodf_overlap_cmp_keep_left
+from land_grab_2.utilities.utils import in_parallel, batch_iterable
+from land_grab_2.utilities.overlap import eval_overlap_keep_left
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -32,6 +33,17 @@ UNIV_NAME_TO_STATE = {'Iowa State University': 'IA',
                       'New Mexico State University': 'NM'}
 
 STATE_TO_UNIV = {v: k for k, v in UNIV_NAME_TO_STATE.items()}
+STATE_LONG_NAME = {'IA': 'iowa',
+                   'OR': 'oregon',
+                   'WI': 'wisconsin',
+                   'WA': 'washington',
+                   'MN': 'minnesota',
+                   'NC': 'north carolina',
+                   'VT': 'vermont',
+                   'WV': 'west virginia',
+                   'UT': 'utah',
+                   'ID': 'idaho',
+                   'NM': 'new mexico'}
 
 
 def db_list_counties(state_code):
@@ -91,7 +103,7 @@ def dict_to_geodataframe(crs, parcel) -> Optional[geopandas.GeoSeries]:
                    else [MultiPolygon(p) for p in geojson_0])
 
         gdfs = []
-        df = pd.DataFrame([parcel], columns=parcel.keys())
+        df = pd.DataFrame([parcel], dtype=str, columns=parcel.keys())
         for poly in geojson:
             gdf = geopandas.GeoDataFrame(df, crs=crs, geometry=[poly])
             gdfs.append(gdf)
@@ -115,31 +127,35 @@ def dictlist_to_geodataframe(count_parcels, crs=None):
 
 def extract_matches(grist_data, county_parcels_gdf, overlap_report):
     grist_data_update = []
-    for name, group in overlap_report.groupby("joinidx_0")[["joinidx_1"]]:
-        county_parcel = county_parcels_gdf[county_parcels_gdf['joinidx_0'] == name]
+    try:
+        for name, group in overlap_report.groupby("joinidx_1")[["joinidx_0"]]:
+            county_parcel = county_parcels_gdf[county_parcels_gdf['joinidx_1'] == name]
 
-        grist_rows = grist_data[grist_data['joinidx_1'].isin(group['joinidx_1'].tolist())].index.tolist()
-        for g_row_idx in grist_rows:
-            try:
+            grist_rows = grist_data[grist_data['joinidx_0'].isin(group['joinidx_0'].tolist())].index.tolist()
+            for g_row_idx in grist_rows:
                 rownum = grist_data.at[g_row_idx, 'rownum']
                 if rownum is not None:
                     record = (int(rownum), county_parcel['id'].tolist()[0])
                     grist_data_update.append(record)
-            except Exception as err:
-                print(f'just swallowed err from extract_matches(), err: {err}')
+    except Exception as err:
+        print(traceback.format_exc())
+        print(f'just swallowed err from extract_matches(), err: {err}')
 
     return grist_data_update
 
 
-def find_overlaps(grist_data, county_parcels_gdf):
+def find_overlaps(grist_data, county_parcels_gdf, crs_list):
     try:
-        overlapping_regions = geodf_overlap_cmp_keep_left(grist_data, county_parcels_gdf)
+        overlapping_regions, grist_data, county_parcels_gdf = eval_overlap_keep_left(grist_data,
+                                                                                     county_parcels_gdf,
+                                                                                     crs_list=crs_list,
+                                                                                     return_inputs=True)
 
         return (extract_matches(grist_data, county_parcels_gdf, overlapping_regions)
                 if overlapping_regions.shape[0] > 0
                 else [])
     except Exception as err:
-        print(f'failing on mysterious except in find_overlaps()')
+        print(f'failing on mysterious except in find_overlaps(): {err}')
 
 
 def process_parcels_batch(grist_data_path, county, state_code, parcels_batch):
@@ -148,9 +164,22 @@ def process_parcels_batch(grist_data_path, county, state_code, parcels_batch):
     county_parcels = GristDB().hydrate_ids(parcels_batch)
 
     county_parcels_gdf = dictlist_to_geodataframe(county_parcels, crs=grist_data.crs)
-    overlapping_county_parcels = find_overlaps(grist_data, county_parcels_gdf)
+    crs_list = GristDB().crs_search_by_state(STATE_LONG_NAME[state_code])
+    crs_list = [f"{r['data_source']}:{r['coord_ref_sys_code']}" for r in crs_list]
+
+    overlapping_county_parcels = find_overlaps(grist_data, county_parcels_gdf, crs_list)
     if overlapping_county_parcels:
         print(f' found {len(overlapping_county_parcels)} parcels with overlap for {county}')
+    else:
+        state_dir_path = Path(grist_data_path).parent.parent / 'output/non_matches' / state_code
+        county_dir_path = state_dir_path / county
+        for a_dir in [state_dir_path, county_dir_path]:
+            if not a_dir.exists():
+                a_dir.mkdir(parents=True, exist_ok=True)
+
+        grist_data.to_file(str(state_dir_path / f'grist_data.geojson'), driver='GeoJSON')
+        county_parcels_gdf.to_csv(str(county_dir_path / f'regrid_data.csv'), index=False)
+        county_parcels_gdf.to_file(str(county_dir_path / f'regrid_data.geojson'), driver='GeoJSON')
 
     return overlapping_county_parcels
 
@@ -167,7 +196,7 @@ def process_county(grist_data_path, state_code, county):
 
 
 def process_state(grist_data_path, state_code):
-    counties = [c['county'] for c in db_list_counties(state_code)][:2]
+    counties = [c['county'] for c in db_list_counties(state_code)]
     print(f'state: {state_code} total counties: {len(counties)}')
     overlapping_parcels_ids = in_parallel(counties,
                                           partial(process_county, grist_data_path, state_code),
@@ -191,6 +220,18 @@ def find_overlapping_parcels(grist_data_path):
         return df
 
 
+def summarize_run(overlapping_parcels, data_path):
+    # TODO maybe workshop this func
+    summary = []
+    for univ, state in UNIV_NAME_TO_STATE.items():
+        # what did we search, what did we find, what did we not find
+        state_dir_path = data_path / 'output/non_matches' / state
+        matched_state = state if not state_dir_path.exists() else ''
+        summary.append({'university': univ, 'matched': matched_state})
+
+    return pd.DataFrame(summary)
+
+
 def main():
     # given a set of geometry entries from the regrid database and
     # a set of geometry entries from university primary source,
@@ -202,11 +243,38 @@ def main():
     overlapping_parcels = find_overlapping_parcels(str(data_directory / 'input/UL-provided-names.geojson'))
     print(f'processing took {datetime.now() - st}')
 
+    run_summary = summarize_run(overlapping_parcels, data_directory)
+    run_summary.to_csv(str(data_directory / 'output/summary.csv'), index=False)
     if overlapping_parcels is not None:
         overlapping_parcels.to_csv(str(data_directory / 'output/matches.csv'), index=False)
     else:
         print('no report to write')
 
 
+def foo():
+    state = 'VT'
+    grist_data = geopandas.read_file(
+        '/Users/marcellebonterre/Projects/land-grab-2/data/uni_holdings/overlap_check/input/output/non_matches/VT/grist_data.geojson')
+    original_crs = grist_data.crs
+    raw_candidate_crss = GristDB().crs_search_by_state('vermont')
+    candidate_crss = [f"{r['data_source']}:{r['coord_ref_sys_code']}" for r in raw_candidate_crss]
+    counties = [c['county'] for c in db_list_counties(state)]
+    matches = []
+    for c in counties:
+        county_parcel_id_batchess = batch_iterable([p['id'] for p in db_county_parcel_ids(c)], batch_size=100000)
+        for county_parcel_id_batch in county_parcel_id_batchess:
+            county_parcels = GristDB().hydrate_ids(county_parcel_id_batch)
+            county_parcels_gdf = dictlist_to_geodataframe(county_parcels, crs=grist_data.crs)
+            match, grist_data, county_parcels_gdf = eval_overlap_keep_left(grist_data,
+                                                                           county_parcels_gdf,
+                                                                           crs_list=candidate_crss,
+                                                                           return_inputs=True)
+            if match is not None:
+                _matches = extract_matches(grist_data, county_parcels_gdf, match) if match.shape[0] > 0 else []
+                matches.append({'state': state, 'county': c, 'original_crs': original_crs, 'results': _matches})
+    assert 1
+
+
 if __name__ == '__main__':
     main()
+    # foo()

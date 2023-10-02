@@ -9,7 +9,7 @@ import geopandas
 import pandas as pd
 from ratelimiter import RateLimiter
 
-from land_grab_2.utils import GristCache, in_parallel, fetch_remote, fetch_all_parcel_ids
+from land_grab_2.utilities.utils import GristCache, in_parallel, fetch_remote, fetch_all_parcel_ids
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)

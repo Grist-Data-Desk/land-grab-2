@@ -11,7 +11,6 @@ from typing import Optional
 import dask
 import dask.bag
 import geopandas
-import numpy as np
 import requests
 import restapi
 from compose import compose
@@ -253,39 +252,8 @@ def fetch_all_parcel_ids(url_base, retries=10):
             return None
 
 
-def geodf_overlap_cmp_keep_left(left, right, return_inputs=False):
-    try:
-        if 'joinidx_0' not in left.index:
-            left["joinidx_0"] = np.arange(0, left.shape[0]).astype(int).astype(str)
-
-        right = right.drop_duplicates([
-            c
-            for c in right.columns
-            if 'object' not in c
-        ])
-        if 'joinidx_1' not in right.index:
-            right["joinidx_1"] = np.arange(0, right.shape[0]).astype(int).astype(str)
-
-        left_original = left.copy(deep=True)
-        right_original = right.copy(deep=True)
-
-        left = left.to_crs(right.crs)
-        overlapping_regions = geopandas.sjoin(left[['joinidx_0', 'geometry']],
-                                              right[['joinidx_1', 'geometry']],
-                                              how="left",
-                                              predicate='intersects').dropna()
-        return overlapping_regions, left_original, right_original if return_inputs else overlapping_regions
-    except Exception as err:
-        try:
-            right = right.set_crs(left.crs).to_crs(left.crs)
-            return geodf_overlap_cmp_keep_left(left, right)
-        except Exception as err:
-            print(f'failing on mysterious except')
-            assert 1
-
-
 def _to_kebab_case(string):
-    '''convert string to kebab case'''
+    """convert string to kebab case"""
     if '_' in string:
         return "-".join(string.lower().split('_'))
     else:
@@ -293,7 +261,7 @@ def _to_kebab_case(string):
 
 
 def _get_filename(state, label, alias, filetype):
-    '''return a filename in kebabcase'''
+    """return a filename in kebabcase"""
     if alias:
         return f'{_to_kebab_case(state)}-{_to_kebab_case(label)}-{_to_kebab_case(alias)}{filetype}'
     else:
@@ -301,9 +269,9 @@ def _get_filename(state, label, alias, filetype):
 
 
 def _query_arcgis_restapi(config, source, label, code, alias, directory):
-    '''
+    """
     Query available arcgis restapi's with relevant filters
-    '''
+    """
     # create a descriptive filename to store query info
     filename = _get_filename(source, label, alias, '.geojson')
 

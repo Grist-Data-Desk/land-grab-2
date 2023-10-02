@@ -6,7 +6,7 @@ import pandas as pd
 from land_grab_2.stl_dataset.step_1.constants import ALBERS_EQUAL_AREA, EXISTING_COLUMN_TO_FINAL_COLUMN_MAP, COLUMNS, \
     TRUST_NAME, TOWNSHIP, RANGE, SECTION, MERIDIAN, COUNTY, ALIQUOT, RIGHTS_TYPE, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE, \
     OK_HOLDING_DETAIL_ID, ACTIVITY, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_2, OK_TRUST_FUND_ID
-from land_grab_2.utils import _get_filename, add_uuid
+from land_grab_2.utilities.utils import _get_filename
 
 os.environ['RESTAPI_USE_ARCPY'] = 'FALSE'
 

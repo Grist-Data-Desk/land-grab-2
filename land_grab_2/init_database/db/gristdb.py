@@ -260,3 +260,23 @@ class GristDB:
     def fetch_all_unique(self, select_col):
         list_all_sql = f"SELECT DISTINCT {select_col} FROM regrid  ORDER BY {select_col} ASC;"
         return self.execute(list_all_sql, results_type=GristDbResults.ALL)
+
+    def crs_search_by_state(self, state):
+        list_all_sql = f'''SELECT * 
+                        FROM epsg_coordinatereferencesystem 
+                        WHERE coord_ref_sys_name ILIKE '%{state}%';'''
+        return self.execute(list_all_sql, results_type=GristDbResults.ALL)
+
+    def search_text_col_has_query_paged(self, batch_size=1000):
+        """
+        get match count
+		sort and limit matches
+		page through matches by id-page until no results
+        """
+        results_count = self.count_where()
+        if results_count == 0:
+            return []
+
+        batch_count = max(1,results_count//batch_size)
+        for batch in range(batch_count):
+            pass

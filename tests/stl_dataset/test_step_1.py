@@ -4,7 +4,7 @@ os.environ['DATA'] = '/Users/marcellebonterre/Projects/land-grab-2/data'
 
 from pathlib import Path
 
-from land_grab_2.utils import _cessions_data_directory
+from land_grab_2.utilities.utils import _cessions_data_directory
 from land_grab_2.stl_dataset.step_1.constants import STATE_TRUST_DATA_SOURCE_DIRECTORY
 
 
