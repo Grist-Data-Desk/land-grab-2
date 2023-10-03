@@ -175,37 +175,6 @@ class GristDB:
         except Exception as err:
             log.info(f'failed while closing db conn with {err}')
 
-    def search_text_column_has_query(self,
-                                     table_name: str,
-                                     column_name: str,
-                                     queries: List[str],
-                                     exclusion_ids: Optional[List[str]] = None,
-                                     callback: Optional[Any] = None):
-        if not queries:
-            return None
-
-        proper_quotes_queries = (q.replace("'", "''") for q in queries)
-        query_template = f"to_tsvector('english', {column_name}) @@ "
-        predicates = ' OR '.join([
-            (query_template + f"plainto_tsquery('english', '{q}')").format((column_name, q))
-            for q in proper_quotes_queries
-        ])
-
-        exclusion_ids_fmttd = ', '.join([f"'{i}'" for i in exclusion_ids])
-        id_exclude_predicate = '' if not exclusion_ids else f'AND id NOT IN ({exclusion_ids_fmttd})'
-
-        search_sql = f"""
-            SELECT * 
-            FROM {table_name} 
-            WHERE {predicates}
-            {id_exclude_predicate};
-        """
-
-        if callback:
-            return self.execute(search_sql, results_type=GristDbResults.CALLBACK, callback=callback)
-
-        return self.execute(search_sql, results_type=GristDbResults.ALL)
-
     def search_column_value_in_set(self,
                                    table_name: str,
                                    column_name: str,
@@ -267,16 +236,66 @@ class GristDB:
                         WHERE coord_ref_sys_name ILIKE '%{state}%';'''
         return self.execute(list_all_sql, results_type=GristDbResults.ALL)
 
-    def search_text_col_has_query_paged(self, batch_size=1000):
-        """
-        get match count
-		sort and limit matches
-		page through matches by id-page until no results
-        """
-        results_count = self.count_where()
-        if results_count == 0:
-            return []
+    def search_text_col_has_query_paged_impl(self,
+                                             table_name: str,
+                                             column_name: str,
+                                             queries: List[str],
+                                             exclusion_ids: Optional[List[str]] = None,
+                                             pagination_row_id: Optional[str] = None,
+                                             limit: int = None):
+        if not queries:
+            return None
+        limit_clause = '' if not limit else f'LIMIT {limit}'
 
-        batch_count = max(1,results_count//batch_size)
-        for batch in range(batch_count):
-            pass
+        proper_quotes_queries = (q.replace("'", "''") for q in queries)
+        query_template = f"to_tsvector('english', {column_name}) @@ "
+        predicates = ' OR '.join([
+            (query_template + f"plainto_tsquery('english', '{q}')").format((column_name, q))
+            for q in proper_quotes_queries
+        ])
+
+        exclusion_ids_fmttd = ', '.join([f"'{i}'" for i in exclusion_ids])
+        id_exclude_predicate = '' if not exclusion_ids else f'AND id NOT IN ({exclusion_ids_fmttd})'
+
+        search_sql = f"""
+            SELECT * 
+            FROM {table_name} 
+            WHERE {predicates}
+            {id_exclude_predicate}
+            ORDER BY id ASC {limit_clause};
+        """
+        if pagination_row_id:
+            search_sql = f"""
+                SELECT * 
+                FROM {table_name} 
+                WHERE {predicates}
+                {id_exclude_predicate}
+                AND id > {pagination_row_id} ORDER BY id ASC {limit_clause};
+            """
+
+        return self.execute(search_sql, results_type=GristDbResults.ALL)
+
+    def search_text_column_has_query(self,
+                                     table_name: str,
+                                     column_name: str,
+                                     queries: List[str],
+                                     exclusion_ids: Optional[List[str]] = None,
+                                     pagination_row_id: Optional[str] = None,
+                                     limit: int = 500):
+        all_results = []
+        result = self.search_text_col_has_query_paged_impl(table_name,
+                                                           column_name,
+                                                           queries,
+                                                           exclusion_ids,
+                                                           pagination_row_id,
+                                                           limit)
+        while result:
+            pagination_row_id = result[-1]['id']
+            result = self.search_text_col_has_query_paged_impl(table_name,
+                                                               column_name,
+                                                               queries,
+                                                               exclusion_ids,
+                                                               pagination_row_id,
+                                                               limit)
+            all_results += result
+        return all_results

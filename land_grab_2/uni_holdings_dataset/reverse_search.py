@@ -2,6 +2,8 @@
 University	Reverse_Search_Name	Reverse_Search_Mail_Address	Status	Check_Method
 """
 import logging
+import os
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -88,11 +90,9 @@ def process_university(row):
             # to perform an address search,
             # addresses = [a.strip() for a in mailadd.split(';')]
             print(f'[univ: {univ}] owner-address searching {len(owner_addresses_for_search)}: queries')
-            address_results_from_owner_search = []
-            db.search_text_column_has_query('regrid',
-                                            'mailadd',
-                                            list(owner_addresses_for_search),
-                                            callback=lambda a_row: address_results_from_owner_search.append(a_row))
+            address_results_from_owner_search = db.search_text_column_has_query('regrid',
+                                                                                'mailadd',
+                                                                                list(owner_addresses_for_search))
 
             # uniq_results = [
             # r for r in address_results_from_owner_search if r.get('id') and r.get('id') not in all_ids
@@ -108,16 +108,23 @@ def process_university(row):
 
 
 @app.command()
-def main(csv_path: str):
+def main():
+    data_tld = os.environ.get('DATA')
+    data_directory = Path(f'{data_tld}/uni_holdings/reverse_search')
+
     try:
         global OUT_DIR
-        OUT_DIR = Path(csv_path).parent
+        OUT_DIR = data_directory / 'output'
+
+        csv_path = data_directory / 'input/2308_LGU UNIS HACKATHON - UNI Priority Intake Status.csv'
         df = pd.read_csv(csv_path, index_col=False, dtype=str)
+
+        st = datetime.now()
         df.apply(process_university, axis=1)
+        print(f'processing took {datetime.now() - st}')
     except Exception as err:
         log.error(err)
 
 
 if __name__ == '__main__':
-    # app()
-    main('/tests/ignored_dir/foo/Reverse_Search_Guide_01.csv')
+    main()
