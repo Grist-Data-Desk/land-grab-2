@@ -26,7 +26,13 @@ log = logging.getLogger(__name__)
 memory = Memory(str(Path(os.environ.get('DATA')) / 'cache'))
 
 
-def in_parallel(work_items, a_callable, scheduler='processes', postprocess=None, batched=True, batch_size=10):
+def in_parallel(work_items,
+                a_callable,
+                scheduler='processes',
+                postprocess=None,
+                batched=True,
+                show_progress=False,
+                batch_size=10):
     debug_parallelism = os.environ.get('DEBUG_PARALLEL')
     if debug_parallelism:
         scheduler = 'synchronous' if len(debug_parallelism) <= 5 else debug_parallelism
@@ -40,7 +46,11 @@ def in_parallel(work_items, a_callable, scheduler='processes', postprocess=None,
     all_results = []
     if not batched:
         with dask.config.set(scheduler=scheduler):
-            with ProgressBar():
+            if show_progress:
+                with ProgressBar():
+                    all_results = dask.bag.from_sequence(work_items).map(a_callable).compute()
+                    return all_results
+            else:
                 all_results = dask.bag.from_sequence(work_items).map(a_callable).compute()
                 return all_results
 
@@ -49,7 +59,11 @@ def in_parallel(work_items, a_callable, scheduler='processes', postprocess=None,
     batches = batch_iterable(work_items, batch_size)
     for batch in tqdm(batches):
         with dask.config.set(scheduler=scheduler):
-            with ProgressBar():
+            if show_progress:
+                with ProgressBar():
+                    results = dask.bag.from_sequence(batch, partition_size=partition_size).map(a_callable).compute()
+                    all_results += results
+            else:
                 results = dask.bag.from_sequence(batch, partition_size=partition_size).map(a_callable).compute()
                 all_results += results
 
@@ -304,11 +318,15 @@ def _query_arcgis_restapi(config, source, label, code, alias, directory):
 
 
 @functools.cache
-def add_uuid(*args):
+def extend_with_uuid(*args):
     v_uniq = '-'.join(
         [str(a) for a in args] + [str(uuid.uuid4())]
     )
     return v_uniq
+
+
+def get_uuid():
+    return str(uuid.uuid4())
 
 
 def delete_files_and_subdirectories_in_directory(directory_path):

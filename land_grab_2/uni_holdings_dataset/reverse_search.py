@@ -3,10 +3,12 @@ University	Reverse_Search_Name	Reverse_Search_Mail_Address	Status	Check_Method
 """
 import logging
 import os
+import traceback
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List
 
+import geopandas
 import pandas as pd
 import typer
 
@@ -116,13 +118,18 @@ def main():
         global OUT_DIR
         OUT_DIR = data_directory / 'output'
 
+        grist_data_path = str(data_directory / 'input/UL-provided-names.geojson')
+        grist_data = geopandas.read_file(grist_data_path)
+
         csv_path = data_directory / 'input/2308_LGU UNIS HACKATHON - UNI Priority Intake Status.csv'
         df = pd.read_csv(csv_path, index_col=False, dtype=str)
 
         st = datetime.now()
-        df.apply(process_university, axis=1)
+        for univ in set(df.Uni.tolist()):
+            df.apply(process_university, axis=1)
         print(f'processing took {datetime.now() - st}')
     except Exception as err:
+        print(traceback.format_exc())
         log.error(err)
 
 
