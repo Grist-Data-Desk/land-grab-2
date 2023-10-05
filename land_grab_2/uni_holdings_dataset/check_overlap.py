@@ -14,11 +14,13 @@ import pandas as pd
 from shapely import MultiPolygon, Polygon
 
 from land_grab_2.init_database.db.gristdb import GristDB
-from land_grab_2.utilities.utils import in_parallel, batch_iterable, get_uuid, in_parallel_fake
+from land_grab_2.utilities.utils import in_parallel, batch_iterable, get_uuid, in_parallel_fake, send_email
 from land_grab_2.utilities.overlap import eval_overlap_keep_left
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
+
+SCALE_SCHEDULER = os.environ.get('SCALE_SCHEDULER', 'synchronous')
 
 UNIV_NAME_TO_STATE = {'Iowa State University': 'IA',
                       'Portland State University': 'OR',
@@ -218,7 +220,7 @@ def process_state(grist_data_path, state_code):
     print(f'state: {state_code} total counties: {len(counties)}')
     overlapping_parcels_ids = in_parallel(counties,
                                           partial(process_county, grist_data_path, state_code),
-                                          scheduler='synchronous',
+                                          scheduler=SCALE_SCHEDULER,
                                           show_progress=True,
                                           batched=False)
     overlapping_parcels_ids = itertools.chain.from_iterable(overlapping_parcels_ids)
@@ -229,7 +231,7 @@ def process_state(grist_data_path, state_code):
 def find_overlapping_parcels(grist_data_path):
     all_states = [v for v in UNIV_NAME_TO_STATE.values()]
     all_matches_ids = in_parallel(all_states, partial(process_state, grist_data_path),
-                                  scheduler='synchronous',
+                                  scheduler=SCALE_SCHEDULER,
                                   batched=False)
     # all_matches_ids = list(itertools.chain.from_iterable(all_matches_ids))
     # if all_matches_ids:
@@ -253,7 +255,10 @@ def run():
     st = datetime.now()
     overlapping_parcels = find_overlapping_parcels(str(data_directory / 'input/UL-provided-names.geojson'))
     print(f'processing took {datetime.now() - st}')
-
+    try:
+        send_email('laanak@gmail.com', 'check-overlap-status', f'processing took {datetime.now() - st}')
+    except:
+        pass
     # if overlapping_parcels is not None:
     #     overlapping_parcels.to_csv(str(data_directory / 'output/matches.csv'), index=False)
     # else:
