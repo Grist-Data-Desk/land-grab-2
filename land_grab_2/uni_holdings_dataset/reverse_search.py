@@ -120,7 +120,7 @@ def run():
         global OUT_DIR
         OUT_DIR = data_directory / 'output'
 
-        csv_path = data_directory / 'input/2308_LGU UNIS HACKATHON - Sheet4.csv'
+        csv_path = data_directory / 'input/2308_LGU UNIS HACKATHON - Sheet5.csv'
         df = pd.read_csv(csv_path, index_col=False, dtype=str)
 
         st = datetime.now()
