@@ -220,7 +220,7 @@ def process_state(grist_data_path, state_code):
     print(f'state: {state_code} total counties: {len(counties)}')
     overlapping_parcels_ids = in_parallel(counties,
                                           partial(process_county, grist_data_path, state_code),
-                                          scheduler='processes',
+                                          scheduler='synchronous',
                                           show_progress=True,
                                           batched=False)
     overlapping_parcels_ids = itertools.chain.from_iterable(overlapping_parcels_ids)

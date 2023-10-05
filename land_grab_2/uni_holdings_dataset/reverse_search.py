@@ -33,20 +33,14 @@ UNIV_NAME_TO_STATE = {'Iowa State University': 'IA',
                       'New Mexico State University': 'NM',
                       'University of Florida':'FL',
                       'University of California System':'CA',
-                      'University of Arizona':'AZ'}
+                      'University of Arizona':'AZ',
+                      'Purdue University':'IN',
+                      'University of Missouri':'MO',
+                      'Ohio State University':'OH',
+                      'University of Tennessee':'TN'}
 
 STATE_TO_UNIV = {v: k for k, v in UNIV_NAME_TO_STATE.items()}
-STATE_LONG_NAME = {'IA': 'iowa',
-                   'OR': 'oregon',
-                   'WI': 'wisconsin',
-                   'WA': 'washington',
-                   'MN': 'minnesota',
-                   'NC': 'north carolina',
-                   'VT': 'vermont',
-                   'WV': 'west virginia',
-                   'UT': 'utah',
-                   'ID': 'idaho',
-                   'NM': 'new mexico'}
+
 
 def write_search_results(output_dir: Path, name: str, univ: str, queries: List[str], results: List[Dict[str, Any]]):
     univ_out_dir = output_dir / univ
