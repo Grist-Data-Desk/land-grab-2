@@ -20,6 +20,33 @@ log = logging.getLogger(__name__)
 app = typer.Typer()
 OUT_DIR = Path('').resolve()
 
+UNIV_NAME_TO_STATE = {'Iowa State University': 'IA',
+                      'University of Wisconsin': 'WI',
+                      'Washington State University': 'WA',
+                      'University of Minnesota': 'MN',
+                      'North Carolina State University': 'NC',
+                      'University of Vermont': 'VT',
+                      'West Virginia University': 'WV',
+                      'Utah State University': 'UT',
+                      'University of Idaho': 'ID',
+                      'Oregon State University': 'OR',
+                      'New Mexico State University': 'NM',
+                      'University of Florida':'FL',
+                      'University of California System':'CA',
+                      'University of Arizona':'AZ'}
+
+STATE_TO_UNIV = {v: k for k, v in UNIV_NAME_TO_STATE.items()}
+STATE_LONG_NAME = {'IA': 'iowa',
+                   'OR': 'oregon',
+                   'WI': 'wisconsin',
+                   'WA': 'washington',
+                   'MN': 'minnesota',
+                   'NC': 'north carolina',
+                   'VT': 'vermont',
+                   'WV': 'west virginia',
+                   'UT': 'utah',
+                   'ID': 'idaho',
+                   'NM': 'new mexico'}
 
 def write_search_results(output_dir: Path, name: str, univ: str, queries: List[str], results: List[Dict[str, Any]]):
     univ_out_dir = output_dir / univ
