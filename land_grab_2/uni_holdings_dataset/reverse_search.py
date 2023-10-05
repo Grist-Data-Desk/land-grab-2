@@ -51,12 +51,12 @@ def process_university(row):
         owner_records = None
         address_records = None
         if isinstance(owner, str) and len(owner) > 0:
-            owners = [o.strip() for o in owner.split(';')]
+            owners = [o.strip() for o in owner.split('\n')]
             owner_records = db.search_text_column_has_query('regrid', 'owner', owners)
             write_search_results(out_dir, 'owner', univ, owners, owner_records)
 
         if isinstance(mailadd, str) and len(mailadd) > 0:
-            addresses = [a.strip() for a in mailadd.split(';')]
+            addresses = [a.strip() for a in mailadd.split('\n')]
             address_records = db.search_text_column_has_query('regrid', 'mailadd', addresses)
             write_search_results(out_dir, 'address', univ, addresses, address_records)
 
@@ -106,11 +106,13 @@ def process_university(row):
                                  list(owner_addresses_for_search),
                                  address_results_from_owner_search)
     except Exception as err:
+        print(traceback.format_exc())
         log.error(err)
 
 
 @app.command()
-def main():
+def run():
+    print('running private_holdings_by_reverse_search')
     data_tld = os.environ.get('DATA')
     data_directory = Path(f'{data_tld}/uni_holdings/reverse_search')
 
@@ -118,15 +120,11 @@ def main():
         global OUT_DIR
         OUT_DIR = data_directory / 'output'
 
-        grist_data_path = str(data_directory / 'input/UL-provided-names.geojson')
-        grist_data = geopandas.read_file(grist_data_path)
-
-        csv_path = data_directory / 'input/2308_LGU UNIS HACKATHON - UNI Priority Intake Status.csv'
+        csv_path = data_directory / 'input/2308_LGU UNIS HACKATHON - Sheet4.csv'
         df = pd.read_csv(csv_path, index_col=False, dtype=str)
 
         st = datetime.now()
-        for univ in set(df.Uni.tolist()):
-            df.apply(process_university, axis=1)
+        df.apply(process_university, axis=1)
         print(f'processing took {datetime.now() - st}')
     except Exception as err:
         print(traceback.format_exc())
@@ -134,4 +132,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    run()

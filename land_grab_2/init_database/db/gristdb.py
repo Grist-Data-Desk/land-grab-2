@@ -246,6 +246,7 @@ class GristDB:
         if not queries:
             return None
         limit_clause = '' if not limit else f'LIMIT {limit}'
+        exclusion_ids = exclusion_ids or []
 
         proper_quotes_queries = (q.replace("'", "''") for q in queries)
         query_template = f"to_tsvector('english', {column_name}) @@ "

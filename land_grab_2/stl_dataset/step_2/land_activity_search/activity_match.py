@@ -242,6 +242,7 @@ def main(stl_path: Path, the_out_dir: Path):
 
 
 def run():
+    print('running stl_activity_match')
     required_envs = ['DATA', 'PYTHONHASHSEED']
     missing_envs = [env for env in required_envs if os.environ.get(env) is None]
     if any(missing_envs):

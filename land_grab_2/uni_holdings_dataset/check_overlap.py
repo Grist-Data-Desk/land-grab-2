@@ -1,3 +1,4 @@
+import concurrent.futures
 import itertools
 import json
 import logging
@@ -13,7 +14,7 @@ import pandas as pd
 from shapely import MultiPolygon, Polygon
 
 from land_grab_2.init_database.db.gristdb import GristDB
-from land_grab_2.utilities.utils import in_parallel, batch_iterable, get_uuid
+from land_grab_2.utilities.utils import in_parallel, batch_iterable, get_uuid, in_parallel_fake
 from land_grab_2.utilities.overlap import eval_overlap_keep_left
 
 logging.basicConfig(level=logging.INFO)
@@ -158,11 +159,10 @@ def find_overlaps(grist_data, county_parcels_gdf, crs_list):
         print(f'failing on mysterious except in find_overlaps(): {err}')
 
 
-def write_county_batch(grist_data_path: Path, state_code: str, county: str, batch_results: Optional[list]):
+def write_county_batch(grist_data_path: str, state_code: str, county: str, batch_results: Optional[list]):
     if batch_results is None or isinstance(batch_results, list) and len(batch_results) == 0:
         return
-    print('preparing to write batch')
-    output_dir = grist_data_path.parent.parent
+    output_dir = Path(grist_data_path).parent.parent / 'output'
     state_dir = output_dir / state_code
     county_dir = state_dir / county
     bid = get_uuid()
@@ -176,7 +176,6 @@ def write_county_batch(grist_data_path: Path, state_code: str, county: str, batc
         for (grist_rownum, _), regrid_row in zip(batch_results, results_hydrated)
     ]
     df = pd.DataFrame(results)
-    print('writing batch')
     df.to_csv(str(county_dir / batch_name), index=False)
 
 
@@ -188,7 +187,7 @@ def process_parcels_batch(grist_data_path, county, state_code, parcels_batch):
     county_parcels_gdf = dictlist_to_geodataframe(county_parcels, crs=grist_data.crs)
     crs_list = GristDB().crs_search_by_state(STATE_LONG_NAME[state_code])
     crs_list = [f"{r['data_source']}:{r['coord_ref_sys_code']}" for r in crs_list]
-    crs_list = crs_list + [grist_data.crs]
+    crs_list = [grist_data.crs] + crs_list
 
     overlapping_county_parcels = find_overlaps(grist_data, county_parcels_gdf, crs_list)
     if overlapping_county_parcels:
@@ -199,15 +198,18 @@ def process_parcels_batch(grist_data_path, county, state_code, parcels_batch):
 
 
 def process_county(grist_data_path, state_code, county):
-    county_parcel_id_batches = batch_iterable([p['id'] for p in db_county_parcel_ids(county)], batch_size=100000)
+    county_parcel_groups = batch_iterable([p['id'] for p in db_county_parcel_ids(county)], batch_size=500)
 
-    batched_parcel_matches_ids = in_parallel(county_parcel_id_batches,
-                                             partial(process_parcels_batch, grist_data_path, county, state_code),
-                                             # scheduler='synchronous',
-                                             batched=False)
-    batched_parcel_matches_ids = itertools.chain.from_iterable(batched_parcel_matches_ids)
+    parcel_matches_ids = in_parallel(county_parcel_groups,
+                                     partial(process_parcels_batch,
+                                             grist_data_path,
+                                             county,
+                                             state_code),
+                                     batched=False)
 
-    return batched_parcel_matches_ids
+    parcel_matches_ids = itertools.chain.from_iterable(parcel_matches_ids)
+
+    return parcel_matches_ids
 
 
 def process_state(grist_data_path, state_code):
@@ -216,7 +218,7 @@ def process_state(grist_data_path, state_code):
     print(f'state: {state_code} total counties: {len(counties)}')
     overlapping_parcels_ids = in_parallel(counties,
                                           partial(process_county, grist_data_path, state_code),
-                                          # scheduler='synchronous',
+                                          scheduler='synchronous',
                                           show_progress=True,
                                           batched=False)
     overlapping_parcels_ids = itertools.chain.from_iterable(overlapping_parcels_ids)
@@ -240,7 +242,8 @@ def find_overlapping_parcels(grist_data_path):
     #     return df
 
 
-def main():
+def run():
+    print('Running: private_holdings_by_geo_overlap')
     # given a set of geometry entries from the regrid database and
     # a set of geometry entries from university primary source,
     # gather regrid database entries where there is intersection with university primary source data
@@ -258,4 +261,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    run()

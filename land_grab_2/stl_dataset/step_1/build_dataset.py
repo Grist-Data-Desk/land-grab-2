@@ -100,10 +100,11 @@ def build_full_dataset():
     # merge with usfs cessions data and calculate_summary_statistics
     # TODO: uncomment once this is finished
     # merge_cessions_data()
-    calculate_summary_statistics()
+    # calculate_summary_statistics()
 
 
 def run():
+    print('Running: build_stl_dataset')
     build_full_dataset()
 
 

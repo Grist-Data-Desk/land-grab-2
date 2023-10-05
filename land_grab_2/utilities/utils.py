@@ -1,4 +1,5 @@
 import functools
+import itertools
 import json
 import logging
 import os
@@ -24,6 +25,27 @@ from land_grab_2.stl_dataset.step_1.constants import STATE_TRUST_DIRECTORY, QUER
 log = logging.getLogger(__name__)
 
 memory = Memory(str(Path(os.environ.get('DATA')) / 'cache'))
+
+
+def in_parallel_fake(work_items,
+                     a_callable,
+                     postprocess=None,
+                     batched=True,
+                     show_progress=False,
+                     batch_size=10):
+    if postprocess:
+        a_callable = compose(postprocess, a_callable)
+
+    log.info('Using for-loop as scheduler')
+
+    batches = [[w] for w in work_items]
+    if batched:
+        batches = batch_iterable(work_items, batch_size)
+
+    if show_progress:
+        batches = tqdm(batches)
+
+    return list(itertools.chain.from_iterable([[a_callable(work_item) for work_item in batch] for batch in batches]))
 
 
 def in_parallel(work_items,
@@ -317,7 +339,7 @@ def _query_arcgis_restapi(config, source, label, code, alias, directory):
         print(f'encountered error while querying {data_source}:\n{err}')
 
 
-@functools.cache
+@functools.lru_cache()
 def extend_with_uuid(*args):
     v_uniq = '-'.join(
         [str(a) for a in args] + [str(uuid.uuid4())]
