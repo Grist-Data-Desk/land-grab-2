@@ -201,13 +201,19 @@ def process_parcels_batch(grist_data_path, county, state_code, parcels_batch):
 
 def process_county(grist_data_path, state_code, county):
     county_parcel_groups = batch_iterable([p['id'] for p in db_county_parcel_ids(county)], batch_size=100000)
-
-    parcel_matches_ids = in_parallel(county_parcel_groups,
-                                     partial(process_parcels_batch,
-                                             grist_data_path,
+    with concurrent.futures.ProcessPoolExecutor() as pool:
+        fs = [pool.submit(process_parcels_batch,
+                          grist_data_path,
                                              county,
-                                             state_code),
-                                     batched=False)
+                                             state_code, b) for b in county_parcel_groups]
+        concurrent.futures.wait(fs)
+        parcel_matches_ids = [f.result() for f in fs]
+    # parcel_matches_ids = in_parallel(county_parcel_groups,
+    #                                  partial(process_parcels_batch,
+    #                                          grist_data_path,
+    #                                          county,
+    #                                          state_code),
+    #                                  batched=False)
 
     parcel_matches_ids = itertools.chain.from_iterable(parcel_matches_ids)
 
