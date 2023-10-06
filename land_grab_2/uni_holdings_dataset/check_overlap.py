@@ -207,7 +207,7 @@ def process_county(grist_data_path, state_code, county):
                           grist_data_path,
                           county,
                           state_code, b) for b in county_parcel_groups]
-        parcel_matches_ids = [f.result() for f in tqdm(concurrent.futures.as_completed(fs))]
+        parcel_matches_ids = [f.result() for f in concurrent.futures.as_completed(fs)]
     # parcel_matches_ids = in_parallel(county_parcel_groups,
     #                                  partial(process_parcels_batch,
     #                                          grist_data_path,
