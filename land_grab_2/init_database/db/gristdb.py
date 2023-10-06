@@ -300,3 +300,51 @@ class GristDB:
                                                                limit)
             all_results += result
         return all_results
+
+    def _db_state_by_min_col_length(self,
+                                    state: str,
+                                    column: str,
+                                    min_len: int,
+                                    max_len: int,
+                                    pagination_row_id: Optional[str] = None,
+                                    limit: int = 10000) -> List[Dict[str, Any]]:
+
+        search_sql = f"""
+        select * 
+        from regrid 
+        where state2 = '{state}' 
+        AND length({column}) >= {min_len} 
+        AND length({column}) <= {max_len}
+        ORDER BY id ASC 
+        LIMIT {limit};
+        """
+
+        if pagination_row_id:
+            search_sql = f"""
+                    select * 
+                    from regrid 
+                    where state2 = '{state}' 
+                    AND length({column}) >= {min_len} 
+                    AND length({column}) <= {max_len} 
+                    AND id > {pagination_row_id} 
+                    ORDER BY id ASC 
+                    LIMIT {limit};
+                    """
+
+        return self.execute(search_sql, results_type=GristDbResults.ALL)
+
+    def state_by_min_col_length(self, state: str, column: str, min_len: int, max_len:int) -> List[Dict[str, Any]]:
+        all_results = []
+
+        result = self._db_state_by_min_col_length(state=state, column=column, min_len=min_len, max_len=max_len)
+
+        while result:
+            pagination_row_id = result[-1]['id']
+            result = self._db_state_by_min_col_length(state=state,
+                                                      column=column,
+                                                      min_len=min_len,
+                                                      max_len=max_len,
+                                                      pagination_row_id=pagination_row_id)
+            all_results += result
+
+        return all_results

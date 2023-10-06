@@ -23,18 +23,20 @@ log = logging.getLogger(__name__)
 
 SCALE_SCHEDULER = os.environ.get('SCALE_SCHEDULER', 'synchronous')
 
-UNIV_NAME_TO_STATE = {'Iowa State University': 'IA',
-                      'Portland State University': 'OR',
-                      'University of Wisconsin': 'WI',
-                      'Washington State University': 'WA',
-                      'University of Minnesota': 'MN',
-                      'North Carolina State University': 'NC',
-                      'University of Vermont': 'VT',
-                      'West Virginia University': 'WV',
-                      'Utah State University': 'UT',
-                      'University of Idaho': 'ID',
-                      'Oregon State University': 'OR',
-                      'New Mexico State University': 'NM'}
+UNIV_NAME_TO_STATE = {
+    'Iowa State University': 'IA',
+    'University of Idaho': 'ID',
+    'University of Minnesota': 'MN',
+    'North Carolina State University': 'NC',
+    'New Mexico State University': 'NM',
+    'Portland State University': 'OR',
+    'Oregon State University': 'OR',
+    'Utah State University': 'UT',
+    'University of Vermont': 'VT',
+    'Washington State University': 'WA',
+    'University of Wisconsin': 'WI',
+    'West Virginia University': 'WV',
+}
 
 STATE_TO_UNIV = {v: k for k, v in UNIV_NAME_TO_STATE.items()}
 STATE_LONG_NAME = {'IA': 'iowa',

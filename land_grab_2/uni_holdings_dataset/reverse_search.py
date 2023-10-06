@@ -1,18 +1,23 @@
 """
 University	Reverse_Search_Name	Reverse_Search_Mail_Address	Status	Check_Method
 """
+import copy
+import itertools
 import logging
 import os
 import traceback
+from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 
 import geopandas
+import numpy as np
 import pandas as pd
 import typer
+from numpy import percentile
 
-from land_grab_2.init_database.db.gristdb import GristDB
+from land_grab_2.init_database.db.gristdb import GristDB, GristDbResults
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -31,15 +36,101 @@ UNIV_NAME_TO_STATE = {'Iowa State University': 'IA',
                       'University of Idaho': 'ID',
                       'Oregon State University': 'OR',
                       'New Mexico State University': 'NM',
-                      'University of Florida':'FL',
-                      'University of California System':'CA',
-                      'University of Arizona':'AZ',
-                      'Purdue University':'IN',
-                      'University of Missouri':'MO',
-                      'Ohio State University':'OH',
-                      'University of Tennessee':'TN'}
+                      'University of Florida': 'FL',
+                      'University of California System': 'CA',
+                      'University of Arizona': 'AZ',
+                      'Purdue University': 'IN',
+                      'University of Missouri': 'MO',
+                      'Ohio State University': 'OH',
+                      'University of Tennessee': 'TN'}
 
 STATE_TO_UNIV = {v: k for k, v in UNIV_NAME_TO_STATE.items()}
+
+
+@dataclass
+class Bound:
+    name:str
+    left: int
+    right: int
+    values: List[str] = field(default_factory=list)
+
+
+@dataclass
+class StrSizeBucketBounds:
+    small: Bound
+    medium: Bound
+    large: Bound
+    extra_large: Bound
+
+
+def db_state_by_min_col_length(state: str, column: str, min_len: int) -> List[Dict[str, Any]]:
+    search_sql = f"""
+    select * from regrid where state2 = '{state}' AND length({column}) >= {min_len};
+    """
+    return GristDB().execute(search_sql, results_type=GristDbResults.ALL)
+
+
+def gather_size_bounds(q):
+    data = np.array([len(s) for s in q])
+    quartiles = percentile(data, [25, 50, 75])
+
+    data_min = data.min()
+    q1 = int(quartiles[0])
+    median = int(quartiles[1])
+    q3 = int(quartiles[2])
+    data_max = data.max()
+
+    bounds = StrSizeBucketBounds(small=Bound('small', data_min, median),
+                                 medium=Bound('medium', q1, q3),
+                                 large=Bound('large', median, data_max),
+                                 extra_large=Bound('extra_large', data_max, 2 * data_max))
+
+    return bounds
+
+
+def bucket_queries(bounds, queries):
+    for q in queries:
+        if bounds.extra_large.left <= len(q):
+            bounds.extra_large.values.append(q)
+        elif bounds.large.left <= len(q) <= bounds.large.right:
+            bounds.large.values.append(q)
+        elif bounds.medium.left <= len(q) <= bounds.medium.right:
+            bounds.medium.values.append(q)
+        else:
+            bounds.small.values.append(q)
+    return bounds
+
+
+def _search(state: str, column: str, bound: Bound):
+    results = GristDB().state_by_min_col_length(state=state, column=column, min_len=bound.left, max_len=bound.right)
+
+    keepers = []
+    for result in results:
+        if any(v in result[column] for v in bound.values):
+            keepers.append(result)
+
+    return keepers
+
+
+def search(university: str, queries: List[str], column: str) -> List[Dict[str, Any]]:
+    state = UNIV_NAME_TO_STATE.get(university)
+    if not state:
+        return
+
+    # find bucket sizes based on query lengths by summarization
+    bounds = gather_size_bounds(queries)
+
+    queries_by_size = bucket_queries(bounds, queries)
+    queries_by_size_xl_first = [
+        # queries_by_size.extra_large,
+        queries_by_size.large,
+        queries_by_size.medium,
+        queries_by_size.small
+    ]
+
+    keepers = list(itertools.chain.from_iterable([_search(state, column, bound) for bound in queries_by_size_xl_first]))
+
+    return keepers
 
 
 def write_search_results(output_dir: Path, name: str, univ: str, queries: List[str], results: List[Dict[str, Any]]):
@@ -73,12 +164,14 @@ def process_university(row):
         address_records = None
         if isinstance(owner, str) and len(owner) > 0:
             owners = [o.strip() for o in owner.split('\n')]
-            owner_records = db.search_text_column_has_query('regrid', 'owner', owners)
+            owner_records = search(univ, owners, 'owner')
+            # owner_records = db.search_text_column_has_query('regrid', 'owner', owners)
             write_search_results(out_dir, 'owner', univ, owners, owner_records)
 
         if isinstance(mailadd, str) and len(mailadd) > 0:
             addresses = [a.strip() for a in mailadd.split('\n')]
-            address_records = db.search_text_column_has_query('regrid', 'mailadd', addresses)
+            address_records = search(univ, addresses, 'mailadd')
+            # address_records = db.search_text_column_has_query('regrid', 'mailadd', addresses)
             write_search_results(out_dir, 'address', univ, addresses, address_records)
 
         if owner and mailadd and owner_records and address_records:
@@ -113,10 +206,11 @@ def process_university(row):
             # to perform an address search,
             # addresses = [a.strip() for a in mailadd.split(';')]
             print(f'[univ: {univ}] owner-address searching {len(owner_addresses_for_search)}: queries')
-            address_results_from_owner_search = db.search_text_column_has_query('regrid',
-                                                                                'mailadd',
-                                                                                list(owner_addresses_for_search))
-
+            address_results_from_owner_search = search(univ, list(owner_addresses_for_search), 'mailadd')
+            # address_results_from_owner_search = db.search_text_column_has_query('regrid',
+            #                                                                     'mailadd',
+            #                                                                     list(owner_addresses_for_search))
+            #
             # uniq_results = [
             # r for r in address_results_from_owner_search if r.get('id') and r.get('id') not in all_ids
             # ]
