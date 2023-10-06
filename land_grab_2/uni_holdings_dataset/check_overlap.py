@@ -202,7 +202,7 @@ def process_parcels_batch(grist_data_path, county, state_code, parcels_batch):
 
 def process_county(grist_data_path, state_code, county):
     county_parcel_groups = batch_iterable([p['id'] for p in db_county_parcel_ids(county)], batch_size=100000)
-    with concurrent.futures.ProcessPoolExecutor() as pool:
+    with concurrent.futures.ProcessPoolExecutor(max_workers=len(county_parcel_groups)) as pool:
         fs = [pool.submit(process_parcels_batch,
                           grist_data_path,
                           county,
