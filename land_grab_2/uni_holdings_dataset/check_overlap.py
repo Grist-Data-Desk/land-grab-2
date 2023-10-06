@@ -12,6 +12,7 @@ from typing import Optional
 import geopandas
 import pandas as pd
 from shapely import MultiPolygon, Polygon
+from tqdm import tqdm
 
 from land_grab_2.init_database.db.gristdb import GristDB
 from land_grab_2.utilities.utils import in_parallel, batch_iterable, get_uuid, in_parallel_fake, send_email
@@ -204,10 +205,9 @@ def process_county(grist_data_path, state_code, county):
     with concurrent.futures.ProcessPoolExecutor() as pool:
         fs = [pool.submit(process_parcels_batch,
                           grist_data_path,
-                                             county,
-                                             state_code, b) for b in county_parcel_groups]
-        concurrent.futures.wait(fs)
-        parcel_matches_ids = [f.result() for f in fs]
+                          county,
+                          state_code, b) for b in county_parcel_groups]
+        parcel_matches_ids = [f.result() for f in tqdm(concurrent.futures.as_completed(fs))]
     # parcel_matches_ids = in_parallel(county_parcel_groups,
     #                                  partial(process_parcels_batch,
     #                                          grist_data_path,
