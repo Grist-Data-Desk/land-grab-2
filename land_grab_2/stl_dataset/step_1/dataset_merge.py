@@ -147,13 +147,9 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
         if file.endswith('.geojson'):
             print(cleaned_data_directory + file)
             gdf = gpd.read_file(cleaned_data_directory + file)
-            try:
-                gdf[GIS_ACRES] = (gdf.to_crs(gdf.crs).area / ACRES_TO_SQUARE_METERS).round(2)
-                gdf = gdf.to_crs(ALBERS_EQUAL_AREA) # EPSG:5070
-            except Exception as err:
-                print(gdf.crs)
-                print(err)
-                sys.exit()
+            gdf[GIS_ACRES] = (gdf.to_crs(ALBERS_EQUAL_AREA).area / ACRES_TO_SQUARE_METERS).round(2)
+         
+
             if not gdf.empty:
                 gdfs.append(gdf)
 
@@ -202,6 +198,11 @@ def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
             merge_single_state_helper(state, state_cleaned_data_directory, merged_data_directory)
             
         )
+
+    state_datasets_to_merge = [
+        gdf.set_crs(ALBERS_EQUAL_AREA, inplace=True, allow_override=True).to_crs(ALBERS_EQUAL_AREA)
+        for gdf in state_datasets_to_merge
+    ] 
 
     # merge all states to single geodataframe
     merged = pd.concat(state_datasets_to_merge, ignore_index=True)
