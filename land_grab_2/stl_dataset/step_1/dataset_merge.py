@@ -4,6 +4,10 @@ import geopandas
 import geopandas as gpd
 import pandas as pd
 
+import numpy as np
+
+import sys
+
 from land_grab_2.stl_dataset.step_1.constants import ALL_STATES, RIGHTS_TYPE, ACTIVITY, COLUMNS, GIS_ACRES, \
     ALBERS_EQUAL_AREA, ACRES_TO_SQUARE_METERS, ACRES, OBJECT_ID
 from land_grab_2.utilities.utils import prettyify_list_of_strings, state_specific_directory
@@ -143,7 +147,9 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
         if file.endswith('.geojson'):
             print(cleaned_data_directory + file)
             gdf = gpd.read_file(cleaned_data_directory + file)
-            print(len(gdf))
+            gdf[GIS_ACRES] = (gdf.to_crs(ALBERS_EQUAL_AREA).area / ACRES_TO_SQUARE_METERS).round(2)
+         
+
             if not gdf.empty:
                 gdfs.append(gdf)
 
@@ -151,9 +157,6 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
     gdf = _merge_dataframes(gdfs)
     print(len(gdf))
 
-    # compute gis calculated areas, rounded to 2 decimals
-    gdf[GIS_ACRES] = (gdf.to_crs(ALBERS_EQUAL_AREA).area /
-                      ACRES_TO_SQUARE_METERS).round(2)
     # round acres to 2 decimals
     if ACRES in gdf.columns:
         gdf[ACRES] = gdf[ACRES].round(2)
@@ -192,9 +195,14 @@ def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
             cleaned_data_directory, state)
 
         state_datasets_to_merge.append(
-            merge_single_state_helper(
-                state, state_cleaned_data_directory,
-                merged_data_directory).to_crs(ALBERS_EQUAL_AREA))
+            merge_single_state_helper(state, state_cleaned_data_directory, merged_data_directory)
+            
+        )
+
+    state_datasets_to_merge = [
+        gdf.set_crs(ALBERS_EQUAL_AREA, inplace=True, allow_override=True).to_crs(ALBERS_EQUAL_AREA)
+        for gdf in state_datasets_to_merge
+    ] 
 
     # merge all states to single geodataframe
     merged = pd.concat(state_datasets_to_merge, ignore_index=True)
