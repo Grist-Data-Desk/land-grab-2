@@ -29,6 +29,7 @@ pytest = "^7.4.2"
 pytest-mock = "^3.11.1"
 snakeviz = "^2.2.0"
 jupyter = "^1.0.0"
+cython = "^3.0.3"
 
 
 [tool.poetry.scripts]
