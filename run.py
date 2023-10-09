@@ -30,8 +30,8 @@ def stl_activity_match():
 
 
 @app.command()
-def private_holdings_by_geo_overlap():
-    check_overlap.run()
+def private_holdings_by_geo_overlap(states=None):
+    check_overlap.run(states)
 
 
 @app.command()
