@@ -85,8 +85,10 @@ def _merge_dataframes(df_list):
 
         # if there are any rights type columns in the merged dataset,
         # correctly merge those columns to contain a readable rights type
-        if merged.columns.str.contains(RIGHTS_TYPE).any():
-            merged[RIGHTS_TYPE] = merged.apply(_merge_rights_type, axis=1)
+
+        #comment out to show duplicates
+        # if merged.columns.str.contains(RIGHTS_TYPE).any():
+        #     merged[RIGHTS_TYPE] = merged.apply(_merge_rights_type, axis=1)
 
         # if there are any activity columns in the merged dataset,
         # correctly merge those columns to contain a readable activity
@@ -112,7 +114,7 @@ def _merge_rights_type(row):
     '''
     Correctly merge the rights type column, aggregating values and removing duplicated values
     '''
-    return _merge_row_helper(row, column=RIGHTS_TYPE)
+    return _merge_rights_row_helper(row, column=RIGHTS_TYPE)
 
 
 def _merge_activity(row):
@@ -131,6 +133,19 @@ def _merge_row_helper(row, column):
     if values.any():
         values = pd.unique(values)
         return '+'.join(values)
+    else:
+        return None
+    
+
+def _merge_rights_row_helper(row, column):
+    '''
+    Correctly merge a column, aggregating values and removing duplicated values
+    '''
+    # get all rights type values from datasets
+    values = row.filter(like=column).dropna()
+    if values.any():
+        values = pd.unique(values)
+        return values
     else:
         return None
 
