@@ -8,6 +8,7 @@ import os
 import traceback
 from dataclasses import dataclass, field
 from datetime import datetime
+from functools import partial
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
@@ -18,6 +19,8 @@ import typer
 from numpy import percentile
 
 from land_grab_2.init_database.db.gristdb import GristDB, GristDbResults
+from land_grab_2.utilities.overlap import dictlist_to_geodataframe
+from land_grab_2.utilities.utils import batch_iterable, in_parallel, in_parallel_fake
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -47,9 +50,28 @@ UNIV_NAME_TO_STATE = {'Iowa State University': 'IA',
 STATE_TO_UNIV = {v: k for k, v in UNIV_NAME_TO_STATE.items()}
 
 
+def write_search_results(output_dir: Path, name: str, univ: str, queries: List[str], results: List[Dict[str, Any]]):
+    univ_out_dir = output_dir / univ
+    if not univ_out_dir.exists():
+        univ_out_dir.mkdir(parents=True, exist_ok=True)
+
+    pd.DataFrame({'query_components': queries}).to_csv(univ_out_dir / f'{name}_query.csv', index=False)
+
+    if results:
+        results_df = pd.DataFrame(results)
+        results_df.to_csv(univ_out_dir / f'{name}_search_results.csv', index=False)
+
+        gdf = dictlist_to_geodataframe(results)
+        gdf.to_file(str(univ_out_dir / f'{name}_search_results.geojson'), driver='GeoJSON')
+    else:
+        results_file = univ_out_dir / f'{name}_empty_results.txt'
+        with results_file.open('w') as fh:
+            fh.write('')
+
+
 @dataclass
 class Bound:
-    name:str
+    name: str
     left: int
     right: int
     values: List[str] = field(default_factory=list)
@@ -112,7 +134,7 @@ def _search(state: str, column: str, bound: Bound):
     return keepers
 
 
-def search(university: str, queries: List[str], column: str) -> List[Dict[str, Any]]:
+def search_bucket_method(university: str, queries: List[str], column: str) -> List[Dict[str, Any]]:
     state = UNIV_NAME_TO_STATE.get(university)
     if not state:
         return
@@ -133,22 +155,31 @@ def search(university: str, queries: List[str], column: str) -> List[Dict[str, A
     return keepers
 
 
-def write_search_results(output_dir: Path, name: str, univ: str, queries: List[str], results: List[Dict[str, Any]]):
-    univ_out_dir = output_dir / univ
-    if not univ_out_dir.exists():
-        univ_out_dir.mkdir(parents=True, exist_ok=True)
+def search(university: str, queries: List[str], column: str, batch_size=100) -> List[Dict[str, Any]]:
+    # gather all ids for a state
+    state = UNIV_NAME_TO_STATE.get(university)
+    state_ids = GristDB().ids_where('state2', state) # TODO paged impl.
 
-    pd.DataFrame({'query_components': queries}).to_csv(univ_out_dir / f'{name}_query.csv', index=False)
+    # batch ids into batches of $X
+    state_id_batches = batch_iterable(state_ids, batch_size=batch_size)
 
-    if results:
-        pd.DataFrame(results).to_csv(univ_out_dir / f'{name}_search_results.csv', index=False)
-    else:
-        results_file = univ_out_dir / f'{name}_empty_results.txt'
-        with results_file.open('w') as fh:
-            fh.write('')
+    # DISTINCT query db for field match where id IN $ids_list
+    batched_results = in_parallel(state_id_batches,
+                                  partial(GristDB().db_query_field_in_value_by_ids, queries, column),
+                                  scheduler='processes',
+                                  show_progress=True,
+                                  batched=False)
+
+    # maybe quality-filter - post-process result
+    # quality_filter(batched_results) # possibly also in parallel
+
+    # flatten results
+    keepers = list(itertools.chain.from_iterable(batched_results))
+
+    return keepers
 
 
-def process_university(row):
+def process_university(row, secondary_search=False):
     global OUT_DIR
     out_dir = OUT_DIR / 'reverse_search_results'
     if not out_dir.exists():
@@ -174,52 +205,54 @@ def process_university(row):
             # address_records = db.search_text_column_has_query('regrid', 'mailadd', addresses)
             write_search_results(out_dir, 'address', univ, addresses, address_records)
 
-        if owner and mailadd and owner_records and address_records:
-            owner_ids = set([r['id'] for r in owner_records])
-            address_ids = set([r['id'] for r in address_records])
-            owner_no_address = owner_ids - address_ids
-            address_no_owner = address_ids - owner_ids
-            shared_ids = set.intersection(owner_ids, address_ids)
-            print(f'[univ: {univ}] address had: {len(address_ids)} unique ids, '
-                  f'owner had: {len(owner_ids)} unique ids, shared: {len(shared_ids)}')
-            print(f'[univ: {univ}] address had: {len(address_no_owner)} ids not in owner, '
-                  f'owner had: {len(owner_no_address)} ids not in address')
+        if secondary_search:
+            if owner and mailadd and owner_records and address_records:
+                owner_ids = set([r['id'] for r in owner_records])
+                address_ids = set([r['id'] for r in address_records])
+                owner_no_address = owner_ids - address_ids
+                address_no_owner = address_ids - owner_ids
+                shared_ids = set.intersection(owner_ids, address_ids)
+                print(f'[univ: {univ}] address had: {len(address_ids)} unique ids, '
+                      f'owner had: {len(owner_ids)} unique ids, shared: {len(shared_ids)}')
+                print(f'[univ: {univ}] address had: {len(address_no_owner)} ids not in owner, '
+                      f'owner had: {len(owner_no_address)} ids not in address')
 
-        # for rows that match owner queries,
-        if owner_records:
-            # we want to extract their address field
-            owner_addresses = [r.get('mailadd') for r in owner_records if r.get('mailadd')]
-            if not owner_addresses:
-                return
-
-            # and use the ones not already accounted for in original address queries list,
-            existing_address_queries = mailadd if mailadd else []
-            owner_addresses_for_search = set([a.strip() for a in owner_addresses if a not in existing_address_queries])
-
-            # for returning only rows whose ids are not in the set of ids we already have
-            all_ids = []
+            # for rows that match owner queries,
             if owner_records:
-                all_ids += [r['id'] for r in owner_records]
-            if address_records:
-                all_ids += [r['id'] for r in address_records]
+                # we want to extract their address field
+                owner_addresses = [r.get('mailadd') for r in owner_records if r.get('mailadd')]
+                if not owner_addresses:
+                    return
 
-            # to perform an address search,
-            # addresses = [a.strip() for a in mailadd.split(';')]
-            print(f'[univ: {univ}] owner-address searching {len(owner_addresses_for_search)}: queries')
-            address_results_from_owner_search = search(univ, list(owner_addresses_for_search), 'mailadd')
-            # address_results_from_owner_search = db.search_text_column_has_query('regrid',
-            #                                                                     'mailadd',
-            #                                                                     list(owner_addresses_for_search))
-            #
-            # uniq_results = [
-            # r for r in address_results_from_owner_search if r.get('id') and r.get('id') not in all_ids
-            # ]
+                # and use the ones not already accounted for in original address queries list,
+                existing_address_queries = mailadd if mailadd else []
+                owner_addresses_for_search = set(
+                    [a.strip() for a in owner_addresses if a not in existing_address_queries])
 
-            write_search_results(out_dir,
-                                 'address_results_from_owner_search',
-                                 univ,
-                                 list(owner_addresses_for_search),
-                                 address_results_from_owner_search)
+                # for returning only rows whose ids are not in the set of ids we already have
+                all_ids = []
+                if owner_records:
+                    all_ids += [r['id'] for r in owner_records]
+                if address_records:
+                    all_ids += [r['id'] for r in address_records]
+
+                # to perform an address search,
+                # addresses = [a.strip() for a in mailadd.split(';')]
+                print(f'[univ: {univ}] owner-address searching {len(owner_addresses_for_search)}: queries')
+                address_results_from_owner_search = search(univ, list(owner_addresses_for_search), 'mailadd')
+                # address_results_from_owner_search = db.search_text_column_has_query('regrid',
+                #                                                                     'mailadd',
+                #                                                                     list(owner_addresses_for_search))
+                #
+                # uniq_results = [
+                # r for r in address_results_from_owner_search if r.get('id') and r.get('id') not in all_ids
+                # ]
+
+                write_search_results(out_dir,
+                                     'address_results_from_owner_search',
+                                     univ,
+                                     list(owner_addresses_for_search),
+                                     address_results_from_owner_search)
     except Exception as err:
         print(traceback.format_exc())
         log.error(err)

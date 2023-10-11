@@ -1,4 +1,5 @@
 import enum
+import functools
 import itertools
 import logging
 from dataclasses import dataclass
@@ -215,6 +216,7 @@ class GristDB:
         list_all_sql = f"SELECT COUNT(id) FROM regrid WHERE {where_col} = '{val}';"
         return self.execute(list_all_sql, results_type=GristDbResults.ONE)
 
+    @functools.lru_cache
     def ids_where(self,
                   where_col,
                   val):
@@ -309,6 +311,7 @@ class GristDB:
                                     pagination_row_id: Optional[str] = None,
                                     limit: int = 10000) -> List[Dict[str, Any]]:
 
+        # TODO add query contains filter
         search_sql = f"""
         select * 
         from regrid 
@@ -333,7 +336,7 @@ class GristDB:
 
         return self.execute(search_sql, results_type=GristDbResults.ALL)
 
-    def state_by_min_col_length(self, state: str, column: str, min_len: int, max_len:int) -> List[Dict[str, Any]]:
+    def state_by_min_col_length(self, state: str, column: str, min_len: int, max_len: int) -> List[Dict[str, Any]]:
         all_results = []
 
         result = self._db_state_by_min_col_length(state=state, column=column, min_len=min_len, max_len=max_len)
@@ -348,3 +351,22 @@ class GristDB:
             all_results += result
 
         return all_results
+
+    def db_query_field_in_value_by_ids(self, queries, column, id_batch):
+        predicates = ' OR '.join([f"{column} ILIKE '%{q}%'" for q in queries])
+        id_batch = [record['id'] for record in id_batch]
+        inclusion_ids_fmttd = ', '.join([str(i) for i in id_batch])
+
+        ids_sql = f"SELECT DISTINCT id  FROM regrid WHERE id IN ({inclusion_ids_fmttd}) AND ({predicates});"
+        results_ids = self.execute(ids_sql, results_type=GristDbResults.ALL)
+        if not results_ids:
+            return results_ids
+
+        # print(f'had a few matches: {len(results_ids)}')
+        results_ids = [record['id'] for record in results_ids]
+        results_ids_fmttd = ', '.join([str(i) for i in results_ids])
+
+        search_sql = f"""SELECT * FROM regrid WHERE id IN  ({results_ids_fmttd});"""
+        results_details = self.execute(search_sql, results_type=GristDbResults.ALL)
+
+        return results_details

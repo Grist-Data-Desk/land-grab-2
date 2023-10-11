@@ -79,9 +79,11 @@ def create_indexes(regrid_table):
     db.create_index(regrid_table.name, 'county', type=GristDbIndexType.TEXT)
 
     log.info('Creating database index on owner column')
+    db.create_index(regrid_table.name, 'owner')
     db.create_index(regrid_table.name, 'owner', type=GristDbIndexType.TEXT)
 
     log.info('Creating database index on mailadd column')
+    db.create_index(regrid_table.name, 'mailadd')
     db.create_index(regrid_table.name, 'mailadd', type=GristDbIndexType.TEXT)
 
     log.info('done creating database indexes')

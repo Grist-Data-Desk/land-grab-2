@@ -52,7 +52,8 @@ def in_parallel_fake(work_items,
                      postprocess=None,
                      batched=True,
                      show_progress=False,
-                     batch_size=10):
+                     batch_size=10,
+                     **kwargs):
     if postprocess:
         a_callable = compose(postprocess, a_callable)
 
