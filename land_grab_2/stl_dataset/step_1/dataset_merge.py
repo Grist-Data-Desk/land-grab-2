@@ -1,3 +1,4 @@
+import itertools
 import os
 
 import geopandas
@@ -129,7 +130,9 @@ def _merge_row_helper(row, column):
     # get all rights type values from datasets
     values = row.filter(like=column).dropna()
     if values.any():
-        values = pd.unique(values)
+        uniq_vals = list(itertools.chain.from_iterable([v.split('+') for v in list(set(values.tolist()))]))
+        uniq_vals = [v.strip() for v in uniq_vals]
+        values = pd.unique(uniq_vals)
         return '+'.join(values)
     else:
         return None
