@@ -261,7 +261,7 @@ def _get_sd_rights_type(gdf):
     '''
     get and clean SD rights types to be consistent with the rest of the dataset
     '''
-    gdf[RIGHTS_TYPE] = gdf['match_type'].str.replace('both', 'surface+subsurface')
+    gdf[RIGHTS_TYPE] = gdf['match_type'].str.replace('both', 'subsurface+surface')
     gdf[RIGHTS_TYPE] = gdf[RIGHTS_TYPE].str.lower()
     return gdf
 

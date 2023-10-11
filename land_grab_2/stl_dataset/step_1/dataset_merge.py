@@ -74,7 +74,7 @@ def _merge_dataframes(df_list):
                 if df[column].dtype == int:
                     df[column] = df[column].astype(object)
 
-        # convert to lists
+        # convert to lists, join on columns that aren't rights type or activity
         columns_to_join_on = [
             column for column in columns_to_join_on
             if column not in [RIGHTS_TYPE, ACTIVITY]
@@ -87,8 +87,8 @@ def _merge_dataframes(df_list):
         # correctly merge those columns to contain a readable rights type
 
         #comment out to show duplicates
-        # if merged.columns.str.contains(RIGHTS_TYPE).any():
-        #     merged[RIGHTS_TYPE] = merged.apply(_merge_rights_type, axis=1)
+        if merged.columns.str.contains(RIGHTS_TYPE).any():
+            merged[RIGHTS_TYPE] = merged.apply(_merge_rights_type, axis=1)
 
         # if there are any activity columns in the merged dataset,
         # correctly merge those columns to contain a readable activity
@@ -145,7 +145,8 @@ def _merge_rights_row_helper(row, column):
     values = row.filter(like=column).dropna()
     if values.any():
         values = pd.unique(values)
-        return values
+        # print(values)
+        return '+'.join(values)
     else:
         return None
 
@@ -164,7 +165,6 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
             gdf = gpd.read_file(cleaned_data_directory + file)
             gdf[GIS_ACRES] = (gdf.to_crs(ALBERS_EQUAL_AREA).area / ACRES_TO_SQUARE_METERS).round(2)
          
-
             if not gdf.empty:
                 gdfs.append(gdf)
 

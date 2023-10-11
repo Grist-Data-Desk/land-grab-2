@@ -400,7 +400,8 @@ STATE_TRUST_CONFIGS = {
         STATE: 'OK',
         UNIVERSITY: 'Oklahoma State University',
         MANAGING_AGENCY: 'Commissioners of the Land Office',
-        RIGHTS_TYPE: 'Unleased Mineral Lands',
+        RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
+        # RIGHTS_TYPE: 'Unleased Mineral Lands',
         STATE_ENABLING_ACT: '34. Stat. 267-286 , esp. 272, 274-75 (1906)',
         DATA_SOURCE:
             'https://gis.clo.ok.gov/arcgis/rest/services/Public/OKLeaseData_ExternalProd/MapServer/10',
@@ -421,7 +422,8 @@ STATE_TRUST_CONFIGS = {
         STATE: 'OK',
         UNIVERSITY: 'Oklahoma State University',
         MANAGING_AGENCY: 'Commissioners of the Land Office',
-        RIGHTS_TYPE: 'Real Estate Subdivisions',
+        # RIGHTS_TYPE: 'Real Estate Subdivisions',
+        RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
         STATE_ENABLING_ACT: '34. Stat. 267-286 , esp. 272, 274-75 (1906)',
         DATA_SOURCE:
             'https://gis.clo.ok.gov/arcgis/rest/services/Public/OKLeaseData_ExternalProd/MapServer/2',
@@ -442,7 +444,8 @@ STATE_TRUST_CONFIGS = {
         STATE: 'OK',
         UNIVERSITY: 'Oklahoma State University',
         MANAGING_AGENCY: 'Commissioners of the Land Office',
-        RIGHTS_TYPE: 'Mineral Subdivisions',
+        # RIGHTS_TYPE: 'Mineral Subdivisions',
+        RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
         STATE_ENABLING_ACT: '34. Stat. 267-286 , esp. 272, 274-75 (1906)',
         DATA_SOURCE:
             'https://gis.clo.ok.gov/arcgis/rest/services/Public/OKLeaseData_ExternalProd/MapServer/3',
@@ -612,6 +615,22 @@ STATE_TRUST_CONFIGS = {
             'acres': ACRES,
         },
     },
+    'WA-timber': {
+        DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
+        STATE: 'WA',
+        UNIVERSITY: 'Washington State University',
+        MANAGING_AGENCY: 'Department of Natural Resources',
+        RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
+        STATE_ENABLING_ACT: '25 Stat. 676-684, esp. 679-81 (1889)',
+        ACTIVITY: 'timber',
+        DATA_SOURCE:
+            'https://gis.dnr.wa.gov/site3/rest/services/Public_Boundaries/WADNR_PUBLIC_Cadastre_OpenData/MapServer/6/',
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['TIMBER_TRUST_CD'],
+        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+            4: 'Agricultural School',
+            10: 'Scientific School',
+        },
+    },
     'WA-surface': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
         STATE: 'WA',
@@ -642,28 +661,13 @@ STATE_TRUST_CONFIGS = {
             10: 'Scientific School',
         },
     },
-    'WA-timber': {
-        DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
-        STATE: 'WA',
-        UNIVERSITY: 'Washington State University',
-        MANAGING_AGENCY: 'Department of Natural Resources',
-        RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
-        STATE_ENABLING_ACT: '25 Stat. 676-684, esp. 679-81 (1889)',
-        ACTIVITY: TIMBER_RIGHTS_TYPE,
-        DATA_SOURCE:
-            'https://gis.dnr.wa.gov/site3/rest/services/Public_Boundaries/WADNR_PUBLIC_Cadastre_OpenData/MapServer/6/',
-        ATTRIBUTE_LABEL_TO_FILTER_BY: ['TIMBER_TRUST_CD'],
-        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-            4: 'Agricultural School',
-            10: 'Scientific School',
-        },
-    },
     'WI': {
         DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
         STATE: 'WI',
         UNIVERSITY: 'University of Wisconsin',
         MANAGING_AGENCY: 'Board of Commissioners of Public Lands',
         STATE_ENABLING_ACT: '9 Stat.  56-58 (1846)',
+        RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
         LOCAL_DATA_SOURCE:
             STATE_TRUST_DATA_SOURCE_DIRECTORY + 'BCPLShapeFIleforWeb',
         DATA_SOURCE:
