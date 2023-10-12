@@ -16,7 +16,7 @@ os.environ['RESTAPI_USE_ARCPY'] = 'FALSE'
 
 
 def extract_tribe_list(group):
-    raw_tribes = list(itertools.chain.from_iterable([i.split(';') for i in group]))
+    raw_tribes = [x for x in list(itertools.chain.from_iterable([i.split(';') for i in group])) if x]
     tribe_list = ';'.join(set([i.strip() for i in raw_tribes]))
     return tribe_list
 
@@ -28,7 +28,6 @@ def count_tribe_list(group):
 
 
 def present_day_tribe(df, university_summary):
-    uniq_no_blanks = compose(lambda s: ','.join([json.dumps(i) for i in s if i]), set)
     for c in [c for c in df.columns.tolist() if 'present_day_tribe' in c]:
         university_summary[c] = df.groupby([UNIVERSITY])[c].apply(extract_tribe_list)
         university_summary[f'{c}_count'] = df.groupby([UNIVERSITY])[c].apply(count_tribe_list)
