@@ -53,6 +53,7 @@ def write_search_results(output_dir: Path, name: str, univ: str, queries: List[s
 
     if results:
         results_df = pd.DataFrame(results)
+        results_df.drop_duplicates([c for c in results_df.columns if c != 'id'], inplace=True)
         results_df.to_csv(univ_out_dir / f'{name}_search_results.csv', index=False)
 
         gdf = dictlist_to_geodataframe(results)
