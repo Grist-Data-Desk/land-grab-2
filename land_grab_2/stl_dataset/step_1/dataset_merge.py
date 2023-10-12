@@ -213,8 +213,7 @@ def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
             cleaned_data_directory, state)
 
         state_datasets_to_merge.append(
-            merge_single_state_helper(state, state_cleaned_data_directory, merged_data_directory)
-            
+            merge_single_state_helper(state, state_cleaned_data_directory, merged_data_directory).to_crs(ALBERS_EQUAL_AREA)
         )
 
     state_datasets_to_merge = [
