@@ -10,7 +10,8 @@ from land_grab_2.stl_dataset.step_1.dataset_extraction import extract_and_clean_
 from land_grab_2.stl_dataset.step_1.constants import (STATE)
 
 from land_grab_2.stl_dataset.step_1.state_trust_config import STATE_TRUST_CONFIGS
-from land_grab_2.utilities.utils import in_parallel, delete_files_and_subdirectories_in_directory, _queried_data_directory, \
+from land_grab_2.utilities.utils import in_parallel, delete_files_and_subdirectories_in_directory, \
+    _queried_data_directory, \
     _cleaned_data_directory, _merged_data_directory, _cessions_data_directory, \
     _summary_statistics_data_directory
 
@@ -88,19 +89,8 @@ def build_full_dataset():
     '''
     Delete all old data files and build the entire dataset from scratch
     '''
-    # first delete all previous data
-    delete_files_and_subdirectories_in_directory(_queried_data_directory())
-    delete_files_and_subdirectories_in_directory(_cleaned_data_directory())
-    delete_files_and_subdirectories_in_directory(_merged_data_directory())
-
-    # extract, clean, and merge all data
     extract_and_clean_all()
     merge_all_states()
-
-    # merge with usfs cessions data and calculate_summary_statistics
-    # TODO: uncomment once this is finished
-    # merge_cessions_data()
-    # calculate_summary_statistics()
 
 
 def run():
@@ -110,24 +100,3 @@ def run():
 
 if __name__ == "__main__":
     run()
-
-    # delete_files_and_subdirectories_in_directory(_queried_data_directory())
-    # delete_files_and_subdirectories_in_directory(_cleaned_data_directory())
-    # delete_files_and_subdirectories_in_directory(_merged_data_directory())
-
-    # states = ['AZ', 'MT', 'OR', 'UT', 'OK', 'NM']
-    # states = ['UT']
-    # states = ['OK']
-    # keys = [k for k in STATE_TRUST_CONFIGS.keys() if
-    #         any(k.startswith(prefix) for prefix in states)]
-
-    # keys = STATE_TRUST_CONFIGS.keys()
-
-    # st = datetime.now()
-    # in_parallel(keys, extract_and_clean_single_source, batched=False, scheduler='synchronous')
-    # in_parallel(keys, extract_and_clean_single_source, batched=False)
-    # print(f'extract_and_clean_all took: {datetime.now() - st}')
-
-    # extract_and_clean_all()
-    # merge_all_states()
-    # merge_single_state('OK')
