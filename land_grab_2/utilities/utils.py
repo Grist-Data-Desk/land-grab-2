@@ -4,8 +4,10 @@ import json
 import logging
 import os
 import shutil
+import smtplib
 import time
 import uuid
+from email.message import EmailMessage
 from pathlib import Path
 from typing import Optional
 
@@ -21,9 +23,6 @@ from tqdm import tqdm
 
 from land_grab_2.stl_dataset.step_1.constants import STATE_TRUST_DIRECTORY, QUERIED_DIRECTORY, CLEANED_DIRECTORY, \
     MERGED_DIRECTORY, CESSIONS_DIRECTORY, SUMMARY_STATISTICS_DIRECTORY
-import os
-import smtplib
-from email.message import EmailMessage
 
 log = logging.getLogger(__name__)
 
@@ -339,17 +338,15 @@ def _query_arcgis_restapi(config, source, label, code, alias, directory):
     # create desired attribute conditions to filter the query by
     attribute_filter = f'{label}={code}'
 
-    cached_layer_query = memory.cache(layer.query)
-    # cached_layer_query = layer.query
     try:
         # then filter by specific attributes
         if code == '*':
-            features = cached_layer_query(outSR=4326, f='geojson', exceed_limit=True)
+            features = layer.query(outSR=4326, f='geojson', exceed_limit=True)
         else:
-            features = cached_layer_query(where=attribute_filter,
-                                          outSR=4326,
-                                          f='geojson',
-                                          exceed_limit=True)
+            features = layer.query(where=attribute_filter,
+                                   outSR=4326,
+                                   f='geojson',
+                                   exceed_limit=True)
 
         # count the number of features
         print(f'Found {len(features)} features with {attribute_filter}')
