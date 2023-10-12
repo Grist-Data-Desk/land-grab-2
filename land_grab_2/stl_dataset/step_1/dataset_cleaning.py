@@ -59,8 +59,8 @@ def _clean_queried_data(source, config, label, alias, queried_data_directory,
 def _filter_and_clean_shapefile(gdf, config, source, label, code, alias,
                                 cleaned_data_directory):
     # # adding projection info for wisconsin
-    # if source == 'WI':
-    #     gdf = gdf.to_crs(ALBERS_EQUAL_AREA)
+    if source == 'WI':
+        gdf = gdf.to_crs(ALBERS_EQUAL_AREA)
 
     if code != '*':
         filtered_gdf = gdf[gdf[label] == code].copy()
@@ -261,7 +261,7 @@ def _get_sd_rights_type(gdf):
     '''
     get and clean SD rights types to be consistent with the rest of the dataset
     '''
-    gdf[RIGHTS_TYPE] = gdf['match_type'].str.replace('both', 'surface+subsurface')
+    gdf[RIGHTS_TYPE] = gdf['match_type'].str.replace('both', 'subsurface+surface')
     gdf[RIGHTS_TYPE] = gdf[RIGHTS_TYPE].str.lower()
     return gdf
 
