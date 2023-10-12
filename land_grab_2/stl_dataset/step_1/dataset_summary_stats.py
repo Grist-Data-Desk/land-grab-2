@@ -15,16 +15,19 @@ from land_grab_2.utilities.utils import prettyify_list_of_strings
 os.environ['RESTAPI_USE_ARCPY'] = 'FALSE'
 
 
-def extract_tribe_list(group):
+def extract_tribe_list(group, should_join=True):
+    if group is None:
+        return '' if should_join else []
+
     raw_tribes = [x for x in list(itertools.chain.from_iterable([i.split(';') for i in group])) if x]
-    tribe_list = ';'.join(set([i.strip() for i in raw_tribes]))
+    tribe_list = set([i.strip() for i in raw_tribes])
+    if should_join:
+        tribe_list = ';'.join(tribe_list)
     return tribe_list
 
 
 def count_tribe_list(group):
-    raw_tribes = list(itertools.chain.from_iterable([i.split(';') for i in group]))
-    clean_tribe_list = set([i.strip() for i in raw_tribes])
-    return len(clean_tribe_list)
+    return len(extract_tribe_list(group, should_join=False))
 
 
 def present_day_tribe(df, university_summary):
