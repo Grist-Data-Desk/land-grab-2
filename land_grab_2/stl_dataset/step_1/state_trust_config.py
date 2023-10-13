@@ -705,7 +705,7 @@ STATE_TRUST_CONFIGS = {
             "'UW'": 'University of Wyoming (acquired)'
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
-            'SurfaceAcres': ACRES,
+            'SubsurfaceAcres': ACRES,
             'Township_Temp': TOWNSHIP,
             'Range_Temp': RANGE,
             'FirstDivision_Temp': SECTION,
