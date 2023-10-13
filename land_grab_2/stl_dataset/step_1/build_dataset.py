@@ -2,16 +2,13 @@ from datetime import datetime
 
 import typer
 
-from land_grab_2.stl_dataset.step_1.dataset_summary_stats import calculate_summary_statistics_helper
+from land_grab_2.stl_dataset.step_1.constants import (STATE)
+from land_grab_2.stl_dataset.step_1.dataset_extraction import extract_and_clean_single_source_helper
 from land_grab_2.stl_dataset.step_1.dataset_merge import merge_single_state_helper, merge_all_states_helper, \
     merge_cessions_data_helper
-from land_grab_2.stl_dataset.step_1.dataset_extraction import extract_and_clean_single_source_helper
-
-from land_grab_2.stl_dataset.step_1.constants import (STATE)
-
+from land_grab_2.stl_dataset.step_1.dataset_summary_stats import calculate_summary_statistics_helper
 from land_grab_2.stl_dataset.step_1.state_trust_config import STATE_TRUST_CONFIGS
-from land_grab_2.utilities.utils import in_parallel, delete_files_and_subdirectories_in_directory, \
-    _queried_data_directory, \
+from land_grab_2.utilities.utils import in_parallel, _queried_data_directory, \
     _cleaned_data_directory, _merged_data_directory, _cessions_data_directory, \
     _summary_statistics_data_directory
 

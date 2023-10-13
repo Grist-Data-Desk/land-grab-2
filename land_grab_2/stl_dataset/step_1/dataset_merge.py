@@ -22,9 +22,9 @@ def _get_merged_dataset_filename(state=None, file_extension='.geojson'):
 
 
 def take_first_val(column, row):
-    '''
+    """
     Correctly merge a column, aggregating values and removing duplicated values
-    '''
+    """
     # get all rights type values from datasets
     group = row.filter(like=column).dropna()
     if group.any():
@@ -35,10 +35,10 @@ def take_first_val(column, row):
 
 
 def _merge_dataframes(df_list):
-    '''
+    """
     Merge multiple dataframes for a state, correctly merging the different
-    rights type column values (surface, mineral, etc)
-    '''
+    rights type column values (surface, mineral, etc.)
+    """
     if not df_list:
         return geopandas.GeoDataFrame()
 
@@ -49,23 +49,23 @@ def _merge_dataframes(df_list):
 
 
 def _merge_rights_type(row):
-    '''
+    """
     Correctly merge the rights type column, aggregating values and removing duplicated values
-    '''
+    """
     return _merge_rights_row_helper(row, column=RIGHTS_TYPE)
 
 
 def _merge_activity(row):
-    '''
+    """
     Correctly merge the activity column, aggregating values and removing duplicated values
-    '''
+    """
     return _merge_row_helper(row, column=ACTIVITY)
 
 
 def _merge_row_helper(row, column):
-    '''
+    """
     Correctly merge a column, aggregating values and removing duplicated values
-    '''
+    """
     # get all rights type values from datasets
     values = row.filter(like=column).dropna()
     if values.any():
@@ -78,9 +78,9 @@ def _merge_row_helper(row, column):
 
 
 def _merge_rights_row_helper(row, column):
-    '''
+    """
     Correctly merge a column, aggregating values and removing duplicated values
-    '''
+    """
     # get all rights type values from datasets
     return _merge_row_helper(row, column)
 
@@ -179,8 +179,8 @@ def merge_cessions_data_helper(cessions_directory):
     # # then filter by specific attributes
     # features = layer.query(outSR=4326, f='geojson', exceed_limit=True)
     # print(f'Found {len(features)} features.')
-    # # save json file, may save as json depending on the esri api version, needs 10.3 to saave as geojson
+    # # save json file, may save as json depending on the esri api version, needs 10.3 to save as geojson
     # features.dump(cessions_directory + 'data.json',
     #               indent=2)  # indent allows for pretty view
-    gdf = gpd.read_file(cessions_directory + 'data.json')
+    gpd.read_file(cessions_directory + 'data.json')
     breakpoint()
