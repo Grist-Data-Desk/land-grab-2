@@ -177,7 +177,8 @@ def geometric_deduplication(gdf: pd.DataFrame, crs: Any, tolerance: float = 0.15
             last_row = current_row
             continue
         else:
-            if not all(last_row[k] == current_row[k] for k in last_row.keys() if k not in stop_list):
+            if not all(last_row[k] == current_row[k] for k, v in last_row.items()
+                       if k not in stop_list and not pd.isna(v)):
                 uniq_rows.append(current_row)
                 last_row = current_row
                 continue

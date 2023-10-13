@@ -138,14 +138,11 @@ def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
     # grab data from each state directory
     for state in os.listdir(cleaned_data_directory):
         print(state)
-        state_cleaned_data_directory = state_specific_directory(
-            cleaned_data_directory, state)
+        state_cleaned_data_directory = state_specific_directory(cleaned_data_directory, state)
 
-        state_datasets_to_merge.append(
-            merge_single_state_helper(
-                state, state_cleaned_data_directory, merged_data_directory
-            ).to_crs(ALBERS_EQUAL_AREA)
-        )
+        merged_state = merge_single_state_helper(state, state_cleaned_data_directory, merged_data_directory)
+        merged_state = merged_state.to_crs(ALBERS_EQUAL_AREA)
+        state_datasets_to_merge.append(merged_state)
 
     # merge all states to single geodataframe
     merged = pd.concat(state_datasets_to_merge, ignore_index=True)
