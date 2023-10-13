@@ -410,11 +410,13 @@ STATE_TRUST_CONFIGS = {
             "*": 'All'
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
-            'TotalAllAcreage': ACRES,
+            'Acres': ACRES,
             'CountyName': COUNTY,
             'Section': SECTION,
             'Meridian': MERIDIAN,
             'QuarterDescription': ALIQUOT,
+            'Township':TOWNSHIP,
+            'Range':RANGE,
         },
     },
     'OK-real-estate-subdivs': {
@@ -437,6 +439,8 @@ STATE_TRUST_CONFIGS = {
             'Section': SECTION,
             'Meridian': MERIDIAN,
             'QuarterDescription': ALIQUOT,
+            'Township':TOWNSHIP,
+            'Range':RANGE,
         },
     },
     'OK-mineral-subdivs': {
@@ -480,6 +484,8 @@ STATE_TRUST_CONFIGS = {
             'Section': SECTION,
             'Meridian': MERIDIAN,
             'QuarterDescription': ALIQUOT,
+            'Township': TOWNSHIP,
+            'Range': RANGE,
         },
     },
     'OK-subsurface': {

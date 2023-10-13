@@ -11,7 +11,8 @@ import numpy as np
 import pandas as pd
 from shapely import Polygon, MultiPolygon
 
-from land_grab_2.stl_dataset.step_1.constants import GIS_ACRES, FINAL_DATASET_COLUMNS, RIGHTS_TYPE, ACTIVITY, ACRES
+from land_grab_2.stl_dataset.step_1.constants import GIS_ACRES, FINAL_DATASET_COLUMNS, RIGHTS_TYPE, ACTIVITY, ACRES, \
+    GEOMETRY, OBJECT_ID, DATA_SOURCE
 from land_grab_2.utilities.utils import in_parallel, combine_delim_list
 
 log = logging.getLogger(__name__)
@@ -156,8 +157,8 @@ def is_same_geo_feature(feature_1, feature_2, crs=None, tolerance: float = 0.15)
 
 
 def geometric_deduplication(gdf: pd.DataFrame, crs: Any, tolerance: float = 0.15) -> pd.DataFrame:
-    stop_list = ['geometry', RIGHTS_TYPE, ACTIVITY]
-    acres_col = next((c for c in gdf.columns.tolist() if GIS_ACRES in c or 'acre' in c), None)
+    stop_list = [GEOMETRY, RIGHTS_TYPE, ACTIVITY, OBJECT_ID, 'OBJECTID', DATA_SOURCE, GIS_ACRES]
+    acres_col = next((c for c in gdf.columns.tolist() if GIS_ACRES in c), None)
     if not acres_col:
         return gdf
 
