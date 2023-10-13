@@ -330,7 +330,16 @@ rewrite_rules = {
             "milltypeDe": "Sub-activity"
         },
         "Oil and Gas Active Lease": {
-            "PrimaryCustomer": "Lessee or Owner or Manager",
+            "Prim_Cust": "Lessee or Owner or Manager",
+            "Producing": "Lease Status",
+            "DateEffect": "Lease Start Date",
+            "DateExpire": "Lease End Date"
+        },
+        "Coal Active Lease": {
+            "Prim_Cust": "Lessee or Owner or Manager",
+            "Producing": "Lease Status",
+            "DateEffect": "Lease Start Date",
+            "DateExpire": "Lease End Date"
         }
     },
     "wi": {
@@ -678,8 +687,13 @@ STATE_ACTIVITIES = {
                                 location='https://services2.arcgis.com/DRQySz3VhPgOv7Bo/ArcGIS/rest/services/Active_Mills/FeatureServer/0/query',
                                 keep_cols=['facilname', 'milltypeDe'],
                                 use_name_as_activity=True),
+        StateActivityDataSource(name='Coal Active Lease',
+                                location='Montana_All/MMB_CoalActiveLease.shp',
+                                keep_cols=['Prim_Cust', 'Producing', 'DateEffect', 'DateExpire'],
+                                use_name_as_activity=True),
         StateActivityDataSource(name='Oil and Gas Active Lease',
-                                location='https://services2.arcgis.com/DRQySz3VhPgOv7Bo/ArcGIS/rest/services/MMB_Oil_and_Gas_Active_Lease/FeatureServer/query',
-                                keep_cols=['PrimaryCustomer'],
+                                location='Montana_All/MMB_OilandGasActiveLease.shp',
+                                keep_cols=['Prim_Cust', 'Producing', 'DateEffect', 'DateExpire'],
                                 use_name_as_activity=True)]),
 }
+
