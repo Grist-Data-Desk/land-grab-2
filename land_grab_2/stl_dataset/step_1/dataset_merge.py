@@ -60,15 +60,15 @@ def _merge_dataframes(df_list):
         # convert to lists, join on columns that aren't rights type or activity
         columns_to_join_on = [
             column for column in columns_to_join_on
-            # if column not in [RIGHTS_TYPE, ACTIVITY, 'geometry']
-            if column not in [RIGHTS_TYPE, ACTIVITY]
+            if column not in [RIGHTS_TYPE, ACTIVITY, 'geometry']
+            # if column not in [RIGHTS_TYPE, ACTIVITY]
         ]
 
         # merge on these columns
         merged = pd.merge(df1, df2, on=columns_to_join_on, how='outer')
 
-        # if merged.columns.str.contains('geometry').any():
-        #     merged['geometry'] = merged.apply(partial(take_first_val, 'geometry'), axis=1)
+        if merged.columns.str.contains('geometry').any():
+            merged['geometry'] = merged.apply(partial(take_first_val, 'geometry'), axis=1)
 
         # if there are any rights type columns in the merged dataset,
         # correctly merge those columns to contain a readable rights type
@@ -93,7 +93,7 @@ def _merge_dataframes(df_list):
     # return the final merged dataset
     merged = df_list.pop()
     merged = merged.drop_duplicates()
-    merged = geopandas.GeoDataFrame(merged, geometry=merged.geometry)
+    merged = geopandas.GeoDataFrame(merged, geometry=merged.geometry, crs=block_crs)
     return merged
 
 
@@ -119,7 +119,7 @@ def _merge_row_helper(row, column):
     values = row.filter(like=column).dropna()
     if values.any():
         uniq_vals = list(itertools.chain.from_iterable([v.split('+') for v in list(set(values.tolist()))]))
-        uniq_vals = [v.strip() for v in uniq_vals]
+        uniq_vals = sorted([v.strip() for v in uniq_vals])
         values = pd.unique(uniq_vals)
         return '+'.join(values)
     else:
@@ -131,13 +131,7 @@ def _merge_rights_row_helper(row, column):
     Correctly merge a column, aggregating values and removing duplicated values
     '''
     # get all rights type values from datasets
-    values = row.filter(like=column).dropna()
-    if values.any():
-        values = pd.unique(values)
-        # print(values)
-        return '+'.join(values)
-    else:
-        return None
+    return _merge_row_helper(row, column)
 
 
 def merge_single_state_helper(state: str, cleaned_data_directory,
