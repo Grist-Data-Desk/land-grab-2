@@ -38,10 +38,9 @@ def present_day_tribe(df, university_summary):
 
 
 def tribe_named_in_land_cession(df, university_summary):
-    uniq_no_blanks = compose(lambda s: ','.join([i for i in s if i]), set)
     for c in [c for c in df.columns.tolist() if 'tribe_named_in_land_cessions' in c]:
-        university_summary[c] = df.groupby([UNIVERSITY])[c].apply(uniq_no_blanks)
-        university_summary[f'{c}_count'] = df.groupby([UNIVERSITY])[c].nunique()
+        university_summary[c] = df.groupby([UNIVERSITY])[c].apply(extract_tribe_list)
+        university_summary[f'{c}_count'] =  df.groupby([UNIVERSITY])[c].apply(count_tribe_list)
     return university_summary
 
 
