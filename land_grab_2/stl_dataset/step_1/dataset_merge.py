@@ -60,14 +60,15 @@ def _merge_dataframes(df_list):
         # convert to lists, join on columns that aren't rights type or activity
         columns_to_join_on = [
             column for column in columns_to_join_on
-            if column not in [RIGHTS_TYPE, ACTIVITY, 'geometry']
+            # if column not in [RIGHTS_TYPE, ACTIVITY, 'geometry']
+            if column not in [RIGHTS_TYPE, ACTIVITY]
         ]
 
         # merge on these columns
         merged = pd.merge(df1, df2, on=columns_to_join_on, how='outer')
 
-        if merged.columns.str.contains('geometry').any():
-            merged['geometry'] = merged.apply(partial(take_first_val, 'geometry'), axis=1)
+        # if merged.columns.str.contains('geometry').any():
+        #     merged['geometry'] = merged.apply(partial(take_first_val, 'geometry'), axis=1)
 
         # if there are any rights type columns in the merged dataset,
         # correctly merge those columns to contain a readable rights type
