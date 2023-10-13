@@ -1,5 +1,6 @@
 import itertools
 import os
+from functools import partial
 
 import geopandas
 import geopandas as gpd
@@ -23,36 +24,17 @@ def _get_merged_dataset_filename(state=None, file_extension='.geojson'):
         return ALL_STATES + file_extension
 
 
-def take_first_val(row):
-    for col in row.keys():
-        if 'activity' not in col:
-            if isinstance(row[col], list):
-                if len(row[col]) == 0:
-                    # row[col] = None
-                    pass
-                else:
-                    row[col] = row[col][0]
-
-    return row
-
-
-def condense_activity(merged):
-    if 'activity' not in merged.columns:
-        return merged
-
-    # chlk = ['parcel', 'parcelid', 'globalid', 'objectid']
-    # groupby_col = next((c for c in merged.columns for l in chlk if l.lower() in c.lower()), None)
-    # if not groupby_col:
-    #     return merged
-
-    # m2 = merged.dissolve(by=groupby_col, aggfunc=list).reset_index()
-    # m2 = merged.groupby([groupby_col, 'geometry'], as_index=False).agg(list).reset_index()
-    m2 = merged.groupby(['geometry'], as_index=False).agg(list).reset_index()
-    m2 = m2.apply(take_first_val, axis=1)
-    m2[ACTIVITY] = m2.activity.map(lambda v: prettyify_list_of_strings({'activity': v})['activity'])
-    # m2['rights_type'] = m2.rights_type.map(lambda v: prettyify_list_of_strings({'activity': v})['activity'])
-    m2 = gpd.GeoDataFrame(m2, geometry=m2['geometry'], crs=merged.crs)
-    return m2
+def take_first_val(column, row):
+    '''
+    Correctly merge a column, aggregating values and removing duplicated values
+    '''
+    # get all rights type values from datasets
+    group = row.filter(like=column).dropna()
+    if group.any():
+        single_val = next((g for g in group if g is not None), None)
+        return single_val
+    else:
+        return None
 
 
 def _merge_dataframes(df_list):
@@ -60,7 +42,7 @@ def _merge_dataframes(df_list):
     Merge multiple dataframes for a state, correctly merging the different
     rights type column values (surface, mineral, etc)
     '''
-
+    block_crs = df_list[0].crs
     # merge dataframes one by one until only 1 exists
     while len(df_list) > 1:
         # get the first two datasets
@@ -78,16 +60,19 @@ def _merge_dataframes(df_list):
         # convert to lists, join on columns that aren't rights type or activity
         columns_to_join_on = [
             column for column in columns_to_join_on
-            if column not in [RIGHTS_TYPE, ACTIVITY]
+            if column not in [RIGHTS_TYPE, ACTIVITY, 'geometry']
         ]
 
         # merge on these columns
         merged = pd.merge(df1, df2, on=columns_to_join_on, how='outer')
 
+        if merged.columns.str.contains('geometry').any():
+            merged['geometry'] = merged.apply(partial(take_first_val, 'geometry'), axis=1)
+
         # if there are any rights type columns in the merged dataset,
         # correctly merge those columns to contain a readable rights type
 
-        #comment out to show duplicates
+        # comment out to show duplicates
         if merged.columns.str.contains(RIGHTS_TYPE).any():
             merged[RIGHTS_TYPE] = merged.apply(_merge_rights_type, axis=1)
 
@@ -107,7 +92,7 @@ def _merge_dataframes(df_list):
     # return the final merged dataset
     merged = df_list.pop()
     merged = merged.drop_duplicates()
-    merged = geopandas.GeoDataFrame(merged)
+    merged = geopandas.GeoDataFrame(merged, geometry=merged.geometry, crs=block_crs)
     return merged
 
 
@@ -138,7 +123,7 @@ def _merge_row_helper(row, column):
         return '+'.join(values)
     else:
         return None
-    
+
 
 def _merge_rights_row_helper(row, column):
     '''
@@ -167,7 +152,7 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
             print(cleaned_data_directory + file)
             gdf = gpd.read_file(cleaned_data_directory + file)
             gdf[GIS_ACRES] = (gdf.to_crs(ALBERS_EQUAL_AREA).area / ACRES_TO_SQUARE_METERS).round(2)
-         
+
             if not gdf.empty:
                 gdfs.append(gdf)
 
@@ -184,10 +169,8 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
     gdf = gdf[final_column_order]
 
     # save to geojson and csv
-    gdf.to_file(merged_data_directory + _get_merged_dataset_filename(state),
-                driver='GeoJSON')
-    gdf.to_csv(merged_data_directory +
-               _get_merged_dataset_filename(state, '.csv'))
+    gdf.to_file(merged_data_directory + _get_merged_dataset_filename(state), driver='GeoJSON')
+    gdf.to_csv(merged_data_directory + _get_merged_dataset_filename(state, '.csv'))
 
     return gdf
 
@@ -213,20 +196,16 @@ def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
             cleaned_data_directory, state)
 
         state_datasets_to_merge.append(
-            merge_single_state_helper(state, state_cleaned_data_directory, merged_data_directory).to_crs(ALBERS_EQUAL_AREA)
+            merge_single_state_helper(
+                state, state_cleaned_data_directory, merged_data_directory
+            ).to_crs(ALBERS_EQUAL_AREA)
         )
-
-    state_datasets_to_merge = [
-        gdf.set_crs(ALBERS_EQUAL_AREA, inplace=True, allow_override=True).to_crs(ALBERS_EQUAL_AREA)
-        for gdf in state_datasets_to_merge
-    ] 
 
     # merge all states to single geodataframe
     merged = pd.concat(state_datasets_to_merge, ignore_index=True)
-    # merged = condense_activity(merged)
     m2 = merged.groupby(['geometry'], as_index=False).agg(list).reset_index()
     m2 = m2.apply(uniq, axis=1)
-    merged = gpd.GeoDataFrame(m2, geometry=m2['geometry'], crs=merged.crs)
+    merged = gpd.GeoDataFrame(m2, geometry=m2['geometry'], crs=ALBERS_EQUAL_AREA)
 
     # add a unique object id identifier columns
     merged[OBJECT_ID] = merged.index + 1

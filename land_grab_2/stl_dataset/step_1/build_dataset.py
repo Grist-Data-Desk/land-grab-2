@@ -89,7 +89,7 @@ def build_full_dataset():
     '''
     Delete all old data files and build the entire dataset from scratch
     '''
-    extract_and_clean_all()
+    # extract_and_clean_all() # TODO
     merge_all_states()
 
 
