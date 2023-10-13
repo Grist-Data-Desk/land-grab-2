@@ -129,7 +129,7 @@ def dictlist_to_geodataframe(count_parcels, crs=None):
     return gdf
 
 
-def combine_dfs(df_list, difference_tolerance: float = 0.0):
+def combine_dfs(df_list, tolerance: float = 0.0):
     # find col intersection of all
     common_cols = list(set.intersection(*[set(df.columns.tolist()) for df in df_list]))
 
@@ -142,7 +142,7 @@ def combine_dfs(df_list, difference_tolerance: float = 0.0):
     merged = pd.concat(consistent_cols_df_list, ignore_index=True)
 
     # geometric rollup dedup
-    merged_uniq = geometric_deduplication(merged, df_crs, difference_tolerance=difference_tolerance)
+    merged_uniq = geometric_deduplication(merged, df_crs, tolerance=tolerance)
 
     # drop unwanted columns
     merged_uniq = merged_uniq.drop([c for c in merged_uniq.columns if c not in FINAL_DATASET_COLUMNS], axis=1)
@@ -150,14 +150,14 @@ def combine_dfs(df_list, difference_tolerance: float = 0.0):
     return merged_uniq
 
 
-def is_same_geo_feature(feature_1, feature_2, crs=None, difference_tolerance: float = 0.0) -> bool:
+def is_same_geo_feature(feature_1, feature_2, crs=None, tolerance: float = 0.0) -> bool:
     # if area is same
     area_difference = abs(feature_1.area - feature_2.area)
-    if area_difference > difference_tolerance:
+    if area_difference > tolerance:
         return False
 
     # if shape is same
-    is_same_shape = feature_1.equals_exact(feature_2, difference_tolerance)
+    is_same_shape = feature_1.equals_exact(feature_2, tolerance)
     if not is_same_shape:
         return False
 
@@ -171,7 +171,7 @@ def is_same_geo_feature(feature_1, feature_2, crs=None, difference_tolerance: fl
     return True
 
 
-def geometric_deduplication(gdf: pd.DataFrame, crs: Any, difference_tolerance: float = 0.0) -> pd.DataFrame:
+def geometric_deduplication(gdf: pd.DataFrame, crs: Any, tolerance: float = 0.0) -> pd.DataFrame:
     acres_col = next((c for c in gdf.columns.tolist() if GIS_ACRES in c or 'acre' in c), None)
     if not acres_col:
         return gdf
@@ -187,7 +187,7 @@ def geometric_deduplication(gdf: pd.DataFrame, crs: Any, difference_tolerance: f
             last_row = current_row
             continue
 
-        if not is_same_geo_feature(last_row['geometry'], current_row['geometry'], crs=crs):
+        if not is_same_geo_feature(last_row['geometry'], current_row['geometry'], crs=crs, tolerance=tolerance):
             uniq_rows.append(current_row)
             last_row = current_row
             continue
