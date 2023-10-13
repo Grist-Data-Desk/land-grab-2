@@ -93,7 +93,7 @@ def _merge_dataframes(df_list):
     # return the final merged dataset
     merged = df_list.pop()
     merged = merged.drop_duplicates()
-    merged = geopandas.GeoDataFrame(merged, geometry=merged.geometry, crs=block_crs)
+    merged = geopandas.GeoDataFrame(merged, geometry=merged.geometry)
     return merged
 
 
