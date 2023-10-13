@@ -1,18 +1,15 @@
 import itertools
 import os
-from functools import partial
 
 import geopandas
 import geopandas as gpd
 import pandas as pd
 
-import numpy as np
-
-import sys
-
-from land_grab_2.stl_dataset.step_1.constants import ALL_STATES, RIGHTS_TYPE, ACTIVITY, COLUMNS, GIS_ACRES, \
+from land_grab_2.stl_dataset.step_1.constants import ALL_STATES, RIGHTS_TYPE, ACTIVITY, FINAL_DATASET_COLUMNS, \
+    GIS_ACRES, \
     ALBERS_EQUAL_AREA, ACRES_TO_SQUARE_METERS, ACRES, OBJECT_ID
-from land_grab_2.utilities.utils import prettyify_list_of_strings, state_specific_directory
+from land_grab_2.utilities.overlap import combine_dfs
+from land_grab_2.utilities.utils import state_specific_directory
 
 os.environ['RESTAPI_USE_ARCPY'] = 'FALSE'
 
@@ -42,58 +39,12 @@ def _merge_dataframes(df_list):
     Merge multiple dataframes for a state, correctly merging the different
     rights type column values (surface, mineral, etc)
     '''
-    block_crs = df_list[0].crs
-    # merge dataframes one by one until only 1 exists
-    while len(df_list) > 1:
-        # get the first two datasets
-        df1 = df_list.pop()
-        df2 = df_list.pop()
-
-        # get intersection of all columns between these two datasets
-        columns_to_join_on = set.intersection(
-            *map(set, [df.columns for df in [df1, df2]]))
-        for df in [df1, df2]:
-            for column in df.columns:
-                if df[column].dtype == int:
-                    df[column] = df[column].astype(object)
-
-        # convert to lists, join on columns that aren't rights type or activity
-        columns_to_join_on = [
-            column for column in columns_to_join_on
-            if column not in [RIGHTS_TYPE, ACTIVITY, 'geometry']
-            # if column not in [RIGHTS_TYPE, ACTIVITY]
-        ]
-
-        # merge on these columns
-        merged = pd.merge(df1, df2, on=columns_to_join_on, how='outer')
-
-        if merged.columns.str.contains('geometry').any():
-            merged['geometry'] = merged.apply(partial(take_first_val, 'geometry'), axis=1)
-
-        # if there are any rights type columns in the merged dataset,
-        # correctly merge those columns to contain a readable rights type
-
-        # comment out to show duplicates
-        if merged.columns.str.contains(RIGHTS_TYPE).any():
-            merged[RIGHTS_TYPE] = merged.apply(_merge_rights_type, axis=1)
-
-        # if there are any activity columns in the merged dataset,
-        # correctly merge those columns to contain a readable activity
-        if merged.columns.str.contains(ACTIVITY).any():
-            merged[ACTIVITY] = merged.apply(_merge_activity, axis=1)
-
-        # remove remaining columns
-        columns_to_drop = [
-            column for column in merged.columns if column not in COLUMNS
-        ]
-        merged = merged.drop(columns_to_drop, axis=1)
-
-        df_list.append(merged)
+    if not df_list:
+        return geopandas.GeoDataFrame()
 
     # return the final merged dataset
-    merged = df_list.pop()
-    merged = merged.drop_duplicates()
-    merged = geopandas.GeoDataFrame(merged, geometry=merged.geometry, crs=block_crs)
+    merged = df_list[0] if len(df_list) == 1 else combine_dfs(df_list)
+    merged = geopandas.GeoDataFrame(merged, geometry=merged.geometry, crs=merged.crs)
     return merged
 
 
@@ -160,7 +111,7 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
         gdf[ACRES] = gdf[ACRES].round(2)
 
     # reorder columns to desired order
-    final_column_order = [column for column in COLUMNS if column in gdf.columns]
+    final_column_order = [column for column in FINAL_DATASET_COLUMNS if column in gdf.columns]
     gdf = gdf[final_column_order]
 
     # save to geojson and csv
@@ -207,7 +158,7 @@ def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
 
     # reorder columns to desired order
     final_column_order = [
-        column for column in COLUMNS if column in merged.columns
+        column for column in FINAL_DATASET_COLUMNS if column in merged.columns
     ]
     merged = merged[final_column_order]
 

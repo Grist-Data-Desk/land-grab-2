@@ -3,7 +3,7 @@ import os
 import geopandas as gpd
 import pandas as pd
 
-from land_grab_2.stl_dataset.step_1.constants import ALBERS_EQUAL_AREA, EXISTING_COLUMN_TO_FINAL_COLUMN_MAP, COLUMNS, \
+from land_grab_2.stl_dataset.step_1.constants import ALBERS_EQUAL_AREA, EXISTING_COLUMN_TO_FINAL_COLUMN_MAP, FINAL_DATASET_COLUMNS, \
     TRUST_NAME, TOWNSHIP, RANGE, SECTION, MERIDIAN, COUNTY, ALIQUOT, RIGHTS_TYPE, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE, \
     OK_HOLDING_DETAIL_ID, ACTIVITY, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_2, OK_TRUST_FUND_ID
 from land_grab_2.utilities.utils import _get_filename
@@ -104,7 +104,7 @@ def _format_columns(gdf, config, alias):
         gdf = gdf.rename(columns=config[EXISTING_COLUMN_TO_FINAL_COLUMN_MAP])
 
     # add any other data if it exists in the config
-    for column in COLUMNS:
+    for column in FINAL_DATASET_COLUMNS:
         if ((column not in gdf.columns) and config.get(column)):
             gdf[column] = config[column]
 
@@ -112,7 +112,7 @@ def _format_columns(gdf, config, alias):
     groupby_col = next((c for c in gdf.columns for l in chlk if l.lower() in c.lower()), None)
 
     # remove remaining columns
-    columns_to_drop = [column for column in gdf.columns if column not in COLUMNS + [groupby_col]]
+    columns_to_drop = [column for column in gdf.columns if column not in FINAL_DATASET_COLUMNS + [groupby_col]]
 
     # add trust name columns
     if alias:

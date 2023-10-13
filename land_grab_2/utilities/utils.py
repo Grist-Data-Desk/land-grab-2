@@ -427,3 +427,10 @@ def _cessions_data_directory(state=None):
 def _summary_statistics_data_directory(state=None):
     return state_specific_directory(
         STATE_TRUST_DIRECTORY + SUMMARY_STATISTICS_DIRECTORY, state)
+
+
+def combine_delim_list(old_val, update_val, sep='+'):
+    update_vals = [v.strip() for v in update_val.split(sep) if v.strip()]
+    old_vals = [v.strip() for v in old_val.split(sep) if v.strip()]
+    new_val = sep.join(sorted(list(set(update_vals + old_vals))))
+    return new_val

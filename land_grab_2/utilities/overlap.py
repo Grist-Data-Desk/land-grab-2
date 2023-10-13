@@ -2,15 +2,17 @@ import itertools
 import json
 import logging
 import traceback
+from collections import Counter
 from functools import partial
-from typing import Optional
+from typing import Optional, Any
 
 import geopandas
 import numpy as np
 import pandas as pd
 from shapely import Polygon, MultiPolygon
 
-from land_grab_2.utilities.utils import in_parallel
+from land_grab_2.stl_dataset.step_1.constants import GIS_ACRES, FINAL_DATASET_COLUMNS, RIGHTS_TYPE, ACTIVITY
+from land_grab_2.utilities.utils import in_parallel, combine_delim_list
 
 log = logging.getLogger(__name__)
 
@@ -125,3 +127,92 @@ def dictlist_to_geodataframe(count_parcels, crs=None):
         crs=crs
     )
     return gdf
+
+
+def combine_dfs(df_list, difference_tolerance: float = 0.0):
+    # find col intersection of all
+    common_cols = list(set.intersection(*[set(df.columns.tolist()) for df in df_list]))
+
+    # select intersected cols from all
+    consistent_cols_df_list = [df[common_cols] for df in df_list]
+
+    # concat all
+    df_crs = Counter([df.crs for df in df_list]).most_common(1)[0][0]
+    consistent_cols_df_list = [df.to_crs(df_crs) for df in consistent_cols_df_list]
+    merged = pd.concat(consistent_cols_df_list, ignore_index=True)
+
+    # geometric rollup dedup
+    merged_uniq = geometric_deduplication(merged, df_crs, difference_tolerance=difference_tolerance)
+
+    # drop unwanted columns
+    merged_uniq = merged_uniq.drop([c for c in merged_uniq.columns if c not in FINAL_DATASET_COLUMNS], axis=1)
+
+    return merged_uniq
+
+
+def is_same_geo_feature(feature_1, feature_2, crs=None, difference_tolerance: float = 0.0) -> bool:
+    # if area is same
+    area_difference = abs(feature_1.area - feature_2.area)
+    if area_difference > difference_tolerance:
+        return False
+
+    # if shape is same
+    is_same_shape = feature_1.equals_exact(feature_2, difference_tolerance)
+    if not is_same_shape:
+        return False
+
+    # if geo has overlap
+    feature_1_geo = geopandas.GeoSeries([feature_1], crs=crs)
+    feature_2_geo = geopandas.GeoSeries([feature_2], crs=crs)
+    is_intersecting = feature_1_geo.intersects(feature_2_geo)
+    if is_intersecting is None or not is_intersecting.bool():
+        return False
+
+    return True
+
+
+def geometric_deduplication(gdf: pd.DataFrame, crs: Any, difference_tolerance: float = 0.0) -> pd.DataFrame:
+    acres_col = next((c for c in gdf.columns.tolist() if GIS_ACRES in c or 'acre' in c), None)
+    if not acres_col:
+        return gdf
+
+    smallest_area_first_gdf = gdf.sort_values(by=[acres_col])
+
+    dup_rows = []
+    uniq_rows = []
+    last_row = None
+    for i, current_row in enumerate(smallest_area_first_gdf.to_dict(orient='records')):
+        if last_row is None:
+            uniq_rows.append(current_row)
+            last_row = current_row
+            continue
+
+        current_listed_area = current_row.get(acres_col)
+        last_row_listed_area = last_row.get(acres_col)
+        if current_listed_area and last_row_listed_area:
+            if abs(current_listed_area - last_row_listed_area) > difference_tolerance:
+                uniq_rows.append(current_row)
+                last_row = current_row
+                continue
+
+        if not is_same_geo_feature(last_row['geometry'], current_row['geometry'], crs=crs):
+            uniq_rows.append(current_row)
+            last_row = current_row
+            continue
+        else:
+            if (RIGHTS_TYPE in last_row and
+                    RIGHTS_TYPE in current_row and
+                    last_row[RIGHTS_TYPE] != current_row[RIGHTS_TYPE]):
+                last_row[RIGHTS_TYPE] = combine_delim_list(last_row[RIGHTS_TYPE], current_row[RIGHTS_TYPE])
+
+            if (ACTIVITY in last_row and
+                    ACTIVITY in current_row and
+                    last_row[ACTIVITY] != current_row[ACTIVITY]):
+                last_row[ACTIVITY] = combine_delim_list(last_row[ACTIVITY], current_row[ACTIVITY])
+
+            dup_rows.append(current_row)
+
+    uniq_df = pd.DataFrame(uniq_rows)
+    uniq_geodf = geopandas.GeoDataFrame(uniq_df, geometry=uniq_df.geometry, crs=smallest_area_first_gdf.crs)
+
+    return uniq_geodf
