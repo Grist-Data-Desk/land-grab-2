@@ -129,27 +129,6 @@ def dictlist_to_geodataframe(count_parcels, crs=None):
     return gdf
 
 
-def combine_dfs(df_list, tolerance: float = 0.0):
-    # find col intersection of all
-    common_cols = list(set.intersection(*[set(df.columns.tolist()) for df in df_list]))
-
-    # select intersected cols from all
-    consistent_cols_df_list = [df[common_cols] for df in df_list]
-
-    # concat all
-    df_crs = Counter([df.crs for df in df_list]).most_common(1)[0][0]
-    consistent_cols_df_list = [df.to_crs(df_crs) for df in consistent_cols_df_list]
-    merged = pd.concat(consistent_cols_df_list, ignore_index=True)
-
-    # geometric rollup dedup
-    merged_uniq = geometric_deduplication(merged, df_crs, tolerance=tolerance)
-
-    # drop unwanted columns
-    merged_uniq = merged_uniq.drop([c for c in merged_uniq.columns if c not in FINAL_DATASET_COLUMNS], axis=1)
-
-    return merged_uniq
-
-
 def is_same_geo_feature(feature_1, feature_2, crs=None, tolerance: float = 0.0) -> bool:
     # if area is same
     area_difference = abs(feature_1.area - feature_2.area)
@@ -208,3 +187,24 @@ def geometric_deduplication(gdf: pd.DataFrame, crs: Any, tolerance: float = 0.0)
     uniq_geodf = geopandas.GeoDataFrame(uniq_df, geometry=uniq_df.geometry, crs=smallest_area_first_gdf.crs)
 
     return uniq_geodf
+
+
+def combine_dfs(df_list, tolerance: float = 0.0):
+    # find col intersection of all
+    common_cols = list(set.intersection(*[set(df.columns.tolist()) for df in df_list]))
+
+    # select intersected cols from all
+    consistent_cols_df_list = [df[common_cols] for df in df_list]
+
+    # concat all
+    df_crs = Counter([df.crs for df in df_list]).most_common(1)[0][0]
+    consistent_cols_df_list = [df.to_crs(df_crs) for df in consistent_cols_df_list]
+    merged = pd.concat(consistent_cols_df_list, ignore_index=True)
+
+    # geometric rollup dedup
+    merged_uniq = geometric_deduplication(merged, df_crs, tolerance=tolerance)
+
+    # drop unwanted columns
+    merged_uniq = merged_uniq.drop([c for c in merged_uniq.columns if c not in FINAL_DATASET_COLUMNS], axis=1)
+
+    return merged_uniq
