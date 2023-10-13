@@ -687,7 +687,7 @@ STATE_TRUST_CONFIGS = {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
         STATE: 'WY',
         UNIVERSITY: 'University of Wyoming',
-        MANAGING_AGENCY: 'Board of Commissioners of Public Lands',
+        MANAGING_AGENCY: 'Office of State Lands and Investment',
         RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
         STATE_ENABLING_ACT: '26 Stat. 222-226 (1890)',
         DATA_SOURCE:
@@ -696,7 +696,7 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "'UN'": 'University Land (trust)',
             "'AG'": 'Agricultural College',
-            # "'UW'": 'University of Wyoming (acquired)'
+            "'UW'": 'University of Wyoming (acquired)'
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'SurfaceAcres': ACRES,
@@ -709,7 +709,7 @@ STATE_TRUST_CONFIGS = {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
         STATE: 'WY',
         UNIVERSITY: 'University of Wyoming',
-        MANAGING_AGENCY: 'Board of Commissioners of Public Lands',
+        MANAGING_AGENCY: 'Office of State Lands and Investment',
         RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
         STATE_ENABLING_ACT: '26 Stat. 222-226 (1890)',
         DATA_SOURCE:
@@ -718,6 +718,7 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "'UN'": 'University Land (trust)',
             "'AG'": 'Agricultural College',
+            "'UW'": 'University of Wyoming (acquired)'
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'SurfaceAcres': ACRES,
