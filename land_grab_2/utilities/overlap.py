@@ -187,14 +187,6 @@ def geometric_deduplication(gdf: pd.DataFrame, crs: Any, difference_tolerance: f
             last_row = current_row
             continue
 
-        current_listed_area = current_row.get(acres_col)
-        last_row_listed_area = last_row.get(acres_col)
-        if current_listed_area and last_row_listed_area:
-            if abs(current_listed_area - last_row_listed_area) > difference_tolerance:
-                uniq_rows.append(current_row)
-                last_row = current_row
-                continue
-
         if not is_same_geo_feature(last_row['geometry'], current_row['geometry'], crs=crs):
             uniq_rows.append(current_row)
             last_row = current_row
