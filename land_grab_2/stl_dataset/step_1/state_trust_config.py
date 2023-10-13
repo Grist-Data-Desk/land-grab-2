@@ -437,8 +437,6 @@ STATE_TRUST_CONFIGS = {
             'Section': SECTION,
             'Meridian': MERIDIAN,
             'QuarterDescription': ALIQUOT,
-            'Township': TOWNSHIP,
-            'Range': RANGE,
         },
     },
     'OK-mineral-subdivs': {
@@ -482,8 +480,6 @@ STATE_TRUST_CONFIGS = {
             'Section': SECTION,
             'Meridian': MERIDIAN,
             'QuarterDescription': ALIQUOT,
-            'Township': TOWNSHIP,
-            'Range': RANGE,
         },
     },
     'OK-subsurface': {
