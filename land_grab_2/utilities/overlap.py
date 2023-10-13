@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 from shapely import Polygon, MultiPolygon
 
-from land_grab_2.stl_dataset.step_1.constants import GIS_ACRES, FINAL_DATASET_COLUMNS, RIGHTS_TYPE, ACTIVITY
+from land_grab_2.stl_dataset.step_1.constants import GIS_ACRES, FINAL_DATASET_COLUMNS, RIGHTS_TYPE, ACTIVITY, ACRES
 from land_grab_2.utilities.utils import in_parallel, combine_delim_list
 
 log = logging.getLogger(__name__)
@@ -209,14 +209,18 @@ def geometric_deduplication(gdf: pd.DataFrame, crs: Any, tolerance: float = 0.15
 def combine_dfs(df_list, tolerance: float = 0.15):
     # find col intersection of all
     common_cols = list(set.intersection(*[set(df.columns.tolist()) for df in df_list]))
+    if ACRES not in common_cols:
+        common_cols.append(ACRES)
 
     # select intersected cols from all
-    consistent_cols_df_list = [df[common_cols] for df in df_list]
+    consistent_cols_df_list = [df[[c for c in common_cols if c in df.columns]] for df in df_list]
 
     # concat all
     df_crs = Counter([df.crs for df in df_list]).most_common(1)[0][0]
     consistent_cols_df_list = [df.to_crs(df_crs) for df in consistent_cols_df_list]
     merged = pd.concat(consistent_cols_df_list, ignore_index=True)
+    if ACRES not in merged:
+        merged[ACRES] = np.nan
 
     # geometric rollup dedup
     merged_uniq = geometric_deduplication(merged, df_crs, tolerance=tolerance)
