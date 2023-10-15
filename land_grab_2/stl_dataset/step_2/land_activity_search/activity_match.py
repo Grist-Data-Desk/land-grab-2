@@ -227,7 +227,8 @@ def main(stl_path: Path, the_out_dir: Path):
     match_all_activities(STATE_ACTIVITIES, gdf)
     for row_idx, activity_list in GRIST_DATA_UPDATE.items():
         # gdf.at[row_idx, 'activity'] = ','.join(activity_list)
-        gdf.loc[row_idx, 'activity'] = ','.join(activity_list)
+        sorted_activities = list(sorted(list((activity_list))))
+        gdf.loc[row_idx, 'activity'] = ','.join(sorted_activities)
 
     if 'joinidx_1' in gdf.columns:
         gdf.drop('joinidx_1', inplace=True, axis=1)
