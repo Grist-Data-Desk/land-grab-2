@@ -158,9 +158,7 @@ def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
     merged[OBJECT_ID] = merged.index + 1
 
     # reorder columns to desired order
-    final_column_order = [
-        column for column in FINAL_DATASET_COLUMNS if column in merged.columns
-    ]
+    final_column_order = [column for column in FINAL_DATASET_COLUMNS if column in merged.columns]
     merged = merged[final_column_order]
     crs = merged.crs
     merged['geometry'] = merged.geometry.map(lambda g: make_valid(g))
