@@ -111,12 +111,7 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
     if ACRES in gdf.columns:
         gdf[ACRES] = gdf[ACRES].round(2)
 
-    # reorder columns to desired order
-    final_column_order = [column for column in FINAL_DATASET_COLUMNS if column in gdf.columns]
-    gdf = gdf[final_column_order]
-    crs = gdf.crs
-    gdf['geometry'] = gdf.geometry.map(lambda g: make_valid(g))
-    gdf.set_crs(crs, inplace=True, allow_override=True).to_crs(crs)
+    gdf = prepare_for_write(gdf)
 
     # save to geojson and csv
     gdf.to_file(merged_data_directory + _get_merged_dataset_filename(state), driver='GeoJSON')
@@ -134,6 +129,15 @@ def uniq(row):
             else:
                 row[col] = row[col][0]
     return row
+
+
+def prepare_for_write(gdf):
+    final_column_order = [column for column in FINAL_DATASET_COLUMNS if column in gdf.columns]
+    gdf = gdf[final_column_order]
+    crs = gdf.crs
+    gdf['geometry'] = gdf.geometry.map(lambda g: make_valid(g))
+    gdf.set_crs(crs, inplace=True, allow_override=True).to_crs(crs)
+    return gdf
 
 
 def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
@@ -157,12 +161,7 @@ def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
     # add a unique object id identifier columns
     merged[OBJECT_ID] = merged.index + 1
 
-    # reorder columns to desired order
-    final_column_order = [column for column in FINAL_DATASET_COLUMNS if column in merged.columns]
-    merged = merged[final_column_order]
-    crs = merged.crs
-    merged['geometry'] = merged.geometry.map(lambda g: make_valid(g))
-    merged.set_crs(crs, inplace=True, allow_override=True).to_crs(crs)
+    merged = prepare_for_write(merged)
 
     # save to geojson and csv
     merged.to_file(merged_data_directory + _get_merged_dataset_filename(), driver='GeoJSON')
