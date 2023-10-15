@@ -15,10 +15,9 @@ import dask
 import dask.bag
 import geopandas
 import requests
-import restapi
 from compose import compose
 from dask.diagnostics import ProgressBar
-from joblib import Memory
+# from joblib import Memory
 from tqdm import tqdm
 
 from land_grab_2.stl_dataset.step_1.constants import STATE_TRUST_DIRECTORY, QUERIED_DIRECTORY, CLEANED_DIRECTORY, \
@@ -26,7 +25,7 @@ from land_grab_2.stl_dataset.step_1.constants import STATE_TRUST_DIRECTORY, QUER
 
 log = logging.getLogger(__name__)
 
-memory = Memory(str(Path(os.environ.get('DATA')) / 'cache'))
+# memory = Memory(str(Path(os.environ.get('DATA')) / 'cache'))
 
 
 def send_email(to, subject, message):
@@ -322,39 +321,6 @@ def _get_filename(state, label, alias, filetype):
         return f'{_to_kebab_case(state)}-{_to_kebab_case(label)}-{_to_kebab_case(alias)}{filetype}'
     else:
         return f'{_to_kebab_case(state)}-{_to_kebab_case(label)}{filetype}'
-
-
-def _query_arcgis_restapi(config, source, label, code, alias, directory):
-    """
-    Query available arcgis restapi's with relevant filters
-    """
-    # create a descriptive filename to store query info
-    filename = _get_filename(source, label, alias, '.geojson')
-
-    # data_source for specific Map Server
-    data_source = config['data_source']
-    layer = restapi.MapServiceLayer(data_source)
-
-    # create desired attribute conditions to filter the query by
-    attribute_filter = f'{label}={code}'
-
-    try:
-        # then filter by specific attributes
-        if code == '*':
-            features = layer.query(outSR=4326, f='geojson', exceed_limit=True)
-        else:
-            features = layer.query(where=attribute_filter,
-                                   outSR=4326,
-                                   f='geojson',
-                                   exceed_limit=True)
-
-        # count the number of features
-        print(f'Found {len(features)} features with {attribute_filter}')
-
-        # save geojson file, may save as json depending on the esri api version, needs 10.3 to saave as geojson
-        features.dump(directory + filename, indent=2)  # indent allows for pretty view
-    except Exception as err:
-        print(f'encountered error while querying {data_source}:\n{err}')
 
 
 @functools.lru_cache()

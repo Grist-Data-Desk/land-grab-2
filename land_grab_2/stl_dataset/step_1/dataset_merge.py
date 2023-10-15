@@ -4,6 +4,7 @@ import os
 import geopandas
 import geopandas as gpd
 import pandas as pd
+from shapely import make_valid
 
 from land_grab_2.stl_dataset.step_1.constants import ALL_STATES, RIGHTS_TYPE, ACTIVITY, FINAL_DATASET_COLUMNS, \
     GIS_ACRES, \
@@ -113,6 +114,9 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
     # reorder columns to desired order
     final_column_order = [column for column in FINAL_DATASET_COLUMNS if column in gdf.columns]
     gdf = gdf[final_column_order]
+    crs = gdf.crs
+    gdf['geometry'] = gdf.geometry.map(lambda g: make_valid(g))
+    gdf.set_crs(crs, inplace=True, allow_override=True).to_crs(crs)
 
     # save to geojson and csv
     gdf.to_file(merged_data_directory + _get_merged_dataset_filename(state), driver='GeoJSON')
@@ -158,6 +162,9 @@ def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
         column for column in FINAL_DATASET_COLUMNS if column in merged.columns
     ]
     merged = merged[final_column_order]
+    crs = merged.crs
+    merged['geometry'] = merged.geometry.map(lambda g: make_valid(g))
+    merged.set_crs(crs, inplace=True, allow_override=True).to_crs(crs)
 
     # save to geojson and csv
     merged.to_file(merged_data_directory + _get_merged_dataset_filename(),
