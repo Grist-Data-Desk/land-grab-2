@@ -17,6 +17,8 @@ app = typer.Typer()
 @app.command()
 def stl_dataset():
     build_dataset.run()
+    compute_summary.run()
+    activity_match.run()
 
 
 @app.command()
