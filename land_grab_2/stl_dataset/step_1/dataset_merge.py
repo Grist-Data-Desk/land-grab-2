@@ -146,6 +146,8 @@ def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
     # grab data from each state directory
     for state in os.listdir(cleaned_data_directory):
         print(state)
+        if 'AZ' in state:
+            assert 1
         state_cleaned_data_directory = state_specific_directory(cleaned_data_directory, state)
 
         merged_state = merge_single_state_helper(state, state_cleaned_data_directory, merged_data_directory)

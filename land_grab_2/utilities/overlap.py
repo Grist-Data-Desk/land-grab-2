@@ -133,8 +133,8 @@ def dictlist_to_geodataframe(count_parcels, crs=None):
 def is_same_geo_feature(feature_1, feature_2, crs=None, tolerance: float = 0.15) -> bool:
     # if area is same
     area_difference = abs(feature_1.area - feature_2.area)
-    tolerance = tolerance * max(feature_1.area, feature_2.area)
-    if area_difference > tolerance:
+    area_tolerance = tolerance * max(feature_1.area, feature_2.area)
+    if area_difference > area_tolerance:
         return False
 
     percent_diff = 100 * (area_difference / max(feature_1.area, feature_2.area))
