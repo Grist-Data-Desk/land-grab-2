@@ -167,10 +167,8 @@ def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
     merged.set_crs(crs, inplace=True, allow_override=True).to_crs(crs)
 
     # save to geojson and csv
-    merged.to_file(merged_data_directory + _get_merged_dataset_filename(),
-                   driver='GeoJSON')
-    merged.to_csv(merged_data_directory +
-                  _get_merged_dataset_filename(file_extension='.csv'))
+    merged.to_file(merged_data_directory + _get_merged_dataset_filename(), driver='GeoJSON')
+    merged.to_csv(merged_data_directory + _get_merged_dataset_filename(file_extension='.csv'))
 
     return merged
 
