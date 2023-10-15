@@ -261,7 +261,9 @@ def run():
     GristCache('', CACHE_DIR)
 
     # stl = base_data_dir / 'input/230815_nationals_STLs/0815_national_stls_deduplicated.geojson'
-    stl = base_data_dir / 'input/all-states.geojson'
+    # stl = base_data_dir / 'input/all-states.geojson'
+    step_1_data_directory = Path(f'{data_tld}/stl_dataset/step_1').resolve()
+    stl = step_1_data_directory / 'input/state_trust/merged/all-states.geojson'
 
     out_dir = base_data_dir / 'output'
 
