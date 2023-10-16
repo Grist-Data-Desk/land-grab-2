@@ -9,7 +9,7 @@ import pandas as pd
 from compose import compose
 
 from land_grab_2.stl_dataset.step_1.constants import UNIVERSITY, GIS_ACRES, STATE, DATA_DIRECTORY, UNIVERSITY_SUMMARY, \
-    TRIBE_SUMMARY
+    TRIBE_SUMMARY, RIGHTS_TYPE
 from land_grab_2.utilities.utils import prettyify_list_of_strings
 
 os.environ['RESTAPI_USE_ARCPY'] = 'FALSE'
@@ -40,7 +40,7 @@ def present_day_tribe(df, university_summary):
 def tribe_named_in_land_cession(df, university_summary):
     for c in [c for c in df.columns.tolist() if 'tribe_named_in_land_cessions' in c]:
         university_summary[c] = df.groupby([UNIVERSITY])[c].apply(extract_tribe_list)
-        university_summary[f'{c}_count'] =  df.groupby([UNIVERSITY])[c].apply(count_tribe_list)
+        university_summary[f'{c}_count'] = df.groupby([UNIVERSITY])[c].apply(count_tribe_list)
     return university_summary
 
 
@@ -126,6 +126,21 @@ def pivot_on_tribe(df):
     return tribe_summary_semi_aggd, tribe_summary_full_agg
 
 
+def gis_acres_sum_by_rights_type(df, university_summary):
+    for row in university_summary.iterrows():
+        row_df = pd.DataFrame([row], columns=['university', *university_summary.columns.tolist()])
+        univ = ''
+        univ_data = df[df.university == univ]
+        relevant_rights_types = set(univ_data.rights_type.tolist())
+        for rights_type in relevant_rights_types:
+            single_rights_type_df = univ_data[univ_data.rights_type == rights_type]
+            # university_summary[f'{rights_type}_acres'] = single_rights_type_df[GIS_ACRES].sum()
+            univ_idx = university_summary.index[univ]
+            university_summary.at[univ_idx, f'{rights_type}_acres'] = single_rights_type_df[GIS_ACRES].sum()
+
+    return university_summary
+
+
 def calculate_summary_statistics_helper(summary_statistics_data_directory, merged_data_directory):
     '''
     Calculate summary statistics based on the full dataset. Create two csvs. In the first,
@@ -148,13 +163,23 @@ def calculate_summary_statistics_helper(summary_statistics_data_directory, merge
     gis_acres_col = GIS_ACRES if GIS_ACRES in df.columns else 'gis_calculated_acres'
     df[GIS_ACRES] = df[gis_acres_col].astype(float)
 
+    # TODO
+    #  drop cession-specific tribe cols
+    #  add cession count column
+    #  ensure tribes in cession list is coherent wrt to splitting for count --- as bugfix for presentdaytribe col
+    #  get column sequence from Maria
     # create first csv: university summary
     university_summary = pd.DataFrame()
     university_summary = present_day_tribe(df, university_summary)
     university_summary = tribe_named_in_land_cession(df, university_summary)
     university_summary = gather_univ_cessions_nums(df, university_summary)
-    university_summary[GIS_ACRES] = df.groupby([UNIVERSITY])[GIS_ACRES].sum()
+    university_summary = gis_acres_sum_by_rights_type(df, university_summary)
     university_summary.to_csv(summary_statistics_data_directory + UNIVERSITY_SUMMARY)
+
+    # TODO
+    #  cession count
+    #  divide gis_acres by right_type, as above
+    #  get column sequence from Maria
 
     # second csv: tribal summary
     tribe_summary_semi_aggd, tribe_summary_full_agg = pivot_on_tribe(df_1)

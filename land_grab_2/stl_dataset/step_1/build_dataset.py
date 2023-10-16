@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 
 import typer
@@ -12,6 +13,8 @@ from land_grab_2.utilities.utils import in_parallel, _queried_data_directory, \
     _cleaned_data_directory, _merged_data_directory, _cessions_data_directory, \
     _summary_statistics_data_directory
 
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger(__name__)
 app = typer.Typer()
 
 
@@ -35,8 +38,10 @@ def extract_and_clean_all():
     Extract and clean data for the entire dataset
     '''
     st = datetime.now()
-    # in_parallel(STATE_TRUST_CONFIGS.keys(), extract_and_clean_single_source, batched=False, scheduler='synchronous')
     for state in STATE_TRUST_CONFIGS.keys():
+        if 'UT' in state:
+            print('skipping UTAH extracting and cleaning')
+            continue
         extract_and_clean_single_source(state)
     print(f'extract_and_clean_all took: {datetime.now() - st}')
 
