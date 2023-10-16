@@ -9,13 +9,35 @@ from typing import Optional, Any
 import geopandas
 import numpy as np
 import pandas as pd
-from shapely import Polygon, MultiPolygon
+from shapely import Polygon, MultiPolygon, make_valid
 
 from land_grab_2.stl_dataset.step_1.constants import GIS_ACRES, FINAL_DATASET_COLUMNS, RIGHTS_TYPE, ACTIVITY, ACRES, \
     GEOMETRY, OBJECT_ID, DATA_SOURCE
 from land_grab_2.utilities.utils import in_parallel, combine_delim_list
 
 log = logging.getLogger(__name__)
+STATE_LONG_NAME = {
+    'AZ': 'arizona',
+    'CO': 'colorado',
+    'IA': 'iowa',
+    'ID': 'idaho',
+    'OR': 'oregon',
+    'OK': 'oklahoma',
+    'ND': 'north dakota',
+    'NE': 'nebraska',
+    'WI': 'wisconsin',
+    'WA': 'washington',
+    'MN': 'minnesota',
+    'NC': 'north carolina',
+    'VT': 'vermont',
+    'WV': 'west virginia',
+    'UT': 'utah',
+    'NM': 'new mexico',
+    'SD': 'south dakota',
+    'TX': 'texas',
+    'WY': 'wyoming',
+    'MT': 'montana',
+}
 
 
 def add_idx_col(df, idx_name: str):
@@ -230,3 +252,10 @@ def combine_dfs(df_list, tolerance: float = 0.15):
     merged_uniq = merged_uniq.drop([c for c in merged_uniq.columns if c not in FINAL_DATASET_COLUMNS], axis=1)
 
     return merged_uniq
+
+
+def fix_geometries(gdf):
+    crs = gdf.crs
+    gdf['geometry'] = gdf.geometry.map(lambda g: make_valid(g))
+    gdf.set_crs(crs, inplace=True, allow_override=True).to_crs(crs)
+    return gdf
