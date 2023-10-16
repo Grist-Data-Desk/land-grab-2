@@ -12,7 +12,7 @@ import pandas as pd
 
 from land_grab_2.init_database.db.gristdb import GristDB
 from land_grab_2.utilities.utils import in_parallel, batch_iterable, get_uuid, send_email
-from land_grab_2.utilities.overlap import eval_overlap_keep_left, dictlist_to_geodataframe
+from land_grab_2.utilities.overlap import eval_overlap_keep_left, dictlist_to_geodataframe, STATE_LONG_NAME
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -35,17 +35,6 @@ UNIV_NAME_TO_STATE = {
 }
 
 STATE_TO_UNIV = {v: k for k, v in UNIV_NAME_TO_STATE.items()}
-STATE_LONG_NAME = {'IA': 'iowa',
-                   'OR': 'oregon',
-                   'WI': 'wisconsin',
-                   'WA': 'washington',
-                   'MN': 'minnesota',
-                   'NC': 'north carolina',
-                   'VT': 'vermont',
-                   'WV': 'west virginia',
-                   'UT': 'utah',
-                   'ID': 'idaho',
-                   'NM': 'new mexico'}
 
 
 def db_list_counties(state_code):
