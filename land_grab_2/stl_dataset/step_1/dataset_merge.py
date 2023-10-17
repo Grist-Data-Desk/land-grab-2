@@ -155,7 +155,7 @@ def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
     # add a unique object id identifier columns
     merged[OBJECT_ID] = merged.index + 1
 
-    final_column_order = [column for column in FINAL_DATASET_COLUMNS if column in gdf.columns]
+    final_column_order = [column for column in FINAL_DATASET_COLUMNS if column in merged.columns]
     merged = merged[final_column_order]
     merged = fix_geometries(merged)
 
