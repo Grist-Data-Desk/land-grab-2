@@ -253,9 +253,9 @@ def match_all_activities(states_data=None, grist_data=None):
 
     for activity_state, activity_info in states_data.items():
         print(f'state: {activity_state}')
-        if 'UT' in activity_state:
-            print('skipping utah')
-            continue
+        # if 'UT' in activity_state:
+        #     print('skipping utah')
+        #     continue
 
         if not activity_info:
             log.error(f'NO ACTIVITY CONFIG FOR {activity_state}')

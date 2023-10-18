@@ -407,7 +407,7 @@ STATE_TRUST_CONFIGS = {
             'https://gis.clo.ok.gov/arcgis/rest/services/Public/OKLeaseData_ExternalProd/MapServer/10',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['*'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-            "*": 'All'
+            "*": 'Oklahoma State University'
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'Acres': ACRES,
@@ -429,7 +429,7 @@ STATE_TRUST_CONFIGS = {
             'https://gis.clo.ok.gov/arcgis/rest/services/Public/OKLeaseData_ExternalProd/MapServer/2',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['*'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-            "*": 'All'
+            "*": 'Oklahoma State University'
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'TotalAllAcreage': ACRES,
@@ -451,7 +451,7 @@ STATE_TRUST_CONFIGS = {
             'https://gis.clo.ok.gov/arcgis/rest/services/Public/OKLeaseData_ExternalProd/MapServer/3',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['*'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-            "*": 'All'
+            "*": 'Oklahoma State University'
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'TotalAllAcreage': ACRES,
@@ -472,7 +472,7 @@ STATE_TRUST_CONFIGS = {
             'https://gis.clo.ok.gov/arcgis/rest/services/Public/OKLeaseData_ExternalProd/MapServer/2',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['*'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-            "*": 'All'
+            "*": 'Oklahoma State University'
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'TotalAllAcreage': ACRES,
@@ -517,26 +517,6 @@ STATE_TRUST_CONFIGS = {
             'QQSEC': ALIQUOT,
         },
     },
-    # 'TX': {
-    #     DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
-    #     STATE: 'TX',
-    #     UNIVERSITY: 'Texas A&M',
-    #     MANAGING_AGENCY: 'General Land Office',
-    #     RIGHTS_TYPE: SURFACE_RIGHTS_TYPE + '+' + SUBSURFACE_RIGHTS_TYPE,
-    #     # found at https://universitylands.utsystem.edu/Resources/GIS
-    #     DATA_SOURCE:
-    #     'https://gisapps.universitylands.org/server/rest/services/Hosted/GrantTracts_SpatialJoin/FeatureServer/16',
-    #     ATTRIBUTE_LABEL_TO_FILTER_BY: ['tractid'],
-    #     ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-    #         "*": None
-    #     },
-    #     EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
-    #         'acres': ACRES,
-    #         'countyname': COUNTY,
-    #         'section': SECTION,
-    #         'block': BLOCK,
-    #     },
-    # },
     'TX-surface': {
         DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
         STATE: 'TX',

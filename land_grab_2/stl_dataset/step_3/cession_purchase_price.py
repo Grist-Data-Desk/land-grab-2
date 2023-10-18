@@ -98,8 +98,8 @@ def run():
     out_dir = base_data_dir / 'output'
     cession_price_data = base_data_dir / 'input/Cession_Data.csv'
 
-    step_1_data_directory = Path(f'{data_tld}/stl_dataset/step_1').resolve()
-    stl = step_1_data_directory / 'input/national_stls.csv'
+    step_2_data_directory = Path(f'{data_tld}/stl_dataset/step_2').resolve()
+    stl = step_2_data_directory / 'output/updated_grist_stl.geojson'
     main(stl, cession_price_data, out_dir)
 
 
