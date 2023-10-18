@@ -1,18 +1,17 @@
 import logging
 import os
-from decimal import *
 from pathlib import Path
 
 import geopandas
 import pandas as pd
+
+from land_grab_2.stl_dataset.step_1.constants import GIS_ACRES
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
 
 def add_price_columns(stl_data, price_data):
-    getcontext().prec = 2
-
     log.info('processing price information')
     all_columns = stl_data.columns.tolist()
     cession_columns = [c for c in all_columns if c.endswith('present_day_tribe')]
@@ -34,13 +33,17 @@ def add_price_columns(stl_data, price_data):
             row[f'C{i}_price_paid_per_acre'] = 0.0 if not price_info else float(price_info)
             cession_prices[(i, cession)] = row[f'C{i}_price_paid_per_acre']
 
-        parcel_size = (0.0
-                       if 'gis_calculated_acres' not in row or not row['gis_calculated_acres']
-                       else float(row['gis_calculated_acres']))
-        row[f'price_paid_for_parcel'] = float(sum([
-            Decimal(price) * Decimal(parcel_size)
+        if 'gis_calculated_acres' in row and row['gis_calculated_acres']:
+            parcel_size = float(row['gis_calculated_acres'])
+        elif GIS_ACRES in row and row[GIS_ACRES]:
+            parcel_size = float(row[GIS_ACRES])
+        else:
+            parcel_size = 0.0
+
+        row[f'price_paid_for_parcel'] = round(sum([
+            price * parcel_size
             for price in cession_prices.values()
-        ]))
+        ]), 2)
 
         out_rows.append(row)
 
