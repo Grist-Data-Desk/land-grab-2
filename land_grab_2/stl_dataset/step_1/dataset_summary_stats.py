@@ -1,12 +1,11 @@
 import itertools
-import json
 import os
 import traceback
+from collections import defaultdict
 from pathlib import Path
 
 import geopandas as gpd
 import pandas as pd
-from compose import compose
 
 from land_grab_2.stl_dataset.step_1.constants import UNIVERSITY, GIS_ACRES, STATE, DATA_DIRECTORY, UNIVERSITY_SUMMARY, \
     TRIBE_SUMMARY, RIGHTS_TYPE
@@ -22,7 +21,7 @@ def extract_tribe_list(group, should_join=True):
     raw_tribes = [x for x in list(itertools.chain.from_iterable([i.split(';') for i in group])) if x]
     tribe_list = set([i.strip() for i in raw_tribes])
     if should_join:
-        tribe_list = ';'.join(tribe_list)
+        tribe_list = ';'.join(list(sorted(tribe_list)))
     return tribe_list
 
 
@@ -30,17 +29,27 @@ def count_tribe_list(group):
     return len(extract_tribe_list(group, should_join=False))
 
 
-def present_day_tribe(df, university_summary):
-    for c in [c for c in df.columns.tolist() if 'present_day_tribe' in c]:
-        university_summary[c] = df.groupby([UNIVERSITY])[c].apply(extract_tribe_list)
-        university_summary[f'{c}_count'] = df.groupby([UNIVERSITY])[c].apply(count_tribe_list)
-    return university_summary
+def tribe_summary_for_univ_summary(df, col_filter_func, out_column_name):
+    # build simpler tribe-listing structure
+    tmp_uni_summary = pd.DataFrame()
+    for c in [c for c in df.columns.tolist() if col_filter_func(c)]:
+        tmp_uni_summary[c] = df.groupby([UNIVERSITY])[c].apply(extract_tribe_list)
+    tmp_uni_summary.reset_index(inplace=True)
 
+    # collect tribe-name lists
+    out_data = []
+    tribes = defaultdict(lambda: defaultdict(list))
+    for row in tmp_uni_summary.to_dict(orient='records'):
+        univ = row[UNIVERSITY]
+        for c in [c for c in tmp_uni_summary.columns.tolist() if col_filter_func(c)]:
+            if len(row[c]) > 0:
+                tribes[univ]['names'].append(row[c])
+        tribe_list = extract_tribe_list(tribes[univ]['names'])
+        tribe_count = count_tribe_list(tribes[univ]['names'])
+        out_data.append({UNIVERSITY: univ, out_column_name: tribe_list, f'{out_column_name}_count': tribe_count})
 
-def tribe_named_in_land_cession(df, university_summary):
-    for c in [c for c in df.columns.tolist() if 'tribe_named_in_land_cessions' in c]:
-        university_summary[c] = df.groupby([UNIVERSITY])[c].apply(extract_tribe_list)
-        university_summary[f'{c}_count'] = df.groupby([UNIVERSITY])[c].apply(count_tribe_list)
+    university_summary = pd.DataFrame(out_data, index=None)
+
     return university_summary
 
 
@@ -48,11 +57,73 @@ def combine_cession_ids(v):
     return ','.join(set(itertools.chain.from_iterable([c.split(',') for c in v.tolist() if c])))
 
 
-def gather_univ_cessions_nums(df, university_summary):
-    university_summary['all_univ_cession_nums'] = df.groupby([UNIVERSITY])['all_cession_numbers'].apply(
-        combine_cession_ids
-    )
-    return university_summary
+def gather_univ_cessions_nums(df):
+    tmp_summary = pd.DataFrame()
+    tmp_summary['all_cessions'] = df.groupby([UNIVERSITY])['all_cession_numbers'].apply(combine_cession_ids)
+    tmp_summary.reset_index(inplace=True)
+    tmp_summary['cession_count'] = tmp_summary['all_cessions'].map(lambda c: len(c.split(',')))
+    return tmp_summary
+
+
+def gis_acres_sum_by_rights_type_for_uni_summary(df):
+    records = []
+    for univ in set(df.university.tolist()):
+        record = {}
+        for rt in set(df.loc[df[UNIVERSITY] == univ]['rights_type'].tolist()):
+            if len(rt) == 0:
+                col_name = f'unknown_rights_type_acres'
+            elif '+' in rt:
+                col_name = rt.replace('+', '_and_') + '_acres'
+            else:
+                col_name = f'{rt}_acres'
+
+            relevant_rows = df.loc[(df[UNIVERSITY] == univ) & (df.rights_type == rt)]
+            record[col_name] = relevant_rows[GIS_ACRES].sum()
+            record[UNIVERSITY] = univ
+        records.append(record)
+
+    tmp_summary = pd.DataFrame(records)
+    tmp_summary['surface_acres'] = tmp_summary['surface_acres'] + tmp_summary['subsurface_and_surface_acres']
+    tmp_summary['subsurface_acres'] = tmp_summary['subsurface_acres'] + tmp_summary['subsurface_and_surface_acres']
+
+    return tmp_summary
+
+
+def university_summary(df, summary_statistics_data_directory=None):
+    present_day_tribe_summary = tribe_summary_for_univ_summary(df,
+                                                               lambda c: c.endswith('present_day_tribe'),
+                                                               'present_day_tribe')
+    tribe_named_in_cessions_summary = tribe_summary_for_univ_summary(df,
+                                                                     lambda c: 'tribe_named_in_land_cessions' in c,
+                                                                     'tribes_named_in_cession')
+
+    uni_summary = present_day_tribe_summary.join(tribe_named_in_cessions_summary.set_index('university'),
+                                                        on='university')
+
+    cession_summary = gather_univ_cessions_nums(df)
+    uni_summary = uni_summary.join(cession_summary.set_index('university'), on='university')
+
+    rights_type_summary = gis_acres_sum_by_rights_type_for_uni_summary(df)
+    uni_summary = uni_summary.join(rights_type_summary.set_index('university'), on='university')
+
+    uni_summary['surface_acres'] = uni_summary['surface_acres'].map(lambda v: round(v, 2))
+    uni_summary['subsurface_acres'] = uni_summary['subsurface_acres'].map(lambda v: round(v, 2))
+    uni_summary['subsurface_and_surface_acres'] = uni_summary['subsurface_and_surface_acres'].map(lambda v: round(v, 2))
+
+    # sequence columns
+    uni_summary = uni_summary[[
+        'university',
+        *list(sorted(c for c in uni_summary.columns if c.endswith('_acres'))),
+        'present_day_tribe_count',
+        'present_day_tribe',
+        'tribes_named_in_cession_count',
+        'tribes_named_in_cession',
+        'cession_count',
+        'all_cessions',
+    ]]
+
+    uni_summary.to_csv(summary_statistics_data_directory + UNIVERSITY_SUMMARY)
+    return uni_summary
 
 
 def cleanup_gis_acres(row):
@@ -109,7 +180,37 @@ def construct_single_tribe_info(row):
         print(err)
 
 
-def pivot_on_tribe(df):
+def gis_acres_sum_by_rights_type_tribe_summary(df):
+
+    present_day_tibe_cols = [c for c in df.columns if c.endswith('present_day_tribe')]
+    tribe_land_accounts = defaultdict(dict)
+    for row in df.to_dict(orient='records'):
+        tribe_list = extract_tribe_list([row[c] for c in present_day_tibe_cols], should_join=False)
+        for tribe in tribe_list:
+            rights_type = 'unknown_rights_type' if RIGHTS_TYPE not in row or not row[RIGHTS_TYPE] else row[RIGHTS_TYPE]
+            if '+' in rights_type:
+                rights_type = rights_type.replace('+', '_and_')
+
+            out_col_name = f'{rights_type}_acres'
+            if rights_type not in tribe_land_accounts[tribe]:
+                tribe_land_accounts[tribe][out_col_name] = float(row[GIS_ACRES])
+            else:
+                tribe_land_accounts[tribe][out_col_name] += float(row[GIS_ACRES])
+
+    records = [{'present_day_tribe': tribe, **land_info} for tribe, land_info in tribe_land_accounts.items()]
+
+    tmp_summary = pd.DataFrame(records)
+    tmp_summary['surface_acres'] = tmp_summary['surface_acres'] + tmp_summary['subsurface_and_surface_acres']
+    tmp_summary['subsurface_acres'] = tmp_summary['subsurface_acres'] + tmp_summary['subsurface_and_surface_acres']
+
+    tmp_summary['surface_acres'] = tmp_summary['surface_acres'].map(lambda v: round(v, 2))
+    tmp_summary['subsurface_acres'] = tmp_summary['subsurface_acres'].map(lambda v: round(v, 2))
+    tmp_summary['subsurface_and_surface_acres'] = tmp_summary['subsurface_and_surface_acres'].map(lambda v: round(v, 2))
+
+    return tmp_summary
+
+
+def tribe_summary(df, summary_statistics_data_directory, univ_summary):
     results = list(itertools.chain.from_iterable([
         construct_single_tribe_info(row.to_dict())
         for _, row in df.iterrows()
@@ -117,28 +218,26 @@ def pivot_on_tribe(df):
     tribe_summary_tmp = pd.DataFrame(results)
     group_cols = [c for c in list(tribe_summary_tmp.columns) if GIS_ACRES not in c and 'cession_number' not in c]
     tribe_summary_semi_aggd = tribe_summary_tmp.groupby(group_cols)[GIS_ACRES].sum().reset_index()
-    # tribe_summary['cession_number'] = tribe_summary.groupby(group_cols)['cession_number'].agg(lambda g: g)
+    tribe_summary_semi_aggd.to_csv(summary_statistics_data_directory + TRIBE_SUMMARY)
 
     tribe_summary_full_agg = tribe_summary_tmp.groupby(['present_day_tribe']).agg(list).reset_index()
     tribe_summary_full_agg[GIS_ACRES] = tribe_summary_full_agg[GIS_ACRES].map(sum)
     tribe_summary_full_agg = tribe_summary_full_agg.apply(prettyify_list_of_strings, axis=1)
+    tribe_summary_full_agg['cession_count'] = tribe_summary_full_agg['cession_number'].map(lambda v: len(v.split(',')))
+    rights = gis_acres_sum_by_rights_type_tribe_summary(df)
+    tribe_summary_full_agg = tribe_summary_full_agg.join(rights.set_index('present_day_tribe'), on='present_day_tribe')
 
-    return tribe_summary_semi_aggd, tribe_summary_full_agg
+    # sequence columns
+    tribe_summary_full_agg = tribe_summary_full_agg[[
+        'present_day_tribe',
+        'cession_count',
+        'cession_number',
+        *list(sorted(c for c in tribe_summary_full_agg.columns if c.endswith('_acres') and GIS_ACRES not in c)),
+        'university',
+        'state',
+    ]]
 
-
-def gis_acres_sum_by_rights_type(df, university_summary):
-    for row in university_summary.iterrows():
-        row_df = pd.DataFrame([row], columns=['university', *university_summary.columns.tolist()])
-        univ = ''
-        univ_data = df[df.university == univ]
-        relevant_rights_types = set(univ_data.rights_type.tolist())
-        for rights_type in relevant_rights_types:
-            single_rights_type_df = univ_data[univ_data.rights_type == rights_type]
-            # university_summary[f'{rights_type}_acres'] = single_rights_type_df[GIS_ACRES].sum()
-            univ_idx = university_summary.index[univ]
-            university_summary.at[univ_idx, f'{rights_type}_acres'] = single_rights_type_df[GIS_ACRES].sum()
-
-    return university_summary
+    tribe_summary_full_agg.to_csv(summary_statistics_data_directory + 'tribe-summary-condensed.csv')
 
 
 def calculate_summary_statistics_helper(summary_statistics_data_directory, merged_data_directory):
@@ -150,6 +249,7 @@ def calculate_summary_statistics_helper(summary_statistics_data_directory, merge
     day tribe, get total acreage of state land trust parcels, all associated cessions, and all
     states and universities that have land taken from this tribe held in trust
     '''
+
     # df_0 = gpd.read_file(merged_data_directory + _get_merged_dataset_filename())
     df_0 = gpd.read_file(DATA_DIRECTORY + '/national_stls.csv')  # TODO: parameterize
 
@@ -163,25 +263,5 @@ def calculate_summary_statistics_helper(summary_statistics_data_directory, merge
     gis_acres_col = GIS_ACRES if GIS_ACRES in df.columns else 'gis_calculated_acres'
     df[GIS_ACRES] = df[gis_acres_col].astype(float)
 
-    # TODO
-    #  drop cession-specific tribe cols
-    #  add cession count column
-    #  ensure tribes in cession list is coherent wrt to splitting for count --- as bugfix for presentdaytribe col
-    #  get column sequence from Maria
-    # create first csv: university summary
-    university_summary = pd.DataFrame()
-    university_summary = present_day_tribe(df, university_summary)
-    university_summary = tribe_named_in_land_cession(df, university_summary)
-    university_summary = gather_univ_cessions_nums(df, university_summary)
-    university_summary = gis_acres_sum_by_rights_type(df, university_summary)
-    university_summary.to_csv(summary_statistics_data_directory + UNIVERSITY_SUMMARY)
-
-    # TODO
-    #  cession count
-    #  divide gis_acres by right_type, as above
-    #  get column sequence from Maria
-
-    # second csv: tribal summary
-    tribe_summary_semi_aggd, tribe_summary_full_agg = pivot_on_tribe(df_1)
-    tribe_summary_semi_aggd.to_csv(summary_statistics_data_directory + TRIBE_SUMMARY)
-    tribe_summary_full_agg.to_csv(summary_statistics_data_directory + 'tribe-summary-condensed.csv')
+    univ_summary = university_summary(df, summary_statistics_data_directory)
+    tribe_summary(df_1, summary_statistics_data_directory, univ_summary)
