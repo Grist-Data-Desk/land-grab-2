@@ -11,9 +11,9 @@ import geopandas
 import pandas as pd
 
 from land_grab_2.init_database.db.gristdb import GristDB
-from land_grab_2.utilities.utils import in_parallel, batch_iterable, get_uuid, send_email, in_parallel_prod
 from land_grab_2.utilities.overlap import eval_overlap_keep_left, dictlist_to_geodataframe, STATE_LONG_NAME, \
     tree_based_proximity
+from land_grab_2.utilities.utils import in_parallel, batch_iterable, get_uuid, send_email
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -201,7 +201,7 @@ def process_state(grist_data_path, state_code):
     print(f'processing state: {state_code}')
     counties = [c['county'] for c in db_list_counties(state_code)]
     print(f'state: {state_code} total counties: {len(counties)}')
-    overlapping_parcels_ids = in_parallel_prod(counties,
+    overlapping_parcels_ids = in_parallel(counties,
                                           partial(process_county, grist_data_path, state_code),
                                           # scheduler='synchronous',
                                           show_progress=True,
@@ -213,7 +213,7 @@ def process_state(grist_data_path, state_code):
 
 def find_overlapping_parcels(grist_data_path, states=None):
     all_states = states or [v for v in UNIV_NAME_TO_STATE.values()]
-    all_matches_ids = in_parallel_prod(all_states, partial(process_state, grist_data_path),
+    all_matches_ids = in_parallel(all_states, partial(process_state, grist_data_path),
                                   scheduler='synchronous',
                                   batched=False)
     # all_matches_ids = list(itertools.chain.from_iterable(all_matches_ids))

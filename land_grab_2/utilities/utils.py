@@ -69,7 +69,7 @@ def in_parallel_fake(work_items,
     return list(itertools.chain.from_iterable([[a_callable(work_item) for work_item in batch] for batch in batches]))
 
 
-def in_parallel(work_items,
+def in_parallel_exp(work_items,
                 a_callable,
                 scheduler='processes',
                 postprocess=None,
@@ -90,7 +90,7 @@ def in_parallel(work_items,
     return all_results
 
 
-def in_parallel_prod(work_items,
+def in_parallel(work_items,
                      a_callable,
                      scheduler='processes',
                      postprocess=None,
