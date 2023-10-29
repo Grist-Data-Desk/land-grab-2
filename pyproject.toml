@@ -8,6 +8,8 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.8"
 typer = "*"
+shapely = "^2.0.2"
+pyogrio = "^0.6.0"
 geopandas = "*"
 bmi-arcgis-restapi = "*"
 urllib3 = { version = "*", extras = ["secure"] }
@@ -22,6 +24,8 @@ psycopg = { extras = ["binary"], version = "*" }
 requests = "*"
 openpyxl = "*"
 joblib = "*"
+scikit-learn = "^1.3.1"
+pyarrow = "^13.0.0"
 
 
 [tool.poetry.group.dev.dependencies]

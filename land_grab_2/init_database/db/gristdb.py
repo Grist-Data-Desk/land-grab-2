@@ -226,7 +226,9 @@ class GristDB:
         if batch_size:
             while results:
                 page_id = results[-1]['id']
-                list_all_sql_paged = f"SELECT id FROM regrid WHERE id > {page_id} AND {where_col} = '{val}'  ORDER BY id ASC LIMIT {batch_size};"
+                list_all_sql_paged = f"""
+                SELECT id FROM regrid WHERE id > {page_id} AND {where_col} = '{val}' ORDER BY id ASC LIMIT {batch_size};
+                """
                 results = self.execute(list_all_sql_paged, results_type=GristDbResults.ALL)
                 all_results += results
         return all_results
@@ -357,26 +359,6 @@ class GristDB:
             all_results += result
 
         return all_results
-
-    def db_query_field_in_value_by_ids(self, queries, column, id_batch):
-        predicates = ' OR '.join([f"{column} ILIKE '%{q}%'" for q in queries])
-        id_batch = [record['id'] for record in id_batch]
-        inclusion_ids_fmttd = ', '.join([str(i) for i in id_batch])
-
-        ids_sql = f"SELECT DISTINCT id  FROM regrid WHERE id IN ({inclusion_ids_fmttd}) AND ({predicates});"
-        results_ids = self.execute(ids_sql, results_type=GristDbResults.ALL)
-        if not results_ids:
-            return results_ids
-
-        # print(f'had a few matches: {len(results_ids)}')
-        # TODO could it be faster to split along this line instead, for paralllization
-        results_ids = [record['id'] for record in results_ids]
-        results_ids_fmttd = ', '.join([str(i) for i in results_ids])
-
-        search_sql = f"""SELECT * FROM regrid WHERE id IN  ({results_ids_fmttd});"""
-        results_details = self.execute(search_sql, results_type=GristDbResults.ALL)
-
-        return results_details
 
     def db_query_field_in_value_by_ids_1(self, queries, column, id_batch):
         predicates = ' OR '.join([f"{column} ILIKE '%{q}%'" for q in queries])

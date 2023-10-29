@@ -122,6 +122,14 @@ STATE_TRUST_CONFIGS = {
             6: '100.00% School of Science (Scientific School)',
             921: 'Split - AC and F.&G.',
             927: 'Split - SS and F.&G.',
+            20: '100.00% University of Idaho Regent',
+            8: 'University of Idaho',
+            911: '4.00% State Hospital South (Insane Asylum), 96.00% University of Idaho',
+            908: '68.00% Public School (Indemnity, Schools, Common Schools), 32.00% University of Idaho',
+            910: '22.20% Normal School, 77.80% University of Idaho',
+            928: 'Dept. of Fish and Game, University of Idaho',
+            907: '27.00% Charitable Institute, 65.00% Public School (Indemnity, Schools, Common Schools), 8.00% University of Idaho'
+
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'L_ACRES': ACRES,
@@ -142,6 +150,14 @@ STATE_TRUST_CONFIGS = {
             6: '100.00% School of Science (Scientific School)',
             921: 'Split - AC and F.&G.',
             927: 'Split - SS and F.&G.',
+            20: '100.00% University of Idaho Regent',
+            8: 'University of Idaho',
+            911: '4.00% State Hospital South (Insane Asylum), 96.00% University of Idaho',
+            908: '68.00% Public School (Indemnity, Schools, Common Schools), 32.00% University of Idaho',
+            910: '22.20% Normal School, 77.80% University of Idaho',
+            928: 'Dept. of Fish and Game, University of Idaho',
+            907: '27.00% Charitable Institute, 65.00% Public School (Indemnity, Schools, Common Schools), 8.00% University of Idaho'
+
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'L_ACRES': ACRES,

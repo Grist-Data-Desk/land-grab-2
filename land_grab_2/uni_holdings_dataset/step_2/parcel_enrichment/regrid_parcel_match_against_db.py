@@ -6,7 +6,7 @@ from typing import Optional, List, Any, Union
 
 import pandas as pd
 
-from tasks.init_database.db import GristDB
+from land_grab_2.init_database.db.gristdb import GristDB
 from land_grab_2.uni_holdings_dataset.step_2.parcel_enrichment.entities import Parcel
 from land_grab_2.uni_holdings_dataset.step_2.parcel_enrichment.parsers.az_universityofarizona_parser import azua_parser
 # from land_grab.university_real_estate.parsers.ca_universityofcalifornia_parser import cauc_parser
@@ -15,9 +15,12 @@ from land_grab_2.uni_holdings_dataset.step_2.parcel_enrichment.parsers.in_purdue
 from land_grab_2.uni_holdings_dataset.step_2.parcel_enrichment.parsers.mo_universityofmissouri_parser import moum_parser
 from land_grab_2.uni_holdings_dataset.step_2.parcel_enrichment.parsers.nj_rutgersuniversity_parser import njru_parser
 from land_grab_2.uni_holdings_dataset.step_2.parcel_enrichment.parsers.oh_ohiostateuniversity_parser import ohos_parser
-from tasks.to_be_moved.land_grab.university_real_estate import tnut_parser
-from land_grab_2.uni_holdings_dataset.step_2.parcel_enrichment.parsers.tx_texasaandm_mineral_parser import txam_mineral_parser
-from land_grab_2.uni_holdings_dataset.step_2.parcel_enrichment.parsers.tx_texasaandm_property_parser import txam_property_parser
+from land_grab_2.uni_holdings_dataset.step_2.parcel_enrichment.parsers.tn_universityoftennessee_parser import \
+    tnut_parser
+from land_grab_2.uni_holdings_dataset.step_2.parcel_enrichment.parsers.tx_texasaandm_mineral_parser import \
+    txam_mineral_parser
+from land_grab_2.uni_holdings_dataset.step_2.parcel_enrichment.parsers.tx_texasaandm_property_parser import \
+    txam_property_parser
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)

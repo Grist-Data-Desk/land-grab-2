@@ -1,11 +1,14 @@
 import os
+from collections import Counter
+from pathlib import Path
 
 import geopandas as gpd
 import pandas as pd
 
-from land_grab_2.stl_dataset.step_1.constants import ALBERS_EQUAL_AREA, EXISTING_COLUMN_TO_FINAL_COLUMN_MAP, FINAL_DATASET_COLUMNS, \
+from land_grab_2.stl_dataset.step_1.constants import ALBERS_EQUAL_AREA, EXISTING_COLUMN_TO_FINAL_COLUMN_MAP, \
+    FINAL_DATASET_COLUMNS, \
     TRUST_NAME, TOWNSHIP, RANGE, SECTION, MERIDIAN, COUNTY, ALIQUOT, RIGHTS_TYPE, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE, \
-    OK_HOLDING_DETAIL_ID, ACTIVITY, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_2, OK_TRUST_FUND_ID
+    OK_HOLDING_DETAIL_ID, ACTIVITY, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_2, OK_TRUST_FUND_ID, LOCAL_DATA_SOURCE
 from land_grab_2.utilities.utils import _get_filename
 
 os.environ['RESTAPI_USE_ARCPY'] = 'FALSE'
@@ -56,9 +59,31 @@ def _clean_queried_data(source, config, label, alias, queried_data_directory,
     return gdf
 
 
+def _get_mt_activity(filtered_gdf, source):
+    """
+    extract activity value from directory name
+    """
+    surface = 'MT-surface-'
+    subsurface = 'MT-subsurface-'
+    prefix = (surface in source and surface) or (subsurface in source and subsurface)
+    if not prefix:
+        return filtered_gdf
+
+    activity_name = source[len(prefix):].replace('-', ' ').replace('and', '&')
+    if not activity_name:
+        return filtered_gdf
+
+    if ACTIVITY in filtered_gdf.columns:
+        filtered_gdf[ACTIVITY] = filtered_gdf[ACTIVITY].map(lambda v: activity_name)
+    else:
+        filtered_gdf[ACTIVITY] = activity_name
+
+    return filtered_gdf
+
+
 def _filter_and_clean_shapefile(gdf, config, source, label, code, alias,
                                 cleaned_data_directory):
-    # # adding projection info for wisconsin
+    # adding projection info for wisconsin
     if source == 'WI':
         gdf = gdf.to_crs(ALBERS_EQUAL_AREA)
 
@@ -77,6 +102,7 @@ def _filter_and_clean_shapefile(gdf, config, source, label, code, alias,
         filtered_gdf = _get_wi_town_range_section_aliquot(filtered_gdf)
     elif 'MT' in source:
         filtered_gdf = _get_mt_town_range_section(filtered_gdf)
+        filtered_gdf = _get_mt_activity(filtered_gdf, source)
     elif 'SD' in source:
         filtered_gdf = _get_sd_town_range_meridian(filtered_gdf)
         filtered_gdf = _get_sd_rights_type(filtered_gdf)
@@ -101,7 +127,9 @@ def _format_columns(gdf, config, alias):
     # if the initial dataset contains any columns that can be used in our final
     # dataset, rename them to the final dataset column name
     if config.get(EXISTING_COLUMN_TO_FINAL_COLUMN_MAP):
-        gdf = gdf.rename(columns=config[EXISTING_COLUMN_TO_FINAL_COLUMN_MAP])
+        out_cols = set(config[EXISTING_COLUMN_TO_FINAL_COLUMN_MAP].values()) - set(gdf.columns.tolist())
+        deduplicated_cols = {k: v for k, v in config[EXISTING_COLUMN_TO_FINAL_COLUMN_MAP].items() if v in out_cols}
+        gdf = gdf.rename(columns=deduplicated_cols)
 
     # add any other data if it exists in the config
     for column in FINAL_DATASET_COLUMNS:

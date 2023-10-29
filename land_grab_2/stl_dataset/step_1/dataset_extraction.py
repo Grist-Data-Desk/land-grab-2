@@ -28,10 +28,8 @@ def extract_and_clean_single_source_helper(source: str, config: dict,
 
     for label in config[ATTRIBUTE_LABEL_TO_FILTER_BY]:
         for code, alias in config[ATTRIBUTE_CODE_TO_ALIAS_MAP].items():
-
             # if querying from rest api
             if config[DOWNLOAD_TYPE] == API_QUERY_DOWNLOAD_TYPE:
-
                 _query_arcgis_restapi(config, source, label, code, alias,
                                       queried_data_directory)
 
@@ -45,19 +43,24 @@ def extract_and_clean_single_source_helper(source: str, config: dict,
                                             cleaned_data_directory)
 
 
-def _query_arcgis_restapi(config, source, label, code, alias, directory):
+def _query_arcgis_restapi(config, source, label, code, alias, directory, regen=False):
     """
     Query available arcgis restapi's with relevant filters
     """
+    # create desired attribute conditions to filter the query by
+    attribute_filter = f'{label}={code}'
+
     # create a descriptive filename to store query info
     filename = _get_filename(source, label, alias, '.geojson')
+    if (not regen and
+            Path(directory + filename).exists() or
+            Path(directory + filename.replace('geojson', 'json')).exists()):
+        print(f'Found existing file on disk with for {attribute_filter}')
+        return
 
     # data_source for specific Map Server
     data_source = config['data_source']
     layer = restapi.MapServiceLayer(data_source)
-
-    # create desired attribute conditions to filter the query by
-    attribute_filter = f'{label}={code}'
 
     try:
         # then filter by specific attributes

@@ -38,14 +38,14 @@ class StateActivityDataSource:
         if loc_path.name.endswith('.shp'):
             if loc_path.name.startswith('/'):
                 shapefile = self.location
-                gdf = geopandas.read_file(str(shapefile))
+                gdf = geopandas.read_file(str(shapefile), engine="pyogrio")
             else:
                 shapefile = stl_comparison_base_dir / self.location
-                gdf = geopandas.read_file(str(shapefile))
+                gdf = geopandas.read_file(str(shapefile), engine="pyogrio")
         else:
             shapefile = next(
                 (f for f in (stl_comparison_base_dir / self.location).iterdir() if f.name.endswith('.shp')), None)
-            gdf = geopandas.read_file(str(shapefile))
+            gdf = geopandas.read_file(str(shapefile), engine="pyogrio")
 
         return gdf
 

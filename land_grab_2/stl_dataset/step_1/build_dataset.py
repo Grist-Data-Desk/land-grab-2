@@ -1,4 +1,3 @@
-import logging
 from datetime import datetime
 
 import typer
@@ -9,12 +8,10 @@ from land_grab_2.stl_dataset.step_1.dataset_merge import merge_single_state_help
     merge_cessions_data_helper
 from land_grab_2.stl_dataset.step_1.dataset_summary_stats import calculate_summary_statistics_helper
 from land_grab_2.stl_dataset.step_1.state_trust_config import STATE_TRUST_CONFIGS
-from land_grab_2.utilities.utils import in_parallel, _queried_data_directory, \
+from land_grab_2.utilities.utils import _queried_data_directory, \
     _cleaned_data_directory, _merged_data_directory, _cessions_data_directory, \
     _summary_statistics_data_directory
 
-logging.basicConfig(level=logging.INFO)
-log = logging.getLogger(__name__)
 app = typer.Typer()
 
 
@@ -39,9 +36,6 @@ def extract_and_clean_all():
     '''
     st = datetime.now()
     for state in STATE_TRUST_CONFIGS.keys():
-        if 'UT' in state:
-            print('skipping UTAH extracting and cleaning')
-            continue
         extract_and_clean_single_source(state)
     print(f'extract_and_clean_all took: {datetime.now() - st}')
 

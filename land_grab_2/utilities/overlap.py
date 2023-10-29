@@ -4,16 +4,16 @@ import logging
 import traceback
 from collections import Counter
 from functools import partial
-from typing import Optional, Any
+from typing import Optional, Any, Dict, Iterable
 
 import geopandas
 import numpy as np
 import pandas as pd
-from shapely import Polygon, MultiPolygon, make_valid
+from shapely import Polygon, MultiPolygon, make_valid, STRtree
 
 from land_grab_2.stl_dataset.step_1.constants import GIS_ACRES, FINAL_DATASET_COLUMNS, RIGHTS_TYPE, ACTIVITY, ACRES, \
     GEOMETRY, OBJECT_ID, DATA_SOURCE
-from land_grab_2.utilities.utils import in_parallel, combine_delim_list
+from land_grab_2.utilities.utils import in_parallel, combine_delim_list, batch_iterable
 
 log = logging.getLogger(__name__)
 STATE_LONG_NAME = {
@@ -152,6 +152,14 @@ def dictlist_to_geodataframe(count_parcels, crs=None):
     return gdf
 
 
+def is_much_bigger(feature_1, feature_2, tolerance: float = 0.15) -> bool:
+    # if feature_1 area is bigger
+    bigger = np.argmax([feature_1.area, feature_2.area])
+    area_difference = abs(feature_1.area - feature_2.area)
+    area_tolerance = tolerance * max(feature_1.area, feature_2.area)
+    return bigger == 0 and area_difference > area_tolerance
+
+
 def is_same_geo_feature(feature_1, feature_2, crs=None, tolerance: float = 0.15) -> bool:
     # if area is same
     area_difference = abs(feature_1.area - feature_2.area)
@@ -232,8 +240,8 @@ def geometric_deduplication(gdf: pd.DataFrame, crs: Any, tolerance: float = 0.15
 def combine_dfs(df_list, tolerance: float = 0.15):
     # find col intersection of all
     common_cols = list(set.intersection(*[set(df.columns.tolist()) for df in df_list]))
-    if ACRES not in common_cols:
-        common_cols.append(ACRES)
+    missing_final_cols = list(set([c for c in FINAL_DATASET_COLUMNS if c not in common_cols]))
+    common_cols += missing_final_cols
 
     # select intersected cols from all
     consistent_cols_df_list = [df[[c for c in common_cols if c in df.columns]] for df in df_list]
@@ -242,8 +250,6 @@ def combine_dfs(df_list, tolerance: float = 0.15):
     df_crs = Counter([df.crs for df in df_list]).most_common(1)[0][0]
     consistent_cols_df_list = [df.to_crs(df_crs) for df in consistent_cols_df_list]
     merged = pd.concat(consistent_cols_df_list, ignore_index=True)
-    if ACRES not in merged:
-        merged[ACRES] = np.nan
 
     # geometric rollup dedup
     merged_uniq = geometric_deduplication(merged, df_crs, tolerance=tolerance)
@@ -259,3 +265,76 @@ def fix_geometries(gdf):
     gdf['geometry'] = gdf.geometry.map(lambda g: make_valid(g))
     gdf.set_crs(crs, inplace=True, allow_override=True).to_crs(crs)
     return gdf
+
+
+def _tree_based_proximity_batch(grist_bounds=None, grist_data=None, crs=None, match_dist_threshold=None, batch=None):
+    other_envelopes = [None if g['geometry'] is None else g['geometry'].envelope for g in batch]
+    indices = STRtree(other_envelopes).nearest(grist_bounds)
+
+    pairs = sorted([
+        (
+            g['geometry'].boundary.distance(batch[i]['geometry'].envelope),
+            grist_idx,
+            g,
+            batch[i],
+            (g['geometry'].contains(batch[i]['geometry']) or
+             batch[i]['geometry'].contains(g['geometry']) or
+             g['geometry'].intersects(batch[i]['geometry']) or
+             batch[i]['geometry'].intersects(g['geometry']) or
+             g['geometry'].crosses(batch[i]['geometry']) or
+             batch[i]['geometry'].crosses(g['geometry']) or
+             g['geometry'].within(batch[i]['geometry']) or
+             batch[i]['geometry'].within(g['geometry']) or
+             g['geometry'].touches(batch[i]['geometry']) or
+             batch[i]['geometry'].touches(g['geometry']) or
+             g['geometry'].covers(batch[i]['geometry']) or
+             batch[i]['geometry'].covers(g['geometry']) or
+
+             g['geometry'].boundary.contains(batch[i]['geometry'].envelope) or
+             batch[i]['geometry'].envelope.contains(g['geometry'].boundary) or
+             g['geometry'].boundary.intersects(batch[i]['geometry'].envelope) or
+             batch[i]['geometry'].envelope.intersects(g['geometry'].boundary) or
+             g['geometry'].boundary.crosses(batch[i]['geometry'].envelope) or
+             batch[i]['geometry'].envelope.crosses(g['geometry'].boundary) or
+             g['geometry'].boundary.within(batch[i]['geometry'].envelope) or
+             batch[i]['geometry'].envelope.within(g['geometry'].boundary) or
+             g['geometry'].boundary.touches(batch[i]['geometry'].envelope) or
+             batch[i]['geometry'].envelope.touches(g['geometry'].boundary) or
+             g['geometry'].boundary.covers(batch[i]['geometry'].envelope) or
+             batch[i]['geometry'].envelope.covers(g['geometry'].boundary) or
+
+             is_same_geo_feature(g['geometry'], batch[i]['geometry'], crs=crs)),
+        )
+        for grist_idx, (g, i) in enumerate(zip(grist_data, indices))
+        if g['geometry'].boundary.distance(batch[i]['geometry'].envelope) <= match_dist_threshold
+    ], key=lambda p: p[0])
+
+    return pairs
+    # return itertools.takewhile(lambda x: x[0] <= match_dist_threshold, pairs)
+
+
+def tree_based_proximity(grist_data: Iterable[Dict[str, Any]], other_data, crs, match_dist_threshold: float = 2.0):
+    grist_bounds = [g['geometry'].boundary for g in grist_data if g['geometry'] is not None]
+
+    other_data = (
+        other_data.set_crs(crs, allow_override=True).to_crs(crs) if not other_data.crs else other_data.to_crs(crs)
+    )
+    other_data_dicts = other_data.to_dict(orient='records')
+
+    too_many_records = 10_000
+    batches = [other_data_dicts]
+    if len(other_data_dicts) > too_many_records:
+        batches = batch_iterable(other_data_dicts, too_many_records)
+
+    all_sorted_and_filtered_pairs = in_parallel(batches,
+                                                partial(_tree_based_proximity_batch,
+                                                        grist_bounds,
+                                                        grist_data,
+                                                        crs,
+                                                        match_dist_threshold),
+                                                scheduler='threads',
+                                                batched=False)
+
+    sorted_and_filtered_pairs_final = itertools.chain.from_iterable(all_sorted_and_filtered_pairs)
+
+    return sorted_and_filtered_pairs_final

@@ -22,32 +22,74 @@ log = logging.getLogger(__name__)
 
 app = typer.Typer()
 
-UNIV_NAME_TO_STATE = {'Iowa State University': 'IA',
-                      'University of Wisconsin': 'WI',
-                      'Washington State University': 'WA',
-                      'University of Minnesota': 'MN',
-                      'North Carolina State University': 'NC',
-                      'University of Vermont': 'VT',
-                      'West Virginia University': 'WV',
-                      'Utah State University': 'UT',
-                      'University of Idaho': 'ID',
-                      'Oregon State University': 'OR',
-                      'New Mexico State University': 'NM',
-                      'University of Florida': 'FL',
-                      'University of California System': 'CA',
-                      'University of Arizona': 'AZ',
-                      'Purdue University': 'IN',
-                      'University of Missouri': 'MO',
-                      'Ohio State University': 'OH',
-                      'University of Tennessee': 'TN'}
+UNIV_NAME_TO_STATE = {
+    'Iowa State University': 'IA',
+    'University of Wisconsin': 'WI',
+    'Washington State University': 'WA',
+    'University of Minnesota': 'MN',
+    'North Carolina State University': 'NC',
+    'University of Vermont': 'VT',
+    'West Virginia University': 'WV',
+    'Utah State University': 'UT',
+    'University of Idaho': 'ID',
+    'Oregon State University': 'OR',
+    'New Mexico State University': 'NM',
+    'University of Florida': 'FL',
+    'University of California System': 'CA',
+    'University of Arizona': 'AZ',
+    'Purdue University': 'IN',
+    'University of Missouri': 'MO',
+    'Ohio State University': 'OH',
+    'University of Tennessee': 'TN',
+    'Texas A&M University': 'TX',
+    'University of Connecticut': 'CT',
+    'Michigan State University': 'MI',
+    'Kansas State University': 'KS',
+    'University of Kentucky': 'KY',
+    'University of Nevada': 'NV',
+    'University of Georgia': 'GA',
+    'Rutgers University': 'NJ',
+    'Kentucky State University': 'KY',
+    'Louisiana State University': 'LA',
+    'Colorado State University': 'CO',
+    'North Dakota State University': 'ND',
+    'University of Wyoming': 'WY',
+    'Oklahoma State University': 'OK',
+    'University of Illinois': 'IL',
+    'University of Maryland': 'MD',
+    'University of Massachusetts': 'MA',
+    'University of of Maine': 'ME',
+    'University of Nebraska': 'NE',
+    'University of New Hampshire': 'NH',
+    'University of Rhode Island': 'RI',
+    'Auburn University': 'AL',
+    'University of Arkansas': 'AK',
+    'University of Delaware': 'DE',
+    'MIT': 'MA',
+    'Alcorn State University': 'MS',
+    'Mississippi State University': 'MS',
+    'Cornell': 'NY',
+    'Pennsylvania State University': 'PA',
+    'Clemson University': 'SC',
+    'South Carolina State University': 'SC',
+    'South Dakota State University': 'SD',
+    'Montana State University': 'MT',
+    'Virginia State University': 'VA',
+    'Virginia Tech': 'VA',
+}
 
 STATE_TO_UNIV = {v: k for k, v in UNIV_NAME_TO_STATE.items()}
 
 
-def write_search_results(output_dir: Path, name: str, univ: str, queries: List[str], results: List[Dict[str, Any]]):
+def get_univ_out_dir(output_dir=None, univ=None):
     univ_out_dir = output_dir / univ
     if not univ_out_dir.exists():
         univ_out_dir.mkdir(parents=True, exist_ok=True)
+    return univ_out_dir
+
+
+def write_search_results(output_dir: Path, name: str, univ: str, queries: List[str], results: List[Dict[str, Any]]):
+    univ_out_dir = get_univ_out_dir(output_dir, univ)
 
     pd.DataFrame({'query_components': queries}).to_csv(univ_out_dir / f'{name}_query.csv', index=False)
 
@@ -58,6 +100,8 @@ def write_search_results(output_dir: Path, name: str, univ: str, queries: List[s
 
         gdf = dictlist_to_geodataframe(results)
         gdf.to_file(str(univ_out_dir / f'{name}_search_results.geojson'), driver='GeoJSON')
+
+        gdf.to_feather(str(univ_out_dir / f'{name}_search_results.feather'), index=False)
     else:
         results_file = univ_out_dir / f'{name}_empty_results.txt'
         with results_file.open('w') as fh:
@@ -119,7 +163,7 @@ def search(university: str, queries: List[str], column: str, batch_size=10000) -
     state = UNIV_NAME_TO_STATE.get(university)
     # print(f'filtering db for state: {state}')
     st = datetime.now()
-    state_ids = GristDB().ids_where('state2', state, batch_size=None)
+    state_ids = GristDB().ids_where('state2', state, batch_size=batch_size)
     et = datetime.now()
     # print(f'took {et - st}s')
 
@@ -165,11 +209,18 @@ def search(university: str, queries: List[str], column: str, batch_size=10000) -
 
 def process_university(should_secondary_search=False, out_dir=None, row=None):
     try:
+        # univ = row['University']'University'
+        # owner = row['Reverse_Search_Name']'Owner Name Queries - PRIORITY LIST'
+        # mailadd = row['Reverse_Search_Mail_Address']'Reverse_Search_Mail_Address'
+
         univ = row['University']
-        owner = row['Reverse_Search_Name']
+        owner = row['Owner Name Queries - PRIORITY LIST']
         mailadd = row['Reverse_Search_Mail_Address']
         if not univ or not (univ and (owner or mailadd)):
             print(f'skipping univ: {univ}')
+            return
+
+        if len(list(get_univ_out_dir(out_dir, univ).iterdir())) > 0:
             return
 
         owner_records = None
@@ -194,7 +245,7 @@ def process_university(should_secondary_search=False, out_dir=None, row=None):
 @app.command()
 def run():
     print('running private_holdings_by_reverse_search')
-    data_tld = os.environ.get('DATA')
+    data_tld = os.environ. get('DATA')
     data_directory = Path(f'{data_tld}/uni_holdings/reverse_search')
 
     try:
@@ -202,13 +253,15 @@ def run():
         if not out_dir.exists():
             out_dir.mkdir(parents=True, exist_ok=True)
 
-        csv_path = data_directory / 'input/2308_LGU UNIS HACKATHON - Sheet5.csv'
+        csv_path = data_directory / 'input/2308_LGU UNIS HACKATHON - UNIVERSITY QUERY TERMS.csv'
         df = pd.read_csv(csv_path, index_col=False, dtype=str)
 
         univs = df.to_dict(orient='records')
         should_secondary_search = False
         st = datetime.now()
         in_parallel(univs, partial(process_university, should_secondary_search, out_dir),
+                    scheduler='synchronous',
+                    # scheduler='threads',
                     show_progress=True,
                     batched=False)
         print(f'processing took {datetime.now() - st}')

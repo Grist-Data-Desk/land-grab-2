@@ -19,11 +19,13 @@ from compose import compose
 from dask.diagnostics import ProgressBar
 # from joblib import Memory
 from tqdm import tqdm
+from tqdm.contrib.concurrent import process_map
 
 from land_grab_2.stl_dataset.step_1.constants import STATE_TRUST_DIRECTORY, QUERIED_DIRECTORY, CLEANED_DIRECTORY, \
     MERGED_DIRECTORY, CESSIONS_DIRECTORY, SUMMARY_STATISTICS_DIRECTORY
 
 log = logging.getLogger(__name__)
+
 
 # memory = Memory(str(Path(os.environ.get('DATA')) / 'cache'))
 
@@ -84,6 +86,27 @@ def in_parallel(work_items,
     if scheduler == 'synchronous':
         log.info('Using Dask synchronous scheduler')
 
+    all_results = process_map(a_callable, work_items)
+    return all_results
+
+
+def in_parallel_prod(work_items,
+                     a_callable,
+                     scheduler='processes',
+                     postprocess=None,
+                     batched=True,
+                     show_progress=False,
+                     batch_size=10):
+    debug_parallelism = os.environ.get('DEBUG_PARALLEL')
+    if debug_parallelism:
+        scheduler = 'synchronous' if len(debug_parallelism) <= 5 else debug_parallelism
+
+    if postprocess:
+        a_callable = compose(postprocess, a_callable)
+
+    if scheduler == 'synchronous':
+        log.info('Using Dask synchronous scheduler')
+
     all_results = []
     if not batched:
         with dask.config.set(scheduler=scheduler):
@@ -111,8 +134,12 @@ def in_parallel(work_items,
     return all_results
 
 
-def batch_iterable(work_items, batch_size):
-    return [work_items[i:i + batch_size] for i in range(0, len(work_items), batch_size)]
+def batch_iterable(work_items, batch_size, generator=False):
+    return (
+        [work_items[i:i + batch_size] for i in range(0, len(work_items), batch_size)]
+        if not generator else
+        (work_items[i:i + batch_size] for i in range(0, len(work_items), batch_size))
+    )
 
 
 def read_json(p: Path):
@@ -396,7 +423,19 @@ def _summary_statistics_data_directory(state=None):
 
 
 def combine_delim_list(old_val, update_val, sep='+'):
+    old_val = str(old_val)
+    if old_val == 'nan':
+        old_val = ''
+
+    update_val = str(update_val)
+    if update_val == 'nan':
+        update_val = ''
+
     update_vals = [v.strip() for v in update_val.split(sep) if v.strip()]
     old_vals = [v.strip() for v in old_val.split(sep) if v.strip()]
     new_val = sep.join(sorted(list(set(update_vals + old_vals))))
     return new_val
+
+
+def index_of(it, f, default=-1):
+    return next((i for i, e in enumerate(it) if f(e)), default)

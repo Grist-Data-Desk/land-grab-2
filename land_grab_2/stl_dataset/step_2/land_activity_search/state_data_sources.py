@@ -1,6 +1,6 @@
 from land_grab_2.stl_dataset.step_2.land_activity_search.entities import StateForActivity, StateActivityDataSource
 
-rewrite_rules = {
+REWRITE_RULES = {
     "id": {
         "Water": {
             "TypeGroup": "Rights-Type",
@@ -9,9 +9,11 @@ rewrite_rules = {
             "Source": "Source"
         },
         "roads": {
+            "EasementRi": "Rights-Type",
             "EasementRight": "Rights-Type",
             "TypeGroup": "Transaction Type",
             "Status": "Lease Status",
+            "EasementPu": "Activity",
             "EasementPurpose": "Activity",
             "Easement Purpose": "Activity",
             "Parties": "Lessee or Owner or Manager",
@@ -30,13 +32,13 @@ rewrite_rules = {
     },
     "co": {
         "misc": {
-            "Transaction Type": "Transaction Type",
-            "Lease Status": "Lease Status",
-            "Lease Type": "Activity",
-            "Lease Subtype": "Sub-activity",
-            "Lessee Name": "Lessee or Owner or Manager",
-            "Lease State Date": "Lease Start Date",
-            "Lease End Date": "Lease End Date"
+            "Transactio": "Transaction Type",
+            "Lease_Stat": "Lease Status",
+            "Lease_Type": "Activity",
+            "Lease_Subt": "Sub-activity",
+            "Lessee_Nam": "Lessee or Owner or Manager",
+            "Lease_Star": "Lease Start Date",
+            "Lease_End_": "Lease End Date"
         }
     },
     "mn": {
@@ -122,10 +124,12 @@ rewrite_rules = {
     },
     "tx": {
         "renewables": {
-            "FIRST_sitedescription": "Activity"
+            "FIRST_sitedescription": "Activity",
+            "first_site": "Activity"
         },
         "minerals": {
-            "UnitTypeDescription": "Activity"
+            "UnitTypeDescription": "Activity",
+            "unittypede": "Activity"
         },
         "misc": {
             "LEASE_STAT": "Lease Status",
@@ -185,6 +189,7 @@ rewrite_rules = {
         "Metallic and Nonmetallic Minerals": {
             "LeaseStatusLabel": "Lease Status",
             "MineralTypeLabel": "Activity",
+            'oslisde._8': 'Activity',
             "MetallicNonMetallicLeaseSubType": "Sub-activity",
             "CompanyName": "Lessee or Owner or Manager",
             "CompanyZipCode": "Owner Address or Location",
@@ -194,6 +199,7 @@ rewrite_rules = {
         "Oil and gas": {
             "LeaseStatusLabel": "Lease Status",
             "MineralTypeLabel": "Activity",
+            'oslisde.88': "Activity",
             "CompanyName": "Lessee or Owner or Manager",
             "CompanyZipCode": "Owner Address or Location",
             "LeaseIssueDate": "Lease Start Date",
@@ -202,7 +208,9 @@ rewrite_rules = {
         "Easements": {
             "Status_LU": "Lease Status",
             "Sub_Group_LU": "Activity",
+            'oslisde.20': "Activity",
             "Use_Type_LU": "Sub-activity",
+            'oslisde.21': "Sub-activity",
             "Leaseholder_LU": "Lessee or Owner or Manager",
             "Issue_Date_LU": "Lease Start Date",
             "Expiration_Date_LU": "Lease End Date"
@@ -216,6 +224,7 @@ rewrite_rules = {
         "Special": {
             "Status_LU": "Lease Status",
             "Type_LU": "Activity",
+            'oslisde.19': "Activity",
             "Purpose_LU": "Sub-activity",
             "Leaseholder_LU": "Lessee or Owner or Manager",
             "Start_Date_LU": "Lease Start Date",
@@ -307,6 +316,7 @@ rewrite_rules = {
             "OGRID_NAM": "Lessee or Owner or Manager"
         }
     },
+
     "mt": {
         "misc": {
             "UNITTYPE": "Activity",
@@ -335,6 +345,9 @@ rewrite_rules = {
             "DateEffect": "Lease Start Date",
             "DateExpire": "Lease End Date"
         },
+        "Agriculture and Grazing": {
+            "Status": "Lease Status"
+        },
         "Coal Active Lease": {
             "Prim_Cust": "Lessee or Owner or Manager",
             "Producing": "Lease Status",
@@ -342,6 +355,7 @@ rewrite_rules = {
             "DateExpire": "Lease End Date"
         }
     },
+
     "wi": {
         "misc": {
             "PROP_NAME": "Activity"
@@ -691,9 +705,12 @@ STATE_ACTIVITIES = {
                                 location='Montana_All/MMB_CoalActiveLease.shp',
                                 keep_cols=['Prim_Cust', 'Producing', 'DateEffect', 'DateExpire'],
                                 use_name_as_activity=True),
+        StateActivityDataSource(name='Agriculture and Grazing',
+                                location='Montana_All/AGMB_AgreementTracts.shp',
+                                keep_cols=['Status'],
+                                use_name_as_activity=True),
         StateActivityDataSource(name='Oil and Gas Active Lease',
                                 location='Montana_All/MMB_OilandGasActiveLease.shp',
                                 keep_cols=['Prim_Cust', 'Producing', 'DateEffect', 'DateExpire'],
                                 use_name_as_activity=True)]),
 }
-
