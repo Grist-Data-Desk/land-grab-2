@@ -318,7 +318,7 @@ REWRITE_RULES = {
     },
 
     "mt": {
-        "misc": {
+        "miscellaneous": {
             "UNITTYPE": "Activity",
             "MANAME": "Sub-activity",
             "INST": "Lessee or Owner or Manager"

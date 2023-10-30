@@ -43,6 +43,7 @@ def _clean_queried_data(source, config, label, alias, queried_data_directory,
         gdf = _get_az_town_range_section(gdf)
     elif 'MT' in source:
         gdf = _get_mt_town_range_section(gdf)
+        gdf = _get_mt_activity(gdf, source)
     elif source == 'OK-subsurface':
         gdf = _get_ok_subsurface_town_range(gdf)
     elif 'OR' in source:
@@ -73,6 +74,7 @@ def _get_mt_activity(filtered_gdf, source):
     if not activity_name:
         return filtered_gdf
 
+    activity_name = activity_name.title()
     if ACTIVITY in filtered_gdf.columns:
         filtered_gdf[ACTIVITY] = filtered_gdf[ACTIVITY].map(lambda v: activity_name)
     else:

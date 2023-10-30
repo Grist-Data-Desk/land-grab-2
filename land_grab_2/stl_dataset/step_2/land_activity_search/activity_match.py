@@ -83,6 +83,9 @@ def get_activity_name(state, activity, activity_row):
         return activity.name
 
     possible_activity_cols = get_activity_column(activity, state)
+    if possible_activity_cols is None:
+        return activity.name
+
     for activity_col in possible_activity_cols:
         if activity_col and activity_col in activity_row.keys():
             activity_name_row = activity_row[activity_col].tolist()
@@ -177,6 +180,8 @@ def match_all_activities(states_data=None, grist_data=None):
                         print(f'THE NONESTATE: {activity_state}')
                         sys.exit(1)
                     GRIST_DATA_UPDATE[k].update(v)
+
+        assert 1
 
 
 def main(stl_path: Path, the_out_dir: Path):
