@@ -1,5 +1,6 @@
 import itertools
 import os
+from pathlib import Path
 
 import geopandas
 import geopandas as gpd
@@ -139,24 +140,14 @@ def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
     for state in os.listdir(cleaned_data_directory):
         print(state)
         state_cleaned_data_directory = state_specific_directory(cleaned_data_directory, state)
-
+        if not Path(state_cleaned_data_directory).is_dir():
+            continue
         merged_state = merge_single_state_helper(state, state_cleaned_data_directory, merged_data_directory)
         merged_state = merged_state.to_crs(ALBERS_EQUAL_AREA)
         state_datasets_to_merge.append(merged_state)
 
     # merge all states to single geodataframe
     merged = pd.concat(state_datasets_to_merge, ignore_index=True)
-
-    # print(f'Beginning Geometric dedup on final df')
-    # rounds = 0
-    # while True:
-    #     size_0 = merged.shape[0]
-    #     merged = geometric_deduplication(merged, merged.crs)
-    #     size_1 = merged.shape[0]
-    #     if size_0 == size_1:
-    #         break
-    #     rounds += 1
-    # print(f'Geometric dedup on final df took {rounds} rounds')
 
     m2 = merged.groupby(['geometry'], as_index=False).agg(list).reset_index()
     m2 = m2.apply(uniq, axis=1)

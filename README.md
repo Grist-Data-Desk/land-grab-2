@@ -26,8 +26,7 @@ The following assumes your data directory is itself called `data` and all paths 
   * output will be `data/stl_dataset/step_2/output/updated_grist_stl.[csv, geojson]`
 * Stage 2.5 -- A manual step
   * enrich the unified dataset with land-cession information per-parcel.
-  * once completed move the updated dataset to
-  * look for output in `data/output`
+  * once completed move the updated dataset to TBD
 * Stage 3
   *  the data directory contains a listing of prices paid for land. this will be used to calculate ...TBD
   * `$ python run.py stl-stage-3`
