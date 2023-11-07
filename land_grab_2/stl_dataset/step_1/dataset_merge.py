@@ -151,7 +151,7 @@ def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
 
     # m2 = merged.groupby(['geometry'], as_index=False).agg(list).reset_index()
     # m2 = m2.apply(uniq, axis=1)
-    # merged = gpd.GeoDataFrame(m2, geometry=m2['geometry'], crs=ALBERS_EQUAL_AREA)
+    merged = gpd.GeoDataFrame(merged, geometry=merged['geometry'], crs=ALBERS_EQUAL_AREA)
 
     # add a unique object id identifier columns
     merged[OBJECT_ID] = merged.index + 1
