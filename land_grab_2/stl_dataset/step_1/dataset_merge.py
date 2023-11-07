@@ -1,5 +1,6 @@
 import itertools
 import os
+from collections import defaultdict
 from pathlib import Path
 
 import geopandas
@@ -138,6 +139,8 @@ def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
 
     # grab data from each state directory
     for state in os.listdir(cleaned_data_directory):
+        if 'MN' not in state:
+            continue
         print(state)
         state_cleaned_data_directory = state_specific_directory(cleaned_data_directory, state)
         if not Path(state_cleaned_data_directory).is_dir():

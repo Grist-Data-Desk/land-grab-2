@@ -250,12 +250,13 @@ def combine_dfs(df_list, tolerance: float = 0.15):
     df_crs = Counter([df.crs for df in df_list]).most_common(1)[0][0]
     consistent_cols_df_list = [df.to_crs(df_crs) for df in consistent_cols_df_list]
     merged = pd.concat(consistent_cols_df_list, ignore_index=True)
+    merged_uniq = merged.drop([c for c in merged.columns if c not in FINAL_DATASET_COLUMNS], axis=1)
 
     # geometric rollup dedup
-    merged_uniq = geometric_deduplication(merged, df_crs, tolerance=tolerance)
+    # merged_uniq = geometric_deduplication(merged, df_crs, tolerance=tolerance)
 
     # drop unwanted columns
-    merged_uniq = merged_uniq.drop([c for c in merged_uniq.columns if c not in FINAL_DATASET_COLUMNS], axis=1)
+    # merged_uniq = merged_uniq.drop([c for c in merged_uniq.columns if c not in FINAL_DATASET_COLUMNS], axis=1)
 
     return merged_uniq
 
@@ -265,6 +266,36 @@ def fix_geometries(gdf):
     gdf['geometry'] = gdf.geometry.map(lambda g: make_valid(g))
     gdf.set_crs(crs, inplace=True, allow_override=True).to_crs(crs)
     return gdf
+
+
+def is_possibly_same_feature(feature_1, feature_2, crs=None, tolerance: float = 0.15) -> bool:
+    return (feature_1.contains(feature_2) or
+            feature_2.contains(feature_1) or
+            feature_1.intersects(feature_2) or
+            feature_2.intersects(feature_1) or
+            feature_1.crosses(feature_2) or
+            feature_2.crosses(feature_1) or
+            feature_1.within(feature_2) or
+            feature_2.within(feature_1) or
+            feature_1.touches(feature_2) or
+            feature_2.touches(feature_1) or
+            feature_1.covers(feature_2) or
+            feature_2.covers(feature_1) or
+
+            feature_1.boundary.contains(feature_2.envelope) or
+            feature_2.envelope.contains(feature_1.boundary) or
+            feature_1.boundary.intersects(feature_2.envelope) or
+            feature_2.envelope.intersects(feature_1.boundary) or
+            feature_1.boundary.crosses(feature_2.envelope) or
+            feature_2.envelope.crosses(feature_1.boundary) or
+            feature_1.boundary.within(feature_2.envelope) or
+            feature_2.envelope.within(feature_1.boundary) or
+            feature_1.boundary.touches(feature_2.envelope) or
+            feature_2.envelope.touches(feature_1.boundary) or
+            feature_1.boundary.covers(feature_2.envelope) or
+            feature_2.envelope.covers(feature_1.boundary) or
+
+            is_same_geo_feature(feature_1, feature_2, crs=crs, tolerance=tolerance))
 
 
 def _tree_based_proximity_batch(grist_bounds=None, grist_data=None, crs=None, match_dist_threshold=None, batch=None):
@@ -277,33 +308,7 @@ def _tree_based_proximity_batch(grist_bounds=None, grist_data=None, crs=None, ma
             grist_idx,
             g,
             batch[i],
-            (g['geometry'].contains(batch[i]['geometry']) or
-             batch[i]['geometry'].contains(g['geometry']) or
-             g['geometry'].intersects(batch[i]['geometry']) or
-             batch[i]['geometry'].intersects(g['geometry']) or
-             g['geometry'].crosses(batch[i]['geometry']) or
-             batch[i]['geometry'].crosses(g['geometry']) or
-             g['geometry'].within(batch[i]['geometry']) or
-             batch[i]['geometry'].within(g['geometry']) or
-             g['geometry'].touches(batch[i]['geometry']) or
-             batch[i]['geometry'].touches(g['geometry']) or
-             g['geometry'].covers(batch[i]['geometry']) or
-             batch[i]['geometry'].covers(g['geometry']) or
-
-             g['geometry'].boundary.contains(batch[i]['geometry'].envelope) or
-             batch[i]['geometry'].envelope.contains(g['geometry'].boundary) or
-             g['geometry'].boundary.intersects(batch[i]['geometry'].envelope) or
-             batch[i]['geometry'].envelope.intersects(g['geometry'].boundary) or
-             g['geometry'].boundary.crosses(batch[i]['geometry'].envelope) or
-             batch[i]['geometry'].envelope.crosses(g['geometry'].boundary) or
-             g['geometry'].boundary.within(batch[i]['geometry'].envelope) or
-             batch[i]['geometry'].envelope.within(g['geometry'].boundary) or
-             g['geometry'].boundary.touches(batch[i]['geometry'].envelope) or
-             batch[i]['geometry'].envelope.touches(g['geometry'].boundary) or
-             g['geometry'].boundary.covers(batch[i]['geometry'].envelope) or
-             batch[i]['geometry'].envelope.covers(g['geometry'].boundary) or
-
-             is_same_geo_feature(g['geometry'], batch[i]['geometry'], crs=crs)),
+            is_possibly_same_feature(g['geometry'], batch[i]['geometry'], crs=crs),
         )
         for grist_idx, (g, i) in enumerate(zip(grist_data, indices))
         if g['geometry'].boundary.distance(batch[i]['geometry'].envelope) <= match_dist_threshold
