@@ -225,22 +225,22 @@ def main(stl_comparison_base_dir, stl_path: Path, the_out_dir: Path):
     gdf.to_file(str(the_out_dir / 'updated_grist_stl.geojson'), driver='GeoJSON')
     log.info(f'original grist_data row_count: {gdf.shape[0]}')
 
-    if ACTIVITY_DATA_UPDATE:
-        activity_df = pd.DataFrame(ACTIVITY_DATA_UPDATE)
-        date_cols = [col for col in activity_df.columns if 'datetime' in str(activity_df.dtypes[col])]
-        for col in date_cols:
-            activity_df[col] = activity_df[col].map(str)
-        did_it_work = str(activity_df.dtypes[col])
-        assert 1
-
-        activity_gdf = geopandas.GeoDataFrame(activity_df, geometry=activity_df.geometry)
-        activity_gdf = geometric_deduplication(activity_gdf, gdf.crs)
-
-        activity_gdf.to_csv(str(the_out_dir / 'activity_match_deep_dive.csv'), index=False)
-        activity_gdf.to_file(str(the_out_dir / 'activity_match_deep_dive.geojson'), driver='GeoJSON')
-        log.info(f'activity_df row_count: {activity_df.shape[0]}')
-    else:
-        print('No activity matches whatsoever. recommend investigation/debugging.')
+    # if ACTIVITY_DATA_UPDATE:
+    #     activity_df = pd.DataFrame(ACTIVITY_DATA_UPDATE)
+    #     date_cols = [col for col in activity_df.columns if 'datetime' in str(activity_df.dtypes[col])]
+    #     for col in date_cols:
+    #         activity_df[col] = activity_df[col].map(str)
+    #     did_it_work = str(activity_df.dtypes[col])
+    #     assert 1
+    #
+    #     activity_gdf = geopandas.GeoDataFrame(activity_df, geometry=activity_df.geometry)
+    #     activity_gdf = geometric_deduplication(activity_gdf, gdf.crs)
+    #
+    #     activity_gdf.to_csv(str(the_out_dir / 'activity_match_deep_dive.csv'), index=False)
+    #     activity_gdf.to_file(str(the_out_dir / 'activity_match_deep_dive.geojson'), driver='GeoJSON')
+    #     log.info(f'activity_df row_count: {activity_df.shape[0]}')
+    # else:
+    #     print('No activity matches whatsoever. recommend investigation/debugging.')
 
 
 def run():
