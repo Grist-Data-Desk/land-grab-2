@@ -97,8 +97,8 @@ class StateActivityDataSource:
                     print(f'Failed with {err} initing geodf for {self.name} from: {self.location}')
                     return
 
-    def query_data(self, stl_comparison_base_dir) -> Optional[
-        Union[geopandas.GeoDataFrame, List[geopandas.GeoDataFrame]]]:
+    def query_data(self,
+                   stl_comparison_base_dir) -> Optional[Union[geopandas.GeoDataFrame, List[geopandas.GeoDataFrame]]]:
         if not self.location:
             return
 

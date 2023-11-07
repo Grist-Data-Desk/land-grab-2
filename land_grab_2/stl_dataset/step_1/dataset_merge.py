@@ -8,7 +8,7 @@ import pandas as pd
 from land_grab_2.stl_dataset.step_1.constants import ALL_STATES, RIGHTS_TYPE, ACTIVITY, FINAL_DATASET_COLUMNS, \
     GIS_ACRES, \
     ALBERS_EQUAL_AREA, ACRES_TO_SQUARE_METERS, ACRES, OBJECT_ID
-from land_grab_2.utilities.overlap import combine_dfs, fix_geometries
+from land_grab_2.utilities.overlap import combine_dfs, fix_geometries, geometric_deduplication
 from land_grab_2.utilities.utils import state_specific_directory
 
 os.environ['RESTAPI_USE_ARCPY'] = 'FALSE'
@@ -146,6 +146,21 @@ def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
 
     # merge all states to single geodataframe
     merged = pd.concat(state_datasets_to_merge, ignore_index=True)
+
+    # print(f'Beginning Geometric dedup on final df')
+    # rounds = 0
+    # while True:
+    #     size_0 = merged.shape[0]
+    #     merged = geometric_deduplication(merged, merged.crs)
+    #     size_1 = merged.shape[0]
+    #     if size_0 == size_1:
+    #         break
+    #     rounds += 1
+    # print(f'Geometric dedup on final df took {rounds} rounds')
+
+    m2 = merged.groupby(['geometry'], as_index=False).agg(list).reset_index()
+    m2 = m2.apply(uniq, axis=1)
+    merged = gpd.GeoDataFrame(m2, geometry=m2['geometry'], crs=ALBERS_EQUAL_AREA)
 
     # add a unique object id identifier columns
     merged[OBJECT_ID] = merged.index + 1

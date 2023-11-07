@@ -277,6 +277,10 @@ REWRITE_RULES = {
             "AllotName": "Sub-activity",
             "Manager": "Lessee or Owner or Manager"
         },
+        "Coal Lease": {
+            "AllotName": "Sub-activity",
+            "Manager": "Lessee or Owner or Manager"
+        },
         "Oil and gas wells": {
             "Operator": "Lessee or Owner or Manager"
         }
@@ -612,6 +616,10 @@ STATE_ACTIVITIES = {
         StateActivityDataSource(name='Grazing',
                                 location='Utah_All/Utah_Grazing_Allotments',
                                 keep_cols=['Manager', 'AllotName'],
+                                use_name_as_activity=True),
+        StateActivityDataSource(name='Coal Lease',
+                                location='Utah_All/Utah_Coal_Leases',
+                                keep_cols=[],
                                 use_name_as_activity=True)
 
     ]),

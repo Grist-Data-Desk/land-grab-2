@@ -43,7 +43,7 @@ def _clean_queried_data(source, config, label, alias, queried_data_directory,
         gdf = _get_az_town_range_section(gdf)
     elif 'MT' in source:
         gdf = _get_mt_town_range_section(gdf)
-        gdf = _get_mt_activity(gdf, source)
+        # gdf = _get_mt_activity(gdf, source)
     elif source == 'OK-subsurface':
         gdf = _get_ok_subsurface_town_range(gdf)
     elif 'OR' in source:
@@ -104,7 +104,7 @@ def _filter_and_clean_shapefile(gdf, config, source, label, code, alias,
         filtered_gdf = _get_wi_town_range_section_aliquot(filtered_gdf)
     elif 'MT' in source:
         filtered_gdf = _get_mt_town_range_section(filtered_gdf)
-        filtered_gdf = _get_mt_activity(filtered_gdf, source)
+        # filtered_gdf = _get_mt_activity(filtered_gdf, source)
     elif 'SD' in source:
         filtered_gdf = _get_sd_town_range_meridian(filtered_gdf)
         filtered_gdf = _get_sd_rights_type(filtered_gdf)

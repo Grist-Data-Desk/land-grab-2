@@ -10,35 +10,37 @@ app = typer.Typer()
 
 
 @app.command()
-def stl_dataset_step_1():
+def stl_stage_1():
     build_dataset.run()
+
+
+@app.command()
+def stl_stage_2():
     activity_match.run()
 
 
 @app.command()
-def stl_dataset_step_2():
-    # below needs session
-    # compute_summary.run() # TODO
+def stl_stage_3():
     cession_purchase_price.run()
 
 
 @app.command()
-def stl_summary():
+def stl_stage_4():
     compute_summary.run()
 
 
 @app.command()
-def stl_activity_match():
-    activity_match.run()
-
+def pvt_holds_extract_raw_data(states=None):
+    check_overlap.run(states)
+    
 
 @app.command()
-def private_holdings_by_geo_overlap(states=None):
+def pvt_holds_regrid_overlap(states=None):
     check_overlap.run(states)
 
 
 @app.command()
-def private_holdings_by_reverse_search():
+def pvt_holds_rev_search():
     reverse_search.run()
 
 
