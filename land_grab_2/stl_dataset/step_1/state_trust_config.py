@@ -339,24 +339,24 @@ STATE_TRUST_CONFIGS = {
             'SUBDIVISION': ALIQUOT,
         },
     },
-    'NE': {
-        DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
-        STATE: 'NE',
-        UNIVERSITY: 'University of Nebraska',
-        MANAGING_AGENCY: 'Board of Educational Lands and Funds',
-        RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
-        LOCAL_DATA_SOURCE:
-            STATE_TRUST_DATA_SOURCE_DIRECTORY + '2023_Nebraska_BELF_lands.zip',
-        LAYER: '233103 BELF trust lands',
-        ATTRIBUTE_LABEL_TO_FILTER_BY: ['Fund_Desc'],
-        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-            'University': 'University',
-            'AG College': 'AG College',
-        },
-        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
-            'County': COUNTY,
-        },
-    },
+    # 'NE': {
+    #     DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
+    #     STATE: 'NE',
+    #     UNIVERSITY: 'University of Nebraska',
+    #     MANAGING_AGENCY: 'Board of Educational Lands and Funds',
+    #     RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
+    #     LOCAL_DATA_SOURCE:
+    #         STATE_TRUST_DATA_SOURCE_DIRECTORY + '2023_Nebraska_BELF_lands.zip',
+    #     LAYER: '233103 BELF trust lands',
+    #     ATTRIBUTE_LABEL_TO_FILTER_BY: ['Fund_Desc'],
+    #     ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+    #         'University': 'University',
+    #         'AG College': 'AG College',
+    #     },
+    #     EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+    #         'County': COUNTY,
+    #     },
+    # },
     'NM-surface': {
         DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
         STATE: 'NM',
