@@ -147,8 +147,7 @@ def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
         state_datasets_to_merge.append(merged_state)
 
     # merge all states to single geodataframe
-    merged = pd.concat(state_datasets_to_merge, ignore_index=True).agg(list).reset_index()
-
+    merged = pd.concat(state_datasets_to_merge, ignore_index=True).agg(list).reset_index().apply(uniq, axis=1)
     # m2 = merged.groupby(['geometry'], as_index=False).agg(list).reset_index()
     # m2 = m2.apply(uniq, axis=1)
     merged = gpd.GeoDataFrame(merged, geometry=merged['geometry'], crs=ALBERS_EQUAL_AREA)
