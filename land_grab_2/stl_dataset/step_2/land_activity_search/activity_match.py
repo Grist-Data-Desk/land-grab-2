@@ -31,7 +31,6 @@ DONT_USE_COLS = ['TypeGroup', 'Type', 'Status', 'DteGranted', 'DteExpires', 'Nam
 GRIST_DATA_UPDATE = defaultdict(set)
 ACTIVITY_DATA_UPDATE = []
 
-COLUMN_RENAME_RULES = {}
 AZ_KEY = {
     '0': 'Unleased Parcels',
     '1': 'Agriculture',
@@ -68,9 +67,9 @@ MT_KEY = {
 
 def get_activity_column(activity, state):
     # which col in the rewrite rules is the one that becomes activity
-    activity_rewrite_rules = COLUMN_RENAME_RULES.get(state.lower()).get(activity.name.lower())
+    activity_rewrite_rules = REWRITE_RULES.get(state.lower()).get(activity.name.lower())
     if not activity_rewrite_rules:
-        activity_rewrite_rules = COLUMN_RENAME_RULES.get(state.lower()).get(activity.name)
+        activity_rewrite_rules = REWRITE_RULES.get(state.lower()).get(activity.name)
         if not activity_rewrite_rules:
             return
 
@@ -203,9 +202,6 @@ def match_all_activities(stl_comparison_base_dir, states_data=None, grist_data=N
 def main(stl_comparison_base_dir, stl_path: Path, the_out_dir: Path):
     if not the_out_dir.exists():
         the_out_dir.mkdir(parents=True, exist_ok=True)
-
-    global COLUMN_RENAME_RULES
-    COLUMN_RENAME_RULES = REWRITE_RULES
 
     log.info(f'reading {stl_path}')
     gdf = geopandas.read_file(str(stl_path))
