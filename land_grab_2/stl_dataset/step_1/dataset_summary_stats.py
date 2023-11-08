@@ -14,14 +14,29 @@ from land_grab_2.utilities.utils import prettyify_list_of_strings
 os.environ['RESTAPI_USE_ARCPY'] = 'FALSE'
 
 
+def dedup_tribe_names(tribe_list):
+    combine_details = {
+        'Bridgeport Indian Colony, California': 'Bridgeport Paiute Indian Colony of California',
+        'Burns Paiute Tribe, Oregon': 'Burns Paiute Tribe of the Burns Paiute Indian Colony of Oregon',
+        'Confederated Tribes and Bands of the Yakama Nation': 'Confederated Tribes and Bands of the Yakama Nation, Washington',
+        'Nez Perce Tribe, Idaho': 'Nez Perce Tribe of Idaho',
+        'Quinault Indian Nation, Washington': 'Quinault Tribe of the Quinault Reservation, Washington',
+    }
+
+    tribe_list_deduped = list(sorted(set([t if t not in combine_details else combine_details[t] for t in tribe_list])))
+
+    return tribe_list_deduped
+
+
 def extract_tribe_list(group, should_join=True):
     if group is None:
         return '' if should_join else []
 
     raw_tribes = [x for x in list(itertools.chain.from_iterable([i.split(';') for i in group])) if x]
-    tribe_list = set([i.strip() for i in raw_tribes])
+    tribe_list = list(sorted(set([i.strip() for i in raw_tribes])))
+    tribe_list = dedup_tribe_names(tribe_list)
     if should_join:
-        tribe_list = ';'.join(list(sorted(tribe_list)))
+        tribe_list = ';'.join(tribe_list)
     return tribe_list
 
 
@@ -98,7 +113,7 @@ def university_summary(df, summary_statistics_data_directory=None):
                                                                      'tribes_named_in_cession')
 
     uni_summary = present_day_tribe_summary.join(tribe_named_in_cessions_summary.set_index('university'),
-                                                        on='university')
+                                                 on='university')
 
     cession_summary = gather_univ_cessions_nums(df)
     uni_summary = uni_summary.join(cession_summary.set_index('university'), on='university')
@@ -181,7 +196,6 @@ def construct_single_tribe_info(row):
 
 
 def gis_acres_sum_by_rights_type_tribe_summary(df):
-
     present_day_tibe_cols = [c for c in df.columns if c.endswith('present_day_tribe')]
     tribe_land_accounts = defaultdict(dict)
     for row in df.to_dict(orient='records'):
