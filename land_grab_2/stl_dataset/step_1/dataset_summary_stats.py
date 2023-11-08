@@ -13,17 +13,19 @@ from land_grab_2.utilities.utils import prettyify_list_of_strings
 
 os.environ['RESTAPI_USE_ARCPY'] = 'FALSE'
 
+TRIBE_COMBINE_DETAILS = {
+    'Bridgeport Indian Colony, California': 'Bridgeport Paiute Indian Colony of California',
+    'Burns Paiute Tribe, Oregon': 'Burns Paiute Tribe of the Burns Paiute Indian Colony of Oregon',
+    'Confederated Tribes and Bands of the Yakama Nation': 'Confederated Tribes and Bands of the Yakama Nation, Washington',
+    'Nez Perce Tribe, Idaho': 'Nez Perce Tribe of Idaho',
+    'Quinault Indian Nation, Washington': 'Quinault Tribe of the Quinault Reservation, Washington',
+}
+
 
 def dedup_tribe_names(tribe_list):
-    combine_details = {
-        'Bridgeport Indian Colony, California': 'Bridgeport Paiute Indian Colony of California',
-        'Burns Paiute Tribe, Oregon': 'Burns Paiute Tribe of the Burns Paiute Indian Colony of Oregon',
-        'Confederated Tribes and Bands of the Yakama Nation': 'Confederated Tribes and Bands of the Yakama Nation, Washington',
-        'Nez Perce Tribe, Idaho': 'Nez Perce Tribe of Idaho',
-        'Quinault Indian Nation, Washington': 'Quinault Tribe of the Quinault Reservation, Washington',
-    }
-
-    tribe_list_deduped = list(sorted(set([t if t not in combine_details else combine_details[t] for t in tribe_list])))
+    tribe_list_deduped = list(sorted(set([t
+                                          if t not in TRIBE_COMBINE_DETAILS else TRIBE_COMBINE_DETAILS[t]
+                                          for t in tribe_list])))
 
     return tribe_list_deduped
 
@@ -159,6 +161,9 @@ def cleanup_gis_acres(row):
 def gather_single_tribe_details(row, current_tribe, cession_number_col):
     try:
         gis_acres_val = cleanup_gis_acres(row)
+        current_tribe = (current_tribe
+                         if current_tribe not in TRIBE_COMBINE_DETAILS
+                         else TRIBE_COMBINE_DETAILS[current_tribe])
         return {
             GIS_ACRES: gis_acres_val,
             'present_day_tribe': current_tribe,
