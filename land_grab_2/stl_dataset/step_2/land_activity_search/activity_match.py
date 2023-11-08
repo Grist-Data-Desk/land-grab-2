@@ -106,6 +106,11 @@ def get_activity_name(state, activity, activity_row):
                     return activity_name
 
 
+def is_incompatible_activity(grist_row, activity):
+    restricted_rights_types = ['subsurface']
+    return grist_row[RIGHTS_TYPE] in restricted_rights_types and activity.is_restricted_activity
+
+
 def capture_matches(matches, state, activity):
     rewrite_list = {'OtherMin': 'Other Minerals', 'OilGas': 'Oil & Gas', 'OilAndGas': 'Oil & Gas'}
     total = 0
@@ -124,7 +129,7 @@ def capture_matches(matches, state, activity):
             activity_name = rewrite_list[activity_name]
 
         total += 1
-        if contains:
+        if contains and not is_incompatible_activity(grist_row, activity):
             does_contain += 1
             grist_data_update[grist_idx].add(activity_name)
             activity_data_update.append(activity_row)
