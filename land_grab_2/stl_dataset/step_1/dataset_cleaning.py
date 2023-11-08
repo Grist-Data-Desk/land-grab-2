@@ -291,9 +291,10 @@ def _get_sd_rights_type(gdf):
     '''
     get and clean SD rights types to be consistent with the rest of the dataset
     '''
-    surf = gdf[gdf['match_type'] == 'both']['match_type'].str.replace('both', 'surface')
+    both = gdf[gdf['match_type'] == 'both']
+    both['match_type'] = both['match_type'].str.replace('both', 'surface')
     gdf['match_type'] = gdf['match_type'].str.replace('both', 'subsurface')
-    gdf = pd.concat([gdf, surf], ignore_index=True)
+    gdf = pd.concat([gdf, both], ignore_index=True)
     gdf[RIGHTS_TYPE] = gdf['match_type'].str.lower()
     return gdf
 
