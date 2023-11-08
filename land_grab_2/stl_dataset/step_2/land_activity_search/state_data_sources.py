@@ -748,5 +748,5 @@ STATE_ACTIVITIES = {
         StateActivityDataSource(name='Oil and Gas Active Lease',
                                 location='Montana_All/MMB_OilandGasActiveLease.shp',
                                 keep_cols=['Prim_Cust', 'Producing', 'DateEffect', 'DateExpire'],
-                                use_name_as_activity=True)]),
+                                use_name_as_activity=True)])
 }

@@ -50,20 +50,6 @@ def _merge_dataframes(df_list):
     return merged
 
 
-def _merge_rights_type(row):
-    """
-    Correctly merge the rights type column, aggregating values and removing duplicated values
-    """
-    return _merge_rights_row_helper(row, column=RIGHTS_TYPE)
-
-
-def _merge_activity(row):
-    """
-    Correctly merge the activity column, aggregating values and removing duplicated values
-    """
-    return _merge_row_helper(row, column=ACTIVITY)
-
-
 def _merge_row_helper(row, column):
     """
     Correctly merge a column, aggregating values and removing duplicated values
@@ -77,14 +63,6 @@ def _merge_row_helper(row, column):
         return '+'.join(values)
     else:
         return None
-
-
-def _merge_rights_row_helper(row, column):
-    """
-    Correctly merge a column, aggregating values and removing duplicated values
-    """
-    # get all rights type values from datasets
-    return _merge_row_helper(row, column)
 
 
 def merge_single_state_helper(state: str, cleaned_data_directory,
@@ -110,7 +88,7 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
 
     # round acres to 2 decimals
     if ACRES in gdf.columns:
-        gdf[ACRES] = gdf[ACRES].round(2)
+        gdf[ACRES] = gdf[ACRES].map(lambda a: a or 0.0).round(2)
 
     final_column_order = [column for column in FINAL_DATASET_COLUMNS if column in gdf.columns]
     gdf = gdf[final_column_order]
