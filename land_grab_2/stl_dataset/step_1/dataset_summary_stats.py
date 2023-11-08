@@ -69,7 +69,10 @@ def tribe_summary_for_univ_summary(df, col_filter_func, out_column_name):
 
 
 def combine_cession_ids(v):
-    return ','.join(set(itertools.chain.from_iterable([c.split(',') if ',' in c else c.split(' ') for c in v.tolist() if c])))
+    raw_nums = set(itertools.chain.from_iterable([c.split(',') if ',' in c else c.split(' ') for c in v.tolist() if c]))
+    raw_nums = [n for n in raw_nums if n]
+    clean_nums = ','.join(raw_nums)
+    return clean_nums
 
 
 def gather_univ_cessions_nums(df):
