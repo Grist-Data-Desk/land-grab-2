@@ -103,8 +103,8 @@ def gis_acres_sum_by_rights_type_for_uni_summary(df):
         records.append(record)
 
     tmp_summary = pd.DataFrame(records)
-    tmp_summary['surface_acres'] = tmp_summary['surface_acres'] + tmp_summary['subsurface_and_surface_acres']
-    tmp_summary['subsurface_acres'] = tmp_summary['subsurface_acres'] + tmp_summary['subsurface_and_surface_acres']
+    # tmp_summary['surface_acres'] = tmp_summary['surface_acres'] + tmp_summary['subsurface_and_surface_acres']
+    # tmp_summary['subsurface_acres'] = tmp_summary['subsurface_acres'] + tmp_summary['subsurface_and_surface_acres']
 
     return tmp_summary
 
@@ -128,7 +128,7 @@ def university_summary(df, summary_statistics_data_directory=None):
 
     uni_summary['surface_acres'] = uni_summary['surface_acres'].map(lambda v: round(v, 2))
     uni_summary['subsurface_acres'] = uni_summary['subsurface_acres'].map(lambda v: round(v, 2))
-    uni_summary['subsurface_and_surface_acres'] = uni_summary['subsurface_and_surface_acres'].map(lambda v: round(v, 2))
+    # uni_summary['subsurface_and_surface_acres'] = uni_summary['subsurface_and_surface_acres'].map(lambda v: round(v, 2))
 
     # sequence columns
     uni_summary = uni_summary[[
@@ -222,12 +222,12 @@ def gis_acres_sum_by_rights_type_tribe_summary(df):
     records = [{'present_day_tribe': tribe, **land_info} for tribe, land_info in tribe_land_accounts.items()]
 
     tmp_summary = pd.DataFrame(records)
-    tmp_summary['surface_acres'] = tmp_summary['surface_acres'] + tmp_summary['subsurface_and_surface_acres']
-    tmp_summary['subsurface_acres'] = tmp_summary['subsurface_acres'] + tmp_summary['subsurface_and_surface_acres']
+    tmp_summary['surface_acres'] = tmp_summary['surface_acres'] # + tmp_summary['subsurface_and_surface_acres']
+    tmp_summary['subsurface_acres'] = tmp_summary['subsurface_acres'] # + tmp_summary['subsurface_and_surface_acres']
 
     tmp_summary['surface_acres'] = tmp_summary['surface_acres'].map(lambda v: round(v, 2))
     tmp_summary['subsurface_acres'] = tmp_summary['subsurface_acres'].map(lambda v: round(v, 2))
-    tmp_summary['subsurface_and_surface_acres'] = tmp_summary['subsurface_and_surface_acres'].map(lambda v: round(v, 2))
+    # tmp_summary['subsurface_and_surface_acres'] = tmp_summary['subsurface_and_surface_acres'].map(lambda v: round(v, 2))
 
     return tmp_summary
 
