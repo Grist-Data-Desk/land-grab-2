@@ -22,7 +22,7 @@ from tqdm import tqdm
 from tqdm.contrib.concurrent import process_map
 
 from land_grab_2.stl_dataset.step_1.constants import STATE_TRUST_DIRECTORY, QUERIED_DIRECTORY, CLEANED_DIRECTORY, \
-    MERGED_DIRECTORY, CESSIONS_DIRECTORY, SUMMARY_STATISTICS_DIRECTORY
+    MERGED_DIRECTORY, CESSIONS_DIRECTORY, SUMMARY_STATISTICS_DIRECTORY, STL_OUTPUT_DIRECTORY
 
 log = logging.getLogger(__name__)
 
@@ -403,12 +403,12 @@ def _queried_data_directory(state=None):
 
 
 def _cleaned_data_directory(state=None):
-    return state_specific_directory(STATE_TRUST_DIRECTORY + CLEANED_DIRECTORY,
+    return state_specific_directory(STL_OUTPUT_DIRECTORY + CLEANED_DIRECTORY,
                                     state)
 
 
 def _merged_data_directory(state=None):
-    return state_specific_directory(STATE_TRUST_DIRECTORY + MERGED_DIRECTORY,
+    return state_specific_directory(STL_OUTPUT_DIRECTORY + MERGED_DIRECTORY,
                                     state)
 
 

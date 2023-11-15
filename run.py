@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 import typer
 
-from land_grab_2.stl_dataset.step_1 import build_dataset, compute_summary
+from land_grab_2.stl_dataset.step_1 import build_dataset
+from land_grab_2.stl_dataset.step_4 import compute_summary
 from land_grab_2.stl_dataset.step_2.land_activity_search import activity_match
 from land_grab_2.uni_holdings_dataset import check_overlap, reverse_search
 import land_grab_2.stl_dataset.step_3.cession_purchase_price as cession_purchase_price
