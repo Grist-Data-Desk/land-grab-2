@@ -19,6 +19,8 @@ TRIBE_COMBINE_DETAILS = {
     'Confederated Tribes and Bands of the Yakama Nation': 'Confederated Tribes and Bands of the Yakama Nation, Washington',
     'Nez Perce Tribe, Idaho': 'Nez Perce Tribe of Idaho',
     'Quinault Indian Nation, Washington': 'Quinault Tribe of the Quinault Reservation, Washington',
+    'Confederated Tribes of the Umatilla Reservation, Oregon': 'Confederated Tribes of the Umatilla Indian Reservation, Oregon',
+    'Shoshone-Bannock Tribes of the Fort Hall Reservation, Idaho': 'Shoshone-Bannock Tribes of the Fort Hall Reservation of Idaho'
 }
 
 
