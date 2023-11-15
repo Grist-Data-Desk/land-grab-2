@@ -41,7 +41,7 @@ if data_tld is None:
     raise Exception('NoDataError: Env var: DATA must be set as the path to all project input data.')
 
 DATA_DIRECTORY = f'{data_tld}/stl_dataset/step_1/input/'
-STL_OUTPUT_DIRECTORY = f'{data_tld}/stl_dataset/step_1/input/'
+STL_OUTPUT_DIRECTORY = f'{data_tld}/stl_dataset/step_1/output/'
 STATE_TRUST_DIRECTORY = DATA_DIRECTORY + 'state_trust/'
 UNIVERSITY_DIRECTORY = DATA_DIRECTORY + 'university/'
 QUERIED_DIRECTORY = 'queried/'
