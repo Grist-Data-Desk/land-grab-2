@@ -3,6 +3,7 @@ from collections import Counter
 from pathlib import Path
 
 import geopandas as gpd
+import numpy as np
 import pandas as pd
 
 from land_grab_2.stl_dataset.step_1.constants import ALBERS_EQUAL_AREA, EXISTING_COLUMN_TO_FINAL_COLUMN_MAP, \
@@ -50,6 +51,8 @@ def _clean_queried_data(source, config, label, alias, queried_data_directory,
         gdf = _get_or_town_range_section(gdf)
     elif 'UT' in source:
         gdf = _get_ut_town_range_section_county(gdf)
+    elif 'ND' in source:
+        gdf = _get_nd_activity(gdf, source, config)
 
     gdf = _format_columns(gdf, config, alias)
 
@@ -82,6 +85,15 @@ def _get_mt_activity(filtered_gdf, source):
 
     return filtered_gdf
 
+def _get_nd_activity(filtered_gdf, source, config):
+    """
+    extract activity value from directory name
+    """
+
+    activity_name = config[ACTIVITY]
+    filtered_gdf[ACTIVITY] = np.where(~(filtered_gdf['LEASE'].str.contains( 'none')), activity_name, filtered_gdf['LEASE'])
+
+    return filtered_gdf
 
 def _filter_and_clean_shapefile(gdf, config, source, label, code, alias,
                                 cleaned_data_directory):

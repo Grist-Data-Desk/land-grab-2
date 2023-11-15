@@ -304,6 +304,7 @@ STATE_TRUST_CONFIGS = {
         STATE_ENABLING_ACT: '25 Stat. 676-684, esp. 679-81 (1889)',
         LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY +
                            'Surface_Trust_Lands_with_Trusts.zip',
+        ACTIVITY: 'Recreation',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Trust_Desc'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             'ND STATE UNIVERSITY': 'North Dakota State University',
@@ -326,6 +327,7 @@ STATE_TRUST_CONFIGS = {
         STATE_ENABLING_ACT: '25 Stat. 676-684, esp. 679-81 (1889)',
         DATA_SOURCE:
             'https://ndgishub.nd.gov/arcgis/rest/services/All_GovtLands_State/MapServer/2',
+        ACTIVITY: 'Oil and Gas',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['TRUST'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "'N'": 'North Dakota State University'
@@ -616,9 +618,8 @@ STATE_TRUST_CONFIGS = {
         STATE: 'WA',
         UNIVERSITY: 'Washington State University',
         MANAGING_AGENCY: 'Department of Natural Resources',
-        RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
+        RIGHTS_TYPE: TIMBER_RIGHTS_TYPE,
         STATE_ENABLING_ACT: '25 Stat. 676-684, esp. 679-81 (1889)',
-        ACTIVITY: 'timber',
         DATA_SOURCE:
             'https://gis.dnr.wa.gov/site3/rest/services/Public_Boundaries/WADNR_PUBLIC_Cadastre_OpenData/MapServer/6/',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['TIMBER_TRUST_CD'],
@@ -670,7 +671,6 @@ STATE_TRUST_CONFIGS = {
             'https://bcpl.wisconsin.gov/bcpl.wisconsin.gov%20Shared%20Documents/Maps/BCPLPropertyBoundariesShapefile.zip',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['FUND'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-            '744': 'Common School',
             '745': 'Normal School',
             '746': 'University or Ag College',
         },
