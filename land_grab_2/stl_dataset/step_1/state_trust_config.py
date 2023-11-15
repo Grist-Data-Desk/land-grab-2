@@ -585,7 +585,8 @@ STATE_TRUST_CONFIGS = {
         RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
         STATE_ENABLING_ACT: '28 Stat. 107-110 (1894)',
         DATA_SOURCE:
-            'https://gis.trustlands.utah.gov/server/rest/services/Ownership/UT_SITLA_Ownership_Beneficiary/MapServer/1',
+            'https://gis.trustlands.utah.gov/mapping/rest/services/Ownership_Surface/FeatureServer/0',
+            #'https://gis.trustlands.utah.gov/server/rest/services/Ownership/UT_SITLA_Ownership_Beneficiary/MapServer/1',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['bene_abrev'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "'USU'": 'Utah State University',
@@ -593,9 +594,41 @@ STATE_TRUST_CONFIGS = {
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'acres': ACRES,
+            'township': TOWNSHIP,
+            'range': RANGE,
+            'county_name': COUNTY,
+            'section_': SECTION,
+            'legal_descr': ALIQUOT,
         },
     },
-    'UT-subsurface': {
+    # IF USING SHAPEFILE: 'UT-subsurface-oil-and-gas': {
+    #     DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
+    #     STATE: 'UT',
+    #     UNIVERSITY: 'Utah State University',
+    #     MANAGING_AGENCY: 'Trust Lands Administration',
+    #     RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
+    #     STATE_ENABLING_ACT: '28 Stat. 107-110 (1894)',
+    #     LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'UT-oil-and-gas',
+    #     DATA_SOURCE:
+    #         'https://gis.trustlands.utah.gov/mapping/rest/services/Ownership_Oil_Gas/FeatureServer/0',
+    #           can download shapefiles here:
+    #           coal: https://trust-lands-open-data-gcp-sitla.hub.arcgis.com/datasets/SITLA::ownership-coal/explore?location=39.468040%2C-111.595562%2C7.81
+    #           other min: https://trust-lands-open-data-gcp-sitla.hub.arcgis.com/datasets/SITLA::ownership-other-mineral/explore
+    #     ATTRIBUTE_LABEL_TO_FILTER_BY: ['bene_abrev'],
+    #     ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+    #         "'USU'": 'Utah State University',
+    #         "'NS'": 'Normal School',
+    #     },
+    #     EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+    #         'acres': ACRES,
+    #         'township': TOWNSHIP,
+    #         'range': RANGE,
+    #         'county_name': COUNTY,
+    #         'section_': SECTION,
+    #         'legal_descr': ALIQUOT,
+    #     },
+    # },
+    'UT-subsurface-oil-and-gas': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
         STATE: 'UT',
         UNIVERSITY: 'Utah State University',
@@ -603,7 +636,10 @@ STATE_TRUST_CONFIGS = {
         RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
         STATE_ENABLING_ACT: '28 Stat. 107-110 (1894)',
         DATA_SOURCE:
-            'https://gis.trustlands.utah.gov/server/rest/services/Ownership/UT_SITLA_Ownership_Beneficiary/MapServer/0',
+            'https://gis.trustlands.utah.gov/mapping/rest/services/Ownership_Oil_Gas/FeatureServer/0',
+        # 'https://gis.trustlands.utah.gov/server/rest/services/Ownership/UT_SITLA_Ownership_Beneficiary/MapServer/1',
+        # repeat with coal: https://gis.trustlands.utah.gov/mapping/rest/services/Ownership_Coal/FeatureServer/0
+        # and repeat with other minerals: https://gis.trustlands.utah.gov/mapping/rest/services/Ownership_Other_Mineral/FeatureServer/0
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['bene_abrev'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "'USU'": 'Utah State University',
@@ -611,8 +647,38 @@ STATE_TRUST_CONFIGS = {
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'acres': ACRES,
+            'township': TOWNSHIP,
+            'range': RANGE,
+            'county_name': COUNTY,
+            'section_': SECTION,
+            'legal_descr': ALIQUOT,
         },
     },
+
+    # 'UT-subsurface-oil-and-gas': {
+    #     DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
+    #     STATE: 'UT',
+    #     UNIVERSITY: 'Utah State University',
+    #     MANAGING_AGENCY: 'Trust Lands Administration',
+    #     RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
+    #     STATE_ENABLING_ACT: '28 Stat. 107-110 (1894)',
+    #     DATA_SOURCE:
+    #         'https://gis.trustlands.utah.gov/mapping/rest/services/Ownership_Oil_Gas/FeatureServer/0',
+    #     ATTRIBUTE_LABEL_TO_FILTER_BY: ['bene_abrev'],
+    #     ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+    #         "'USU'": 'Utah State University',
+    #         "'NS'": 'Normal School',
+    #     },
+    #     EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+    #         'acres': ACRES,
+    #         'township': TOWNSHIP,
+    #         'range': RANGE,
+    #         'county_name': COUNTY,
+    #         'section_': SECTION,
+    #         'legal_descr': ALIQUOT,
+    #     },
+    # },
+
     'WA-timber': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
         STATE: 'WA',

@@ -50,7 +50,8 @@ def _clean_queried_data(source, config, label, alias, queried_data_directory,
     elif 'OR' in source:
         gdf = _get_or_town_range_section(gdf)
     elif 'UT' in source:
-        gdf = _get_ut_town_range_section_county(gdf)
+        # gdf = _get_ut_town_range_section_county(gdf)
+        gdf = _get_ut_activity(gdf, source)
     elif 'ND' in source:
         gdf = _get_nd_activity(gdf, source, config)
 
@@ -85,6 +86,28 @@ def _get_mt_activity(filtered_gdf, source):
 
     return filtered_gdf
 
+def _get_ut_activity(filtered_gdf, source):
+    """
+    extract activity value from directory name
+    """
+    surface = 'UT-surface-'
+    subsurface = 'UT-subsurface-'
+    prefix = (surface in source and surface) or (subsurface in source and subsurface)
+    if not prefix:
+        return filtered_gdf
+
+    activity_name = source[len(prefix):].replace('-', ' ') #.replace('and', '&')
+    if not activity_name:
+        return filtered_gdf
+
+    activity_name = activity_name.title()
+    if ACTIVITY in filtered_gdf.columns:
+        filtered_gdf[ACTIVITY] = filtered_gdf[ACTIVITY].map(lambda v: activity_name)
+    else:
+        filtered_gdf[ACTIVITY] = activity_name
+
+    return filtered_gdf
+
 def _get_nd_activity(filtered_gdf, source, config):
     """
     extract activity value from directory name
@@ -92,6 +115,7 @@ def _get_nd_activity(filtered_gdf, source, config):
 
     activity_name = config[ACTIVITY]
     filtered_gdf[ACTIVITY] = np.where(~(filtered_gdf['LEASE'].str.contains( 'none')), activity_name, filtered_gdf['LEASE'])
+    filtered_gdf[ACTIVITY] = np.where(filtered_gdf['LEASE'].str.contains( 'none'), '', filtered_gdf['LEASE'])
 
     return filtered_gdf
 
@@ -120,6 +144,8 @@ def _filter_and_clean_shapefile(gdf, config, source, label, code, alias,
     elif 'SD' in source:
         filtered_gdf = _get_sd_town_range_meridian(filtered_gdf)
         filtered_gdf = _get_sd_rights_type(filtered_gdf)
+    elif 'UT' in source:
+        filtered_gdf = _get_ut_activity(gdf, source)
 
     filtered_gdf = _format_columns(filtered_gdf, config, alias)
 
@@ -249,25 +275,25 @@ def split_trs(trs):
     return township, range, section
 
 
-def _get_ut_town_range_section_county(gdf):
-    '''
-    data has a 'TRS_LABEL' column which is composed of township, range, sectionm meridian
-    '''
-    # first clean county name
-    gdf[COUNTY] = gdf['county_name'].str.strip()
-
-    split = gdf['TRS_LABEL'].str.split(' ', expand=True)
-    gdf[SECTION] = split[2].str.slice(start=3)
-
-    township_split = split[0].str.split('.', expand=True)
-    gdf[TOWNSHIP] = township_split[0].str.slice(
-        start=1) + township_split[1].str.slice(start=-1)
-
-    range_split = split[1].str.split('.', expand=True)
-    gdf[RANGE] = range_split[0].str.slice(start=1) + range_split[1].str.slice(
-        start=-1)
-    gdf[MERIDIAN] = split[3]
-    return gdf
+# def _get_ut_town_range_section_county(gdf):
+#     '''
+#     data has a 'TRS_LABEL' column which is composed of township, range, sectionm meridian
+#     '''
+#     # first clean county name
+#     gdf[COUNTY] = gdf['county_name'].str.strip()
+#
+#     split = gdf['TRS_LABEL'].str.split(' ', expand=True)
+#     gdf[SECTION] = split[2].str.slice(start=3)
+#
+#     township_split = split[0].str.split('.', expand=True)
+#     gdf[TOWNSHIP] = township_split[0].str.slice(
+#         start=1) + township_split[1].str.slice(start=-1)
+#
+#     range_split = split[1].str.split('.', expand=True)
+#     gdf[RANGE] = range_split[0].str.slice(start=1) + range_split[1].str.slice(
+#         start=-1)
+#     gdf[MERIDIAN] = split[3]
+#     return gdf
 
 
 def _get_wi_town_range_section_aliquot(gdf):
