@@ -1,6 +1,6 @@
 # for surface+mineral, ignore blanks and ones that say "Parcel Number", take out spaces and - and concatenate
 # column 3 or [2]
-from land_grab_2.uni_holdings_dataset.step_2.parcel_enrichment.entities import Parcel
+from land_grab_2.uni_holdings_dataset.also_old_stuff_figure_out.parcel_enrichment.entities import Parcel
 
 
 def txam_mineral_parser(l) -> Parcel:

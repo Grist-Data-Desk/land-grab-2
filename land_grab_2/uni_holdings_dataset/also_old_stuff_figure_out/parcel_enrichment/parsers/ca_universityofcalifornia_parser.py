@@ -1,7 +1,7 @@
 import fitz
 import re
 
-from land_grab_2.uni_holdings_dataset.step_2.parcel_enrichment.entities import Parcel
+from land_grab_2.uni_holdings_dataset.also_old_stuff_figure_out.parcel_enrichment.entities import Parcel
 
 
 def cauc_parser(l) -> Parcel:

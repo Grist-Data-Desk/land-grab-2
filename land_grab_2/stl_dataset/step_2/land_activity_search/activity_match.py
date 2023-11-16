@@ -226,8 +226,8 @@ def main(stl_comparison_base_dir, stl_path: Path, the_out_dir: Path):
     gdf = gdf[cols]
 
     log.info(f'final grist_data row_count: {gdf.shape[0]}')
-    gdf.to_csv(str(the_out_dir / 'updated_grist_stl.csv'), index=False)
-    gdf.to_file(str(the_out_dir / 'updated_grist_stl.geojson'), driver='GeoJSON')
+    gdf.to_csv(str(the_out_dir / 'stl_dataset_extra_activities.csv'), index=False)
+    gdf.to_file(str(the_out_dir / 'stl_dataset_extra_activities.geojson'), driver='GeoJSON')
     log.info(f'original grist_data row_count: {gdf.shape[0]}')
 
     # if ACTIVITY_DATA_UPDATE:
@@ -256,8 +256,7 @@ def run():
         raise Exception(f'RequiredEnvVar: The following ENV vars must be set. {missing_envs}')
 
     data_tld = os.environ.get('DATA')
-    data_directory = f'{data_tld}/stl_dataset/step_2'
-    base_data_dir = Path(data_directory).resolve()
+    base_data_dir = Path(f'{data_tld}/stl_dataset/step_2').resolve()
 
     global CACHE_DIR, MEMORY
     CACHE_DIR = base_data_dir / 'input/cache'
@@ -267,7 +266,7 @@ def run():
     GristCache('', CACHE_DIR)  # DO NOT REMOVE unless willing to hunt & remove all transitive uses of GristCache
 
     step_1_data_directory = Path(f'{data_tld}/stl_dataset/step_1').resolve()
-    stl = step_1_data_directory / 'input/state_trust/merged/all-states.geojson'
+    stl = step_1_data_directory / 'output/merged/all-states.geojson'
 
     out_dir = base_data_dir / 'output'
 

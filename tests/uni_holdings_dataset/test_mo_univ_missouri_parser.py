@@ -1,4 +1,4 @@
-from land_grab_2.uni_holdings_dataset.step_2.parcel_enrichment.parsers.mo_universityofmissouri_parser import moum_parser
+from land_grab_2.uni_holdings_dataset.also_old_stuff_figure_out.parcel_enrichment.parsers.mo_universityofmissouri_parser import moum_parser
 
 
 def test_handles_all_weird_cases_of_parcel_number_column():

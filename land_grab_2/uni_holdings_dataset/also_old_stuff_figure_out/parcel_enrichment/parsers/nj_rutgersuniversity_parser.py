@@ -1,4 +1,4 @@
-from land_grab_2.uni_holdings_dataset.step_2.parcel_enrichment.entities import Parcel
+from land_grab_2.uni_holdings_dataset.also_old_stuff_figure_out.parcel_enrichment.entities import Parcel
 
 
 def njru_parser(l) -> Parcel:

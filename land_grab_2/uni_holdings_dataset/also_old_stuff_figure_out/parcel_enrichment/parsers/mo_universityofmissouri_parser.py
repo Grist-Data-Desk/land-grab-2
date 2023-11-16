@@ -1,7 +1,7 @@
 import re
 from typing import List, Union
 
-from land_grab_2.uni_holdings_dataset.step_2.parcel_enrichment.entities import Parcel
+from land_grab_2.uni_holdings_dataset.also_old_stuff_figure_out.parcel_enrichment.entities import Parcel
 
 
 def basic_clean(parcel_number) -> str:

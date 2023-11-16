@@ -109,7 +109,7 @@ def gis_acres_sum_by_rights_type_for_uni_summary(df):
     return tmp_summary
 
 
-def university_summary(df, summary_statistics_data_directory=None):
+def university_summary(df, summary_statistics_data_directory=None, output_dir=None):
     present_day_tribe_summary = tribe_summary_for_univ_summary(df,
                                                                lambda c: c.endswith('present_day_tribe'),
                                                                'present_day_tribe')
@@ -141,7 +141,7 @@ def university_summary(df, summary_statistics_data_directory=None):
         'all_cessions',
     ]]
 
-    uni_summary.to_csv(summary_statistics_data_directory + UNIVERSITY_SUMMARY)
+    uni_summary.to_csv(output_dir / UNIVERSITY_SUMMARY)
     return uni_summary
 
 
@@ -220,7 +220,7 @@ def gis_acres_sum_by_rights_type_tribe_summary(df):
     return tmp_summary
 
 
-def tribe_summary(df, summary_statistics_data_directory):
+def tribe_summary(df, summary_statistics_data_directory, output_dir):
     results = list(itertools.chain.from_iterable([
         construct_single_tribe_info(row.to_dict())
         for _, row in df.iterrows()
@@ -248,7 +248,7 @@ def tribe_summary(df, summary_statistics_data_directory):
         'state',
     ]]
 
-    tribe_summary_full_agg.to_csv(summary_statistics_data_directory + 'tribe-summary-condensed.csv')
+    tribe_summary_full_agg.to_csv(output_dir / 'tribe-summary-condensed.csv')
 
 
 def calculate_summary_statistics_helper(summary_statistics_data_directory, merged_data_directory):
@@ -261,8 +261,10 @@ def calculate_summary_statistics_helper(summary_statistics_data_directory, merge
     states and universities that have land taken from this tribe held in trust
     '''
 
-    # df_0 = gpd.read_file(merged_data_directory + _get_merged_dataset_filename())
-    df_0 = gpd.read_file(DATA_DIRECTORY + '/national_stls.csv')  # TODO: parameterize
+    data_tld = Path(os.environ.get('DATA')).resolve()
+    input_file = data_tld / 'data/stl_dataset/step_3/output/stl_dataset_extra_activities_plus_prices.csv'
+    output_dir = data_tld / 'data/stl_dataset/step_4/output'
+    df_0 = gpd.read_file(input_file)
 
     df = df_0.copy(deep=True)
     df_1 = df_0.copy(deep=True)
@@ -274,5 +276,5 @@ def calculate_summary_statistics_helper(summary_statistics_data_directory, merge
     gis_acres_col = GIS_ACRES if GIS_ACRES in df.columns else 'gis_calculated_acres'
     df[GIS_ACRES] = df[gis_acres_col].astype(float)
 
-    university_summary(df, summary_statistics_data_directory)
-    tribe_summary(df_1, summary_statistics_data_directory)
+    university_summary(df, summary_statistics_data_directory, output_dir)
+    tribe_summary(df_1, summary_statistics_data_directory.output_dir)

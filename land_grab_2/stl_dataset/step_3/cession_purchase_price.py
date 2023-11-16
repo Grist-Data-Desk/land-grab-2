@@ -80,8 +80,9 @@ def main(stl_path: Path, cession_price_data: Path, the_out_dir: Path):
     stl_w_price = add_price_columns(stl_data, price_data)
 
     log.info(f'final grist_data row_count: {stl_w_price.shape[0]}')
-    stl_w_price.to_csv(str(the_out_dir / 'updated_grist_stl.csv'), index=False)
-    stl_w_price.to_file(str(the_out_dir / 'updated_grist_stl.geojson'), driver='GeoJSON')
+    stl_w_price.to_csv(str(the_out_dir / 'stl_dataset_extra_activities_plus_cessions_plus_prices.csv'), index=False)
+    stl_w_price.to_file(str(the_out_dir / 'stl_dataset_extra_activities_plus_cessions_plus_prices.geojson'),
+                        driver='GeoJSON')
     log.info(f'original grist_data row_count: {stl_data.shape[0]}')
 
 
@@ -93,13 +94,18 @@ def run():
         raise Exception(f'RequiredEnvVar: The following ENV vars must be set. {missing_envs}')
 
     data_tld = os.environ.get('DATA')
-    data_directory = f'{data_tld}/stl_dataset/step_3'
-    base_data_dir = Path(data_directory).resolve()
-    out_dir = base_data_dir / 'output'
+    base_data_dir = Path(f'{data_tld}/stl_dataset/step_3').resolve()
     cession_price_data = base_data_dir / 'input/Cession_Data.csv'
 
-    step_2_data_directory = Path(f'{data_tld}/stl_dataset/step_1').resolve()
-    stl = step_2_data_directory / 'input/national_stls.csv'
+    prev_step_output = Path(f'{data_tld}/stl_dataset/step_2_5/output').resolve()
+    stl = next(
+        (f for f in prev_step_output.iterdir() if 'csv' in f.name),
+        None
+    )
+    if not stl:
+        raise Exception(f'MissingInputFile: No CSV was found in: {prev_step_output}.')
+
+    out_dir = base_data_dir / 'output'
     main(stl, cession_price_data, out_dir)
 
 
