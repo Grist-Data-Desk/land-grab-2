@@ -174,8 +174,7 @@ def match_all_activities(stl_comparison_base_dir, states_data=None, grist_data=N
     # process_stated_cached = MEMORY.cache(process_state_activity)
 
     for activity_state, activity_info in states_data.items():
-        if 'UT' not in activity_state:
-            continue
+
         print(f'state: {activity_state} activity: {activity_info.name}')
         if not activity_info:
             log.error(f'NO ACTIVITY CONFIG FOR {activity_state}')

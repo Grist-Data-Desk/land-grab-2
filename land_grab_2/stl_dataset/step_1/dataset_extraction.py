@@ -15,8 +15,7 @@ os.environ['RESTAPI_USE_ARCPY'] = 'FALSE'
 def extract_and_clean_single_source_helper(source: str, config: dict,
                                            queried_data_directory: str,
                                            cleaned_data_directory: str):
-    if 'subsurface' not in source:
-        return
+
     # create the correct data directories
     if not os.path.exists(queried_data_directory):
         Path(queried_data_directory).mkdir(exist_ok=True, parents=True)
