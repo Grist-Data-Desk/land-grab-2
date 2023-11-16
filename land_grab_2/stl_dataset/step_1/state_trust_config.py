@@ -656,7 +656,7 @@ STATE_TRUST_CONFIGS = {
         STATE: 'UT',
         UNIVERSITY: 'Utah State University',
         MANAGING_AGENCY: 'Trust Lands Administration',
-        RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
+        RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
         STATE_ENABLING_ACT: '28 Stat. 107-110 (1894)',
         DATA_SOURCE:
             'https://gis.trustlands.utah.gov/mapping/rest/services/Ownership_Oil_Gas/FeatureServer/0',
