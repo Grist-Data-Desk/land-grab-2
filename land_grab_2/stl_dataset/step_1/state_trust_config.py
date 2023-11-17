@@ -128,6 +128,7 @@ STATE_TRUST_CONFIGS = {
             908: '68.00% Public School (Indemnity, Schools, Common Schools), 32.00% University of Idaho',
             910: '22.20% Normal School, 77.80% University of Idaho',
             928: 'Dept. of Fish and Game, University of Idaho',
+            933: '933: Dept. of Parks and Recreation, School of Science (Scientific School)',
             907: '27.00% Charitable Institute, 65.00% Public School (Indemnity, Schools, Common Schools), 8.00% University of Idaho'
 
         },
@@ -146,17 +147,18 @@ STATE_TRUST_CONFIGS = {
             'https://gis1.idl.idaho.gov/arcgis/rest/services/State_Ownership/MapServer/1',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['SUB_ENDOWMENT'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-            2: '100.00% Agricultural College',
-            6: '100.00% School of Science (Scientific School)',
-            921: 'Split - AC and F.&G.',
-            927: 'Split - SS and F.&G.',
-            20: '100.00% University of Idaho Regent',
-            8: 'University of Idaho',
-            911: '4.00% State Hospital South (Insane Asylum), 96.00% University of Idaho',
-            908: '68.00% Public School (Indemnity, Schools, Common Schools), 32.00% University of Idaho',
-            910: '22.20% Normal School, 77.80% University of Idaho',
-            928: 'Dept. of Fish and Game, University of Idaho',
-            907: '27.00% Charitable Institute, 65.00% Public School (Indemnity, Schools, Common Schools), 8.00% University of Idaho'
+            2: '2: 100.00% Agricultural College',
+            6: '6: 100.00% School of Science (Scientific School)',
+            921: '921: Split - AC and F.&G.',
+            927: '927: Split - SS and F.&G.',
+            20: '20: 100.00% University of Idaho Regent',
+            8: '8: University of Idaho',
+            911: '911: 4.00% State Hospital South (Insane Asylum), 96.00% University of Idaho',
+            908: '908: 68.00% Public School (Indemnity, Schools, Common Schools), 32.00% University of Idaho',
+            910: '910: 22.20% Normal School, 77.80% University of Idaho',
+            928: '928: Dept. of Fish and Game, University of Idaho',
+            933: '933: Dept. of Parks and Recreation, School of Science (Scientific School)',
+            907: '907: 27.00% Charitable Institute, 65.00% Public School (Indemnity, Schools, Common Schools), 8.00% University of Idaho'
 
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
@@ -171,7 +173,7 @@ STATE_TRUST_CONFIGS = {
         RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
         STATE_ENABLING_ACT: '11 Stat. 166-167 (1857); 11 Stat. 285 (1858)',
         LOCAL_DATA_SOURCE:
-            STATE_TRUST_DATA_SOURCE_DIRECTORY + 'shp_plan_stateland_dnrcounty.zip',
+            STATE_TRUST_DATA_SOURCE_DIRECTORY + 'MN-surface.zip',
         DATA_SOURCE:
             'https://resources.gisdata.mn.gov/pub/gdrs/data/pub/us_mn_state_dnr/plan_stateland_dnrcounty/shp_plan_stateland_dnrcounty.zip',
         LAYER: 'stateland_type_trust',
@@ -196,7 +198,7 @@ STATE_TRUST_CONFIGS = {
         RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
         STATE_ENABLING_ACT: '11 Stat. 166-167 (1857); 11 Stat. 285 (1858)',
         LOCAL_DATA_SOURCE:
-            STATE_TRUST_DATA_SOURCE_DIRECTORY + 'MN_UnivTrustMins-20230621',
+            STATE_TRUST_DATA_SOURCE_DIRECTORY + 'MN-subsurface',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['LANDTYPECO'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             '5': 'University',
@@ -303,7 +305,7 @@ STATE_TRUST_CONFIGS = {
         RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
         STATE_ENABLING_ACT: '25 Stat. 676-684, esp. 679-81 (1889)',
         LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY +
-                           'Surface_Trust_Lands_with_Trusts.zip',
+                           'ND-surface.zip',
         ACTIVITY: 'Recreation',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Trust_Desc'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
@@ -348,7 +350,7 @@ STATE_TRUST_CONFIGS = {
     #     MANAGING_AGENCY: 'Board of Educational Lands and Funds',
     #     RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
     #     LOCAL_DATA_SOURCE:
-    #         STATE_TRUST_DATA_SOURCE_DIRECTORY + '2023_Nebraska_BELF_lands.zip',
+    #         STATE_TRUST_DATA_SOURCE_DIRECTORY + 'NE.zip',
     #     LAYER: '233103 BELF trust lands',
     #     ATTRIBUTE_LABEL_TO_FILTER_BY: ['Fund_Desc'],
     #     ATTRIBUTE_CODE_TO_ALIAS_MAP: {
@@ -367,7 +369,7 @@ STATE_TRUST_CONFIGS = {
         RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
         STATE_ENABLING_ACT: '36 Stat. 557-579 , esp. 572-573 (1910)',
         LOCAL_DATA_SOURCE:
-            STATE_TRUST_DATA_SOURCE_DIRECTORY + 'slo_STLStatusCombined.zip',
+            STATE_TRUST_DATA_SOURCE_DIRECTORY + 'NM.zip',
         DATA_SOURCE:
             'https://mapservice.nmstatelands.org/GISDataDownloads/ZipFiles/slo_STLStatusCombined.zip',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Benef_Surf'],
@@ -394,7 +396,7 @@ STATE_TRUST_CONFIGS = {
         RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
         STATE_ENABLING_ACT: '36 Stat. 557-579 , esp. 572-573 (1910)',
         LOCAL_DATA_SOURCE:
-            STATE_TRUST_DATA_SOURCE_DIRECTORY + 'slo_STLStatusCombined.zip',
+            STATE_TRUST_DATA_SOURCE_DIRECTORY + 'NM.zip',
         DATA_SOURCE:
             'https://mapservice.nmstatelands.org/GISDataDownloads/ZipFiles/slo_STLStatusCombined.zip',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Benef_SubS'],
@@ -727,7 +729,7 @@ STATE_TRUST_CONFIGS = {
         STATE_ENABLING_ACT: '9 Stat.  56-58 (1846)',
         RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
         LOCAL_DATA_SOURCE:
-            STATE_TRUST_DATA_SOURCE_DIRECTORY + 'BCPLShapeFIleforWeb',
+            STATE_TRUST_DATA_SOURCE_DIRECTORY + 'WI',
         DATA_SOURCE:
             'https://bcpl.wisconsin.gov/bcpl.wisconsin.gov%20Shared%20Documents/Maps/BCPLPropertyBoundariesShapefile.zip',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['FUND'],
