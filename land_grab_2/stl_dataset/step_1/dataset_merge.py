@@ -65,12 +65,20 @@ def _merge_row_helper(row, column):
         return None
 
 
+def dedup_group(group):
+    gdf = _merge_dataframes(group)
+    gdf = gdf.groupby(['geometry'], as_index=False).agg(list).reset_index().apply(uniq, axis=1)
+    gdf = gpd.GeoDataFrame(gdf, geometry=gdf['geometry'], crs=ALBERS_EQUAL_AREA)
+    return gdf
+
+
 def merge_single_state_helper(state: str, cleaned_data_directory,
                               merged_data_directory):
     if not os.path.exists(merged_data_directory):
         os.makedirs(merged_data_directory)
 
-    gdfs = []
+    # gdfs = []
+    combined_rights_type_gdfs = {'surface': [], 'subsurface': [], 'other': []}
 
     # find all cleaned datasets for the state
     for file in os.listdir(cleaned_data_directory):
@@ -80,7 +88,17 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
             gdf[GIS_ACRES] = (gdf.to_crs(ALBERS_EQUAL_AREA).area / ACRES_TO_SQUARE_METERS).round(2)
 
             if not gdf.empty:
-                gdfs.append(gdf)
+                file_p = Path(file).resolve()
+                if 'subsurface' in file_p.name:
+                    combined_rights_type_gdfs['subsurface'].append(gdf)
+                elif 'surface' not in file_p.name:
+                    combined_rights_type_gdfs['other'].append(gdf)
+                else:
+                    combined_rights_type_gdfs['surface'].append(gdf)
+
+                # gdfs.append(gdf)
+
+    gdfs = [dedup_group(g) for g in combined_rights_type_gdfs.values()]
 
     # merge into a single dataframe, finding and merging any duplicates
     gdf = _merge_dataframes(gdfs)
@@ -117,9 +135,9 @@ def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
 
     # grab data from each state directory
     for state in os.listdir(cleaned_data_directory):
-        print(state)
-        if 'UT' not in state:
+        if 'OK' not in state:
             continue
+        print(state)
         state_cleaned_data_directory = state_specific_directory(cleaned_data_directory, state)
         if not Path(state_cleaned_data_directory).is_dir():
             continue

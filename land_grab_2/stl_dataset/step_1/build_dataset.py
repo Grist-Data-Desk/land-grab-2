@@ -36,7 +36,8 @@ def extract_and_clean_all():
     '''
     st = datetime.now()
     for state in STATE_TRUST_CONFIGS.keys():
-
+        if 'OK' not in state:
+            continue
         extract_and_clean_single_source(state)
     print(f'extract_and_clean_all took: {datetime.now() - st}')
 
@@ -86,9 +87,9 @@ def build_full_dataset():
     '''
     Delete all old data files and build the entire dataset from scratch
     '''
-    # extract_and_clean_all()
-    # merge_all_states()
-    calculate_summary_statistics()
+    extract_and_clean_all()
+    merge_all_states()
+    # calculate_summary_statistics()
 
 
 def run():

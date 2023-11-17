@@ -415,7 +415,7 @@ STATE_TRUST_CONFIGS = {
             'Aliquot': ALIQUOT,
         },
     },
-    'OK-unleased-mineral-lands': {
+    'OK-subsurface-unleased-mineral-lands': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
         STATE: 'OK',
         UNIVERSITY: 'Oklahoma State University',
@@ -459,7 +459,7 @@ STATE_TRUST_CONFIGS = {
             'QuarterDescription': ALIQUOT,
         },
     },
-    'OK-mineral-subdivs': {
+    'OK-subsurface-mineral-subdivs': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
         STATE: 'OK',
         UNIVERSITY: 'Oklahoma State University',
