@@ -44,6 +44,9 @@ def _merge_dataframes(df_list):
     if not df_list:
         return geopandas.GeoDataFrame()
 
+    if len(df_list) == 1:
+        return df_list[0]
+
     # return the final merged dataset
     merged = df_list[0] if len(df_list) == 1 else combine_dfs(df_list)
     merged = geopandas.GeoDataFrame(merged, geometry=merged.geometry, crs=merged.crs)
@@ -66,10 +69,14 @@ def _merge_row_helper(row, column):
 
 
 def dedup_group(group):
+    if not group:
+        return []
+
     gdf = _merge_dataframes(group)
     gdf = gdf.groupby(['geometry'], as_index=False).agg(list).reset_index().apply(uniq, axis=1)
     gdf = gpd.GeoDataFrame(gdf, geometry=gdf['geometry'], crs=ALBERS_EQUAL_AREA)
-    return gdf
+
+    return [gdf]
 
 
 def merge_single_state_helper(state: str, cleaned_data_directory,
@@ -98,7 +105,7 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
 
                 # gdfs.append(gdf)
 
-    gdfs = [dedup_group(g) for g in combined_rights_type_gdfs.values()]
+    gdfs = list(itertools.chain.from_iterable([dedup_group(g) for g in combined_rights_type_gdfs.values()]))
 
     # merge into a single dataframe, finding and merging any duplicates
     gdf = _merge_dataframes(gdfs)
