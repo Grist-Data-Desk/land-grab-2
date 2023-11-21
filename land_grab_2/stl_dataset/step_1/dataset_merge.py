@@ -9,9 +9,9 @@ import pandas as pd
 
 from land_grab_2.stl_dataset.step_1.constants import ALL_STATES, RIGHTS_TYPE, ACTIVITY, FINAL_DATASET_COLUMNS, \
     GIS_ACRES, \
-    ALBERS_EQUAL_AREA, ACRES_TO_SQUARE_METERS, ACRES, OBJECT_ID
-from land_grab_2.utilities.overlap import combine_dfs, fix_geometries, geometric_deduplication
-from land_grab_2.utilities.utils import state_specific_directory
+    ALBERS_EQUAL_AREA, ACRES_TO_SQUARE_METERS, ACRES, OBJECT_ID, TRUST_NAME
+from land_grab_2.utilities.overlap import combine_dfs, fix_geometries, geometric_deduplication, tree_based_proximity
+from land_grab_2.utilities.utils import state_specific_directory, combine_delim_list
 
 os.environ['RESTAPI_USE_ARCPY'] = 'FALSE'
 
@@ -68,13 +68,43 @@ def _merge_row_helper(row, column):
         return None
 
 
+def capture_matches(gdf, matches):
+    contained_dups = False
+    rows_to_be_deleted = set()
+    for match_score, grist_idx, grist_row, cmp_row, contains, cmp_idx in matches:
+        if contains and grist_row[TRUST_NAME] == cmp_row[TRUST_NAME] and grist_idx != cmp_idx:
+            contained_dups = True
+            rows_to_be_deleted.add(cmp_idx)
+            if ACTIVITY in cmp_row:
+                new_activity = cmp_row[ACTIVITY] or ''
+                existing = gdf.loc[grist_idx, ACTIVITY] or ''
+                gdf.loc[grist_idx, ACTIVITY] = combine_delim_list(existing, new_activity, sep=',')
+
+    gdf_rows = [r for i, r in enumerate(gdf.to_dict(orient='records')) if i not in rows_to_be_deleted]
+    df = pd.DataFrame(gdf_rows)
+    gdf = geopandas.GeoDataFrame(df, geometry=df.geometry, crs=gdf.crs)
+
+    return gdf, contained_dups
+
+
+def dedup_single(gdf):
+    gdf = gdf.groupby(['geometry', RIGHTS_TYPE, TRUST_NAME], as_index=False).agg(list).reset_index().apply(uniq, axis=1)
+    gdf = gpd.GeoDataFrame(gdf, geometry=gdf['geometry'], crs=ALBERS_EQUAL_AREA)
+
+    has_dups = True
+    while has_dups:
+        matches = tree_based_proximity(gdf.to_dict(orient='records'), gdf, gdf.crs)
+        gdf, has_dups = capture_matches(gdf, matches)
+
+    return gdf
+
+
 def dedup_group(group):
     if not group:
         return []
 
     gdf = _merge_dataframes(group)
-    gdf = gdf.groupby(['geometry'], as_index=False).agg(list).reset_index().apply(uniq, axis=1)
-    gdf = gpd.GeoDataFrame(gdf, geometry=gdf['geometry'], crs=ALBERS_EQUAL_AREA)
+    gdf = dedup_single(gdf)
 
     return [gdf]
 
@@ -95,6 +125,9 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
             gdf[GIS_ACRES] = (gdf.to_crs(ALBERS_EQUAL_AREA).area / ACRES_TO_SQUARE_METERS).round(2)
 
             if not gdf.empty:
+                gdf = fix_geometries(gdf)
+                # if gdf.shape[0] > 1:
+                #     gdf = dedup_single(gdf)
                 file_p = Path(file).resolve()
                 if 'subsurface' in file_p.name:
                     combined_rights_type_gdfs['subsurface'].append(gdf)
@@ -106,6 +139,8 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
                 # gdfs.append(gdf)
 
     gdfs = list(itertools.chain.from_iterable([dedup_group(g) for g in combined_rights_type_gdfs.values()]))
+    if not gdfs:
+        return None
 
     # merge into a single dataframe, finding and merging any duplicates
     gdf = _merge_dataframes(gdfs)
@@ -116,8 +151,8 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
         gdf[ACRES] = gdf[ACRES].map(lambda a: a or 0.0).round(2)
 
     final_column_order = [column for column in FINAL_DATASET_COLUMNS if column in gdf.columns]
-    gdf = gdf[final_column_order]
     gdf = fix_geometries(gdf)
+    gdf = gdf[final_column_order]
 
     # save to geojson and csv
     gdf.to_file(merged_data_directory + _get_merged_dataset_filename(state), driver='GeoJSON')
@@ -142,13 +177,15 @@ def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
 
     # grab data from each state directory
     for state in os.listdir(cleaned_data_directory):
-        if 'OK' not in state:
-            continue
+        # if 'OK' not in state:
+        #     continue
         print(state)
         state_cleaned_data_directory = state_specific_directory(cleaned_data_directory, state)
         if not Path(state_cleaned_data_directory).is_dir():
             continue
         merged_state = merge_single_state_helper(state, state_cleaned_data_directory, merged_data_directory)
+        if merged_state is None:
+            continue
         merged_state = merged_state.to_crs(ALBERS_EQUAL_AREA)
         state_datasets_to_merge.append(merged_state)
 

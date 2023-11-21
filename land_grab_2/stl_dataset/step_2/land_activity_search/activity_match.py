@@ -151,7 +151,7 @@ def capture_matches(matches, state, activity):
     does_contain = 0
     grist_data_update = defaultdict(set)
     activity_data_update = []
-    for match_score, grist_idx, grist_row, activity_row, contains in matches:
+    for match_score, grist_idx, grist_row, activity_row, contains, _ in matches:
         activity_name = get_activity_name(state, activity, pd.DataFrame([activity_row]))
 
         if activity_name is None or 'None' in activity_name:

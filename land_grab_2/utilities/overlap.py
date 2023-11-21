@@ -273,27 +273,33 @@ def is_possibly_same_feature(feature_1, feature_2, crs=None, tolerance: float = 
             feature_2.contains(feature_1) or
             feature_1.intersects(feature_2) or
             feature_2.intersects(feature_1) or
+            feature_1.overlaps(feature_2) or
+            feature_2.overlaps(feature_1) or
             feature_1.crosses(feature_2) or
             feature_2.crosses(feature_1) or
             feature_1.within(feature_2) or
             feature_2.within(feature_1) or
-            feature_1.touches(feature_2) or
-            feature_2.touches(feature_1) or
             feature_1.covers(feature_2) or
             feature_2.covers(feature_1) or
+
+            feature_1.touches(feature_2) or
+            feature_2.touches(feature_1) or
 
             feature_1.boundary.contains(feature_2.envelope) or
             feature_2.envelope.contains(feature_1.boundary) or
             feature_1.boundary.intersects(feature_2.envelope) or
             feature_2.envelope.intersects(feature_1.boundary) or
+            feature_1.boundary.overlaps(feature_2.envelope) or
+            feature_2.envelope.overlaps(feature_1.boundary) or
             feature_1.boundary.crosses(feature_2.envelope) or
             feature_2.envelope.crosses(feature_1.boundary) or
             feature_1.boundary.within(feature_2.envelope) or
             feature_2.envelope.within(feature_1.boundary) or
-            feature_1.boundary.touches(feature_2.envelope) or
-            feature_2.envelope.touches(feature_1.boundary) or
             feature_1.boundary.covers(feature_2.envelope) or
             feature_2.envelope.covers(feature_1.boundary) or
+
+            feature_1.boundary.touches(feature_2.envelope) or
+            feature_2.envelope.touches(feature_1.boundary) or
 
             is_same_geo_feature(feature_1, feature_2, crs=crs, tolerance=tolerance))
 
@@ -309,6 +315,7 @@ def _tree_based_proximity_batch(grist_bounds=None, grist_data=None, crs=None, ma
             g,
             batch[i],
             is_possibly_same_feature(g['geometry'], batch[i]['geometry'], crs=crs),
+            i
         )
         for grist_idx, (g, i) in enumerate(zip(grist_data, indices))
         if g['geometry'].boundary.distance(batch[i]['geometry'].envelope) <= match_dist_threshold
@@ -318,7 +325,8 @@ def _tree_based_proximity_batch(grist_bounds=None, grist_data=None, crs=None, ma
     # return itertools.takewhile(lambda x: x[0] <= match_dist_threshold, pairs)
 
 
-def tree_based_proximity(grist_data: Iterable[Dict[str, Any]], other_data, crs, match_dist_threshold: float = 2.0):
+def tree_based_proximity(grist_data: Iterable[Dict[str, Any]], other_data, crs, match_dist_threshold: float = 2.0,
+                         too_many_records=10_000):
     grist_bounds = [g['geometry'].boundary for g in grist_data if g['geometry'] is not None]
 
     other_data = (
@@ -326,7 +334,6 @@ def tree_based_proximity(grist_data: Iterable[Dict[str, Any]], other_data, crs, 
     )
     other_data_dicts = other_data.to_dict(orient='records')
 
-    too_many_records = 10_000
     batches = [other_data_dicts]
     if len(other_data_dicts) > too_many_records:
         batches = batch_iterable(other_data_dicts, too_many_records)
