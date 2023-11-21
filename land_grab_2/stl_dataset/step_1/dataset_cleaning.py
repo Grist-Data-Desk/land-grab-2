@@ -48,13 +48,13 @@ def _clean_queried_data(source, config, label, alias, queried_data_directory,
     if source == 'OK-surface':
         gdf = _filter_queried_oklahoma_data(gdf)
         gdf = _get_ok_surface_town_range(gdf)
-    elif source == 'OK-unleased-mineral-lands':
+    elif source == 'OK-subsurface-unleased-mineral-lands':
         gdf = _filter_queried_oklahoma_data_unleased_min_lands(gdf)
         gdf = _get_ok_surface_town_range(gdf)
     elif source == 'OK-real-estate-subdivs':
         gdf = _filter_queried_oklahoma_data_unleased_min_lands(gdf)
         gdf = _get_ok_surface_town_range(gdf)
-    elif source == 'OK-mineral-subdivs':
+    elif source == 'OK-subsurface-mineral-subdivs':
         gdf = _filter_queried_oklahoma_data_unleased_min_lands(gdf)
         gdf = _get_ok_surface_town_range(gdf)
     elif 'AZ' in source:
@@ -362,6 +362,7 @@ def _get_sd_rights_type(gdf):
 
 def _filter_queried_oklahoma_data_unleased_min_lands(gdf):
     filter_df = pd.read_csv(OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE)
+    filter_df_2 = _create_oklahoma_trust_fund_filter()
 
     gdf[OK_HOLDING_DETAIL_ID] = gdf[OK_HOLDING_DETAIL_ID].str.replace('}', '')
     gdf[OK_HOLDING_DETAIL_ID] = gdf[OK_HOLDING_DETAIL_ID].str.replace('{', '')
@@ -369,6 +370,7 @@ def _filter_queried_oklahoma_data_unleased_min_lands(gdf):
 
     # filter dataframe by specific ids
     gdf = gdf[gdf[OK_HOLDING_DETAIL_ID].isin(filter_df[OK_HOLDING_DETAIL_ID])]
+    gdf_2 = gdf[gdf[OK_HOLDING_DETAIL_ID].isin(filter_df_2[OK_HOLDING_DETAIL_ID])]
 
     # merge on ids
     gdf = gdf.merge(filter_df[[OK_HOLDING_DETAIL_ID, 'LeaseType']], how='left', on=OK_HOLDING_DETAIL_ID)
@@ -378,6 +380,8 @@ def _filter_queried_oklahoma_data_unleased_min_lands(gdf):
 
 def _filter_queried_oklahoma_data(gdf):
     filter_df = _create_oklahoma_trust_fund_filter()
+    filter_df_2 = pd.read_csv(OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE)
+
     # change id from dictionary to string
     gdf[OK_HOLDING_DETAIL_ID] = gdf[OK_HOLDING_DETAIL_ID].str.replace('}', '')
     gdf[OK_HOLDING_DETAIL_ID] = gdf[OK_HOLDING_DETAIL_ID].str.replace('{', '')
@@ -385,6 +389,7 @@ def _filter_queried_oklahoma_data(gdf):
 
     # filter dataframe by specific ids
     gdf = gdf[gdf[OK_HOLDING_DETAIL_ID].isin(filter_df[OK_HOLDING_DETAIL_ID])]
+    gdf_2 = gdf[gdf[OK_HOLDING_DETAIL_ID].isin(filter_df_2[OK_HOLDING_DETAIL_ID])]
 
     # merge on ids
     gdf = gdf.merge(filter_df, on=OK_HOLDING_DETAIL_ID, how='left')
