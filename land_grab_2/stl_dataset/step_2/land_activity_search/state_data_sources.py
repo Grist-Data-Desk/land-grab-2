@@ -272,7 +272,7 @@ REWRITE_RULES = {
         },
         "Non-Metallic Minerals": {
             "MINERAL": "Sub-activity"
-        }
+        },
         "Current Leases": {
             "AGREEMENT1": "Activity"
         }
