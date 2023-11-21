@@ -61,7 +61,8 @@ def capture_matches(gdf, matches):
 def condense_activities(row):
     for col in row.keys().tolist():
         if ACTIVITY in col:
-            row[ACTIVITY] = combine_delim_list('', ','.join(row[ACTIVITY]), sep=',')
+            current_activities = [a for a in row[ACTIVITY] if isinstance(a,str)]
+            row[ACTIVITY] = combine_delim_list(','.join(current_activities), '', sep=',')
         elif 'index' in col:
             continue
         else:
