@@ -76,6 +76,11 @@ def dedup_single(gdf):
     deduped_groups = []
     for trust in all_trusts:
         gdf_group = gdf[gdf[TRUST_NAME] == trust].reset_index()
+        if gdf_group.shape[0] == 1:
+            gdf_group = gpd.GeoDataFrame(gdf_group, geometry=gdf_group['geometry'], crs=gdf.crs)
+            deduped_groups.append(gdf_group)
+            continue
+
         gdf_group = (gdf_group.groupby(['geometry'], as_index=False)
                      .agg(list)
                      .apply(condense_activities, axis=1))
