@@ -659,7 +659,7 @@ STATE_TRUST_CONFIGS = {
         RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
         STATE_ENABLING_ACT: '28 Stat. 107-110 (1894)',
         DATA_SOURCE:
-            'https://gis.trustlands.utah.gov/mapping/rest/services/Ownership_Oil_Gas/FeatureServer/0',
+            'https://gis.trustlands.utah.gov/mapping/rest/services/Ownership_Other_Mineral/FeatureServer/0',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['bene_abrev'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "'USU '": 'Utah State University',
