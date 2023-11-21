@@ -5,7 +5,7 @@ from land_grab_2.stl_dataset.step_1.constants import (
     SURFACE_RIGHTS_TYPE, SUBSURFACE_RIGHTS_TYPE, TIMBER_RIGHTS_TYPE, LAYER,
     STATE_TRUST_DATA_SOURCE_DIRECTORY, EXISTING_COLUMN_TO_FINAL_COLUMN_MAP,
     ACRES, COUNTY, MERIDIAN, TOWNSHIP, RANGE, SECTION, ALIQUOT, BLOCK, ACTIVITY,
-    STATE_ENABLING_ACT)
+    STATE_ENABLING_ACT, NET_ACRES)
 
 STATE_TRUST_CONFIGS = {
     # 'AL': {
@@ -116,24 +116,24 @@ STATE_TRUST_CONFIGS = {
         STATE_ENABLING_ACT: '26 Stat. 215-219 (1890)',
         DATA_SOURCE:
             'https://gis1.idl.idaho.gov/arcgis/rest/services/State_Ownership/MapServer/0',
+        NET_ACRES: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'Net_Acreage_Percent_Ownership_Idaho.csv',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['SURF_ENDOWMENT'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-            2: '100.00% Agricultural College',
-            6: '100.00% School of Science (Scientific School)',
-            921: 'Split - AC and F.&G.',
-            927: 'Split - SS and F.&G.',
-            20: '100.00% University of Idaho Regent',
-            8: 'University of Idaho',
-            911: '4.00% State Hospital South (Insane Asylum), 96.00% University of Idaho',
-            908: '68.00% Public School (Indemnity, Schools, Common Schools), 32.00% University of Idaho',
-            910: '22.20% Normal School, 77.80% University of Idaho',
-            928: 'Dept. of Fish and Game, University of Idaho',
+            2: '2: 100.00% Agricultural College',
+            6: '6: 100.00% School of Science (Scientific School)',
+            921: '921: Split - AC and F.&G.',
+            927: '927: Split - SS and F.&G.',
+            20: '20: 100.00% University of Idaho Regent',
+            8: '8: University of Idaho',
+            911: '911: 4.00% State Hospital South (Insane Asylum), 96.00% University of Idaho',
+            908: '908: 68.00% Public School (Indemnity, Schools, Common Schools), 32.00% University of Idaho',
+            910: '910: 22.20% Normal School, 77.80% University of Idaho',
+            928: '928: Dept. of Fish and Game, University of Idaho',
             933: '933: Dept. of Parks and Recreation, School of Science (Scientific School)',
-            907: '27.00% Charitable Institute, 65.00% Public School (Indemnity, Schools, Common Schools), 8.00% University of Idaho'
-
+            907: '907: 27.00% Charitable Institute, 65.00% Public School (Indemnity, Schools, Common Schools), 8.00% University of Idaho'
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
-            'L_ACRES': ACRES,
+            'GISACRES': ACRES,
         },
     },
     'ID-subsurface': {
@@ -145,6 +145,7 @@ STATE_TRUST_CONFIGS = {
         STATE_ENABLING_ACT: '26 Stat. 215-219 (1890)',
         DATA_SOURCE:
             'https://gis1.idl.idaho.gov/arcgis/rest/services/State_Ownership/MapServer/1',
+        NET_ACRES: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'Net_Acreage_Percent_Ownership_Idaho.csv',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['SUB_ENDOWMENT'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             2: '2: 100.00% Agricultural College',
@@ -159,10 +160,9 @@ STATE_TRUST_CONFIGS = {
             928: '928: Dept. of Fish and Game, University of Idaho',
             933: '933: Dept. of Parks and Recreation, School of Science (Scientific School)',
             907: '907: 27.00% Charitable Institute, 65.00% Public School (Indemnity, Schools, Common Schools), 8.00% University of Idaho'
-
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
-            'L_ACRES': ACRES,
+            'GISACRES': ACRES,
         },
     },
     'MN-surface': {
@@ -211,6 +211,7 @@ STATE_TRUST_CONFIGS = {
             'TOWN': TOWNSHIP,
             'RANG': RANGE,
             'SECT': SECTION,
+            'SU_NETACRE': NET_ACRES,
             'FORTDESC': ALIQUOT,
         },
     },
@@ -329,7 +330,7 @@ STATE_TRUST_CONFIGS = {
         STATE_ENABLING_ACT: '25 Stat. 676-684, esp. 679-81 (1889)',
         DATA_SOURCE:
             'https://ndgishub.nd.gov/arcgis/rest/services/All_GovtLands_State/MapServer/2',
-        ACTIVITY: 'Oil and Gas',
+        ACTIVITY: 'Oil and Gas Lease',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['TRUST'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "'N'": 'North Dakota State University'
@@ -341,6 +342,7 @@ STATE_TRUST_CONFIGS = {
             'RNG': RANGE,
             'SEC': SECTION,
             'SUBDIVISION': ALIQUOT,
+            'NET_ACRES': NET_ACRES
         },
     },
     # 'NE': {
@@ -374,9 +376,9 @@ STATE_TRUST_CONFIGS = {
             'https://mapservice.nmstatelands.org/GISDataDownloads/ZipFiles/slo_STLStatusCombined.zip',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Benef_Surf'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-            '04': 'New Mexico State University',
-            '28': 'New Mexico State University',
-            '42': 'New Mexico State University',
+            '04': '04: New Mexico State University',
+            '28': '28: New Mexico State University',
+            '42': '42: New Mexico State University',
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'Acres_Surf': ACRES,
@@ -401,9 +403,9 @@ STATE_TRUST_CONFIGS = {
             'https://mapservice.nmstatelands.org/GISDataDownloads/ZipFiles/slo_STLStatusCombined.zip',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Benef_SubS'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-            '04': 'New Mexico State University',
-            '28': 'New Mexico State University',
-            '42': 'New Mexico State University',
+            '04': '04: New Mexico State University',
+            '28': '28: New Mexico State University',
+            '42': '42: New Mexico State University',
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'Acres_SubS': ACRES,
@@ -415,7 +417,7 @@ STATE_TRUST_CONFIGS = {
             'Aliquot': ALIQUOT,
         },
     },
-    'OK-unleased-mineral-lands': {
+    'OK-subsurface-unleased-mineral-lands': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
         STATE: 'OK',
         UNIVERSITY: 'Oklahoma State University',
@@ -459,7 +461,7 @@ STATE_TRUST_CONFIGS = {
             'QuarterDescription': ALIQUOT,
         },
     },
-    'OK-mineral-subdivs': {
+    'OK-subsurface-mineral-subdivs': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
         STATE: 'OK',
         UNIVERSITY: 'Oklahoma State University',
@@ -588,7 +590,7 @@ STATE_TRUST_CONFIGS = {
         STATE_ENABLING_ACT: '28 Stat. 107-110 (1894)',
         DATA_SOURCE:
             'https://gis.trustlands.utah.gov/mapping/rest/services/Ownership_Surface/FeatureServer/0',
-            #'https://gis.trustlands.utah.gov/server/rest/services/Ownership/UT_SITLA_Ownership_Beneficiary/MapServer/1',
+        # 'https://gis.trustlands.utah.gov/server/rest/services/Ownership/UT_SITLA_Ownership_Beneficiary/MapServer/1',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['bene_abrev'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "'USU '": 'Utah State University',
@@ -661,7 +663,7 @@ STATE_TRUST_CONFIGS = {
         RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
         STATE_ENABLING_ACT: '28 Stat. 107-110 (1894)',
         DATA_SOURCE:
-            'https://gis.trustlands.utah.gov/mapping/rest/services/Ownership_Oil_Gas/FeatureServer/0',
+            'https://gis.trustlands.utah.gov/mapping/rest/services/Ownership_Other_Mineral/FeatureServer/0',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['bene_abrev'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "'USU '": 'Utah State University',

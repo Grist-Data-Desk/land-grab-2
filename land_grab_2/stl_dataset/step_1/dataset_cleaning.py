@@ -9,10 +9,27 @@ import pandas as pd
 from land_grab_2.stl_dataset.step_1.constants import ALBERS_EQUAL_AREA, EXISTING_COLUMN_TO_FINAL_COLUMN_MAP, \
     FINAL_DATASET_COLUMNS, \
     TRUST_NAME, TOWNSHIP, RANGE, SECTION, MERIDIAN, COUNTY, ALIQUOT, RIGHTS_TYPE, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE, \
-    OK_HOLDING_DETAIL_ID, ACTIVITY, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_2, OK_TRUST_FUND_ID, LOCAL_DATA_SOURCE
+    OK_HOLDING_DETAIL_ID, ACTIVITY, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_2, OK_TRUST_FUND_ID, LOCAL_DATA_SOURCE, \
+    NET_ACRES, GIS_ACRES
 from land_grab_2.utilities.utils import _get_filename
 
 os.environ['RESTAPI_USE_ARCPY'] = 'FALSE'
+
+
+def _get_net_acres(gdf, source, config, alias):
+    if NET_ACRES not in config:
+        return gdf
+
+    all_net_acres_info = pd.read_csv(config[NET_ACRES])
+    net_acres_info = all_net_acres_info[all_net_acres_info['Trust Name'] == alias].to_dict(orient='records')
+    if not net_acres_info:
+        return gdf
+
+    net_acres_info = net_acres_info[0]
+    percentage = net_acres_info['Percentage']
+    gdf[NET_ACRES] = gdf['GISACRES'] * (percentage/100)
+
+    return gdf
 
 
 def _clean_queried_data(source, config, label, alias, queried_data_directory,
@@ -31,13 +48,13 @@ def _clean_queried_data(source, config, label, alias, queried_data_directory,
     if source == 'OK-surface':
         gdf = _filter_queried_oklahoma_data(gdf)
         gdf = _get_ok_surface_town_range(gdf)
-    elif source == 'OK-unleased-mineral-lands':
+    elif source == 'OK-subsurface-unleased-mineral-lands':
         gdf = _filter_queried_oklahoma_data_unleased_min_lands(gdf)
         gdf = _get_ok_surface_town_range(gdf)
     elif source == 'OK-real-estate-subdivs':
         gdf = _filter_queried_oklahoma_data_unleased_min_lands(gdf)
         gdf = _get_ok_surface_town_range(gdf)
-    elif source == 'OK-mineral-subdivs':
+    elif source == 'OK-subsurface-mineral-subdivs':
         gdf = _filter_queried_oklahoma_data_unleased_min_lands(gdf)
         gdf = _get_ok_surface_town_range(gdf)
     elif 'AZ' in source:
@@ -54,6 +71,8 @@ def _clean_queried_data(source, config, label, alias, queried_data_directory,
         gdf = _get_ut_activity(gdf, source)
     elif 'ND' in source:
         gdf = _get_nd_activity(gdf, source, config)
+    elif 'ID' in source:
+        gdf = _get_net_acres(gdf, source, config, alias)
 
     gdf = _format_columns(gdf, config, alias)
 
@@ -86,6 +105,7 @@ def _get_mt_activity(filtered_gdf, source):
 
     return filtered_gdf
 
+
 def _get_ut_activity(filtered_gdf, source):
     """
     extract activity value from directory name
@@ -96,7 +116,7 @@ def _get_ut_activity(filtered_gdf, source):
     if not prefix:
         return filtered_gdf
 
-    activity_name = source[len(prefix):].replace('-', ' ') #.replace('and', '&')
+    activity_name = source[len(prefix):].replace('-', ' ')  # .replace('and', '&')
     if not activity_name:
         return filtered_gdf
 
@@ -108,16 +128,19 @@ def _get_ut_activity(filtered_gdf, source):
 
     return filtered_gdf
 
+
 def _get_nd_activity(filtered_gdf, source, config):
     """
     extract activity value from directory name
     """
 
     activity_name = config[ACTIVITY]
-    filtered_gdf[ACTIVITY] = np.where(~(filtered_gdf['LEASE'].str.contains( 'none')), activity_name, filtered_gdf['LEASE'])
-    filtered_gdf[ACTIVITY] = np.where(filtered_gdf['LEASE'].str.contains( 'none'), '', filtered_gdf['LEASE'])
+    filtered_gdf[ACTIVITY] = np.where(~(filtered_gdf['LEASE'].str.contains('none')), activity_name,
+                                      filtered_gdf['LEASE'])
+    filtered_gdf[ACTIVITY] = np.where(filtered_gdf['LEASE'].str.contains('none'), '', filtered_gdf['LEASE'])
 
     return filtered_gdf
+
 
 def _filter_and_clean_shapefile(gdf, config, source, label, code, alias,
                                 cleaned_data_directory):
@@ -339,6 +362,7 @@ def _get_sd_rights_type(gdf):
 
 def _filter_queried_oklahoma_data_unleased_min_lands(gdf):
     filter_df = pd.read_csv(OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE)
+    filter_df_2 = _create_oklahoma_trust_fund_filter()
 
     gdf[OK_HOLDING_DETAIL_ID] = gdf[OK_HOLDING_DETAIL_ID].str.replace('}', '')
     gdf[OK_HOLDING_DETAIL_ID] = gdf[OK_HOLDING_DETAIL_ID].str.replace('{', '')
@@ -346,6 +370,7 @@ def _filter_queried_oklahoma_data_unleased_min_lands(gdf):
 
     # filter dataframe by specific ids
     gdf = gdf[gdf[OK_HOLDING_DETAIL_ID].isin(filter_df[OK_HOLDING_DETAIL_ID])]
+    gdf_2 = gdf[gdf[OK_HOLDING_DETAIL_ID].isin(filter_df_2[OK_HOLDING_DETAIL_ID])]
 
     # merge on ids
     gdf = gdf.merge(filter_df[[OK_HOLDING_DETAIL_ID, 'LeaseType']], how='left', on=OK_HOLDING_DETAIL_ID)
@@ -355,6 +380,8 @@ def _filter_queried_oklahoma_data_unleased_min_lands(gdf):
 
 def _filter_queried_oklahoma_data(gdf):
     filter_df = _create_oklahoma_trust_fund_filter()
+    filter_df_2 = pd.read_csv(OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE)
+
     # change id from dictionary to string
     gdf[OK_HOLDING_DETAIL_ID] = gdf[OK_HOLDING_DETAIL_ID].str.replace('}', '')
     gdf[OK_HOLDING_DETAIL_ID] = gdf[OK_HOLDING_DETAIL_ID].str.replace('{', '')
@@ -362,6 +389,7 @@ def _filter_queried_oklahoma_data(gdf):
 
     # filter dataframe by specific ids
     gdf = gdf[gdf[OK_HOLDING_DETAIL_ID].isin(filter_df[OK_HOLDING_DETAIL_ID])]
+    gdf_2 = gdf[gdf[OK_HOLDING_DETAIL_ID].isin(filter_df_2[OK_HOLDING_DETAIL_ID])]
 
     # merge on ids
     gdf = gdf.merge(filter_df, on=OK_HOLDING_DETAIL_ID, how='left')

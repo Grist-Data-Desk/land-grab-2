@@ -70,12 +70,12 @@ def in_parallel_fake(work_items,
 
 
 def in_parallel_exp(work_items,
-                a_callable,
-                scheduler='processes',
-                postprocess=None,
-                batched=True,
-                show_progress=False,
-                batch_size=10):
+                    a_callable,
+                    scheduler='processes',
+                    postprocess=None,
+                    batched=True,
+                    show_progress=False,
+                    batch_size=10):
     debug_parallelism = os.environ.get('DEBUG_PARALLEL')
     if debug_parallelism:
         scheduler = 'synchronous' if len(debug_parallelism) <= 5 else debug_parallelism
@@ -91,12 +91,12 @@ def in_parallel_exp(work_items,
 
 
 def in_parallel(work_items,
-                     a_callable,
-                     scheduler='processes',
-                     postprocess=None,
-                     batched=True,
-                     show_progress=False,
-                     batch_size=10):
+                a_callable,
+                scheduler='processes',
+                postprocess=None,
+                batched=True,
+                show_progress=False,
+                batch_size=10):
     debug_parallelism = os.environ.get('DEBUG_PARALLEL')
     if debug_parallelism:
         scheduler = 'synchronous' if len(debug_parallelism) <= 5 else debug_parallelism

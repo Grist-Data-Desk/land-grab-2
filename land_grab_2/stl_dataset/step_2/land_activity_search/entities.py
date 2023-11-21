@@ -27,6 +27,8 @@ class StateActivityDataSource:
     use_name_as_activity: bool = False
     keep_cols: List[str] = field(default_factory=list)
     is_restricted_activity: bool = False
+    is_restricted_subsurface_activity: bool = False
+    activity_name_appendage_col:Optional[str]=None
     scheduler: str = None
     use_cache: bool = True
 

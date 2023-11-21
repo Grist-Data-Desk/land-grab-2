@@ -37,15 +37,19 @@ AZ_KEY = {
     '3': 'Commercial Lease',
     '5': 'Grazing Lease',
     '8': 'Prospecting Permit',
+    '11': 'Mineral Permit',
     '66': 'US Govt Exclusive Use',
     '89': 'Institutional Use',
+    '13': 'Oil and Gas Permit',
     '0.0': 'Unleased Parcels',
     '1.0': 'Agriculture',
     '3.0': 'Commercial Lease',
     '5.0': 'Grazing Lease',
     '8.0': 'Prospecting Permit',
+    '11.0': 'Mineral Permit',
     '66.0': 'US Govt Exclusive Use',
     '89.0': 'Institutional Use',
+    '13.0': 'Oil and Gas Permit',
 }
 
 MT_KEY = {
@@ -64,6 +68,36 @@ MT_KEY = {
     'FAGLCB': 'Forest Grazing & Ag Competitive Bid',
 }
 
+WA_KEY = {
+    '10': 'Grazing Lease',
+    '11': 'Permit Range',
+    '12': 'Agricultural Lease',
+    '32': 'Upland Material Purchase',
+    '39': 'Commercial Lease',
+    '50': 'Easement/Permit Granted by DNR',
+    '52': 'Communications Site Lease',
+    '55': 'Easement/Permit Acquired by DNR',
+    '59': 'Recreation Sites',
+    '60': 'Special Use Permits and Land Use Licenses',
+    '64': 'Mining Contract',
+    '65': 'Mineral Lease',
+    '78': 'Water Rights',
+    'T3': 'Land Trespass',
+}
+
+WI_KEY = {
+    '1111': 'Open to public access',
+    '1211': 'Open to passive use, hunting, trapping',
+    '1121': 'Open to passive use, fishing, trapping',
+    '1112': 'Open to passive use, hunting, fishing',
+    '1122': 'Open to passive use and fishing',
+    '1222': 'Open to passive use only',
+    '2111': 'Open to hunting, fishing, trapping',
+    '2211': 'Open to hunting and trapping',
+    '2122': 'Open to fishing only',
+    '2212': 'Open to hunting only',
+}
+
 
 def get_activity_column(activity, state):
     # which col in the rewrite rules is the one that becomes activity
@@ -80,8 +114,28 @@ def get_activity_column(activity, state):
     ]
 
 
+def translate_state_activity_code(activity_name):
+    if activity_name in AZ_KEY:
+        return AZ_KEY[activity_name]
+
+    if activity_name in MT_KEY:
+        return MT_KEY[activity_name]
+
+    if activity_name in WI_KEY:
+        return WI_KEY[activity_name]
+
+    if activity_name in WA_KEY:
+        return WA_KEY[activity_name]
+
+    return activity_name
+
+
 def get_activity_name(state, activity, activity_row):
     if activity.use_name_as_activity:
+        if activity.activity_name_appendage_col:
+            col_val = activity[activity.activity_name_appendage_col]
+            if col_val:
+                return f'{activity.name}_{col_val}'
         return activity.name
 
     possible_activity_cols = get_activity_column(activity, state)
@@ -97,18 +151,30 @@ def get_activity_name(state, activity, activity_row):
                     return activity.name
 
                 if activity_name and activity_name is not np.nan:
-                    if activity_name in AZ_KEY:
-                        return AZ_KEY[activity_name]
-
-                    if activity_name in MT_KEY:
-                        return MT_KEY[activity_name]
+                    activity_name = translate_state_activity_code(activity_name)
 
                     return activity_name
 
 
 def is_incompatible_activity(grist_row, activity):
     restricted_rights_types = ['subsurface']
-    return grist_row[RIGHTS_TYPE] in restricted_rights_types and activity.is_restricted_activity
+    if grist_row[RIGHTS_TYPE] in restricted_rights_types and activity.is_restricted_activity:
+        return True
+
+    restricted_rights_types = ['surface']
+    if grist_row[RIGHTS_TYPE] in restricted_rights_types and activity.is_restricted_subsurface_activity:
+        return True
+
+    return False
+
+
+def exclude_inactive(state, activity_row):
+    if 'MT' in state or 'ID' in state:
+        status_col = next((c for c in activity_row.keys() if 'stat' in c), None)
+        if status_col and activity_row[status_col] != 'Active':
+            return True
+
+    return False
 
 
 def capture_matches(matches, state, activity):
@@ -118,7 +184,7 @@ def capture_matches(matches, state, activity):
     does_contain = 0
     grist_data_update = defaultdict(set)
     activity_data_update = []
-    for match_score, grist_idx, grist_row, activity_row, contains in matches:
+    for match_score, grist_idx, grist_row, activity_row, contains, _ in matches:
         activity_name = get_activity_name(state, activity, pd.DataFrame([activity_row]))
 
         if activity_name is None or 'None' in activity_name:
@@ -131,6 +197,9 @@ def capture_matches(matches, state, activity):
         total += 1
         if contains and not is_incompatible_activity(grist_row, activity):
             does_contain += 1
+            if exclude_inactive(state, activity_row):
+                continue
+
             grist_data_update[grist_idx].add(activity_name)
             activity_data_update.append(activity_row)
 

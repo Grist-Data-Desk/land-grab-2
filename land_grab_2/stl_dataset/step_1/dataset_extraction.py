@@ -56,7 +56,7 @@ def _query_arcgis_restapi(config, source, label, code, alias, directory, regen=F
     if (not regen and
             Path(directory + filename).exists() or
             Path(directory + filename.replace('geojson', 'json')).exists()):
-        print(f'Found existing file on disk with for {attribute_filter}')
+        print(f'Found existing file on disk  for {source} + {attribute_filter}')
         return
 
     # data_source for specific Map Server
