@@ -209,6 +209,7 @@ STATE_TRUST_CONFIGS = {
             'TOWN': TOWNSHIP,
             'RANG': RANGE,
             'SECT': SECTION,
+            'SU_NETACRE': 'NET_ACRES'
             'FORTDESC': ALIQUOT,
         },
     },
@@ -339,6 +340,7 @@ STATE_TRUST_CONFIGS = {
             'RNG': RANGE,
             'SEC': SECTION,
             'SUBDIVISION': ALIQUOT,
+            'NET_ACRES': 'NET_ACRES'
         },
     },
     # 'NE': {
