@@ -98,6 +98,7 @@ WI_KEY = {
     '2212': 'Open to hunting only',
 }
 
+
 def get_activity_column(activity, state):
     # which col in the rewrite rules is the one that becomes activity
     activity_rewrite_rules = REWRITE_RULES.get(state.lower()).get(activity.name.lower())
@@ -113,8 +114,28 @@ def get_activity_column(activity, state):
     ]
 
 
+def translate_state_activity_code(activity_name):
+    if activity_name in AZ_KEY:
+        return AZ_KEY[activity_name]
+
+    if activity_name in MT_KEY:
+        return MT_KEY[activity_name]
+
+    if activity_name in WI_KEY:
+        return WI_KEY[activity_name]
+
+    if activity_name in WA_KEY:
+        return WA_KEY[activity_name]
+
+    return activity_name
+
+
 def get_activity_name(state, activity, activity_row):
     if activity.use_name_as_activity:
+        if activity.activity_name_appendage_col:
+            col_val = activity[activity.activity_name_appendage_col]
+            if col_val:
+                return f'{activity.name}_{col_val}'
         return activity.name
 
     possible_activity_cols = get_activity_column(activity, state)
@@ -130,18 +151,30 @@ def get_activity_name(state, activity, activity_row):
                     return activity.name
 
                 if activity_name and activity_name is not np.nan:
-                    if activity_name in AZ_KEY:
-                        return AZ_KEY[activity_name]
-
-                    if activity_name in MT_KEY:
-                        return MT_KEY[activity_name]
+                    activity_name = translate_state_activity_code(activity_name)
 
                     return activity_name
 
 
 def is_incompatible_activity(grist_row, activity):
     restricted_rights_types = ['subsurface']
-    return grist_row[RIGHTS_TYPE] in restricted_rights_types and activity.is_restricted_activity
+    if grist_row[RIGHTS_TYPE] in restricted_rights_types and activity.is_restricted_activity:
+        return True
+
+    restricted_rights_types = ['surface']
+    if grist_row[RIGHTS_TYPE] in restricted_rights_types and activity.is_restricted_subsurface_activity:
+        return True
+
+    return False
+
+
+def exclude_inactive(state, activity_row):
+    if 'MT' in state or 'ID' in state:
+        status_col = next((c for c in activity_row.keys() if 'stat' in c), None)
+        if status_col and activity_row[status_col] != 'Active':
+            return True
+
+    return False
 
 
 def capture_matches(matches, state, activity):
@@ -164,6 +197,9 @@ def capture_matches(matches, state, activity):
         total += 1
         if contains and not is_incompatible_activity(grist_row, activity):
             does_contain += 1
+            if exclude_inactive(state, activity_row):
+                continue
+
             grist_data_update[grist_idx].add(activity_name)
             activity_data_update.append(activity_row)
 
