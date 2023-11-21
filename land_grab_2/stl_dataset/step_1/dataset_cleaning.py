@@ -9,10 +9,27 @@ import pandas as pd
 from land_grab_2.stl_dataset.step_1.constants import ALBERS_EQUAL_AREA, EXISTING_COLUMN_TO_FINAL_COLUMN_MAP, \
     FINAL_DATASET_COLUMNS, \
     TRUST_NAME, TOWNSHIP, RANGE, SECTION, MERIDIAN, COUNTY, ALIQUOT, RIGHTS_TYPE, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE, \
-    OK_HOLDING_DETAIL_ID, ACTIVITY, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_2, OK_TRUST_FUND_ID, LOCAL_DATA_SOURCE
+    OK_HOLDING_DETAIL_ID, ACTIVITY, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_2, OK_TRUST_FUND_ID, LOCAL_DATA_SOURCE, \
+    NET_ACRES, GIS_ACRES
 from land_grab_2.utilities.utils import _get_filename
 
 os.environ['RESTAPI_USE_ARCPY'] = 'FALSE'
+
+
+def _get_net_acres(gdf, source, config, alias):
+    if NET_ACRES not in config:
+        return gdf
+
+    all_net_acres_info = pd.read_csv(config[NET_ACRES])
+    net_acres_info = all_net_acres_info[all_net_acres_info['Trust Name'] == alias].to_dict(orient='records')
+    if not net_acres_info:
+        return gdf
+
+    net_acres_info = net_acres_info[0]
+    percentage = net_acres_info['Percentage']
+    gdf[NET_ACRES] = gdf['GISACRES'] * (percentage/100)
+
+    return gdf
 
 
 def _clean_queried_data(source, config, label, alias, queried_data_directory,
@@ -54,6 +71,8 @@ def _clean_queried_data(source, config, label, alias, queried_data_directory,
         gdf = _get_ut_activity(gdf, source)
     elif 'ND' in source:
         gdf = _get_nd_activity(gdf, source, config)
+    elif 'ID' in source:
+        gdf = _get_net_acres(gdf, source, config, alias)
 
     gdf = _format_columns(gdf, config, alias)
 

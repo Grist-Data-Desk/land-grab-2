@@ -5,7 +5,7 @@ from land_grab_2.stl_dataset.step_1.constants import (
     SURFACE_RIGHTS_TYPE, SUBSURFACE_RIGHTS_TYPE, TIMBER_RIGHTS_TYPE, LAYER,
     STATE_TRUST_DATA_SOURCE_DIRECTORY, EXISTING_COLUMN_TO_FINAL_COLUMN_MAP,
     ACRES, COUNTY, MERIDIAN, TOWNSHIP, RANGE, SECTION, ALIQUOT, BLOCK, ACTIVITY,
-    STATE_ENABLING_ACT)
+    STATE_ENABLING_ACT, NET_ACRES)
 
 STATE_TRUST_CONFIGS = {
     # 'AL': {
@@ -116,6 +116,7 @@ STATE_TRUST_CONFIGS = {
         STATE_ENABLING_ACT: '26 Stat. 215-219 (1890)',
         DATA_SOURCE:
             'https://gis1.idl.idaho.gov/arcgis/rest/services/State_Ownership/MapServer/0',
+        NET_ACRES: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'Net_Acreage_Percent_Ownership_Idaho.csv',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['SURF_ENDOWMENT'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             2: '2: 100.00% Agricultural College',
@@ -144,6 +145,7 @@ STATE_TRUST_CONFIGS = {
         STATE_ENABLING_ACT: '26 Stat. 215-219 (1890)',
         DATA_SOURCE:
             'https://gis1.idl.idaho.gov/arcgis/rest/services/State_Ownership/MapServer/1',
+        NET_ACRES: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'Net_Acreage_Percent_Ownership_Idaho.csv',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['SUB_ENDOWMENT'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             2: '2: 100.00% Agricultural College',
@@ -209,7 +211,7 @@ STATE_TRUST_CONFIGS = {
             'TOWN': TOWNSHIP,
             'RANG': RANGE,
             'SECT': SECTION,
-            'SU_NETACRE': 'NET_ACRES'
+            'SU_NETACRE': NET_ACRES,
             'FORTDESC': ALIQUOT,
         },
     },
@@ -340,7 +342,7 @@ STATE_TRUST_CONFIGS = {
             'RNG': RANGE,
             'SEC': SECTION,
             'SUBDIVISION': ALIQUOT,
-            'NET_ACRES': 'NET_ACRES'
+            'NET_ACRES': NET_ACRES
         },
     },
     # 'NE': {
@@ -588,7 +590,7 @@ STATE_TRUST_CONFIGS = {
         STATE_ENABLING_ACT: '28 Stat. 107-110 (1894)',
         DATA_SOURCE:
             'https://gis.trustlands.utah.gov/mapping/rest/services/Ownership_Surface/FeatureServer/0',
-            #'https://gis.trustlands.utah.gov/server/rest/services/Ownership/UT_SITLA_Ownership_Beneficiary/MapServer/1',
+        # 'https://gis.trustlands.utah.gov/server/rest/services/Ownership/UT_SITLA_Ownership_Beneficiary/MapServer/1',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['bene_abrev'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "'USU '": 'Utah State University',
