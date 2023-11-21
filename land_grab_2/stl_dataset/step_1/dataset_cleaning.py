@@ -86,6 +86,7 @@ def _get_mt_activity(filtered_gdf, source):
 
     return filtered_gdf
 
+
 def _get_ut_activity(filtered_gdf, source):
     """
     extract activity value from directory name
@@ -96,7 +97,7 @@ def _get_ut_activity(filtered_gdf, source):
     if not prefix:
         return filtered_gdf
 
-    activity_name = source[len(prefix):].replace('-', ' ') #.replace('and', '&')
+    activity_name = source[len(prefix):].replace('-', ' ')  # .replace('and', '&')
     if not activity_name:
         return filtered_gdf
 
@@ -108,16 +109,19 @@ def _get_ut_activity(filtered_gdf, source):
 
     return filtered_gdf
 
+
 def _get_nd_activity(filtered_gdf, source, config):
     """
     extract activity value from directory name
     """
 
     activity_name = config[ACTIVITY]
-    filtered_gdf[ACTIVITY] = np.where(~(filtered_gdf['LEASE'].str.contains( 'none')), activity_name, filtered_gdf['LEASE'])
-    filtered_gdf[ACTIVITY] = np.where(filtered_gdf['LEASE'].str.contains( 'none'), '', filtered_gdf['LEASE'])
+    filtered_gdf[ACTIVITY] = np.where(~(filtered_gdf['LEASE'].str.contains('none')), activity_name,
+                                      filtered_gdf['LEASE'])
+    filtered_gdf[ACTIVITY] = np.where(filtered_gdf['LEASE'].str.contains('none'), '', filtered_gdf['LEASE'])
 
     return filtered_gdf
+
 
 def _filter_and_clean_shapefile(gdf, config, source, label, code, alias,
                                 cleaned_data_directory):

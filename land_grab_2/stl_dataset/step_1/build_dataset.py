@@ -4,13 +4,11 @@ import typer
 
 from land_grab_2.stl_dataset.step_1.constants import (STATE)
 from land_grab_2.stl_dataset.step_1.dataset_extraction import extract_and_clean_single_source_helper
-from land_grab_2.stl_dataset.step_1.dataset_merge import merge_single_state_helper, merge_all_states_helper, \
-    merge_cessions_data_helper
-from land_grab_2.stl_dataset.step_4.dataset_summary_stats import calculate_summary_statistics_helper
+from land_grab_2.stl_dataset.step_1.dataset_merge import merge_single_state_helper, merge_all_states_helper
 from land_grab_2.stl_dataset.step_1.state_trust_config import STATE_TRUST_CONFIGS
+from land_grab_2.stl_dataset.step_4.dataset_summary_stats import calculate_summary_statistics_helper
 from land_grab_2.utilities.utils import _queried_data_directory, \
-    _cleaned_data_directory, _merged_data_directory, _cessions_data_directory, \
-    _summary_statistics_data_directory
+    _cleaned_data_directory, _merged_data_directory, _summary_statistics_data_directory
 
 app = typer.Typer()
 
@@ -36,8 +34,6 @@ def extract_and_clean_all():
     '''
     st = datetime.now()
     for state in STATE_TRUST_CONFIGS.keys():
-        if 'OK' not in state:
-            continue
         extract_and_clean_single_source(state)
     print(f'extract_and_clean_all took: {datetime.now() - st}')
 
@@ -65,11 +61,6 @@ def merge_all_states():
 
 
 @app.command()
-def merge_cessions_data():
-    merge_cessions_data_helper(_cessions_data_directory())
-
-
-@app.command()
 def calculate_summary_statistics():
     '''
     Calculate summary statistics based on the full dataset. Create two csvs. In the first,
@@ -89,7 +80,6 @@ def build_full_dataset():
     '''
     extract_and_clean_all()
     merge_all_states()
-    # calculate_summary_statistics()
 
 
 def run():

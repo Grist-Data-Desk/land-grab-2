@@ -1,16 +1,15 @@
 import itertools
 import os
-from collections import defaultdict
 from pathlib import Path
 
 import geopandas
 import geopandas as gpd
 import pandas as pd
 
-from land_grab_2.stl_dataset.step_1.constants import ALL_STATES, RIGHTS_TYPE, ACTIVITY, FINAL_DATASET_COLUMNS, \
+from land_grab_2.stl_dataset.step_1.constants import ALL_STATES, ACTIVITY, FINAL_DATASET_COLUMNS, \
     GIS_ACRES, \
     ALBERS_EQUAL_AREA, ACRES_TO_SQUARE_METERS, ACRES, OBJECT_ID, TRUST_NAME
-from land_grab_2.utilities.overlap import combine_dfs, fix_geometries, geometric_deduplication, tree_based_proximity
+from land_grab_2.utilities.overlap import combine_dfs, fix_geometries
 from land_grab_2.utilities.utils import state_specific_directory, combine_delim_list
 
 os.environ['RESTAPI_USE_ARCPY'] = 'FALSE'
@@ -21,19 +20,6 @@ def _get_merged_dataset_filename(state=None, file_extension='.geojson'):
         return state.lower() + file_extension
     else:
         return ALL_STATES + file_extension
-
-
-def take_first_val(column, row):
-    """
-    Correctly merge a column, aggregating values and removing duplicated values
-    """
-    # get all rights type values from datasets
-    group = row.filter(like=column).dropna()
-    if group.any():
-        single_val = next((g for g in group if g is not None), None)
-        return single_val
-    else:
-        return None
 
 
 def _merge_dataframes(df_list):
@@ -51,21 +37,6 @@ def _merge_dataframes(df_list):
     merged = df_list[0] if len(df_list) == 1 else combine_dfs(df_list)
     merged = geopandas.GeoDataFrame(merged, geometry=merged.geometry, crs=merged.crs)
     return merged
-
-
-def _merge_row_helper(row, column):
-    """
-    Correctly merge a column, aggregating values and removing duplicated values
-    """
-    # get all rights type values from datasets
-    values = row.filter(like=column).dropna()
-    if values.any():
-        uniq_vals = list(itertools.chain.from_iterable([v.split('+') for v in list(set(values.tolist()))]))
-        uniq_vals = sorted([v.strip() for v in uniq_vals])
-        values = pd.unique(uniq_vals)
-        return '+'.join(values)
-    else:
-        return None
 
 
 def capture_matches(gdf, matches):
@@ -87,19 +58,27 @@ def capture_matches(gdf, matches):
     return gdf, contained_dups
 
 
+def condense_activities(row):
+    for col in row.keys().tolist():
+        if ACTIVITY in col:
+            row[ACTIVITY] = combine_delim_list('', ','.join(row[ACTIVITY]), sep=',')
+        elif 'index' in col:
+            continue
+        else:
+            if isinstance(row[col], list):
+                row[col] = None if not row[col] else row[col][0]
+    return row
+
+
 def dedup_single(gdf):
-    # gdf_grouped = gdf.groupby(['geometry', RIGHTS_TYPE, TRUST_NAME], as_index=False)
     all_trusts = set(gdf[TRUST_NAME].tolist())
     deduped_groups = []
     for trust in all_trusts:
         gdf_group = gdf[gdf[TRUST_NAME] == trust].reset_index()
-        gdf_group = gdf_group.groupby(['geometry'], as_index=False).agg(list).apply(uniq, axis=1)
-        gdf_group = gpd.GeoDataFrame(gdf_group, geometry=gdf_group['geometry'], crs=gdf.crs).reset_index()
-        # gdf_group = gpd.GeoDataFrame(group, geometry=group['geometry'], crs=gdf.crs).reset_index()
-        has_dups = True
-        while has_dups:
-            matches = tree_based_proximity(gdf_group.to_dict(orient='records'), gdf_group, gdf.crs)
-            gdf_group, has_dups = capture_matches(gdf_group, matches)
+        gdf_group = (gdf_group.groupby(['geometry'], as_index=False)
+                     .agg(list)
+                     .apply(condense_activities, axis=1))
+        gdf_group = gpd.GeoDataFrame(gdf_group, geometry=gdf_group['geometry'], crs=gdf.crs)
         deduped_groups.append(gdf_group)
 
     gdf = _merge_dataframes(deduped_groups).reset_index()
@@ -167,24 +146,11 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
     return gdf
 
 
-def uniq(row):
-    for col in row.keys():
-        if isinstance(row[col], list):
-            if len(row[col]) == 0:
-                # row[col] = None
-                pass
-            else:
-                row[col] = row[col][0]
-    return row
-
-
 def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
     state_datasets_to_merge = []
 
     # grab data from each state directory
     for state in os.listdir(cleaned_data_directory):
-        if 'UT' not in state:
-            continue
         print(state)
         state_cleaned_data_directory = state_specific_directory(cleaned_data_directory, state)
         if not Path(state_cleaned_data_directory).is_dir():
@@ -211,18 +177,3 @@ def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
     merged.to_csv(merged_data_directory + _get_merged_dataset_filename(file_extension='.csv'))
 
     return merged
-
-
-def merge_cessions_data_helper(cessions_directory):
-    # layer = restapi.MapServiceLayer(
-    #     'https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_TribalCessionLands_01/MapServer/0'
-    # )
-
-    # # then filter by specific attributes
-    # features = layer.query(outSR=4326, f='geojson', exceed_limit=True)
-    # print(f'Found {len(features)} features.')
-    # # save json file, may save as json depending on the esri api version, needs 10.3 to save as geojson
-    # features.dump(cessions_directory + 'data.json',
-    #               indent=2)  # indent allows for pretty view
-    gpd.read_file(cessions_directory + 'data.json')
-    breakpoint()
