@@ -130,10 +130,9 @@ STATE_TRUST_CONFIGS = {
             928: 'Dept. of Fish and Game, University of Idaho',
             933: '933: Dept. of Parks and Recreation, School of Science (Scientific School)',
             907: '27.00% Charitable Institute, 65.00% Public School (Indemnity, Schools, Common Schools), 8.00% University of Idaho'
-
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
-            'L_ACRES': ACRES,
+            'GISACRES': ACRES,
         },
     },
     'ID-subsurface': {
@@ -159,10 +158,9 @@ STATE_TRUST_CONFIGS = {
             928: '928: Dept. of Fish and Game, University of Idaho',
             933: '933: Dept. of Parks and Recreation, School of Science (Scientific School)',
             907: '907: 27.00% Charitable Institute, 65.00% Public School (Indemnity, Schools, Common Schools), 8.00% University of Idaho'
-
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
-            'L_ACRES': ACRES,
+            'GISACRES': ACRES,
         },
     },
     'MN-surface': {
@@ -329,7 +327,7 @@ STATE_TRUST_CONFIGS = {
         STATE_ENABLING_ACT: '25 Stat. 676-684, esp. 679-81 (1889)',
         DATA_SOURCE:
             'https://ndgishub.nd.gov/arcgis/rest/services/All_GovtLands_State/MapServer/2',
-        ACTIVITY: 'Oil and Gas',
+        ACTIVITY: 'Oil and Gas Lease',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['TRUST'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "'N'": 'North Dakota State University'

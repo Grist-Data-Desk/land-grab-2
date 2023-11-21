@@ -37,15 +37,19 @@ AZ_KEY = {
     '3': 'Commercial Lease',
     '5': 'Grazing Lease',
     '8': 'Prospecting Permit',
+    '11': 'Mineral Permit',
     '66': 'US Govt Exclusive Use',
     '89': 'Institutional Use',
+    '13': 'Oil and Gas Permit',
     '0.0': 'Unleased Parcels',
     '1.0': 'Agriculture',
     '3.0': 'Commercial Lease',
     '5.0': 'Grazing Lease',
     '8.0': 'Prospecting Permit',
+    '11.0': 'Mineral Permit',
     '66.0': 'US Govt Exclusive Use',
     '89.0': 'Institutional Use',
+    '13.0': 'Oil and Gas Permit',
 }
 
 MT_KEY = {
@@ -64,6 +68,35 @@ MT_KEY = {
     'FAGLCB': 'Forest Grazing & Ag Competitive Bid',
 }
 
+WA_KEY = {
+    '10': 'Grazing Lease',
+    '11': 'Permit Range',
+    '12': 'Agricultural Lease',
+    '32': 'Upland Material Purchase',
+    '39': 'Commercial Lease',
+    '50': 'Easement/Permit Granted by DNR',
+    '52': 'Communications Site Lease',
+    '55': 'Easement/Permit Acquired by DNR',
+    '59': 'Recreation Sites',
+    '60': 'Special Use Permits and Land Use Licenses',
+    '64': 'Mining Contract',
+    '65': 'Mineral Lease',
+    '78': 'Water Rights',
+    'T3': 'Land Trespass',
+}
+
+WI_KEY = {
+    '1111': 'Open to public access',
+    '1211': 'Open to passive use, hunting, trapping',
+    '1121': 'Open to passive use, fishing, trapping',
+    '1112': 'Open to passive use, hunting, fishing',
+    '1122': 'Open to passive use and fishing',
+    '1222': 'Open to passive use only',
+    '2111': 'Open to hunting, fishing, trapping',
+    '2211': 'Open to hunting and trapping',
+    '2122': 'Open to fishing only',
+    '2212': 'Open to hunting only',
+}
 
 def get_activity_column(activity, state):
     # which col in the rewrite rules is the one that becomes activity
