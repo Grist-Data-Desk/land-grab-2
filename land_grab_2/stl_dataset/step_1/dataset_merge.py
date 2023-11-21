@@ -88,13 +88,21 @@ def capture_matches(gdf, matches):
 
 
 def dedup_single(gdf):
-    gdf = gdf.groupby(['geometry', RIGHTS_TYPE, TRUST_NAME], as_index=False).agg(list).reset_index().apply(uniq, axis=1)
-    gdf = gpd.GeoDataFrame(gdf, geometry=gdf['geometry'], crs=ALBERS_EQUAL_AREA)
+    # gdf_grouped = gdf.groupby(['geometry', RIGHTS_TYPE, TRUST_NAME], as_index=False)
+    all_trusts = set(gdf[TRUST_NAME].tolist())
+    deduped_groups = []
+    for trust in all_trusts:
+        gdf_group = gdf[gdf[TRUST_NAME] == trust].reset_index()
+        gdf_group = gdf_group.groupby(['geometry'], as_index=False).agg(list).apply(uniq, axis=1)
+        gdf_group = gpd.GeoDataFrame(gdf_group, geometry=gdf_group['geometry'], crs=gdf.crs).reset_index()
+        # gdf_group = gpd.GeoDataFrame(group, geometry=group['geometry'], crs=gdf.crs).reset_index()
+        has_dups = True
+        while has_dups:
+            matches = tree_based_proximity(gdf_group.to_dict(orient='records'), gdf_group, gdf.crs)
+            gdf_group, has_dups = capture_matches(gdf_group, matches)
+        deduped_groups.append(gdf_group)
 
-    has_dups = True
-    while has_dups:
-        matches = tree_based_proximity(gdf.to_dict(orient='records'), gdf, gdf.crs)
-        gdf, has_dups = capture_matches(gdf, matches)
+    gdf = _merge_dataframes(deduped_groups).reset_index()
 
     return gdf
 
@@ -126,8 +134,6 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
 
             if not gdf.empty:
                 gdf = fix_geometries(gdf)
-                # if gdf.shape[0] > 1:
-                #     gdf = dedup_single(gdf)
                 file_p = Path(file).resolve()
                 if 'subsurface' in file_p.name:
                     combined_rights_type_gdfs['subsurface'].append(gdf)
@@ -177,8 +183,8 @@ def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
 
     # grab data from each state directory
     for state in os.listdir(cleaned_data_directory):
-        # if 'OK' not in state:
-        #     continue
+        if 'UT' not in state:
+            continue
         print(state)
         state_cleaned_data_directory = state_specific_directory(cleaned_data_directory, state)
         if not Path(state_cleaned_data_directory).is_dir():
