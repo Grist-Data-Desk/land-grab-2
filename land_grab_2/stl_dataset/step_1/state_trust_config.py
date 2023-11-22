@@ -378,7 +378,7 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             '04': '04: New Mexico State University',
             '28': '28: New Mexico State University',
-            '42': '42: New Mexico State University',
+            # '42': '42: New Mexico State University',
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'Acres_Surf': ACRES,
@@ -405,7 +405,7 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             '04': '04: New Mexico State University',
             '28': '28: New Mexico State University',
-            '42': '42: New Mexico State University',
+            # '42': '42: New Mexico State University',
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'Acres_SubS': ACRES,
