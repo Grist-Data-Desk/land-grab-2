@@ -1,5 +1,6 @@
 import itertools
 import os
+from collections import Counter, defaultdict
 from pathlib import Path
 
 import geopandas
@@ -8,9 +9,11 @@ import pandas as pd
 
 from land_grab_2.stl_dataset.step_1.constants import ALL_STATES, ACTIVITY, FINAL_DATASET_COLUMNS, \
     GIS_ACRES, \
-    ALBERS_EQUAL_AREA, ACRES_TO_SQUARE_METERS, ACRES, OBJECT_ID, TRUST_NAME
+    ALBERS_EQUAL_AREA, ACRES_TO_SQUARE_METERS, ACRES, OBJECT_ID, TRUST_NAME, ATTRIBUTE_LABEL_TO_FILTER_BY, \
+    ATTRIBUTE_CODE_TO_ALIAS_MAP
+from land_grab_2.stl_dataset.step_1.state_trust_config import STATE_TRUST_CONFIGS
 from land_grab_2.utilities.overlap import combine_dfs, fix_geometries
-from land_grab_2.utilities.utils import state_specific_directory, combine_delim_list
+from land_grab_2.utilities.utils import state_specific_directory, combine_delim_list, _get_filename
 
 os.environ['RESTAPI_USE_ARCPY'] = 'FALSE'
 
@@ -61,7 +64,7 @@ def capture_matches(gdf, matches):
 def condense_activities(row):
     for col in row.keys().tolist():
         if ACTIVITY in col:
-            current_activities = [a for a in row[ACTIVITY] if isinstance(a,str)]
+            current_activities = [a for a in row[ACTIVITY] if isinstance(a, str)]
             row[ACTIVITY] = combine_delim_list(','.join(current_activities), '', sep=',')
         elif 'index' in col:
             continue
@@ -107,9 +110,23 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
     if not os.path.exists(merged_data_directory):
         os.makedirs(merged_data_directory)
 
-    # gdfs = []
-    combined_rights_type_gdfs = {'surface': [], 'subsurface': [], 'other': []}
+    combine_data = defaultdict(list)
+    state_sources = [source for source in STATE_TRUST_CONFIGS.keys() if state in source]
+    for source in state_sources:
+        config = STATE_TRUST_CONFIGS[source]
+        for label in config[ATTRIBUTE_LABEL_TO_FILTER_BY]:
+            for code, alias in config[ATTRIBUTE_CODE_TO_ALIAS_MAP].items():
+                if 'COMBINE_KEY' in config:
+                    clean_file = cleaned_data_directory + _get_filename(source, label, alias, '.geojson')
+                    combine_data[config['COMBINE_KEY']].append(clean_file)
 
+    pre_merged = list(itertools.chain.from_iterable([
+        dedup_group([gpd.read_file(f) for f in files])
+        for files in combine_data.values()
+    ]))
+
+    pre_combined_data_refs = [Path(f).name for files in combine_data.values() for f in files]
+    combined_rights_type_gdfs = {'surface': [], 'subsurface': [], 'other': []}
     # find all cleaned datasets for the state
     for file in os.listdir(cleaned_data_directory):
         if file.endswith('.geojson'):
@@ -119,6 +136,10 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
 
             if not gdf.empty:
                 gdf = fix_geometries(gdf)
+
+                if file in pre_combined_data_refs:
+                    continue
+
                 file_p = Path(file).resolve()
                 if 'subsurface' in file_p.name:
                     combined_rights_type_gdfs['subsurface'].append(gdf)
@@ -127,9 +148,11 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
                 else:
                     combined_rights_type_gdfs['surface'].append(gdf)
 
-                # gdfs.append(gdf)
+    gdfs = pre_merged + list(itertools.chain.from_iterable([
+        dedup_group(g)
+        for g in combined_rights_type_gdfs.values()
+    ]))
 
-    gdfs = list(itertools.chain.from_iterable([dedup_group(g) for g in combined_rights_type_gdfs.values()]))
     if not gdfs:
         return None
 
