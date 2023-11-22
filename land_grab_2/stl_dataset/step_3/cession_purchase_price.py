@@ -1,8 +1,10 @@
+import itertools
 import logging
 import os
 from pathlib import Path
 
 import geopandas
+import numpy as np
 import pandas as pd
 
 from land_grab_2.stl_dataset.step_1.constants import GIS_ACRES
@@ -23,7 +25,11 @@ def add_price_columns(stl_data, price_data):
         for c in cession_price_columns:
             row[c] = ''
 
-        cession_nums = [] if 'all_cession_numbers' not in row.keys() else row['all_cession_numbers'].split(',')
+        cession_nums = ([]
+                        if ('all_cession_numbers' not in row.keys() or
+                            (not isinstance(row['all_cession_numbers'], str) and np.isnan(row['all_cession_numbers'])))
+                        else row['all_cession_numbers'].split(','))
+        cession_nums = list(itertools.chain.from_iterable([c if ' ' not in c else c.split(' ') for c in cession_nums]))
         cession_prices = {}
         for i, cession in enumerate(cession_nums, start=1):
             cession_price_rows = price_data[price_data['Cession_Number'] == cession].to_dict(orient='records')
@@ -62,9 +68,10 @@ def add_price_columns(stl_data, price_data):
 
     df = pd.DataFrame(out_rows)
     df = df[new_col_seq]
-    gdf = geopandas.GeoDataFrame(df, geometry=df.geometry, crs=stl_data.crs)
-
-    return gdf
+    return df
+    # gdf = geopandas.GeoDataFrame(df, geometry=df.geometry, crs=stl_data.crs)
+    #
+    # return gdf
 
 
 def main(stl_path: Path, cession_price_data: Path, the_out_dir: Path):
@@ -72,7 +79,7 @@ def main(stl_path: Path, cession_price_data: Path, the_out_dir: Path):
         the_out_dir.mkdir(parents=True, exist_ok=True)
 
     log.info(f'reading {stl_path}')
-    stl_data = geopandas.read_file(str(stl_path))
+    stl_data = pd.read_csv(str(stl_path))
 
     log.info(f'reading {cession_price_data}')
     price_data = geopandas.read_file(str(cession_price_data))
@@ -81,8 +88,8 @@ def main(stl_path: Path, cession_price_data: Path, the_out_dir: Path):
 
     log.info(f'final grist_data row_count: {stl_w_price.shape[0]}')
     stl_w_price.to_csv(str(the_out_dir / 'stl_dataset_extra_activities_plus_cessions_plus_prices.csv'), index=False)
-    stl_w_price.to_file(str(the_out_dir / 'stl_dataset_extra_activities_plus_cessions_plus_prices.geojson'),
-                        driver='GeoJSON')
+    # stl_w_price.to_file(str(the_out_dir / 'stl_dataset_extra_activities_plus_cessions_plus_prices.geojson'),
+    #                     driver='GeoJSON')
     log.info(f'original grist_data row_count: {stl_data.shape[0]}')
 
 
