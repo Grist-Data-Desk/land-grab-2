@@ -262,7 +262,7 @@ def calculate_summary_statistics_helper(summary_statistics_data_directory, merge
     '''
 
     data_tld = Path(os.environ.get('DATA')).resolve()
-    input_file = data_tld / 'data/stl_dataset/step_3/output/stl_dataset_extra_activities_plus_prices.csv'
+    input_file = data_tld / 'data/stl_dataset/step_3/output/stl_dataset_extra_activities_plus_cessions_plus_prices.csv'
     output_dir = data_tld / 'data/stl_dataset/step_4/output'
     df_0 = gpd.read_file(input_file)
 
