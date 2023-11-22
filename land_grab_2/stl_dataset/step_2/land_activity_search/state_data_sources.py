@@ -202,18 +202,19 @@ REWRITE_RULES = {
     "wy": {
         "Metallic and nonmetallic mineral lease": {
             "LeaseStatusLabel": "Lease Status",
-            "MineralTypeLabel": "Activity",
-            'oslisde._8': 'Activity',
+            # "MineralTypeLabel": "Activity",
+            # 'oslisde._8': 'Activity',
+            'oslisde.OSLISDE.FC_MetallicNonMetallic.MetallicNonMetallicLeaseSubType': 'Activity',
             "MetallicNonMetallicLeaseSubType": "Sub-activity",
             "CompanyName": "Lessee or Owner or Manager",
             "CompanyZipCode": "Owner Address or Location",
             "LeaseIssueDate": "Lease Start Date",
             "LeaseExpirationDate": "Lease End Date"
         },
-        "Oil and gas leases": {
+        "Oil and gas lease": {
             "LeaseStatusLabel": "Lease Status",
-            "MineralTypeLabel": "Activity",
-            'oslisde.88': "Activity",
+            # "MineralTypeLabel": "Activity",
+            # 'oslisde.88': "Activity",
             "CompanyName": "Lessee or Owner or Manager",
             "CompanyZipCode": "Owner Address or Location",
             "LeaseIssueDate": "Lease Start Date",
@@ -406,8 +407,8 @@ REWRITE_RULES = {
         "misc": {
             "PROP_NAME": "Activity"
         },
-        "conservation easement": {
-            "PROGRAM_NAME": "Activity"
+        "Conservation Easement": {
+            "PROGRAM_NA": "Activity"
         }
     },
     "sd": {
@@ -850,11 +851,10 @@ STATE_ACTIVITIES = {
                                 is_restricted_activity=True,
                                 use_name_as_activity=False),
         StateActivityDataSource(name='Conservation Easement',
-                                location='https://dnrmaps.wi.gov/arcgis/rest/services/LF_DML/LF_NRCS_EASEMENT_WTM_Ext/MapServer/0/query',
-                                keep_cols=['PROGRAM_NAME'],
-                                # Name plus 'PROGRAM_NAME' field
-                                activity_name_appendage_col='PROGRAM_NAME',
-                                use_name_as_activity=False),
+                                location='Wisconsin_All/Conservation_Easement.shp',
+                                keep_cols=['PROGRAM_NA'],
+                                activity_name_appendage_col='PROGRAM_NA',
+                                use_name_as_activity=True),
         StateActivityDataSource(name='DNR Easement',
                                 location='Wisconsin_All/DNR_Easement.shp',
                                 keep_cols=['EASE_USE_C'],
@@ -868,20 +868,21 @@ STATE_ACTIVITIES = {
     ]),
     'WY': StateForActivity(name='wyoming', activities=[
         StateActivityDataSource(name='Metallic and nonmetallic mineral lease',
-                                location='Wyoming_All/MetallicNonMetallic.shp',
+                                location='https://gis2.statelands.wyo.gov/arcgis/rest/services/Services/MapViewerService2/MapServer/14/query',
                                 keep_cols=['MetallicNonMetallicLeaseSubType',
                                            'LeaseIssueDate',
+                                           'oslisde.OSLISDE.FC_MetallicNonMetallic.MetallicNonMetallicLeaseSubType',
                                            'LeaseExpirationDate', 'CompanyName', 'LeaseStatusLabel', 'CompanyZipCode',
                                            'MineralTypeLabel'],
                                 is_restricted_subsurface_activity=True,
                                 use_name_as_activity=False),
-        StateActivityDataSource(name='Oil and gas leases',
-                                location='Wyoming_All/OilandGas.shp',
+        StateActivityDataSource(name='Oil and gas lease',
+                                location='https://gis2.statelands.wyo.gov/arcgis/rest/services/Services/MapViewerService2/MapServer/12/query',
                                 keep_cols=['LeaseIssueDate',
                                            'LeaseExpirationDate', 'CompanyName', 'LeaseStatusLabel', 'CompanyZipCode',
                                            'MineralTypeLabel'],
                                 is_restricted_subsurface_activity=True,
-                                use_name_as_activity=False),
+                                use_name_as_activity=True),
         StateActivityDataSource(name='Easements',
                                 location='Wyoming_All/Easements.shp',
                                 keep_cols=['oslisde.20', 'Leaseholder_LU', 'Issue_Date_LU', 'Expiration_Date_LU',
