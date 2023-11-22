@@ -417,7 +417,7 @@ STATE_TRUST_CONFIGS = {
             'Aliquot': ALIQUOT,
         },
     },
-    'OK-subsurface-unleased-mineral-lands': {
+    'OK-subsurface-unleased-minerals': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
         STATE: 'OK',
         UNIVERSITY: 'Oklahoma State University',
@@ -461,16 +461,15 @@ STATE_TRUST_CONFIGS = {
             'QuarterDescription': ALIQUOT,
         },
     },
-    'OK-subsurface-mineral-subdivs': {
+    'OK-subsurface-minerals': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
         STATE: 'OK',
         UNIVERSITY: 'Oklahoma State University',
         MANAGING_AGENCY: 'Commissioners of the Land Office',
-        # RIGHTS_TYPE: 'Mineral Subdivisions',
         RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
         STATE_ENABLING_ACT: '34. Stat. 267-286 , esp. 272, 274-75 (1906)',
-        DATA_SOURCE:
-            'https://gis.clo.ok.gov/arcgis/rest/services/Public/OKLeaseData_ExternalProd/MapServer/3',
+        DATA_SOURCE: 'https://gis.clo.ok.gov/arcgis/rest/services/Public/OKLeaseData_ExternalProd/MapServer/3',
+        'COMBINE_KEY':'OK-subsurface-minerals',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['*'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "*": 'Oklahoma State University'
@@ -483,36 +482,16 @@ STATE_TRUST_CONFIGS = {
             'QuarterDescription': ALIQUOT,
         },
     },
-    'OK-surface': {
-        DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
-        STATE: 'OK',
-        UNIVERSITY: 'Oklahoma State University',
-        MANAGING_AGENCY: 'Commissioners of the Land Office',
-        RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
-        STATE_ENABLING_ACT: '34. Stat. 267-286 , esp. 272, 274-75 (1906)',
-        DATA_SOURCE:
-            'https://gis.clo.ok.gov/arcgis/rest/services/Public/OKLeaseData_ExternalProd/MapServer/2',
-        ATTRIBUTE_LABEL_TO_FILTER_BY: ['*'],
-        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-            "*": 'Oklahoma State University'
-        },
-        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
-            'TotalAllAcreage': ACRES,
-            'CountyName': COUNTY,
-            'Section': SECTION,
-            'Meridian': MERIDIAN,
-            'QuarterDescription': ALIQUOT,
-        },
-    },
-    'OK-subsurface': {
+
+    'OK-subsurface-mineral-lease': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
         STATE: 'OK',
         UNIVERSITY: 'Oklahoma State University',
         MANAGING_AGENCY: 'Commissioners of the Land Office',
         RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
         STATE_ENABLING_ACT: '34. Stat. 267-286 , esp. 272, 274-75 (1906)',
-        DATA_SOURCE:
-            'https://gis.clo.ok.gov/arcgis/rest/services/Public/OKLeaseData_ExternalProd/MapServer/1',
+        DATA_SOURCE: 'https://gis.clo.ok.gov/arcgis/rest/services/Public/OKLeaseData_ExternalProd/MapServer/1',
+        'COMBINE_KEY': 'OK-subsurface-minerals',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['TrustName'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "'Oklahoma State University'": 'Oklahoma State University'

@@ -1,5 +1,4 @@
 import os
-from collections import Counter
 from pathlib import Path
 
 import geopandas as gpd
@@ -8,9 +7,10 @@ import pandas as pd
 
 from land_grab_2.stl_dataset.step_1.constants import ALBERS_EQUAL_AREA, EXISTING_COLUMN_TO_FINAL_COLUMN_MAP, \
     FINAL_DATASET_COLUMNS, \
-    TRUST_NAME, TOWNSHIP, RANGE, SECTION, MERIDIAN, COUNTY, ALIQUOT, RIGHTS_TYPE, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE, \
-    OK_HOLDING_DETAIL_ID, ACTIVITY, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_2, OK_TRUST_FUND_ID, LOCAL_DATA_SOURCE, \
-    NET_ACRES, GIS_ACRES
+    TRUST_NAME, TOWNSHIP, RANGE, SECTION, MERIDIAN, ALIQUOT, RIGHTS_TYPE, \
+    OK_HOLDING_DETAIL_ID, ACTIVITY, NET_ACRES, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SUB, \
+    OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SURF_1, \
+    OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SURF_2, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SURF_3
 from land_grab_2.utilities.utils import _get_filename
 
 os.environ['RESTAPI_USE_ARCPY'] = 'FALSE'
@@ -27,7 +27,7 @@ def _get_net_acres(gdf, source, config, alias):
 
     net_acres_info = net_acres_info[0]
     percentage = net_acres_info['Percentage']
-    gdf[NET_ACRES] = gdf['GISACRES'] * (percentage/100)
+    gdf[NET_ACRES] = gdf['GISACRES'] * (percentage / 100)
 
     return gdf
 
@@ -43,31 +43,26 @@ def _clean_queried_data(source, config, label, alias, queried_data_directory,
 
     if gdf.empty:
         return gdf
-
-    # custom cleaning
-    if source == 'OK-surface':
-        gdf = _filter_queried_oklahoma_data(gdf)
-        gdf = _get_ok_surface_town_range(gdf)
-    elif source == 'OK-subsurface-unleased-mineral-lands':
-        gdf = _filter_queried_oklahoma_data_unleased_min_lands(gdf)
-        gdf = _get_ok_surface_town_range(gdf)
     elif source == 'OK-real-estate-subdivs':
-        gdf = _filter_queried_oklahoma_data_unleased_min_lands(gdf)
+        gdf = _filter_queried_oklahoma_data_surface(gdf)
         gdf = _get_ok_surface_town_range(gdf)
-    elif source == 'OK-subsurface-mineral-subdivs':
-        gdf = _filter_queried_oklahoma_data_unleased_min_lands(gdf)
+    elif source == 'OK-subsurface-mineral-lease':
+        gdf = _get_ok_activity(gdf, source)
+        df = gdf.groupby(['geometry']).first().reset_index()
+        gdf = gpd.GeoDataFrame(df, geometry=df.geometry, crs=gdf.crs)
+    elif source == 'OK-subsurface-minerals':
+        gdf = _filter_queried_oklahoma_data_subsurface(gdf, activity_source=source)
+        gdf = _get_ok_surface_town_range(gdf)
+    elif source == 'OK-subsurface-unleased-minerals':
+        gdf = _filter_queried_oklahoma_data_subsurface(gdf, activity_source=source)
         gdf = _get_ok_surface_town_range(gdf)
     elif 'AZ' in source:
         gdf = _get_az_town_range_section(gdf)
     elif 'MT' in source:
         gdf = _get_mt_town_range_section(gdf)
-        # gdf = _get_mt_activity(gdf, source)
-    elif source == 'OK-subsurface':
-        gdf = _get_ok_subsurface_town_range(gdf)
     elif 'OR' in source:
         gdf = _get_or_town_range_section(gdf)
     elif 'UT' in source:
-        # gdf = _get_ut_town_range_section_county(gdf)
         gdf = _get_ut_activity(gdf, source)
     elif 'ND' in source:
         gdf = _get_nd_activity(gdf, source, config)
@@ -83,16 +78,17 @@ def _clean_queried_data(source, config, label, alias, queried_data_directory,
     return gdf
 
 
-def _get_mt_activity(filtered_gdf, source):
+def _get_ok_activity(filtered_gdf, source):
     """
     extract activity value from directory name
     """
-    surface = 'MT-surface-'
-    subsurface = 'MT-subsurface-'
+    surface = 'OK-surface-'
+    subsurface = 'OK-subsurface-'
     prefix = (surface in source and surface) or (subsurface in source and subsurface)
     if not prefix:
         return filtered_gdf
 
+    source = Path(source).resolve().stem
     activity_name = source[len(prefix):].replace('-', ' ').replace('and', '&')
     if not activity_name:
         return filtered_gdf
@@ -360,27 +356,8 @@ def _get_sd_rights_type(gdf):
     return gdf
 
 
-def _filter_queried_oklahoma_data_unleased_min_lands(gdf):
-    filter_df = pd.read_csv(OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE)
-    filter_df_2 = _create_oklahoma_trust_fund_filter()
-
-    gdf[OK_HOLDING_DETAIL_ID] = gdf[OK_HOLDING_DETAIL_ID].str.replace('}', '')
-    gdf[OK_HOLDING_DETAIL_ID] = gdf[OK_HOLDING_DETAIL_ID].str.replace('{', '')
-    gdf[OK_HOLDING_DETAIL_ID] = gdf[OK_HOLDING_DETAIL_ID].astype(str)
-
-    # filter dataframe by specific ids
-    gdf = gdf[gdf[OK_HOLDING_DETAIL_ID].isin(filter_df[OK_HOLDING_DETAIL_ID])]
-    gdf_2 = gdf[gdf[OK_HOLDING_DETAIL_ID].isin(filter_df_2[OK_HOLDING_DETAIL_ID])]
-
-    # merge on ids
-    gdf = gdf.merge(filter_df[[OK_HOLDING_DETAIL_ID, 'LeaseType']], how='left', on=OK_HOLDING_DETAIL_ID)
-    gdf[ACTIVITY] = gdf['LeaseType']
-    return gdf
-
-
-def _filter_queried_oklahoma_data(gdf):
-    filter_df = _create_oklahoma_trust_fund_filter()
-    filter_df_2 = pd.read_csv(OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE)
+def _filter_queried_oklahoma_data(gdf, data_source, activity_source=None):
+    filter_df = pd.read_csv(data_source)
 
     # change id from dictionary to string
     gdf[OK_HOLDING_DETAIL_ID] = gdf[OK_HOLDING_DETAIL_ID].str.replace('}', '')
@@ -389,19 +366,38 @@ def _filter_queried_oklahoma_data(gdf):
 
     # filter dataframe by specific ids
     gdf = gdf[gdf[OK_HOLDING_DETAIL_ID].isin(filter_df[OK_HOLDING_DETAIL_ID])]
-    gdf_2 = gdf[gdf[OK_HOLDING_DETAIL_ID].isin(filter_df_2[OK_HOLDING_DETAIL_ID])]
 
-    # merge on ids
-    gdf = gdf.merge(filter_df, on=OK_HOLDING_DETAIL_ID, how='left')
-    return gdf
+    df = gdf.merge(filter_df, on=OK_HOLDING_DETAIL_ID, how='left')
+    ex, why = '_x', '_y'
+    df.drop([c for c in df.columns if c.endswith(why)], inplace=True, axis=1)
+    df.rename(columns={c: c.rstrip(ex) for c in df.columns if c.endswith(ex)}, inplace=True)
+    df.drop_duplicates([OK_HOLDING_DETAIL_ID], inplace=True, ignore_index=True)
+
+    df = _get_ok_activity(df, activity_source or data_source)
+
+    gdf_out = gpd.GeoDataFrame(df, geometry=df.geometry, crs=gdf.crs)
+
+    return gdf_out
 
 
-def _create_oklahoma_trust_fund_filter():
-    # get the custom Excel file
-    df = pd.read_excel(OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_2)
+def _filter_queried_oklahoma_data_surface(gdf):
+    # OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SUB
+    # OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_OSU
 
-    # clean and filter by the trust funds we care about, 5 for OSU
-    df = df[[OK_HOLDING_DETAIL_ID, OK_TRUST_FUND_ID]].copy()
-    df = df[df[OK_TRUST_FUND_ID].isin([5])]
-    df[OK_HOLDING_DETAIL_ID] = df[OK_HOLDING_DETAIL_ID].astype(str)
-    return df
+    # filter dataframe by specific ids
+    gdf1 = _filter_queried_oklahoma_data(gdf, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SURF_1)
+    gdf2 = _filter_queried_oklahoma_data(gdf, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SURF_2)
+    gdf3 = _filter_queried_oklahoma_data(gdf, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SURF_3)
+
+    df = pd.concat([gdf1, gdf2, gdf3])
+    gdf_out = gpd.GeoDataFrame(df, geometry=df.geometry, crs=gdf.crs)
+
+    return gdf_out
+
+
+def _filter_queried_oklahoma_data_subsurface(gdf, activity_source):
+    # filter dataframe by specific ids
+    gdf_out = _filter_queried_oklahoma_data(gdf,
+                                            OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SUB,
+                                            activity_source=activity_source)
+    return gdf_out

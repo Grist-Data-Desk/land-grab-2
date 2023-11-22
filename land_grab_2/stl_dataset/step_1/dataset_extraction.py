@@ -15,7 +15,6 @@ os.environ['RESTAPI_USE_ARCPY'] = 'FALSE'
 def extract_and_clean_single_source_helper(source: str, config: dict,
                                            queried_data_directory: str,
                                            cleaned_data_directory: str):
-
     # create the correct data directories
     if not os.path.exists(queried_data_directory):
         Path(queried_data_directory).mkdir(exist_ok=True, parents=True)
@@ -31,17 +30,11 @@ def extract_and_clean_single_source_helper(source: str, config: dict,
         for code, alias in config[ATTRIBUTE_CODE_TO_ALIAS_MAP].items():
             # if querying from rest api
             if config[DOWNLOAD_TYPE] == API_QUERY_DOWNLOAD_TYPE:
-                _query_arcgis_restapi(config, source, label, code, alias,
-                                      queried_data_directory)
-
-                _clean_queried_data(source, config, label, alias,
-                                    queried_data_directory, cleaned_data_directory)
-
+                _query_arcgis_restapi(config, source, label, code, alias, queried_data_directory)
+                _clean_queried_data(source, config, label, alias, queried_data_directory, cleaned_data_directory)
             # if cleaning a shapefile
             elif config[DOWNLOAD_TYPE] == SHAPEFILE_DOWNLOAD_TYPE:
-
-                _filter_and_clean_shapefile(gdf, config, source, label, code, alias,
-                                            cleaned_data_directory)
+                _filter_and_clean_shapefile(gdf, config, source, label, code, alias, cleaned_data_directory)
 
 
 def _query_arcgis_restapi(config, source, label, code, alias, directory, regen=False):
