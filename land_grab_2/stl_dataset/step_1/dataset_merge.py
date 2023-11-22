@@ -105,6 +105,12 @@ def dedup_group(group):
     return [gdf]
 
 
+def hydrate_cleaned(path):
+    gdf = gpd.read_file(path)
+    gdf[GIS_ACRES] = (gdf.to_crs(ALBERS_EQUAL_AREA).area / ACRES_TO_SQUARE_METERS).round(2)
+    return gdf
+
+
 def merge_single_state_helper(state: str, cleaned_data_directory,
                               merged_data_directory):
     if not os.path.exists(merged_data_directory):
@@ -121,7 +127,7 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
                     combine_data[config['COMBINE_KEY']].append(clean_file)
 
     pre_merged = list(itertools.chain.from_iterable([
-        dedup_group([gpd.read_file(f) for f in files])
+        dedup_group([hydrate_cleaned(f) for f in files])
         for files in combine_data.values()
     ]))
 
@@ -131,8 +137,7 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
     for file in os.listdir(cleaned_data_directory):
         if file.endswith('.geojson'):
             print(cleaned_data_directory + file)
-            gdf = gpd.read_file(cleaned_data_directory + file)
-            gdf[GIS_ACRES] = (gdf.to_crs(ALBERS_EQUAL_AREA).area / ACRES_TO_SQUARE_METERS).round(2)
+            gdf = hydrate_cleaned(cleaned_data_directory + file)
 
             if not gdf.empty:
                 gdf = fix_geometries(gdf)
