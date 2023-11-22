@@ -2,7 +2,7 @@ from land_grab_2.stl_dataset.step_2.land_activity_search.entities import StateFo
 
 REWRITE_RULES = {
     "id": {
-        "Water": {
+        "Water Rights": {
             "TypeGroup": "Rights-Type",
             "Status": "Lease Status",
             "WaterUse": "Sub-activity",
@@ -14,17 +14,17 @@ REWRITE_RULES = {
             "TypeGroup": "Transaction Type",
             "Status": "Lease Status",
             "EasementPu": "Activity",
-            "EasementPurpose": "Activity",
-            "Easement Purpose": "Activity",
+            # "EasementPurpose": "Activity",
+            # "Easement Purpose": "Activity",
             "Parties": "Lessee or Owner or Manager",
             "DteGranted": "Lease Start Date",
             "DteExpires": "Lease End Date"
         },
         "Timber": {
-            "Activity": "Sale_Status"
+            "Sale_Status": "Activity"
         },
         "Oil and gas": {
-            "Activity": "WellStatus"
+            "Status": "Activity"
         },
         "misc": {
             "TypeGroup": "Transaction Type",
@@ -54,7 +54,7 @@ REWRITE_RULES = {
             "Status_2": "Use Purpose"
         },
         "Peat": {
-            "T_LEASETYPE": "Activity",
+           # "T_LEASETYPE": "Activity",
             "T_PNAMES": "Lessee or Owner or Manager",
             "T_STARTDAT": "Lease Start Date",
             "T_EXPDATE": "Lease End Date"
@@ -77,14 +77,14 @@ REWRITE_RULES = {
             "UNIT_TYPE": "Activity",
             "ADMINISTRA": "Lessee or Owner or Manager"
         },
-        "Active Mineral Leases": {
+        "Active Mineral Lease": {
             "T_LEASETYP": "Commodity",
             "T_PNAMES": "Lessee or Owner or Manager",
             "T_STARTDAT": "Lease Start Date",
             "T_EXPDATE": "Lease End Date",
             "ML_SU_LAND": "LandClass"
         },
-        "Historic Mineral Leases": {
+        "Historic Mineral Lease": {
             "T_LEASETYP": "Commodity",
             "T_PNAMES": "Lessee or Owner or Manager",
             "T_STARTDAT": "Lease Start Date",
@@ -92,18 +92,18 @@ REWRITE_RULES = {
             "ML_SU_LAND": "LandClass"
         }
     },
-    "nd": {
-        "Minerals": {
-            "LEASE_STATUS": "Lease Status",
-            "LESSEE": "Lessee or Owner or Manager",
-            "LEASE_EFFECTIVE": "Lease Start Date",
-            "LEASE_EXPIRATION": "Lease End Date",
-            "LEASE_EXTENDED": "Lease Extension Date"
-        },
-        "Recreation": {
-            "UNIT_NAME": "Sub-activity"
-        }
-    },
+    # "nd": {
+    #     "Minerals": {
+    #         "LEASE_STATUS": "Lease Status",
+    #         "LESSEE": "Lessee or Owner or Manager",
+    #         "LEASE_EFFECTIVE": "Lease Start Date",
+    #         "LEASE_EXPIRATION": "Lease End Date",
+    #         "LEASE_EXTENDED": "Lease Extension Date"
+    #     },
+    #     "Recreation": {
+    #         "UNIT_NAME": "Sub-activity"
+    #     }
+    # },
     "ne": {
         "Water": {
             "RightStatu": "Lease Status",
@@ -138,13 +138,12 @@ REWRITE_RULES = {
         }
     },
     "tx": {
-        "renewables": {
-            "Type": "Activity",
-            "first_site": "Activity"
+        "Renewables": {
+            "sitedescri": "Activity",
         },
-        "minerals": {
-            "UnitTypeDescription": "Activity",
-            "unittypede": "Sub-Activity"
+        "Minerals": {
+            "UnitTypeDescription": "Sub-Activity",
+            "unittypede": "Activity"
         },
         "misc": {
             "LEASE_STAT": "Lease Status",
@@ -201,7 +200,7 @@ REWRITE_RULES = {
         }
     },
     "wy": {
-        "Metallic and Nonmetallic Mineral Leases": {
+        "Metallic and nonmetallic mineral lease": {
             "LeaseStatusLabel": "Lease Status",
             "MineralTypeLabel": "Activity",
             'oslisde._8': 'Activity',
@@ -230,15 +229,15 @@ REWRITE_RULES = {
             "Issue_Date_LU": "Lease Start Date",
             "Expiration_Date_LU": "Lease End Date"
         },
-        "Grazing Lease": {
+        "Grazing lease": {
             "Status_LU": "Lease Status",
             "Leaseholder_LU": "Lessee or Owner or Manager",
             "Start_Date_LU": "Lease Start Date",
             "Expiration_Date_LU": "Lease End Date"
         },
-        "Special Use Lease": {
+        "Special use lease": {
             "Status_LU": "Lease Status",
-            "Purpose_LU": "Activity",
+            "oslisde.19": "Activity",
             "Type_LU": "Sub-activity",
             "Leaseholder_LU": "Lessee or Owner or Manager",
             "Start_Date_LU": "Lease Start Date",
@@ -252,7 +251,7 @@ REWRITE_RULES = {
         }
     },
     "wa": {
-        "Metallic Minerals": {
+        "Metallic minerals": {
             "PRODUCTION": "Lease Status",
             "ORE_MINERA": "Sub-activity",
             "COMMODITIE": "Commodity"
@@ -270,7 +269,7 @@ REWRITE_RULES = {
             "COMMODITY_": "Commodity",
             "APPLICANT_": "Lessee or Owner or Manager"
         },
-        "Non-Metallic Minerals": {
+        "Non-metallic minerals": {
             "MINERAL": "Sub-activity"
         },
         "Current Leases": {
@@ -294,23 +293,23 @@ REWRITE_RULES = {
             "AllotName": "Sub-activity",
             "Manager": "Lessee or Owner or Manager"
         },
-        "Coal Lease": {
+        "Coal lease": {
             "AllotName": "Sub-activity",
             "Manager": "Lessee or Owner or Manager"
         },
-        "Development Lease": {
+        "Development lease": {
             "app_descr": "Activity",
         },
-        "Grazing Lease": {
+        "Grazing lease": {
             "app_descr": "Activity",
         },
-        "Other Minerals": {
+        "Other minerals": {
             "app_descr": "Activity",
         },
         "Renewables": {
             "app_descr": "Activity",
         },
-        "Special Use Leases": {
+        "Special use lease": {
             "app_descr": "Activity",
         },
         "Easements": {
@@ -331,7 +330,7 @@ REWRITE_RULES = {
             "STATUS": "Lease Status",
             "OGRID_NAM": "Lessee or Owner or Manager"
         },
-        "Commercial Leases": {
+        "Commercial lease": {
             "STATUS": "Lease Status",
             "OGRID_NAM": "Lessee or Owner or Manager",
             "VEREFF_DTE": "Lease Start Date",
@@ -350,13 +349,13 @@ REWRITE_RULES = {
             "VEREFF_DTE": "Lease Start Date",
             "VERTRM_DTE": "Lease End Date"
         },
-        "Oil and gas": {
+        "Oil and gas lease": {
             "STATUS": "Lease Status",
             "OGRID_NAM": "Lessee or Owner or Manager",
             "VEREFF_DTE": "Lease Start Date",
             "VERTRM_DTE": "Lease End Date"
         },
-        "Roads": {
+        "Rights of way lease": {
             "STATUS": "Lease Status",
             "OGRID_NAM": "Lessee or Owner or Manager"
         }
@@ -389,13 +388,14 @@ REWRITE_RULES = {
             "DateEffect": "Lease Start Date",
             "DateExpire": "Lease End Date"
         },
-        "Agriculture and Grazing": {
-            "Status": "Lease Status"
+        "Agriculture and grazing": {
+            "Status": "Lease Status",
+            "TractType": "Activity"
         },
-        "Commercial Leases": {
+        "Commercial lease": {
             "LeaseCateg": "Activity"
         },
-        "Coal Active Lease": {
+        "Coal active lease": {
             "Prim_Cust": "Lessee or Owner or Manager",
             "Producing": "Lease Status",
             "DateEffect": "Lease Start Date",
@@ -461,10 +461,10 @@ STATE_ACTIVITIES = {
                                 keep_cols=['TypeGroup', 'Type', 'Status', 'DteGranted', 'DteExpires', 'Name',
                                            'Commodities'],
                                 use_name_as_activity=False),
-        StateActivityDataSource(name='roads',
+        StateActivityDataSource(name='Easements',
                                 location='Idaho_All/Easements.shp',
                                 keep_cols=['TypeGroup', 'Status', 'DteGranted', 'DteExpires', 'Parties',
-                                           'EasementRight', 'EasementPurpose'],
+                                           'EasementRight', 'EasementPu'],
                                 is_restricted_activity=True,
                                 use_name_as_activity=False),
         StateActivityDataSource(name='Timber',
@@ -477,9 +477,9 @@ STATE_ACTIVITIES = {
                                 location='Idaho_All/OilGas.shp',
                                 keep_cols=['Status'],
                                 activity_name_appendage_col='Status',
-                                is_restricted_activity=True,
+                                is_restricted_subsurface_activity=True,
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='Water',
+        StateActivityDataSource(name='Water Rights',
                                 location='Idaho_All/Water.shp',
                                 keep_cols=['TypeGroup', 'Status', 'WaterUse', 'Source'],
                                 is_restricted_activity=True,
@@ -487,11 +487,11 @@ STATE_ACTIVITIES = {
 
     ]),
     'MN': StateForActivity(name='minnesota', activities=[
-        StateActivityDataSource(name='Peat',
+        StateActivityDataSource(name='Peat Lease',
                                 location='Minnesota_All/shp_plan_state_peatleases/active_peatLeases.shp',
                                 keep_cols=['T_LEASETYP', 'T_STARTDAT', 'T_EXPDATE', 'T_PNAMES'],
                                 is_restricted_subsurface_activity=True,
-                                use_name_as_activity=False),
+                                use_name_as_activity=True),
         StateActivityDataSource(name='Recreation',
                                 location='Minnesota_All/shp_bdry_dnr_lrs_prk/dnr_stat_plan_areas_prk.shp',
                                 keep_cols=['AREA_NAME', 'AREA_TYPE'],
@@ -522,38 +522,38 @@ STATE_ACTIVITIES = {
                                 keep_cols=['T_LEASETYPE'],
                                 is_restricted_subsurface_activity=True,
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='Active Mineral Leases',
+        StateActivityDataSource(name='Active Mineral Lease',
                                 location='Minnesota_All/shp_plan_state_minleases/active_minLeases.shp',
                                 keep_cols=['T_LEASETYP', 'T_STARTDAT', 'T_EXPDATE', 'T_PNAMES', 'ML_SU_LAND'],
                                 is_restricted_subsurface_activity=True,
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='Historic Mineral Leases',
+        StateActivityDataSource(name='Historic Mineral Lease',
                                 location='Minnesota_All/shp_plan_state_minleases/historic_minLeases.shp',
                                 keep_cols=['T_LEASETYP', 'T_STARTDAT', 'T_EXPDATE', 'T_PNAMES', 'ML_SU_LAND'],
                                 is_restricted_subsurface_activity=True,
                                 use_name_as_activity=True)
 
     ]),
-    'ND': StateForActivity(name='north dakota', activities=[
-        StateActivityDataSource(name='Minerals',
-                                location='NorthDakota_All/Minerals.shp',
-                                keep_cols=['LEASE_STATUS', 'LEASE_EFFECTIVE', 'LEASE_EXPIRATION', 'LEASE_EXTENDED',
-                                           'LESSEE'],
-                                use_name_as_activity=True),
-        StateActivityDataSource(name='Recreation',
-                                location='NorthDakota_All/Recreation.shp',
-                                keep_cols=['UNIT_NAME'],
-                                is_restricted_activity=True,
-                                use_name_as_activity=True),
-
-    ]),
+    # 'ND': StateForActivity(name='north dakota', activities=[
+    #     StateActivityDataSource(name='Minerals',
+    #                             location='NorthDakota_All/Minerals.shp',
+    #                             keep_cols=['LEASE_STATUS', 'LEASE_EFFECTIVE', 'LEASE_EXPIRATION', 'LEASE_EXTENDED',
+    #                                        'LESSEE'],
+    #                             use_name_as_activity=True),
+    #     StateActivityDataSource(name='Recreation',
+    #                             location='NorthDakota_All/Recreation.shp',
+    #                             keep_cols=['UNIT_NAME'],
+    #                             is_restricted_activity=True,
+    #                             use_name_as_activity=True),
+    #
+    # ]),
     'NM': StateForActivity(name='new mexico', activities=[
         StateActivityDataSource(name='Agriculture',
                                 location='NewMexico_All/Ag_Leases',
                                 use_name_as_activity=True,
                                 is_restricted_activity=True,
                                 keep_cols=['STATUS', 'OGRID_NAM']),
-        StateActivityDataSource(name='Commercial Leases',
+        StateActivityDataSource(name='Commercial lease',
                                 location='NewMexico_All/Commercial_Leases',
                                 use_name_as_activity=True,
                                 keep_cols=['STATUS', 'OGRID_NAM', 'VEREFF_DTE', 'VERTRM_DTE']),
@@ -568,12 +568,12 @@ STATE_ACTIVITIES = {
                                 is_restricted_subsurface_activity=True,
                                 keep_cols=['STATUS', 'LEASE_TYPE', 'OGRID_NAM', 'SUB_TYPE',
                                            'VEREFF_DTE', 'VERTRM_DTE']),
-        StateActivityDataSource(name='Oil and gas',
+        StateActivityDataSource(name='Oil and gas lease',
                                 location='NewMexico_All/OilGas_Leases',
                                 use_name_as_activity=True,
                                 is_restricted_subsurface_activity=True,
                                 keep_cols=['STATUS', 'VEREFF_DTE', 'VERTRM_DTE', 'OGRID_NAM']),
-        StateActivityDataSource(name='Roads',
+        StateActivityDataSource(name='Rights of way lease',
                                 location='NewMexico_All/slo_rwleased',
                                 use_name_as_activity=True,
                                 is_restricted_activity=True,
@@ -608,26 +608,26 @@ STATE_ACTIVITIES = {
     ]),
     'TX': StateForActivity(name='texas', activities=[
         StateActivityDataSource(name='Coastal',
-                                location='Texas_All/NonMineralPoly',
+                                location='Texas_All/Coastal_Leases_Poly/Coastal_Leases_Poly.shp',
                                 keep_cols=['PROJECT_NA', 'GRANTEE', 'ACTIVITY_T'],
                                 use_name_as_activity=False),
         StateActivityDataSource(name='misc',
-                                location='Texas_All/ME',
+                                location='Texas_All/Misc_Easements/Misc_Easements.shp',
                                 keep_cols=['LEASE_STAT', 'PRIMARY_LE',
                                            'ALL_LESSEE', 'PURPOSE'],
                                 use_name_as_activity=False),
         StateActivityDataSource(name='Hard Minerals',
-                                location='Texas_All/HardMinerals',
+                                location='Texas_All/Hard_Minerals/Hard_Minerals.shp',
                                 keep_cols=['LEASE_STAT', 'ORIGINAL_L', 'EFFECTIVE_'],
                                 is_restricted_subsurface_activity=True,
                                 use_name_as_activity=True),
         StateActivityDataSource(name='Oil and gas',
-                                location='Texas_All/ActiveLeases',
+                                location='Texas_All/OAG_Leases_Active/OAG_Leases_Active.shp',
                                 keep_cols=['LEASE_STAT', 'EFFECTIVE_', 'ORIGINAL_L', 'LESSOR'],
                                 is_restricted_subsurface_activity=True,
                                 use_name_as_activity=True),
 
-        StateActivityDataSource(name='Fracking Ponds',
+        StateActivityDataSource(name='Fracking Pond',
                                 location='Texas_All/PUF-FracPonds.shp',
                                 keep_cols=[],
                                 is_restricted_activity=True,
@@ -649,25 +649,31 @@ STATE_ACTIVITIES = {
                                 use_name_as_activity=True),
         StateActivityDataSource(name='Minerals',
                                 location='Texas_All/PUF-Minerals.shp',
-                                keep_cols=['UnitTypeDescription'],
+                                keep_cols=['unittypede'],
                                 is_restricted_subsurface_activity=True,
-                                activity_name_appendage_col='UnitTypeDescription',
-                                use_name_as_activity=False),
+                                activity_name_appendage_col='unittypede',
+                                use_name_as_activity=True),
         StateActivityDataSource(name='Oil and gas lease',
                                 location='Texas_All/PUF-OilGasLease.shp',
-                                keep_cols=['LeaseStatus'],
+                                keep_cols=['leasestatu'],
                                 is_restricted_subsurface_activity=True,
-                                activity_name_appendage_col='LeaseStatus',
+                                activity_name_appendage_col='leasestatu',
                                 use_name_as_activity=True),
         StateActivityDataSource(name='Oil and gas Wellbores',
                                 location='Texas_All/PUF-OilGasWellbores.shp',
                                 keep_cols=['Cycle'],
                                 is_restricted_subsurface_activity=True,
-                                activity_name_appendage_col='Cycle',
+                                activity_name_appendage_col='cycle',
+                                use_name_as_activity=True),
+        StateActivityDataSource(name='Oil and gas Well Bottom Hole',
+                                location='Texas_All/PUF-WellBottomHole.shp',
+                                keep_cols=['Cycle'],
+                                is_restricted_subsurface_activity=True,
+                                activity_name_appendage_col='cycle',
                                 use_name_as_activity=True),
         StateActivityDataSource(name='Renewables',
                                 location='Texas_All/PUF-Renewables.shp',
-                                keep_cols=['Type'],
+                                keep_cols=['sitedescri'],
                                 is_restricted_activity=True,
                                 use_name_as_activity=False),
         # StateActivityDataSource(name='Renewable Tracts',
@@ -691,55 +697,55 @@ STATE_ACTIVITIES = {
         #                         is_restricted_activity=True,
         #                         use_name_as_activity=True),
 
-        StateActivityDataSource(name='Coal Contracts',
+        StateActivityDataSource(name='Coal contract',
                                 location='Utah_All/Contracts_Coal/Contracts_Coal.shp',
                                 keep_cols=['app_descr'],
                                 is_restricted_subsurface_activity=True,
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='Development Lease',
+        StateActivityDataSource(name='Development lease',
                                 location='Utah_All/Contracts_Dev_Lease/Contracts_Dev_Lease.shp',
                                 keep_cols=['app_descr'],
                                 is_restricted_activity=True,
                                 use_name_as_activity=False),
-        StateActivityDataSource(name='Grazing Lease',
+        StateActivityDataSource(name='Grazing lease',
                                 location='Utah_All/Contracts_Dev_Lease/Contracts_Dev_Lease.shp',
                                 keep_cols=['app_descr'],
                                 is_restricted_activity=True,
                                 use_name_as_activity=False),
-        StateActivityDataSource(name='Oil Shale Contracts',
+        StateActivityDataSource(name='Oil shale contract',
                                 location='Utah_All/Contracts_Oil_Shale/Contracts_Oil_Shale.shp',
                                 keep_cols=['app_descr'],
                                 is_restricted_subsurface_activity=True,
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='Other Minerals',
+        StateActivityDataSource(name='Other minerals',
                                 location='Utah_All/Contracts_Other_Mineral/Contracts_Other_Mineral.shp',
                                 keep_cols=['app_descr'],
                                 is_restricted_subsurface_activity=True,
                                 activity_name_appendage_col='app_descr',
-                                use_name_as_activity=False),
+                                use_name_as_activity=True),
         StateActivityDataSource(name='Renewables',
                                 location='Utah_All/Contracts_Renewable/Contracts_Renewable.shp',
                                 keep_cols=['app_descr'],
                                 is_restricted_activity=True,
                                 activity_name_appendage_col='app_descr',
-                                use_name_as_activity=False),
-        StateActivityDataSource(name='Range Improvement Project Contracts',
+                                use_name_as_activity=True),
+        StateActivityDataSource(name='Range improvement project contract',
                                 location='Utah_All/Contracts_Rip/Contracts_Rip.shp',
                                 keep_cols=['app_descr'],
                                 is_restricted_activity=True,
                                 activity_name_appendage_col='app_descr',
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='Sand Gravel Contracts',
+        StateActivityDataSource(name='Sand gravel contract',
                                 location='Utah_All/Contracts_Sand_Gravel/Contracts_Sand_Gravel.shp',
                                 keep_cols=['app_descr'],
                                 is_restricted_subsurface_activity=True,
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='Tar Sand Contracts',
+        StateActivityDataSource(name='Tar sand contract',
                                 location='Utah_All/Contracts_Sula/Contracts_Sula.shp',
                                 keep_cols=['app_descr'],
                                 is_restricted_subsurface_activity=True,
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='Special Use Leases',
+        StateActivityDataSource(name='Special use lease',
                                 location='Utah_All/Contracts_Tar_Sand/Contracts_Tar_Sand.shp',
                                 keep_cols=['app_descr'],
                                 is_restricted_activity=True,
@@ -764,12 +770,12 @@ STATE_ACTIVITIES = {
         #                         location='Utah_All/Utah_UREZ_Phase_2_Geothermal',
         #                         keep_cols=[],
         #                         use_name_as_activity=True),
-        StateActivityDataSource(name='Wind Zones',
+        StateActivityDataSource(name='Wind zone',
                                 location='Utah_All/Utah_UREZ_Phase_1_Wind_Zones',
                                 keep_cols=[],
                                 is_restricted_activity=True,
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='Solar Zones',
+        StateActivityDataSource(name='Solar zone',
                                 location='Utah_All/Utah_UREZ_Phase_1_Solar_Zones',
                                 keep_cols=[],
                                 is_restricted_activity=True,
@@ -782,10 +788,12 @@ STATE_ACTIVITIES = {
         StateActivityDataSource(name='Oil and gas wells',
                                 location='Utah_All/Utah_Oil_and_Gas_Well_Locations',
                                 keep_cols=['Operator'],
+                                is_restricted_subsurface_activity=True,
                                 use_name_as_activity=True),
         StateActivityDataSource(name='Oil and gas fields',
                                 location='Utah_All/Utah_Oil_and_Gas_Fields-shp',
                                 keep_cols=['STATUS'],
+                                is_restricted_subsurface_activity=True,
                                 use_name_as_activity=True),
         # StateActivityDataSource(name='Grazing',
         #                         location='Utah_All/Utah_Grazing_Allotments',
@@ -808,18 +816,18 @@ STATE_ACTIVITIES = {
                                 location='Washington_All/current_leases_spatial_nature_20231109/current_leases_spatial_nature_20231109.shp',
                                 keep_cols=['AGREEMENT1'],
                                 # Use WA key
-                                use_name_as_activity=True),
-        StateActivityDataSource(name='Non-Metallic Minerals',
+                                use_name_as_activity=False),
+        StateActivityDataSource(name='Non-metallic minerals',
                                 location='Washington_All/NonMetallicMinerals.shp',
                                 keep_cols=['MINERAL'],
                                 is_restricted_subsurface_activity=True,
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='Metallic Minerals',
+        StateActivityDataSource(name='Metallic minerals',
                                 location='Washington_All/MetallicMinerals.shp',
                                 keep_cols=['COMMODITIE', 'PRODUCTION', 'ORE_MINERA'],
                                 is_restricted_subsurface_activity=True,
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='Active Surface Mine Permit Sites',
+        StateActivityDataSource(name='Active Surface Mine Permit Site',
                                 location='Washington_All/Active_Surface_Mine_Permit_Sites.shp',
                                 keep_cols=['APPLICANT_', 'MINE_NAME', 'COMMODITY_'],
                                 use_name_as_activity=True),
@@ -845,20 +853,21 @@ STATE_ACTIVITIES = {
                                 location='https://dnrmaps.wi.gov/arcgis/rest/services/LF_DML/LF_NRCS_EASEMENT_WTM_Ext/MapServer/0/query',
                                 keep_cols=['PROGRAM_NAME'],
                                 # Name plus 'PROGRAM_NAME' field
+                                activity_name_appendage_col='PROGRAM_NAME',
                                 use_name_as_activity=False),
         StateActivityDataSource(name='DNR Easement',
                                 location='Wisconsin_All/DNR_Easement.shp',
                                 keep_cols=['EASE_USE_C'],
-                                # Name plus 'Ease use code' field
-                                use_name_as_activity=False),
+                                activity_name_appendage_col='EASE_USE_C',
+                                use_name_as_activity=True),
         StateActivityDataSource(name='DNR Owned',
                                 location='Wisconsin_All/DNR_Owned.shp',
                                 keep_cols=['EASE_USE_C'],
-                                # Name plus 'Ease use code' field
-                                use_name_as_activity=False)
+                                activity_name_appendage_col='EASE_USE_C',
+                                use_name_as_activity=True)
     ]),
     'WY': StateForActivity(name='wyoming', activities=[
-        StateActivityDataSource(name='Metallic and Nonmetallic Mineral Leases',
+        StateActivityDataSource(name='Metallic and nonmetallic mineral lease',
                                 location='Wyoming_All/MetallicNonMetallic.shp',
                                 keep_cols=['MetallicNonMetallicLeaseSubType',
                                            'LeaseIssueDate',
@@ -879,27 +888,28 @@ STATE_ACTIVITIES = {
                                            'Status_LU',
                                            'Sub_Group_LU',
                                            'Use_Type_LU'],
-                                # can we use Easement + oslisde.20
+                                activity_name_appendage_col='oslisde.20',
                                 is_restricted_activity=True,
-                                use_name_as_activity=False),
-        StateActivityDataSource(name='Grazing Lease',
+                                use_name_as_activity=True),
+        StateActivityDataSource(name='Grazing lease',
                                 location='Wyoming_All/Grazing.shp',
                                 keep_cols=['Leaseholder_LU', 'Start_Date_LU', 'Expiration_Date_LU', 'Status_LU'],
                                 is_restricted_activity=True,
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='Special Use Lease',
+        StateActivityDataSource(name='Special use lease',
                                 location='Wyoming_All/SpecialUseLeases.shp',
-                                keep_cols=['Leaseholder_LU', 'Start_Date_LU', 'Expiration_Date_LU', 'Status_LU',
+                                keep_cols=['oslisde.19','Leaseholder_LU', 'Start_Date_LU', 'Expiration_Date_LU', 'Status_LU',
                                            'Type_LU', 'Purpose_LU'],
-                                use_name_as_activity=False),
-        StateActivityDataSource(name='Wind Lease',
+                                activity_name_appendage_col='oslisde.19',
+                                use_name_as_activity=True),
+        StateActivityDataSource(name='Wind lease',
                                 location='Wyoming_All/Wind.shp',
                                 keep_cols=['Leaseholder_LU', 'Start_Date_LU', 'Expiration_Date_LU', 'Status_LU'],
                                 is_restricted_activity=True,
                                 use_name_as_activity=True)
     ]),
     'MT': StateForActivity(name='Montana', activities=[
-        StateActivityDataSource(name='Oil and Gas Wells',
+        StateActivityDataSource(name='Oil and gas well',
                                 location='Montana_All/wells/wells.shp',
                                 keep_cols=['CoName', 'Status', 'Type', 'Completed'],
                                 is_restricted_subsurface_activity=True,
@@ -913,27 +923,27 @@ STATE_ACTIVITIES = {
                                 keep_cols=['HarvestPrescription', 'DateSold', 'DateClosed', 'LandOffice'],
                                 is_restricted_activity=True,
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='Lumber Mill',
+        StateActivityDataSource(name='Lumber mill',
                                 location='https://services2.arcgis.com/DRQySz3VhPgOv7Bo/ArcGIS/rest/services/Active_Mills/FeatureServer/0/query',
                                 keep_cols=['facilname', 'milltypeDe'],
                                 is_restricted_activity=True,
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='Coal Active Lease',
+        StateActivityDataSource(name='Coal active lease',
                                 location='Montana_All/MMB_CoalActiveLease.shp',
                                 keep_cols=['Prim_Cust', 'Producing', 'DateEffect', 'DateExpire'],
                                 is_restricted_subsurface_activity=True,
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='Agriculture and Grazing',
+        StateActivityDataSource(name='Agriculture and grazing',
                                 location='Montana_All/AGMB_AgreementTracts.shp',
-                                keep_cols=['Status'],
+                                keep_cols=['TractType'],
                                 is_restricted_activity=True,
-                                use_name_as_activity=True),
-        StateActivityDataSource(name='Commercial Leases',
+                                use_name_as_activity=False),
+        StateActivityDataSource(name='Commercial lease',
                                 location='Montana_All/REMB_LeaseLots.shp',
                                 keep_cols=['LeaseCateg', 'LeaseStatu'],
                                 is_restricted_activity=True,
                                 use_name_as_activity=False),
-        StateActivityDataSource(name='Oil and Gas Active Lease',
+        StateActivityDataSource(name='Oil and gas active lease',
                                 location='Montana_All/MMB_OilandGasActiveLease.shp',
                                 keep_cols=['Prim_Cust', 'Producing', 'DateEffect', 'DateExpire'],
                                 is_restricted_subsurface_activity=True,
