@@ -10,7 +10,7 @@ from land_grab_2.stl_dataset.step_1.constants import ALBERS_EQUAL_AREA, EXISTING
     TRUST_NAME, TOWNSHIP, RANGE, SECTION, MERIDIAN, ALIQUOT, RIGHTS_TYPE, \
     OK_HOLDING_DETAIL_ID, ACTIVITY, NET_ACRES, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SUB, \
     OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SURF_1, \
-    OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SURF_2, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SURF_3
+    OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SURF_2, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SURF_3, GIS_ACRES
 from land_grab_2.utilities.utils import _get_filename
 
 os.environ['RESTAPI_USE_ARCPY'] = 'FALSE'
@@ -27,7 +27,7 @@ def _get_net_acres(gdf, source, config, alias):
 
     net_acres_info = net_acres_info[0]
     percentage = net_acres_info['Percentage']
-    gdf[NET_ACRES] = gdf['GISACRES'] * (percentage / 100)
+    gdf[NET_ACRES] = gdf[GIS_ACRES.upper()] * (percentage / 100)
 
     return gdf
 
