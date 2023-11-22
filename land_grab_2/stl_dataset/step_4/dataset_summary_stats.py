@@ -5,6 +5,7 @@ from collections import defaultdict
 from pathlib import Path
 
 import geopandas as gpd
+import numpy as np
 import pandas as pd
 
 from land_grab_2.stl_dataset.step_1.constants import UNIVERSITY, GIS_ACRES, STATE, DATA_DIRECTORY, UNIVERSITY_SUMMARY, \
@@ -36,7 +37,12 @@ def extract_tribe_list(group, should_join=True):
     if group is None:
         return '' if should_join else []
 
-    raw_tribes = [x for x in list(itertools.chain.from_iterable([i.split(';') for i in group])) if x]
+    raw_tribes = [
+        x
+        for x in list(itertools.chain.from_iterable([
+            '' if not isinstance(i, str) and np.isnan(i) else i.split(';')
+            for i in group
+        ])) if x]
     tribe_list = list(sorted(set([i.strip() for i in raw_tribes])))
     tribe_list = dedup_tribe_names(tribe_list)
     if should_join:
@@ -101,6 +107,7 @@ def gis_acres_sum_by_rights_type_for_uni_summary(df):
 
             relevant_rows = df.loc[(df[UNIVERSITY] == univ) & (df.rights_type == rt)]
             record[col_name] = relevant_rows[GIS_ACRES].sum()
+            record['price_paid'] = relevant_rows['price_paid_for_parcel'].astype(float).sum().round(2)
             record[UNIVERSITY] = univ
         records.append(record)
 
@@ -109,7 +116,7 @@ def gis_acres_sum_by_rights_type_for_uni_summary(df):
     return tmp_summary
 
 
-def university_summary(df, summary_statistics_data_directory=None, output_dir=None):
+def university_summary(df, output_dir=None):
     present_day_tribe_summary = tribe_summary_for_univ_summary(df,
                                                                lambda c: c.endswith('present_day_tribe'),
                                                                'present_day_tribe')
@@ -133,6 +140,7 @@ def university_summary(df, summary_statistics_data_directory=None, output_dir=No
     uni_summary = uni_summary[[
         'university',
         *list(sorted(c for c in uni_summary.columns if c.endswith('_acres'))),
+        'price_paid',
         'present_day_tribe_count',
         'present_day_tribe',
         'tribes_named_in_cession_count',
@@ -220,7 +228,7 @@ def gis_acres_sum_by_rights_type_tribe_summary(df):
     return tmp_summary
 
 
-def tribe_summary(df, summary_statistics_data_directory, output_dir):
+def tribe_summary(df, output_dir):
     results = list(itertools.chain.from_iterable([
         construct_single_tribe_info(row.to_dict())
         for _, row in df.iterrows()
@@ -228,7 +236,7 @@ def tribe_summary(df, summary_statistics_data_directory, output_dir):
     tribe_summary_tmp = pd.DataFrame(results)
     group_cols = [c for c in list(tribe_summary_tmp.columns) if GIS_ACRES not in c and 'cession_number' not in c]
     tribe_summary_semi_aggd = tribe_summary_tmp.groupby(group_cols)[GIS_ACRES].sum().reset_index()
-    tribe_summary_semi_aggd.to_csv(summary_statistics_data_directory + TRIBE_SUMMARY)
+    tribe_summary_semi_aggd.to_csv(output_dir / TRIBE_SUMMARY)
 
     tribe_summary_full_agg = tribe_summary_tmp.groupby(['present_day_tribe']).agg(list).reset_index()
     tribe_summary_full_agg[GIS_ACRES] = tribe_summary_full_agg[GIS_ACRES].map(sum)
@@ -264,7 +272,7 @@ def calculate_summary_statistics_helper(summary_statistics_data_directory, merge
     data_tld = Path(os.environ.get('DATA')).resolve()
     input_file = data_tld / 'stl_dataset/step_3/output/stl_dataset_extra_activities_plus_cessions_plus_prices.csv'
     output_dir = data_tld / 'stl_dataset/step_4/output'
-    df_0 = gpd.read_file(input_file)
+    df_0 = gpd.read_file(input_file, ignore_geometry=True)
 
     df = df_0.copy(deep=True)
     df_1 = df_0.copy(deep=True)
@@ -276,5 +284,5 @@ def calculate_summary_statistics_helper(summary_statistics_data_directory, merge
     gis_acres_col = GIS_ACRES if GIS_ACRES in df.columns else 'gis_calculated_acres'
     df[GIS_ACRES] = df[gis_acres_col].astype(float)
 
-    university_summary(df, summary_statistics_data_directory, output_dir)
-    tribe_summary(df_1, summary_statistics_data_directory.output_dir)
+    university_summary(df, output_dir)
+    tribe_summary(df_1, output_dir)
