@@ -138,7 +138,7 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
 
     dedup_skipped = list(itertools.chain.from_iterable([
         [hydrate_cleaned(f) for f in files]
-        for files in combine_data.values()
+        for files in skip_dedup.values()
     ]))
 
     pre_combined_data_refs = [Path(f).name for files in combine_data.values() for f in files]
