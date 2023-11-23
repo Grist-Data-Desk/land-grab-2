@@ -148,7 +148,7 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
     # find all cleaned datasets for the state
     for file in os.listdir(cleaned_data_directory):
         if file.endswith('.geojson'):
-            if file in pre_combined_data_refs or file in skip_dedup:
+            if file in pre_combined_data_refs:
                 continue
 
             print(cleaned_data_directory + file)
