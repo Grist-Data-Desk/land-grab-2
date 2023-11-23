@@ -141,7 +141,9 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
         for files in skip_dedup.values()
     ]))
 
-    pre_combined_data_refs = [Path(f).name for files in combine_data.values() for f in files]
+    pre_combined_data_refs = [Path(f).name
+                              for files in list(combine_data.values()) + list(skip_dedup.values())
+                              for f in files]
     combined_rights_type_gdfs = {'surface': [], 'subsurface': [], 'other': []}
     # find all cleaned datasets for the state
     for file in os.listdir(cleaned_data_directory):
