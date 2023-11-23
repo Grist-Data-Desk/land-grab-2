@@ -27,7 +27,7 @@ def _get_net_acres(gdf, source, config, alias):
 
     net_acres_info = net_acres_info[0]
     percentage = net_acres_info['Percentage']
-    gdf[NET_ACRES] = gdf[GIS_ACRES.upper()] * (percentage / 100)
+    gdf[NET_ACRES] = gdf['GISACRES'] * (percentage / 100)
 
     return gdf
 
