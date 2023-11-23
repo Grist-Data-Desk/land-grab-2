@@ -117,6 +117,7 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
         os.makedirs(merged_data_directory)
 
     combine_data = defaultdict(list)
+    skip_dedup = defaultdict(list)
     state_sources = [source for source in STATE_TRUST_CONFIGS.keys() if state in source]
     for source in state_sources:
         config = STATE_TRUST_CONFIGS[source]
@@ -126,25 +127,35 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
                     clean_file = cleaned_data_directory + _get_filename(source, label, alias, '.geojson')
                     combine_data[config['COMBINE_KEY']].append(clean_file)
 
+                if 'SKIP_DEDUP' in config:
+                    clean_file = cleaned_data_directory + _get_filename(source, label, alias, '.geojson')
+                    skip_dedup['SKIP_DEDUP'].append(clean_file)
+
     pre_merged = list(itertools.chain.from_iterable([
         dedup_group([hydrate_cleaned(f) for f in files])
         for files in combine_data.values()
     ]))
 
-    pre_combined_data_refs = [Path(f).name for files in combine_data.values() for f in files]
+    dedup_skipped = list(itertools.chain.from_iterable([
+        [hydrate_cleaned(f) for f in files]
+        for files in skip_dedup.values()
+    ]))
+
+    pre_combined_data_refs = [Path(f).name
+                              for files in list(combine_data.values()) + list(skip_dedup.values())
+                              for f in files]
     combined_rights_type_gdfs = {'surface': [], 'subsurface': [], 'other': []}
     # find all cleaned datasets for the state
     for file in os.listdir(cleaned_data_directory):
         if file.endswith('.geojson'):
+            if file in pre_combined_data_refs:
+                continue
+
             print(cleaned_data_directory + file)
             gdf = hydrate_cleaned(cleaned_data_directory + file)
 
             if not gdf.empty:
                 gdf = fix_geometries(gdf)
-
-                if file in pre_combined_data_refs:
-                    continue
-
                 file_p = Path(file).resolve()
                 if 'subsurface' in file_p.name:
                     combined_rights_type_gdfs['subsurface'].append(gdf)
@@ -153,7 +164,7 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
                 else:
                     combined_rights_type_gdfs['surface'].append(gdf)
 
-    gdfs = pre_merged + list(itertools.chain.from_iterable([
+    gdfs = pre_merged + dedup_skipped + list(itertools.chain.from_iterable([
         dedup_group(g)
         for g in combined_rights_type_gdfs.values()
     ]))
