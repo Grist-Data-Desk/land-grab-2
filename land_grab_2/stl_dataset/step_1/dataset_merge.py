@@ -129,7 +129,7 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
 
                 if 'SKIP_DEDUP' in config:
                     clean_file = cleaned_data_directory + _get_filename(source, label, alias, '.geojson')
-                    skip_dedup[config['COMBINE_KEY']].append(clean_file)
+                    skip_dedup['SKIP_DEDUP'].append(clean_file)
 
     pre_merged = list(itertools.chain.from_iterable([
         dedup_group([hydrate_cleaned(f) for f in files])
