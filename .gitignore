@@ -136,4 +136,3 @@ dmypy.json
 notebooks
 *.sqlite
 foo
-*.zip
