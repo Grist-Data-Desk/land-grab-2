@@ -1,0 +1,365 @@
+<metadata>
+  <idinfo>
+    <citation>
+      <citeinfo>
+        <origin>Minnesota Department of Natural Resources: Division of Lands and Minerals, Mineral Potential Evaluation Section</origin>
+        <pubdate>20180110</pubdate>
+        <title>Aggregate Resource Mapping Program - Compilation of DNR Test Holes</title>
+        <pubinfo>
+          <publish>Minnesota DNR - Lands and Minerals</publish>
+        </pubinfo>
+        <onlink>http://www.dnr.state.mn.us/lands_minerals/aggregate_maps/completed/index.html</onlink>
+      </citeinfo>
+    </citation>
+    <descript>
+      <abstract>This spatial dataset of test holes and samples is based on a compilation of GIS aggregate resources (sand and gravel, crushed stone) reconnaissance scale data spanning seven county projects completed since 2000 by the DNR's Aggregate Resource Mapping Program (ARMP). The test hole site and sample data was collected to verify the presence or absence of sand and gravel at selected test hole sites from 7 completed Aggregate Mapping Program counties and continues presently. Selected test holes were sampled for aggregate gradations and/or construction aggregate quality specifications. The Minnesota Department of Transportation completed the lithological exam for construction aggregate quality. </abstract>
+      <purpose>To summarize the test hole sites and samples taken in 7 of the Aggregate Mapping Completed Counties.
+
+About the Aggregate Resource Mapping Program:
+The Aggregate Resource Mapping Program (ARMP) began in 1984 when the Minnesota Legislature passed a law (Minnnesota Statutes, section 84.94) to: Identify and classify aggregate resources out side of the Twin Cities metropolitan area; Give aggregate resource information to local units of government and others for making comprehensive land-use and zoning plans; Introduce aggregate resource protection; and Promote orderly and environmentally sound development of the resource.
+Aggregate Mapping Home Page: http://www.dnr.state.mn.us/lands_minerals/aggregate_maps/index.html
+Aggregate Mapping Methodology: http://www.dnr.state.mn.us/lands_minerals/aggregate_maps/methodology.html</purpose>
+      <supplinf>State of Minnesota</supplinf>
+    </descript>
+    <timeperd>
+      <timeinfo>
+        <sngdate>
+          <caldate>20180110</caldate>
+        </sngdate>
+      </timeinfo>
+      <current>Data were collected since 2000</current>
+    </timeperd>
+    <status>
+      <progress>Complete</progress>
+      <update>Continually</update>
+    </status>
+    <spdom>
+      <bounding>
+        <westbc>-97.23</westbc>
+        <eastbc>-89.53</eastbc>
+        <northbc>49.37</northbc>
+        <southbc>43.5</southbc>
+      </bounding>
+    </spdom>
+    <keywords>
+      <theme>
+        <themekey>Test hole drilling, aggregate quality, sieve, gradations, aggregate resources, surficial geology</themekey>
+        <themekt>
+          </themekt>
+      </theme>
+      <place>
+        <placekey>
+          </placekey>
+      </place>
+    </keywords>
+    <accconst>None</accconst>
+    <useconst>Use Disclaimer: 
+Every reasonable effort has been made to ensure the accuracy of the factual data on which this map interpretation is based. However, the Department of Natural Resources does not warrant the accuracy, completeness, or any implied uses of these data. Users may wish to verify critical information; sources include both the references here and information on file in the offices of the Minnesota Department of Natural Resources. Every effort has been made to ensure the interpretation shown conforms to sound geologic and cartographic principles. No claim is made that the interpretation shown is rigorously correct, however, and it should not be used to guide engineering-scale decisions without site-specific verification. This information should not be used to establish legal title, boundaries, or locations of improvements.
+
+Data Disclaimer
+The Minnesota Department of Natural Resources makes no representation or warranties, express or implied, with respect to the reuse of data provided herewith, regardless of its format or the means of its transmission. There is no guarantee or representation to the user as to the accuracy, currency, suitability, or reliability of this data for any purpose. The user accepts the data 'as is', and assumes all risks associated with its use. By accepting this data, the user agrees not to transmit this data or provide access to it or any part of it to another party unless the user shall include with the data a copy of this disclaimer. The Minnesota Department of Natural Resources assumes no responsibility for actual or consequential damage incurred as a result of any user's reliance on this data.</useconst>
+    <browse>
+      <browsen>http://images.dnr.state.mn.us/lands_minerals/aggregate/testhole_image.jpg</browsen>
+    </browse>
+    <crossref>
+      <citeinfo>
+        <title>Other Compiled Aggregate Mapping GIS Datasets: 
+Sand and Gravel Resource Potential; Crushed Stone Resource Potential; Geologic Field Observations; and Status Map of Completed, In-Progress, and Requested Projects
+
+List of Completed DNR Aggregate Mapping Project's Web Pages to Download Maps and Original GIS Data and Metadata at:
+http://www.dnr.state.mn.us/lands_minerals/aggregate_maps/completed/index.html
+Aitkin County (2014) 
+Stearns County (2012)
+Kanabec County (2012)
+Portions of Northern St. Louis and Northern Lake Counties (2010)
+Olmsted County (2010)
+Carlton County and Fond du Lac Reservation (2009)
+Mille Lacs County (2007)
+Meeker County (2006)
+Renville County (2003)
+Le Sueur County (2003)
+Itasca County (2003) - Contracted with MGS
+Benton County (2002)
+Dodge County (2002)
+Chisago County (2000) - Contracted with MGS
+Nicollet County (1999)
+Blue Earth County (1999)
+Clay County (1995)
+Isanti County (1991)
+Wright County (1989)
+Sherburne County (1987)
+
+Completed MGS Aggregate Endowment of the 7-County Twin Cities Metropolitan Area
+7-County Mapping Web page: Information and links to view and download report, maps, and original GIS data and metadata for this MGS mapping project.</title>
+      </citeinfo>
+    </crossref>
+    <ptcontac>
+      <cntinfo>
+        <cntperp>
+          <cntorg>Minnesota DNR - Lands and Minerals</cntorg>
+          <cntper>James Olson</cntper>
+        </cntperp>
+        <cntpos>GIS Analyst</cntpos>
+        <cntaddr>
+          <addrtype>Mailling and Physical</addrtype>
+          <address>500 Lafayette Rd</address>
+          <city>Saint Paul</city>
+          <state>MN</state>
+          <postal>55155</postal>
+        </cntaddr>
+        <cntvoice>651-259-5429</cntvoice>
+        <cntemail>james.olson@state.mn.us</cntemail>
+      </cntinfo>
+    </ptcontac>
+  </idinfo>
+  <dataqual>
+    <logic>
+      </logic>
+    <complete>The data points were gathered at the location where the test holes were drilled. Additional information is given in the Lineage section.</complete>
+    <posacc>
+      <horizpa>
+        <horizpar>The differential correction of the GPS unit for GPS located sites is +/- 3 meters.</horizpar>
+      </horizpa>
+      <vertacc>
+        <vertaccr>None</vertaccr>
+      </vertacc>
+    </posacc>
+    <lineage>
+      <procstep>
+        <procdesc>This varies since the data is a compilation of points collected since 2000. Please consult the original project metadata found at the Aggregate Mapping Program's completed project page at: http://www.dnr.state.mn.us/lands_minerals/aggregate_maps/completed/index.html  
+
+Generally speaking, a tablet PC, a Garmin GPS Bluetooth unit, ArcGIS software, and the GPS toolbar in ArcMap were used in the field to determine the track and location of the observer collecting the points. Testhole points and associated tabular attribute were updated in real time as much as possible. The combination of the GPS unit's location, USGS topographic maps (1:24,000), and aerial photographs (1:3,000 - 1:12,000) were used to assist in determining the observation's site location on screen. At other times a portable Garmin Etrex or a GPS equipped iPhone were used instead of the above mentioned hardware and software. The GPS unit (with differential correction) is accurate to approximately a few meters.</procdesc>
+      </procstep>
+    </lineage>
+    <attracc>
+      <attraccr>
+        </attraccr>
+    </attracc>
+  </dataqual>
+  <spref>
+    <horizsys>
+      <planar>
+        <gridsys>
+          <gridsysn>Universal Transverse Mercator</gridsysn>
+          <utm>
+            <utmzone>15</utmzone>
+          </utm>
+        </gridsys>
+        <planci>
+          <plandu>meters</plandu>
+        </planci>
+      </planar>
+      <geodetic>
+        <horizdn>NAD83</horizdn>
+        <ellips>GRS80</ellips>
+      </geodetic>
+    </horizsys>
+  </spref>
+  <eainfo>
+    <detailed>
+      <enttyp>
+        <enttypl>Fields and Attributes</enttypl>
+      </enttyp>
+      <attr>
+        <attrlabl>PitComp_ID</attrlabl>
+        <attrdef>A Unique ID for each record (ex. AM-xxxx)</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>Source</attrlabl>
+        <attrdef>Construction aggregate pit data source compiled from or observed (ex: topographic map- found on the topographic map). Where multiple records existed for a single gravel pit, data points were removed based on a constructed hierarchy of source information. The following sources of information are listed according to rank.</attrdef>
+        <attrdomv>
+          <edom>
+            <edomvd>Minnesota Department of Transportation database called Aggregate Source Information Systems. If the location did intersect a gravel pit, the locations were interpreted off of existing gravel pit sheets to relocate the mines to as specified on the sheet. This was ranked highest because of associated quality and texture data. Some locations were modified to better correlate to present gravel pit boundaries and on top of USGS 7.5 Minute Topographic Map symbols.</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>Topographic Map</edomv>
+            <edomvd>These gravel pits are located from USGS 7.5 minute quadrangles. This was ranked second highest because of the widespread use of the maps. Where field checked, some of these pit types were changed from gravel to borrow or sand pits to reflect the material excavated.</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>Field Work</edomv>
+            <edomvd>These pits were located while in the field. These pits were ranked third highest due to the fact they were directly observed for quality, texture, and spatial accuracy.</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>Soil Survey</edomv>
+            <edomvd>The records for these pits are from the Soil Survey Geographic Database (SSURGO) Aitkin County. The dataset was downloaded in June 2010. These pits were ranked fourth highest.</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>Air Photo</edomv>
+            <edomvd>Gravel mines were also located and some attributes were interpreted with air photography. These pits were ranked last because they were remotely interpreted.</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>LiDAR</edomv>
+            <edomvd>LiDAR is giving an opportunity to see disturbed surfaces like never before. This is a new source.</edomvd>
+          </edom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>Type</attrlabl>
+        <attrdef>The type of pit, quarry, or prospect observed</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>FieldCheck</attrlabl>
+        <attrdef>A new field asking the question was the pit or quarry field checked. If so, how?</attrdef>
+        <attrdomv>
+          <edom>
+            <edomv>Observed on Site</edomv>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>Observed from Road</edomv>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>Observed from Air Photo</edomv>
+          </edom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>ASIS_numbr</attrlabl>
+        <attrdef>Aggregate Source Information System Number (MN/DOT Database). An empty field means that it does not have an ASIS number.</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>Material_1</attrlabl>
+        <attrdef>Primary material observed in the gravel pit.</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>Material_2</attrlabl>
+        <attrdef>Secondary material observed in the gravel pit.</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>Size</attrlabl>
+        <attrdef>Refers to the relative size of the pit.</attrdef>
+        <attrdomv>
+          <edom>
+            <edomv>Small</edomv>
+            <edomvd>Small pits are less than five acres. These pits are usually used by private landowners or for small jobs.</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>Medium</edomv>
+            <edomvd>Between 5 and 15 acres in size. These pits are used by landowners and for small construction jobs.</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>Large</edomv>
+            <edomvd>These pits are generally greater than 15 acres and are typically used by commercial aggregate operators.</edomvd>
+          </edom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>Thickness</attrlabl>
+        <attrdef>The thickness of the deposit expressed in combination with a modifier. Not Available indicates that the measurement does not apply or was not observed.</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>Overburden</attrlabl>
+        <attrdef>Expresses overburden thickness in the pit by using a value in combination with a modifier if appropriate. Not Available indicates that the measurement does not apply or was not observed.</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>Watertable</attrlabl>
+        <attrdef>The depth of the water table expressed in combination with a modifier. Not Available indicates that the measurement does not apply or was not observed.</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>Status_1</attrlabl>
+        <attrdef>Refers to the status of the pit at the time of mapping.</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>Status_2</attrlabl>
+        <attrdef>Associated with the field 'Status_1'. This field further explains the condition of a partially or fully reclaimed gravel pit. The status could be a combination of more than one use.</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>Dom_litho</attrlabl>
+        <attrdef>Dominant lithology of the pit.</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>Dom_text</attrlabl>
+        <attrdef>The dominant texture of the pit.</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>Comments</attrlabl>
+        <attrdef>Geologist comments related to the pit.</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>County</attrlabl>
+        <attrdef>The county or project area that the data was collected for.</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>Year Current</attrlabl>
+        <attrdef>The year the aggregate data was published.</attrdef>
+      </attr>
+    </detailed>
+    <overview>
+      <eaover>Test hole site data contains information about the test hole id, type, size, depth, materials, geologic description, depth to water, sand and gravel thickness, overburden, sampled, sample interval, link to MnDOT sampling form, and geologist. Test hole sampling data contains information about sample lab, ids, intervals, gradation data, and aggregate quality data.
+
+An example attribute table with descriptions for test holes and samples is provided here from the Kanabec County Aggregate Map:
+http://files.dnr.state.mn.us/lands_minerals/aggregate/aggregate_testholes_attribute_example_kanabeccounty.pdf
+
+If you need more information please consult the original project data and metadata found at the Aggregate Mapping Program's completed project page at: http://www.dnr.state.mn.us/lands_minerals/aggregate_maps/completed/index.html  </eaover>
+    </overview>
+  </eainfo>
+  <distinfo>
+    <resdesc>
+      </resdesc>
+    <distliab>Please read accompanying document: Minnesota DNR Data and Software License Agreement.pdf</distliab>
+    <stdorder>
+      <ordering>Visit the web site noted in the online linkage section, or send an email to the Distribution Contact listed in this metadata record</ordering>
+    </stdorder>
+    <distrib>
+      <cntinfo>
+        <cntperp>
+          <cntorg>Minnesota DNR - GIS</cntorg>
+          <cntper>Zeb Thomas</cntper>
+        </cntperp>
+        <cntpos>GIS Data Systems Coordinator</cntpos>
+        <cntaddr>
+          <addrtype>mailing and physical</addrtype>
+          <address>500 Lafayette Rd</address>
+          <city>Saint Paul</city>
+          <state>MN</state>
+          <postal>55155</postal>
+        </cntaddr>
+        <cntvoice>651-259-5637</cntvoice>
+        <cntemail>zeb.thomas@state.mn.us</cntemail>
+      </cntinfo>
+    </distrib>
+  </distinfo>
+  <metainfo>
+    <metd>2018-07-13 12:24:29</metd>
+    <metstdn>Minnesota Geographic Metadata Guidelines</metstdn>
+    <metstdv>1.2</metstdv>
+    <metextns>
+      <onlink>http://www.mngeo.state.mn.us/committee/standards/mgmg/metadata.htm</onlink>
+    </metextns>
+    <metc>
+      <cntinfo>
+        <cntperp>
+          <cntorg>Minnesota DNR - Lands and Minerals</cntorg>
+          <cntper>James Olson</cntper>
+        </cntperp>
+        <cntpos>GIS Analyst</cntpos>
+        <cntaddr>
+          <addrtype>mailing and physical</addrtype>
+          <address>500 Lafayette Rd</address>
+          <city>Saint Paul</city>
+          <state>MN</state>
+          <postal>55155</postal>
+        </cntaddr>
+        <cntvoice>651-259-5429</cntvoice>
+        <cntemail>james.olson@state.mn.us</cntemail>
+      </cntinfo>
+    </metc>
+  </metainfo>
+</metadata>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?><metadata>
+    <idinfo>
+        <citation>
+            <citeinfo>
+                <title>UREZPhase1_WindZones</title>
+                <geoform>vector digital data</geoform>
+            </citeinfo>
+        </citation>
+        <descript>
+            <abstract>This dataset depicts renewable wind resources identified by the Utah Renewable Energy Zone (UREZ) task force and contains the site name, wind potential, location comments and more.</abstract>
+            <purpose>UREZ Phase 1 Wind Zones</purpose>
+        </descript>
+        <spdom>
+            <bounding>
+                <westbc>-114.192511</westbc>
+                <eastbc>-108.924381</eastbc>
+                <northbc>42.019486</northbc>
+                <southbc>36.994874</southbc>
+            </bounding>
+        </spdom>
+        <keywords>
+            <theme>
+                <themekt>None</themekt>
+                <themekey>Energy</themekey>
+                <themekey>SGID</themekey>
+                <themekey>UGRC</themekey>
+            </theme>
+        </keywords>
+        <accconst>None</accconst>
+        <useconst>The data, including but not limited to geographic data, tabular data, and analytical data, are provided &amp;quot;as is&amp;quot; and &amp;quot;as available&amp;quot;, with no guarantees relating to the availability, completeness, or accuracy of data, and without any express or implied warranties. These data are provided as a public service for informational purposes only. You are solely responsible for obtaining the proper evaluation of a location and associated data by a qualified professional. UGRC reserves the right to change, revise, suspend or discontinue published data and services without notice at any time. Neither UGRC nor the State of Utah are responsible for any misuse or misrepresentation of the data. UGRC and the State of Utah are not obligated to provide you with any maintenance or support. The user assumes the entire risk as to the quality and performance of the data. You agree to hold the State of Utah harmless for any claims, liability, costs, and damages relating to your use of the data. You agree that your sole remedy for any dissatisfaction or claims is to discontinue use of the data.This work is licensed under a Creative Commons Attribution 4.0 International License.</useconst>
+        <native>Esri ArcGIS 12.5.1.22081</native>
+    </idinfo>
+    <spdoinfo>
+        <direct>Vector</direct>
+        <ptvctinf>
+            <sdtsterm>
+                <sdtstype>GT-polygon composed of chains</sdtstype>
+                <ptvctcnt>51</ptvctcnt>
+            </sdtsterm>
+        </ptvctinf>
+    </spdoinfo>
+    <eainfo>
+        <detailed>
+            <enttyp>
+                <enttypl>UREZPhase1_WindZones</enttypl>
+            </enttyp>
+            <attr>
+                <attrlabl>OBJECTID</attrlabl>
+                <attrdef>Internal feature number.</attrdef>
+                <attrdefs>ESRI</attrdefs>
+                <attrdomv>
+                                        
+                    
+                    <udom>Sequential unique whole numbers that are automatically generated.</udom>
+                                        
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>SITE_ID</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>SITENAME</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>COUNTIES</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>MW_POTENT</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>MW_ESTTECH</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>ESTSPEED80M</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>GCF101DENS</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>ELEV_FT</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>GE15GRSCAP</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>COMMENTS</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>CONFIDENCE</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>SHAPE</attrlabl>
+                <attrdef>Feature geometry.</attrdef>
+                <attrdefs>ESRI</attrdefs>
+                <attrdomv>
+                                        
+                    
+                    <udom>Coordinates defining the features.</udom>
+                                        
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>Shape.STArea()</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>Shape.STLength()</attrlabl>
+            </attr>
+        </detailed>
+    </eainfo>
+    <distinfo>
+        <distliab>See access and use constraints information.</distliab>
+        <stdorder>
+            <digform>
+                <digtinfo>
+                    <formname>Feature Class</formname>
+                </digtinfo>
+                <digtopt/>
+            </digform>
+        </stdorder>
+    </distinfo>
+    <metainfo>
+        <metd>20201022</metd>
+        <metstdn>FGDC Content Standard for Digital Geospatial Metadata</metstdn>
+        <metstdv>FGDC-STD-001-1998</metstdv>
+        <mettc>local time</mettc>
+    </metainfo>
+</metadata>

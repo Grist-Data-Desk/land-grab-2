@@ -1,0 +1,32 @@
+<!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
+<qgis version="3.32.0-Lima">
+  <identifier>https://dnrmaps.wi.gov/arcgis/rest/services/LF_DML/LF_DNR_MGD_PROPERTY_WTM_Ext/MapServer/2</identifier>
+  <parentidentifier>https://dnrmaps.wi.gov/arcgis/rest/services/LF_DML/LF_DNR_MGD_PROPERTY_WTM_Ext/MapServer/1</parentidentifier>
+  <language></language>
+  <type>dataset</type>
+  <title>DNR Owned (property)</title>
+  <abstract>DNR Managed Land owned in fee  and symbolized with no fill. Hyperlinks to property page included in dataset
+Credit: DNR, Bureau of Facilities and Land</abstract>
+  <links>
+    <link size="" name="Source" url="https://dnrmaps.wi.gov/arcgis/rest/services/LF_DML/LF_DNR_MGD_PROPERTY_WTM_Ext/MapServer/2" description="" mimeType="" format="" type="WWW:LINK"/>
+  </links>
+  <dates/>
+  <fees></fees>
+  <encoding></encoding>
+  <crs>
+    <spatialrefsys nativeFormat="Wkt">
+      <wkt>PROJCRS["NAD83(HARN) / Wisconsin Transverse Mercator",BASEGEOGCRS["NAD83(HARN)",DATUM["NAD83 (High Accuracy Reference Network)",ELLIPSOID["GRS 1980",6378137,298.257222101,LENGTHUNIT["metre",1]]],PRIMEM["Greenwich",0,ANGLEUNIT["degree",0.0174532925199433]],ID["EPSG",4152]],CONVERSION["Wisconsin Transverse Mercator 83",METHOD["Transverse Mercator",ID["EPSG",9807]],PARAMETER["Latitude of natural origin",0,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8801]],PARAMETER["Longitude of natural origin",-90,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8802]],PARAMETER["Scale factor at natural origin",0.9996,SCALEUNIT["unity",1],ID["EPSG",8805]],PARAMETER["False easting",520000,LENGTHUNIT["metre",1],ID["EPSG",8806]],PARAMETER["False northing",-4480000,LENGTHUNIT["metre",1],ID["EPSG",8807]]],CS[Cartesian,2],AXIS["easting (X)",east,ORDER[1],LENGTHUNIT["metre",1]],AXIS["northing (Y)",north,ORDER[2],LENGTHUNIT["metre",1]],USAGE[SCOPE["State-wide spatial data management."],AREA["United States (USA) - Wisconsin."],BBOX[42.48,-92.89,47.31,-86.25]],ID["EPSG",3071]]</wkt>
+      <proj4>+proj=tmerc +lat_0=0 +lon_0=-90 +k=0.9996 +x_0=520000 +y_0=-4480000 +ellps=GRS80 +units=m +no_defs</proj4>
+      <srsid>1034</srsid>
+      <srid>3071</srid>
+      <authid>EPSG:3071</authid>
+      <description>NAD83(HARN) / Wisconsin Transverse Mercator</description>
+      <projectionacronym>tmerc</projectionacronym>
+      <ellipsoidacronym>EPSG:7019</ellipsoidacronym>
+      <geographicflag>false</geographicflag>
+    </spatialrefsys>
+  </crs>
+  <extent>
+    <spatial maxy="712615.92139999906066805" minx="295074.33850000001257285" crs="EPSG:3071" maxx="770006.33739999996032566" dimensions="2" maxz="0" miny="225378.19279999998980202" minz="0"/>
+  </extent>
+</qgis>

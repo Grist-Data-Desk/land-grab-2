@@ -1,0 +1,32 @@
+<!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
+<qgis version="3.32.0-Lima">
+  <identifier>https://dnrmaps.wi.gov/arcgis/rest/services/LF_DML/LF_NRCS_EASEMENT_WTM_Ext/MapServer/0</identifier>
+  <parentidentifier></parentidentifier>
+  <language></language>
+  <type>dataset</type>
+  <title>National Resources Conservation Service Easement</title>
+  <abstract>The national conservation easement geospatial dataset is an aggregate layer of conservation easements used by NRCS to identify, monitor, and enhance the spatial accuracy of restoration program polygons. The dataset represents locations where voluntary, legally binding agreements between landowners and the USDA exist. These agreements limit certain types of uses or prevent development from taking place on a piece of property now and in the future, to protect the property's ecological or open-space agricultural values. These data are prepared for use by the Natural Resources Conservation Service for USDA Service Center personnel to administer agency programs. The Agricultural Act of 2014 established the Agricultural Conservation Easement Program (ACEP) and repealed the Farm and Ranch Lands Protection Program (FRPP) and Wetlands Reserve Program (WRP), combining the purposes of FRPP and Grassland Reserve Program (GRP) into the new Agricultural Land Easement (ALE) Program. Wetland Reserve Easements (WRE, formerly WRP), are managed under the ACEP as well. The Agricultural Act of 2014 did not affect the validity or terms of any agreement or easement entered into prior to the date of enactment on February 7, 2014 or any associated payments required to be made in connection with an existing agreement or easement. NOTE: All of these easements are closed to public access. DNR staff obtained this data from NRCS in November, 2016. For more information about ACEP, visit the Natural Resources Conservation Service Easements page https://www.nrcs.usda.gov/wps/portal/nrcs/main/national/programs/easements</abstract>
+  <links>
+    <link url="https://dnrmaps.wi.gov/arcgis/rest/services/LF_DML/LF_NRCS_EASEMENT_WTM_Ext/MapServer/0" name="Source" format="" size="" description="" mimeType="" type="WWW:LINK"/>
+  </links>
+  <dates/>
+  <fees></fees>
+  <rights>The U.S. Department of Agriculture, Service Center Agencies should be acknowledged as the data source in products derived from these data. This data set is not designed for use as a primary regulatory tool in permitting or citing decisions, but may be used as a reference source. This is public information and may be interpreted by organizations, agencies, units of government, or others based on needs; however, they are responsible for the appropriate application. Easements are made available for the sole purpose of providing supplemental spatial information. The digital easement layer is not a legal representation. Federal, State, or local regulatory bodies are not to reassign to the Service Center Agencies any authority for the decisions that they make. The Service Center Agencies will not perform any evaluations of these data for purposes related solely to State or local regulatory programs. Photographic or digital enlargement of these data to scales greater than at which they were originally mapped can cause misinterpretation of the data.</rights>
+  <encoding></encoding>
+  <crs>
+    <spatialrefsys nativeFormat="Wkt">
+      <wkt>PROJCRS["NAD83(HARN) / Wisconsin Transverse Mercator",BASEGEOGCRS["NAD83(HARN)",DATUM["NAD83 (High Accuracy Reference Network)",ELLIPSOID["GRS 1980",6378137,298.257222101,LENGTHUNIT["metre",1]]],PRIMEM["Greenwich",0,ANGLEUNIT["degree",0.0174532925199433]],ID["EPSG",4152]],CONVERSION["Wisconsin Transverse Mercator 83",METHOD["Transverse Mercator",ID["EPSG",9807]],PARAMETER["Latitude of natural origin",0,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8801]],PARAMETER["Longitude of natural origin",-90,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8802]],PARAMETER["Scale factor at natural origin",0.9996,SCALEUNIT["unity",1],ID["EPSG",8805]],PARAMETER["False easting",520000,LENGTHUNIT["metre",1],ID["EPSG",8806]],PARAMETER["False northing",-4480000,LENGTHUNIT["metre",1],ID["EPSG",8807]]],CS[Cartesian,2],AXIS["easting (X)",east,ORDER[1],LENGTHUNIT["metre",1]],AXIS["northing (Y)",north,ORDER[2],LENGTHUNIT["metre",1]],USAGE[SCOPE["State-wide spatial data management."],AREA["United States (USA) - Wisconsin."],BBOX[42.48,-92.89,47.31,-86.25]],ID["EPSG",3071]]</wkt>
+      <proj4>+proj=tmerc +lat_0=0 +lon_0=-90 +k=0.9996 +x_0=520000 +y_0=-4480000 +ellps=GRS80 +units=m +no_defs</proj4>
+      <srsid>1034</srsid>
+      <srid>3071</srid>
+      <authid>EPSG:3071</authid>
+      <description>NAD83(HARN) / Wisconsin Transverse Mercator</description>
+      <projectionacronym>tmerc</projectionacronym>
+      <ellipsoidacronym>EPSG:7019</ellipsoidacronym>
+      <geographicflag>false</geographicflag>
+    </spatialrefsys>
+  </crs>
+  <extent>
+    <spatial maxy="693615.24990000005345792" minz="0" dimensions="2" crs="EPSG:3071" miny="224663.03190000000176951" maxx="722099.90150000003632158" maxz="0" minx="315643.90620000002672896"/>
+  </extent>
+</qgis>

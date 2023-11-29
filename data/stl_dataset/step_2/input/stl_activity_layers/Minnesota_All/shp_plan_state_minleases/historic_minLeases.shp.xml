@@ -1,0 +1,388 @@
+<metadata xml:lang="en">
+	<Esri>
+		<CreaDate>20231115</CreaDate>
+		<CreaTime>06324400</CreaTime>
+		<ArcGISFormat>1.0</ArcGISFormat>
+		<SyncOnce>FALSE</SyncOnce>
+		<DataProperties>
+			<itemProps>
+				<itemName Sync="TRUE">historic_minLeases</itemName>
+				<imsContentType Sync="TRUE">002</imsContentType>
+				<itemLocation>
+					<linkage Sync="TRUE">file://\\g46palgdrftp001\Z\var\ftp\gdrs_temp\update\us_mn_state_dnr\plan_state_minleases\shp\historic_minLeases.shp</linkage>
+					<protocol Sync="TRUE">Local Area Network</protocol>
+				</itemLocation>
+				<itemSize Sync="TRUE">0.000</itemSize>
+			</itemProps>
+			<coordRef>
+				<type Sync="TRUE">Projected</type>
+				<geogcsn Sync="TRUE">GCS_North_American_1983</geogcsn>
+				<csUnits Sync="TRUE">Linear Unit: Meter (1.000000)</csUnits>
+				<projcsn Sync="TRUE">NAD_1983_UTM_Zone_15N</projcsn>
+				<peXml Sync="TRUE">&lt;ProjectedCoordinateSystem xsi:type='typens:ProjectedCoordinateSystem' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:typens='http://www.esri.com/schemas/ArcGIS/10.4'&gt;&lt;WKT&gt;PROJCS[&amp;quot;NAD_1983_UTM_Zone_15N&amp;quot;,GEOGCS[&amp;quot;GCS_North_American_1983&amp;quot;,DATUM[&amp;quot;D_North_American_1983&amp;quot;,SPHEROID[&amp;quot;GRS_1980&amp;quot;,6378137.0,298.257222101]],PRIMEM[&amp;quot;Greenwich&amp;quot;,0.0],UNIT[&amp;quot;Degree&amp;quot;,0.0174532925199433]],PROJECTION[&amp;quot;Transverse_Mercator&amp;quot;],PARAMETER[&amp;quot;False_Easting&amp;quot;,500000.0],PARAMETER[&amp;quot;False_Northing&amp;quot;,0.0],PARAMETER[&amp;quot;Central_Meridian&amp;quot;,-93.0],PARAMETER[&amp;quot;Scale_Factor&amp;quot;,0.9996],PARAMETER[&amp;quot;Latitude_Of_Origin&amp;quot;,0.0],UNIT[&amp;quot;Meter&amp;quot;,1.0],AUTHORITY[&amp;quot;EPSG&amp;quot;,26915]]&lt;/WKT&gt;&lt;XOrigin&gt;-5120900&lt;/XOrigin&gt;&lt;YOrigin&gt;-9998100&lt;/YOrigin&gt;&lt;XYScale&gt;450445547.3910538&lt;/XYScale&gt;&lt;ZOrigin&gt;-100000&lt;/ZOrigin&gt;&lt;ZScale&gt;10000&lt;/ZScale&gt;&lt;MOrigin&gt;-100000&lt;/MOrigin&gt;&lt;MScale&gt;10000&lt;/MScale&gt;&lt;XYTolerance&gt;0.001&lt;/XYTolerance&gt;&lt;ZTolerance&gt;0.001&lt;/ZTolerance&gt;&lt;MTolerance&gt;0.001&lt;/MTolerance&gt;&lt;HighPrecision&gt;true&lt;/HighPrecision&gt;&lt;WKID&gt;26915&lt;/WKID&gt;&lt;LatestWKID&gt;26915&lt;/LatestWKID&gt;&lt;/ProjectedCoordinateSystem&gt;</peXml>
+			</coordRef>
+			<lineage>
+				<Process ToolSource="C:\program files\arcgis\server\ArcToolbox\Toolboxes\Conversion Tools.tbx\FeatureClassToFeatureClass" Date="20231116" Time="235547">FeatureClassToFeatureClass /var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases /var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\shp historic_minLeases.shp # "DNRREGION "DNRREGION" true true false 15 Text 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,DNRREGION,-1,-1;COUNTYNAME "COUNTYNAME" true true false 20 Text 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,COUNTYNAME,-1,-1;COUN "COUN" true true false 2 Short 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,COUN,-1,-1;TOWN "TOWN" true true false 2 Short 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,TOWN,-1,-1;RDIR "RDIR" true true false 2 Short 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,RDIR,-1,-1;RANG "RANG" true true false 2 Short 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,RANG,-1,-1;SECT "SECT" true true false 2 Short 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,SECT,-1,-1;FORT "FORT" true true false 2 Short 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,FORT,-1,-1;GLOT "GLOT" true true false 2 Short 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,GLOT,-1,-1;GM_CH "GM_CH" true true false 15 Text 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,GM_CH,-1,-1;FORTDESC "FORTDESC" true true false 55 Text 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,FORTDESC,-1,-1;PLSMATCH "PLSMATCH" true true false 20 Text 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,PLSMATCH,-1,-1;DNRTRNXNUM "DNRTRNXNUM" true true false 10 Text 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,DNRTRNXNUM,-1,-1;T_LEASETYP "T_LEASETYPE" true true false 40 Text 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,T_LEASETYPE,-1,-1;T_LEASETER "T_LEASETERM" true true false 2 Short 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,T_LEASETERM,-1,-1;MINING_UNI "MINING_UNIT_NUMBER" true true false 15 Text 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,MINING_UNIT_NUMBER,-1,-1;T_STARTDAT "T_STARTDATE" true true false 8 Date 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,T_STARTDATE,-1,-1;T_EXPDATE "T_EXPDATE" true true false 8 Date 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,T_EXPDATE,-1,-1;T_TERMINAT "T_TERMINATEDATE" true true false 8 Date 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,T_TERMINATEDATE,-1,-1;T_PNAMES "T_PNAMES" true true false 120 Text 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,T_PNAMES,-1,-1;T_INTACRES "T_INTACRES" true true false 8 Double 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,T_INTACRES,-1,-1;T_INTNETAC "T_INTNETACRES" true true false 8 Double 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,T_INTNETACRES,-1,-1;ML_SU_SUID "ML_SU_SUID" true true false 10 Text 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,ML_SU_SUID,-1,-1;ML_SU_SU_1 "ML_SU_SUIDNUM" true true false 8 Double 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,ML_SU_SUIDNUM,-1,-1;ML_SU_ACRE "ML_SU_ACRES" true true false 8 Double 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,ML_SU_ACRES,-1,-1;ML_SU_NETA "ML_SU_NETACRES" true true false 8 Double 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,ML_SU_NETACRES,-1,-1;ML_SU_LAND "ML_SU_LANDCLASS" true true false 15 Text 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,ML_SU_LANDCLASS,-1,-1;ML_SU_SURF "ML_SU_SURFACESTATUS" true true false 10 Text 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,ML_SU_SURFACESTATUS,-1,-1;DATA_DOWNL "DATA_DOWNLOADDATE" true true false 8 Date 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,DATA_DOWNLOADDATE,-1,-1;Shape_Leng "Shape_Leng" false true true 8 Double 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,Shape_Length,-1,-1;Shape_Area "Shape_Area" false true true 8 Double 0 0 ,First,#,/var/ftp/gdrs_temp/update\us_mn_state_dnr\plan_state_minleases\fgdb\plan_state_minleases.gdb\historic_minLeases,Shape_Area,-1,-1" #</Process>
+			</lineage>
+		</DataProperties>
+		<SyncDate>20231116</SyncDate>
+		<SyncTime>23554100</SyncTime>
+		<ModDate>20231116</ModDate>
+		<ModTime>23554100</ModTime>
+	</Esri>
+	<dataIdInfo>
+		<envirDesc Sync="TRUE">Microsoft Windows XP Professional x64 Edition Version 5.2 (Build 3790) Service Pack 2; Esri ArcGIS 10.4.1.5686</envirDesc>
+		<dataLang>
+			<languageCode value="en" Sync="TRUE"/>
+			<countryCode value="US" Sync="TRUE"/>
+		</dataLang>
+		<idCitation>
+			<resTitle Sync="TRUE">historic_minLeases</resTitle>
+			<presForm>
+				<PresFormCd value="005" Sync="TRUE"/>
+			</presForm>
+		</idCitation>
+		<spatRpType>
+			<SpatRepTypCd value="001" Sync="TRUE"/>
+		</spatRpType>
+	</dataIdInfo>
+	<mdLang>
+		<languageCode value="en" Sync="TRUE"/>
+		<countryCode value="US" Sync="TRUE"/>
+	</mdLang>
+	<distInfo>
+		<distFormat>
+			<formatName Sync="TRUE">Shapefile</formatName>
+		</distFormat>
+		<distTranOps>
+			<transSize Sync="TRUE">0.000</transSize>
+		</distTranOps>
+	</distInfo>
+	<mdHrLv>
+		<ScopeCd value="005" Sync="TRUE"/>
+	</mdHrLv>
+	<mdHrLvName Sync="TRUE">dataset</mdHrLvName>
+	<refSysInfo>
+		<RefSystem>
+			<refSysID>
+				<identCode code="26915" Sync="TRUE"/>
+				<idCodeSpace Sync="TRUE">EPSG</idCodeSpace>
+				<idVersion Sync="TRUE">6.13(3.0.1)</idVersion>
+			</refSysID>
+		</RefSystem>
+	</refSysInfo>
+	<spatRepInfo>
+		<VectSpatRep>
+			<geometObjs Name="historic_minLeases">
+				<geoObjTyp>
+					<GeoObjTypCd value="002" Sync="TRUE"/>
+				</geoObjTyp>
+				<geoObjCnt Sync="TRUE">0</geoObjCnt>
+			</geometObjs>
+			<topLvl>
+				<TopoLevCd value="001" Sync="TRUE"/>
+			</topLvl>
+		</VectSpatRep>
+	</spatRepInfo>
+	<spdoinfo>
+		<ptvctinf>
+			<esriterm Name="historic_minLeases">
+				<efeatyp Sync="TRUE">Simple</efeatyp>
+				<efeageom code="4" Sync="TRUE"/>
+				<esritopo Sync="TRUE">FALSE</esritopo>
+				<efeacnt Sync="TRUE">0</efeacnt>
+				<spindex Sync="TRUE">FALSE</spindex>
+				<linrefer Sync="TRUE">FALSE</linrefer>
+			</esriterm>
+		</ptvctinf>
+	</spdoinfo>
+	<eainfo>
+		<detailed Name="historic_minLeases">
+			<enttyp>
+				<enttypl Sync="TRUE">historic_minLeases</enttypl>
+				<enttypt Sync="TRUE">Feature Class</enttypt>
+				<enttypc Sync="TRUE">0</enttypc>
+			</enttyp>
+			<attr>
+				<attrlabl Sync="TRUE">FID</attrlabl>
+				<attalias Sync="TRUE">FID</attalias>
+				<attrtype Sync="TRUE">OID</attrtype>
+				<attwidth Sync="TRUE">4</attwidth>
+				<atprecis Sync="TRUE">0</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+				<attrdef Sync="TRUE">Internal feature number.</attrdef>
+				<attrdefs Sync="TRUE">Esri</attrdefs>
+				<attrdomv>
+					<udom Sync="TRUE">Sequential unique whole numbers that are automatically generated.</udom>
+				</attrdomv>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">Shape</attrlabl>
+				<attalias Sync="TRUE">Shape</attalias>
+				<attrtype Sync="TRUE">Geometry</attrtype>
+				<attwidth Sync="TRUE">0</attwidth>
+				<atprecis Sync="TRUE">0</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+				<attrdef Sync="TRUE">Feature geometry.</attrdef>
+				<attrdefs Sync="TRUE">Esri</attrdefs>
+				<attrdomv>
+					<udom Sync="TRUE">Coordinates defining the features.</udom>
+				</attrdomv>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">DNRREGION</attrlabl>
+				<attalias Sync="TRUE">DNRREGION</attalias>
+				<attrtype Sync="TRUE">String</attrtype>
+				<attwidth Sync="TRUE">15</attwidth>
+				<atprecis Sync="TRUE">0</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">COUNTYNAME</attrlabl>
+				<attalias Sync="TRUE">COUNTYNAME</attalias>
+				<attrtype Sync="TRUE">String</attrtype>
+				<attwidth Sync="TRUE">20</attwidth>
+				<atprecis Sync="TRUE">0</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">COUN</attrlabl>
+				<attalias Sync="TRUE">COUN</attalias>
+				<attrtype Sync="TRUE">Integer</attrtype>
+				<attwidth Sync="TRUE">5</attwidth>
+				<atprecis Sync="TRUE">5</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">TOWN</attrlabl>
+				<attalias Sync="TRUE">TOWN</attalias>
+				<attrtype Sync="TRUE">Integer</attrtype>
+				<attwidth Sync="TRUE">5</attwidth>
+				<atprecis Sync="TRUE">5</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">RDIR</attrlabl>
+				<attalias Sync="TRUE">RDIR</attalias>
+				<attrtype Sync="TRUE">Integer</attrtype>
+				<attwidth Sync="TRUE">5</attwidth>
+				<atprecis Sync="TRUE">5</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">RANG</attrlabl>
+				<attalias Sync="TRUE">RANG</attalias>
+				<attrtype Sync="TRUE">Integer</attrtype>
+				<attwidth Sync="TRUE">5</attwidth>
+				<atprecis Sync="TRUE">5</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">SECT</attrlabl>
+				<attalias Sync="TRUE">SECT</attalias>
+				<attrtype Sync="TRUE">Integer</attrtype>
+				<attwidth Sync="TRUE">5</attwidth>
+				<atprecis Sync="TRUE">5</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">FORT</attrlabl>
+				<attalias Sync="TRUE">FORT</attalias>
+				<attrtype Sync="TRUE">Integer</attrtype>
+				<attwidth Sync="TRUE">5</attwidth>
+				<atprecis Sync="TRUE">5</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">GLOT</attrlabl>
+				<attalias Sync="TRUE">GLOT</attalias>
+				<attrtype Sync="TRUE">Integer</attrtype>
+				<attwidth Sync="TRUE">5</attwidth>
+				<atprecis Sync="TRUE">5</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">GM_CH</attrlabl>
+				<attalias Sync="TRUE">GM_CH</attalias>
+				<attrtype Sync="TRUE">String</attrtype>
+				<attwidth Sync="TRUE">15</attwidth>
+				<atprecis Sync="TRUE">0</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">FORTDESC</attrlabl>
+				<attalias Sync="TRUE">FORTDESC</attalias>
+				<attrtype Sync="TRUE">String</attrtype>
+				<attwidth Sync="TRUE">55</attwidth>
+				<atprecis Sync="TRUE">0</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">PLSMATCH</attrlabl>
+				<attalias Sync="TRUE">PLSMATCH</attalias>
+				<attrtype Sync="TRUE">String</attrtype>
+				<attwidth Sync="TRUE">20</attwidth>
+				<atprecis Sync="TRUE">0</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">DNRTRNXNUM</attrlabl>
+				<attalias Sync="TRUE">DNRTRNXNUM</attalias>
+				<attrtype Sync="TRUE">String</attrtype>
+				<attwidth Sync="TRUE">10</attwidth>
+				<atprecis Sync="TRUE">0</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">T_LEASETYP</attrlabl>
+				<attalias Sync="TRUE">T_LEASETYP</attalias>
+				<attrtype Sync="TRUE">String</attrtype>
+				<attwidth Sync="TRUE">40</attwidth>
+				<atprecis Sync="TRUE">0</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">T_LEASETER</attrlabl>
+				<attalias Sync="TRUE">T_LEASETER</attalias>
+				<attrtype Sync="TRUE">Integer</attrtype>
+				<attwidth Sync="TRUE">5</attwidth>
+				<atprecis Sync="TRUE">5</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">MINING_UNI</attrlabl>
+				<attalias Sync="TRUE">MINING_UNI</attalias>
+				<attrtype Sync="TRUE">String</attrtype>
+				<attwidth Sync="TRUE">15</attwidth>
+				<atprecis Sync="TRUE">0</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">T_STARTDAT</attrlabl>
+				<attalias Sync="TRUE">T_STARTDAT</attalias>
+				<attrtype Sync="TRUE">Date</attrtype>
+				<attwidth Sync="TRUE">8</attwidth>
+				<atprecis Sync="TRUE">0</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">T_EXPDATE</attrlabl>
+				<attalias Sync="TRUE">T_EXPDATE</attalias>
+				<attrtype Sync="TRUE">Date</attrtype>
+				<attwidth Sync="TRUE">8</attwidth>
+				<atprecis Sync="TRUE">0</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">T_TERMINAT</attrlabl>
+				<attalias Sync="TRUE">T_TERMINAT</attalias>
+				<attrtype Sync="TRUE">Date</attrtype>
+				<attwidth Sync="TRUE">8</attwidth>
+				<atprecis Sync="TRUE">0</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">T_PNAMES</attrlabl>
+				<attalias Sync="TRUE">T_PNAMES</attalias>
+				<attrtype Sync="TRUE">String</attrtype>
+				<attwidth Sync="TRUE">120</attwidth>
+				<atprecis Sync="TRUE">0</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">T_INTACRES</attrlabl>
+				<attalias Sync="TRUE">T_INTACRES</attalias>
+				<attrtype Sync="TRUE">Double</attrtype>
+				<attwidth Sync="TRUE">19</attwidth>
+				<atprecis Sync="TRUE">0</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">T_INTNETAC</attrlabl>
+				<attalias Sync="TRUE">T_INTNETAC</attalias>
+				<attrtype Sync="TRUE">Double</attrtype>
+				<attwidth Sync="TRUE">19</attwidth>
+				<atprecis Sync="TRUE">0</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">ML_SU_SUID</attrlabl>
+				<attalias Sync="TRUE">ML_SU_SUID</attalias>
+				<attrtype Sync="TRUE">String</attrtype>
+				<attwidth Sync="TRUE">10</attwidth>
+				<atprecis Sync="TRUE">0</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">ML_SU_SU_1</attrlabl>
+				<attalias Sync="TRUE">ML_SU_SU_1</attalias>
+				<attrtype Sync="TRUE">Double</attrtype>
+				<attwidth Sync="TRUE">19</attwidth>
+				<atprecis Sync="TRUE">0</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">ML_SU_ACRE</attrlabl>
+				<attalias Sync="TRUE">ML_SU_ACRE</attalias>
+				<attrtype Sync="TRUE">Double</attrtype>
+				<attwidth Sync="TRUE">19</attwidth>
+				<atprecis Sync="TRUE">0</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">ML_SU_NETA</attrlabl>
+				<attalias Sync="TRUE">ML_SU_NETA</attalias>
+				<attrtype Sync="TRUE">Double</attrtype>
+				<attwidth Sync="TRUE">19</attwidth>
+				<atprecis Sync="TRUE">0</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">ML_SU_LAND</attrlabl>
+				<attalias Sync="TRUE">ML_SU_LAND</attalias>
+				<attrtype Sync="TRUE">String</attrtype>
+				<attwidth Sync="TRUE">15</attwidth>
+				<atprecis Sync="TRUE">0</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">ML_SU_SURF</attrlabl>
+				<attalias Sync="TRUE">ML_SU_SURF</attalias>
+				<attrtype Sync="TRUE">String</attrtype>
+				<attwidth Sync="TRUE">10</attwidth>
+				<atprecis Sync="TRUE">0</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">DATA_DOWNL</attrlabl>
+				<attalias Sync="TRUE">DATA_DOWNL</attalias>
+				<attrtype Sync="TRUE">Date</attrtype>
+				<attwidth Sync="TRUE">8</attwidth>
+				<atprecis Sync="TRUE">0</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">Shape_Leng</attrlabl>
+				<attalias Sync="TRUE">Shape_Leng</attalias>
+				<attrtype Sync="TRUE">Double</attrtype>
+				<attwidth Sync="TRUE">19</attwidth>
+				<atprecis Sync="TRUE">0</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+			</attr>
+			<attr>
+				<attrlabl Sync="TRUE">Shape_Area</attrlabl>
+				<attalias Sync="TRUE">Shape_Area</attalias>
+				<attrtype Sync="TRUE">Double</attrtype>
+				<attwidth Sync="TRUE">19</attwidth>
+				<atprecis Sync="TRUE">0</atprecis>
+				<attscale Sync="TRUE">0</attscale>
+				<attrdef Sync="TRUE">Area of feature in internal units squared.</attrdef>
+				<attrdefs Sync="TRUE">Esri</attrdefs>
+				<attrdomv>
+					<udom Sync="TRUE">Positive real numbers that are automatically generated.</udom>
+				</attrdomv>
+			</attr>
+		</detailed>
+	</eainfo>
+	<mdDateSt Sync="TRUE">20231116</mdDateSt>
+</metadata>
