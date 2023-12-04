@@ -281,6 +281,9 @@ def calculate_summary_statistics_helper(summary_statistics_data_directory, merge
     if not stats_dir.exists():
         stats_dir.mkdir(parents=True, exist_ok=True)
 
+    if not output_dir.exists():
+        output_dir.mkdir(parents=True, exist_ok=True)
+
     gis_acres_col = GIS_ACRES if GIS_ACRES in df.columns else 'gis_calculated_acres'
     df[GIS_ACRES] = df[gis_acres_col].astype(float)
 
