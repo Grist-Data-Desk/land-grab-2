@@ -14,7 +14,7 @@ $ git lfs install
 $ git lfs pull
 ```
 
-Together, these commands will install the Git LFS configuartion, fetch LFS changes from the remote, and replace pointer files locally with the actual data.
+Together, these commands will install the Git LFS configuration, fetch LFS changes from the remote, and replace pointer files locally with the actual data.
 
 ### Dependencies
 
