@@ -561,6 +561,7 @@ STATE_ACTIVITIES = {
         StateActivityDataSource(name='Energy',
                                 location='NewMexico_All/Energy_Leases',
                                 use_name_as_activity=False,
+                                is_restricted_activity=True,
                                 keep_cols=['STATUS', 'LEASE_TYPE',
                                            'OGRID_NAM']),
         StateActivityDataSource(name='Minerals',

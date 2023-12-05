@@ -106,8 +106,9 @@ def gis_acres_sum_by_rights_type_for_uni_summary(df):
                 col_name = f'{rt}_acres'
 
             relevant_rows = df.loc[(df[UNIVERSITY] == univ) & (df.rights_type == rt)]
+            relevant_price_rows = df.loc[(df[UNIVERSITY] == univ)]
             record[col_name] = relevant_rows[GIS_ACRES].sum()
-            record['price_paid'] = relevant_rows['price_paid_for_parcel'].astype(float).sum().round(2)
+            record['price_paid'] = relevant_price_rows['price_paid_for_parcel'].astype(float).sum().round(2)
             record[UNIVERSITY] = univ
         records.append(record)
 
