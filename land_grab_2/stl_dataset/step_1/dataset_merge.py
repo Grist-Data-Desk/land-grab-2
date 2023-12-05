@@ -9,7 +9,7 @@ import pandas as pd
 
 from land_grab_2.stl_dataset.step_1.constants import ALL_STATES, ACTIVITY, FINAL_DATASET_COLUMNS, \
     GIS_ACRES, \
-    ALBERS_EQUAL_AREA, ACRES_TO_SQUARE_METERS, ACRES, OBJECT_ID, TRUST_NAME, ATTRIBUTE_LABEL_TO_FILTER_BY, \
+    ALBERS_EQUAL_AREA, WGS_84, ACRES_TO_SQUARE_METERS, ACRES, OBJECT_ID, TRUST_NAME, ATTRIBUTE_LABEL_TO_FILTER_BY, \
     ATTRIBUTE_CODE_TO_ALIAS_MAP, PARCEL_COUNT
 from land_grab_2.stl_dataset.step_1.state_trust_config import STATE_TRUST_CONFIGS
 from land_grab_2.utilities.overlap import combine_dfs, fix_geometries
@@ -18,11 +18,11 @@ from land_grab_2.utilities.utils import state_specific_directory, combine_delim_
 os.environ['RESTAPI_USE_ARCPY'] = 'FALSE'
 
 
-def _get_merged_dataset_filename(state=None, file_extension='.geojson'):
+def _get_merged_dataset_filename(state=None, file_extension='.geojson', crs=''):
     if state:
-        return state.lower() + file_extension
+        return f"{state.lower()}{f'-{crs}' if crs else ''}{file_extension}"
     else:
-        return ALL_STATES + file_extension
+        return f"{ALL_STATES}{f'-{crs}' if crs else ''}{file_extension}"
 
 
 def _merge_dataframes(df_list):
@@ -189,6 +189,10 @@ def merge_single_state_helper(state: str, cleaned_data_directory,
     gdf.to_file(merged_data_directory + _get_merged_dataset_filename(state), driver='GeoJSON')
     gdf.to_csv(merged_data_directory + _get_merged_dataset_filename(state, '.csv'))
 
+    # Additionally, export a version of the dataset in WGS84 for visualization.
+    gdf_wgs84 = gdf.to_crs(WGS_84)
+    gdf_wgs84.to_file(merged_data_directory + _get_merged_dataset_filename(state, crs="wgs84"), driver='GeoJSON')
+
     return gdf
 
 
@@ -221,5 +225,9 @@ def merge_all_states_helper(cleaned_data_directory, merged_data_directory):
     # save to geojson and csv
     merged.to_file(merged_data_directory + _get_merged_dataset_filename(), driver='GeoJSON')
     merged.to_csv(merged_data_directory + _get_merged_dataset_filename(file_extension='.csv'))
+
+    # Additionally, create a version of the dataset in WGS84 for visualization.
+    merged_wgs84 = merged.to_crs(WGS_84)
+    merged_wgs84.to_file(merged_data_directory + _get_merged_dataset_filename(crs="wgs84"), driver='GeoJSON')
 
     return merged
