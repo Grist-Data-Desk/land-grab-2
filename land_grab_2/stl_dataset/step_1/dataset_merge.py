@@ -75,6 +75,7 @@ def condense_activities(row):
 
 
 def dedup_single(gdf):
+    gdf['PARCEL_COUNT'] = gdf.groupby('geometry')['geometry'].transform('count')
     all_trusts = set(gdf[TRUST_NAME].tolist())
     deduped_groups = []
     for trust in all_trusts:
