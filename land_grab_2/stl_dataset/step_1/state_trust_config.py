@@ -529,9 +529,10 @@ STATE_TRUST_CONFIGS = {
         RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
         STATE_ENABLING_ACT: '25 Stat. 676-684, esp. 679-81 (1889)',
         LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'SD-surface',
-        ATTRIBUTE_LABEL_TO_FILTER_BY: ['*'],
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['Trust_Name'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-            "*": 'South Dakota State University'
+            'SDSU EXP. STATION': 'SDSU Agricultural Experiment Station',
+            'SOUTH DAKOTA STATE UNIVERSITY': 'South Dakota State University'
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'RECRDAREAN': ACRES,
