@@ -176,7 +176,7 @@ STATE_TRUST_CONFIGS = {
             STATE_TRUST_DATA_SOURCE_DIRECTORY + 'MN-surface.zip',
         DATA_SOURCE:
             'https://resources.gisdata.mn.gov/pub/gdrs/data/pub/us_mn_state_dnr/plan_stateland_dnrcounty/shp_plan_stateland_dnrcounty.zip',
-        'SKIP_DEDUP': True,
+      # 'SKIP_DEDUP': True,
         LAYER: 'stateland_type_trust',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['LANDTYPECO'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
@@ -198,7 +198,7 @@ STATE_TRUST_CONFIGS = {
         MANAGING_AGENCY: 'Department of Natural Resources',
         RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
         STATE_ENABLING_ACT: '11 Stat. 166-167 (1857); 11 Stat. 285 (1858)',
-        'SKIP_DEDUP': True,
+      # 'SKIP_DEDUP': True,
         LOCAL_DATA_SOURCE:
             STATE_TRUST_DATA_SOURCE_DIRECTORY + 'MN-subsurface',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['LANDTYPECO'],
