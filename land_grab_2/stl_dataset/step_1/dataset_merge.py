@@ -10,7 +10,7 @@ import pandas as pd
 from land_grab_2.stl_dataset.step_1.constants import ALL_STATES, ACTIVITY, FINAL_DATASET_COLUMNS, \
     GIS_ACRES, \
     ALBERS_EQUAL_AREA, ACRES_TO_SQUARE_METERS, ACRES, OBJECT_ID, TRUST_NAME, ATTRIBUTE_LABEL_TO_FILTER_BY, \
-    ATTRIBUTE_CODE_TO_ALIAS_MAP
+    ATTRIBUTE_CODE_TO_ALIAS_MAP, PARCEL_COUNT
 from land_grab_2.stl_dataset.step_1.state_trust_config import STATE_TRUST_CONFIGS
 from land_grab_2.utilities.overlap import combine_dfs, fix_geometries
 from land_grab_2.utilities.utils import state_specific_directory, combine_delim_list, _get_filename
@@ -37,7 +37,7 @@ def _merge_dataframes(df_list):
         return df_list[0]
 
     # return the final merged dataset
-    merged = df_list[0] if len(df_list) == 1 else combine_dfs(df_list)
+    merged = combine_dfs(df_list)
     merged = geopandas.GeoDataFrame(merged, geometry=merged.geometry, crs=merged.crs)
     return merged
 
@@ -75,7 +75,7 @@ def condense_activities(row):
 
 
 def dedup_single(gdf):
-    gdf['PARCEL_COUNT'] = gdf.groupby('geometry')['geometry'].transform('count')
+    gdf[PARCEL_COUNT] = gdf.groupby('geometry')['geometry'].transform('count')
     all_trusts = set(gdf[TRUST_NAME].tolist())
     deduped_groups = []
     for trust in all_trusts:
