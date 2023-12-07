@@ -131,9 +131,7 @@ def _get_nd_activity(filtered_gdf, source, config):
     """
 
     activity_name = config[ACTIVITY]
-    filtered_gdf[ACTIVITY] = np.where(~(filtered_gdf['LEASE'].str.contains('none')), activity_name,
-                                      filtered_gdf['LEASE'])
-    filtered_gdf[ACTIVITY] = np.where(filtered_gdf['LEASE'].str.contains('none'), '', filtered_gdf['LEASE'])
+    filtered_gdf[ACTIVITY] = np.where(filtered_gdf['LEASE'].str.contains('none'), '', activity_name)
 
     return filtered_gdf
 
