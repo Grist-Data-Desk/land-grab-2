@@ -2,7 +2,7 @@ from land_grab_2.stl_dataset.step_1.constants import (
     DOWNLOAD_TYPE, API_QUERY_DOWNLOAD_TYPE, SHAPEFILE_DOWNLOAD_TYPE, STATE,
     UNIVERSITY, MANAGING_AGENCY, DATA_SOURCE, LOCAL_DATA_SOURCE,
     ATTRIBUTE_LABEL_TO_FILTER_BY, ATTRIBUTE_CODE_TO_ALIAS_MAP, RIGHTS_TYPE,
-    SURFACE_RIGHTS_TYPE, SUBSURFACE_RIGHTS_TYPE, TIMBER_RIGHTS_TYPE, LAYER,
+    SURFACE_RIGHTS_TYPE, SUBSURFACE_RIGHTS_TYPE, TRUST_NAME, TIMBER_RIGHTS_TYPE, LAYER,
     STATE_TRUST_DATA_SOURCE_DIRECTORY, EXISTING_COLUMN_TO_FINAL_COLUMN_MAP,
     ACRES, COUNTY, MERIDIAN, TOWNSHIP, RANGE, SECTION, ALIQUOT, BLOCK, ACTIVITY,
     STATE_ENABLING_ACT, NET_ACRES)
@@ -373,23 +373,23 @@ STATE_TRUST_CONFIGS = {
         RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
         STATE_ENABLING_ACT: '36 Stat. 557-579 , esp. 572-573 (1910)',
         LOCAL_DATA_SOURCE:
-            STATE_TRUST_DATA_SOURCE_DIRECTORY + 'NM.zip',
-        DATA_SOURCE:
-            'https://mapservice.nmstatelands.org/GISDataDownloads/ZipFiles/slo_STLStatusCombined.zip',
-        ATTRIBUTE_LABEL_TO_FILTER_BY: ['Benef_Surf'],
+            STATE_TRUST_DATA_SOURCE_DIRECTORY + 'NM-surface',
+        # DATA_SOURCE:
+        #     'https://mapservice.nmstatelands.org/GISDataDownloads/ZipFiles/slo_STLStatusCombined.zip',
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['BeneGroupC'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             '04': '04: New Mexico State University',
             '28': '28: New Mexico State University',
             # '42': '42: New Mexico State University',
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
-            'Acres_Surf': ACRES,
-            'County': COUNTY,
-            'Township': TOWNSHIP,
-            'Range': RANGE,
-            'Section': SECTION,
-            'Meridian': MERIDIAN,
-            'Aliquot': ALIQUOT,
+            'ParcelAcre': ACRES,
+            # 'County': COUNTY,
+            'AppTownshi': TOWNSHIP,
+            'AppRange': RANGE,
+            'AppSection': SECTION,
+            # 'Meridian': MERIDIAN,
+            'AppAliquot': ALIQUOT,
         },
     },
     'NM-subsurface': {
@@ -400,23 +400,23 @@ STATE_TRUST_CONFIGS = {
         RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
         STATE_ENABLING_ACT: '36 Stat. 557-579 , esp. 572-573 (1910)',
         LOCAL_DATA_SOURCE:
-            STATE_TRUST_DATA_SOURCE_DIRECTORY + 'NM.zip',
-        DATA_SOURCE:
-            'https://mapservice.nmstatelands.org/GISDataDownloads/ZipFiles/slo_STLStatusCombined.zip',
-        ATTRIBUTE_LABEL_TO_FILTER_BY: ['Benef_SubS'],
+            STATE_TRUST_DATA_SOURCE_DIRECTORY + 'NM-subsurface',
+        # DATA_SOURCE:
+        #     'https://mapservice.nmstatelands.org/GISDataDownloads/ZipFiles/slo_STLStatusCombined.zip',
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['BeneGroupC'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             '04': '04: New Mexico State University',
             '28': '28: New Mexico State University',
             # '42': '42: New Mexico State University',
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
-            'Acres_SubS': ACRES,
-            'County': COUNTY,
-            'Township': TOWNSHIP,
-            'Range': RANGE,
-            'Section': SECTION,
-            'Meridian': MERIDIAN,
-            'Aliquot': ALIQUOT,
+            'ParcelAcre': ACRES,
+            # 'County': COUNTY,
+            'AppTownshi': TOWNSHIP,
+            'AppRange': RANGE,
+            'AppSection': SECTION,
+            # 'Meridian': MERIDIAN,
+            'AppAliquot': ALIQUOT,
         },
     },
     'OK-subsurface-unleased-minerals': {
@@ -504,13 +504,14 @@ STATE_TRUST_CONFIGS = {
             # 'LegalDescription': ALIQUOT,
         },
     },
-    'SD': {
+    'SD-subsurface': {
         DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
         STATE: 'SD',
         UNIVERSITY: 'South Dakota State University',
         MANAGING_AGENCY: 'Commissioner of School and Public Lands',
+        RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
         STATE_ENABLING_ACT: '25 Stat. 676-684, esp. 679-81 (1889)',
-        LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'SD',
+        LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'SD-Subsurface',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['*'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "*": 'South Dakota State University'
@@ -518,6 +519,26 @@ STATE_TRUST_CONFIGS = {
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'RECRDAREAN': ACRES,
             'QQSEC': ALIQUOT,
+        },
+    },
+    'SD-surface': {
+        DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
+        STATE: 'SD',
+        UNIVERSITY: 'South Dakota State University',
+        MANAGING_AGENCY: 'Commissioner of School and Public Lands',
+        RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
+        STATE_ENABLING_ACT: '25 Stat. 676-684, esp. 679-81 (1889)',
+        LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'SD-surface',
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['Trust_Name'],
+        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+            'SDSU EXP. STATION': 'SDSU Agricultural Experiment Station',
+            'SOUTH DAKOTA STATE UNIVERSITY': 'South Dakota State University'
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'RECRDAREAN': ACRES,
+            'QQSEC': ALIQUOT,
+            'Activity': ACTIVITY,
+            'Trust_Name': TRUST_NAME
         },
     },
     'TX-surface': {
