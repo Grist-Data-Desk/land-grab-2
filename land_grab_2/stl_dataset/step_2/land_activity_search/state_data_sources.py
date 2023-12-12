@@ -689,7 +689,12 @@ STATE_ACTIVITIES = {
         #                         keep_cols=['FIRST_sitedescription'],
         #                         is_restricted_activity=True,
         #                         use_name_as_activity=False),
-
+        StateActivityDataSource(name='Well Bottom Hole',
+                                location='Texas_All/PUF-WellBottomHole.shp',
+                                keep_cols=['cycle'],
+                                is_restricted_subsurface_activity=True,
+                                activity_name_appendage_col='cycle',
+                                use_name_as_activity=True),
 
     ]),
     'UT': StateForActivity(name='utah', activities=[
@@ -854,17 +859,17 @@ STATE_ACTIVITIES = {
         StateActivityDataSource(name='Conservation Easement',
                                 location='Wisconsin_All/Conservation_Easement.shp',
                                 keep_cols=['PROGRAM_NA'],
-                               # activity_name_appendage_col='PROGRAM_NA',
+                                activity_name_appendage_col='PROGRAM_NA',
                                 use_name_as_activity=True),
         StateActivityDataSource(name='DNR Easement',
                                 location='Wisconsin_All/DNR_Easement.shp',
                                 keep_cols=['EASE_USE_C'],
-                              #  activity_name_appendage_col='EASE_USE_C',
+                                activity_name_appendage_col='EASE_USE_C',
                                 use_name_as_activity=True),
         StateActivityDataSource(name='DNR Owned',
                                 location='Wisconsin_All/DNR_Owned.shp',
                                 keep_cols=['EASE_USE_C'],
-                               # activity_name_appendage_col='EASE_USE_C',
+                                activity_name_appendage_col='EASE_USE_C',
                                 use_name_as_activity=True)
     ]),
     'WY': StateForActivity(name='wyoming', activities=[
