@@ -131,9 +131,7 @@ def _get_nd_activity(filtered_gdf, source, config):
     """
 
     activity_name = config[ACTIVITY]
-    filtered_gdf[ACTIVITY] = np.where(~(filtered_gdf['LEASE'].str.contains('none')), activity_name,
-                                      filtered_gdf['LEASE'])
-    filtered_gdf[ACTIVITY] = np.where(filtered_gdf['LEASE'].str.contains('none'), '', filtered_gdf['LEASE'])
+    filtered_gdf[ACTIVITY] = np.where(filtered_gdf['LEASE'].str.contains('none'), '', activity_name)
 
     return filtered_gdf
 
@@ -162,15 +160,19 @@ def _filter_and_clean_shapefile(gdf, config, source, label, code, alias,
         # filtered_gdf = _get_mt_activity(filtered_gdf, source)
     elif 'SD' in source:
         filtered_gdf = _get_sd_town_range_meridian(filtered_gdf)
-        filtered_gdf = _get_sd_rights_type(filtered_gdf)
+        # filtered_gdf = _get_sd_rights_type(filtered_gdf)
+    elif 'SD-surface' in source:
+        filtered_gdf = _get_sd_surface_rights_type(filtered_gdf)
+    elif 'SD-subsurface' in source:
+        filtered_gdf = _get_sd_subsurface_rights_type(filtered_gdf)
     elif 'UT' in source:
         filtered_gdf = _get_ut_activity(gdf, source)
 
     filtered_gdf = _format_columns(filtered_gdf, config, alias)
 
-    # more custom cleaning
-    if 'NM' in source:
-        filtered_gdf = _clean_nm_town_range(filtered_gdf)
+    # # more custom cleaning
+    # if 'NM' in source:
+    #     filtered_gdf = _clean_nm_town_range(filtered_gdf)
 
     filename = _get_filename(source, label, alias, '.geojson')
     filtered_gdf.to_file(cleaned_data_directory + filename, driver='GeoJSON')
@@ -237,13 +239,13 @@ def _get_ne_town_range_section(gdf):
     return gdf
 
 
-def _clean_nm_town_range(gdf):
-    # nm section and range data has extra leading and trailing zeros in a funny way
-    # # for example Range 11E is formatted 0110E. So we remove the extra zeros here.
-    for column in [RANGE, TOWNSHIP]:
-        gdf[column] = gdf[column].str.slice(start=1,
-                                            stop=3) + gdf[column].str.slice(start=4)
-    return gdf
+# def _clean_nm_town_range(gdf):
+#     # nm section and range data has extra leading and trailing zeros in a funny way
+#     # # for example Range 11E is formatted 0110E. So we remove the extra zeros here.
+#     for column in [RANGE, TOWNSHIP]:
+#         gdf[column] = gdf[column].str.slice(start=1,
+#                                             stop=3) + gdf[column].str.slice(start=4)
+#     return gdf
 
 
 def _get_ok_surface_town_range(gdf):
@@ -344,12 +346,24 @@ def _get_sd_town_range_meridian(gdf):
     return gdf
 
 
-def _get_sd_rights_type(gdf):
+def _get_sd_surface_rights_type(gdf):
     '''
     get and clean SD rights types to be consistent with the rest of the dataset
     '''
     both = gdf[gdf['match_type'] == 'both']
     both['match_type'] = both['match_type'].str.replace('both', 'surface')
+    # gdf['match_type'] = gdf['match_type'].str.replace('both', 'subsurface')
+    gdf = pd.concat([gdf, both], ignore_index=True)
+    gdf[RIGHTS_TYPE] = gdf['match_type'].str.lower()
+    return gdf
+
+
+def _get_sd_subsurface_rights_type(gdf):
+    '''
+    get and clean SD rights types to be consistent with the rest of the dataset
+    '''
+    both = gdf[gdf['match_type'] == 'both']
+    # both['match_type'] = both['match_type'].str.replace('both', 'surface')
     gdf['match_type'] = gdf['match_type'].str.replace('both', 'subsurface')
     gdf = pd.concat([gdf, both], ignore_index=True)
     gdf[RIGHTS_TYPE] = gdf['match_type'].str.lower()

@@ -81,7 +81,7 @@ def tribe_summary_for_univ_summary(df, col_filter_func, out_column_name):
 def combine_cession_ids(v):
     raw_nums = set(itertools.chain.from_iterable([c.split(',') if ',' in c else c.split(' ') for c in v.tolist() if c]))
     raw_nums = [n for n in raw_nums if n]
-    clean_nums = ','.join(raw_nums)
+    clean_nums = ';'.join(raw_nums)
     return clean_nums
 
 
@@ -89,7 +89,7 @@ def gather_univ_cessions_nums(df):
     tmp_summary = pd.DataFrame()
     tmp_summary['all_cessions'] = df.groupby([UNIVERSITY])['all_cession_numbers'].apply(combine_cession_ids)
     tmp_summary.reset_index(inplace=True)
-    tmp_summary['cession_count'] = tmp_summary['all_cessions'].map(lambda c: len(c.split(',')))
+    tmp_summary['cession_count'] = tmp_summary['all_cessions'].map(lambda c: len(c.split(';')))
     return tmp_summary
 
 
@@ -243,9 +243,16 @@ def tribe_summary(df, output_dir):
     tribe_summary_full_agg[GIS_ACRES] = tribe_summary_full_agg[GIS_ACRES].map(sum)
     tribe_summary_full_agg = tribe_summary_full_agg.apply(prettyify_list_of_strings, axis=1)
     tribe_summary_full_agg['cession_count'] = tribe_summary_full_agg['cession_number'].map(lambda v: len(v.split(',')))
+    tribe_summary_full_agg['cession_number'] = tribe_summary_full_agg['cession_number'].replace(".0", "")
+
+    # tribe_summary_full_agg['cession_number'] = tribe_summary_full_agg['cession_number'].astype(str).astype(int)
 
     rights = gis_acres_sum_by_rights_type_tribe_summary(tribe_summary_tmp)
     tribe_summary_full_agg = tribe_summary_full_agg.join(rights.set_index('present_day_tribe'), on='present_day_tribe')
+
+    tribe_summary_full_agg['surface_acres'] = tribe_summary_full_agg['surface_acres'].map(lambda v: round(v, 2))
+    tribe_summary_full_agg['subsurface_acres'] = tribe_summary_full_agg['subsurface_acres'].map(lambda v: round(v, 2))
+    tribe_summary_full_agg['timber_acres'] = tribe_summary_full_agg['timber_acres'].map(lambda v: round(v, 2))
 
     # sequence columns
     tribe_summary_full_agg = tribe_summary_full_agg[[
