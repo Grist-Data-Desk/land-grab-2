@@ -135,32 +135,6 @@ def translate_state_activity_code(activity_name):
     return activity_name
 
 
-# def get_activity_name(state, activity, activity_row):
-#     if activity.use_name_as_activity:
-#         if activity.activity_name_appendage_col:
-#             col_val = activity_row[activity.activity_name_appendage_col]
-#             if col_val:
-#                 return f'{activity.name}_{col_val}'
-#         return activity.name
-
-#     possible_activity_cols = get_activity_column(activity, state)
-#     if possible_activity_cols is None:
-#         return activity.name
-
-#     for activity_col in possible_activity_cols:
-#         if activity_col and activity_col in activity_row.keys():
-#             activity_name_row = activity_row[activity_col].tolist()
-#             if activity_name_row is not None and isinstance(activity_name_row, list):
-#                 activity_name = str(activity_name_row[0])
-#                 if 'None' in activity_name:
-#                     return activity.name
-
-#                 if activity_name and activity_name is not np.nan:
-#                     activity_name = translate_state_activity_code(activity_name)
-
-#                     return activity_name
-
-
 def get_activity_name(state, activity, activity_row):
     activity_name = None
 
@@ -183,7 +157,6 @@ def get_activity_name(state, activity, activity_row):
                         break
 
     if activity_name and activity_name is not np.nan:
-        # Cast to an int and subsequently a str—only safe for WI currently! 
         activity_name = translate_state_activity_code(activity_name)
 
     return activity_name if activity_name else activity.name
