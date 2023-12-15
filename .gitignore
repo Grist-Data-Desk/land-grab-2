@@ -136,3 +136,8 @@ dmypy.json
 notebooks
 *.sqlite
 foo
+data/stl_dataset/step_1/input/state_trust/queried/
+data/stl_dataset/step_1/output/
+data/stl_dataset/step_2/output/
+data/stl_dataset/step_3/output/
+data/stl_dataset/step_4/
