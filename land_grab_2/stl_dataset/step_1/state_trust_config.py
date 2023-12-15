@@ -617,7 +617,7 @@ STATE_TRUST_CONFIGS = {
         STATE_ENABLING_ACT: '34. Stat. 267-286 , esp. 272, 274-75 (1906)',
         LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'OK/OK-found-parcels-mineral-parcels-0.geojson',
         DATA_SOURCE:
-            'https://gis.clo.ok.gov/arcgis/rest/services/Public/PLSSProd/MapServer/2',
+            'https://gis.clo.ok.gov/arcgis/rest/services/Public/PLSSProd/MapServer/3',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['*'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "*": 'Oklahoma State University'
