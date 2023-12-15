@@ -10,7 +10,7 @@ from land_grab_2.stl_dataset.step_1.constants import ALBERS_EQUAL_AREA, EXISTING
     TRUST_NAME, TOWNSHIP, RANGE, SECTION, MERIDIAN, ALIQUOT, RIGHTS_TYPE, \
     OK_HOLDING_DETAIL_ID, ACTIVITY, NET_ACRES, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SUB, \
     OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SURF_1, \
-    OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SURF_2, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SURF_3, GIS_ACRES
+    OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SURF_2, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SURF_3
 from land_grab_2.utilities.utils import _get_filename
 
 os.environ['RESTAPI_USE_ARCPY'] = 'FALSE'
@@ -167,6 +167,18 @@ def _filter_and_clean_shapefile(gdf, config, source, label, code, alias,
         filtered_gdf = _get_sd_subsurface_rights_type(filtered_gdf)
     elif 'UT' in source:
         filtered_gdf = _get_ut_activity(gdf, source)
+    elif source == 'OK-found-parcels-agriculture-parcels':
+        gdf = _get_ok_variant_town_range(gdf)
+    elif source == 'OK-found-parcels-agriculture-parcels-0':
+        gdf = _get_ok_variant_town_range(gdf)
+    elif source == 'OK-found-parcels-shortterm-parcels':
+        gdf = _get_ok_variant_town_range(gdf)
+    elif source == 'OK-found-parcels-longterm-parcels':
+        gdf = _get_ok_variant_town_range(gdf)
+    elif source == 'OK-found-parcels-mineral-parcels':
+        gdf = _get_ok_variant_town_range(gdf)
+    elif source == 'OK-found-parcels-mineral-parcels-0':
+        gdf = _get_ok_variant_town_range(gdf)
 
     filtered_gdf = _format_columns(filtered_gdf, config, alias)
 
@@ -246,6 +258,14 @@ def _get_ne_town_range_section(gdf):
 #         gdf[column] = gdf[column].str.slice(start=1,
 #                                             stop=3) + gdf[column].str.slice(start=4)
 #     return gdf
+
+def _get_ok_variant_town_range(gdf):
+    '''
+    OK surface data has township and range divided into two parts, so merge those parts
+    '''
+    gdf[TOWNSHIP] = gdf['TWP'].astype(str) + gdf['TDIR']
+    gdf[RANGE] = gdf['RNG'].astype(str) + gdf['RDIR']
+    return gdf
 
 
 def _get_ok_surface_town_range(gdf):
@@ -370,7 +390,14 @@ def _get_sd_subsurface_rights_type(gdf):
     return gdf
 
 
-def _filter_queried_oklahoma_data(gdf, data_source, activity_source=None):
+def clean_holding_detail_id(item):
+    item = str(item)
+    item = item.replace('}', '')
+    item = item.replace('{', '')
+    return item
+
+
+def _filter_queried_oklahoma_data(gdf, data_source, activity_source=None, debug_activity_source=None):
     filter_df = pd.read_csv(data_source)
 
     # change id from dictionary to string
@@ -399,9 +426,12 @@ def _filter_queried_oklahoma_data_surface(gdf):
     # OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_OSU
 
     # filter dataframe by specific ids
-    gdf1 = _filter_queried_oklahoma_data(gdf, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SURF_1)
-    gdf2 = _filter_queried_oklahoma_data(gdf, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SURF_2)
-    gdf3 = _filter_queried_oklahoma_data(gdf, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SURF_3)
+    gdf1 = _filter_queried_oklahoma_data(gdf, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SURF_1,
+                                         debug_activity_source='agricultural_lease')
+    gdf2 = _filter_queried_oklahoma_data(gdf, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SURF_2,
+                                         debug_activity_source='longterm_commercial_lease')
+    gdf3 = _filter_queried_oklahoma_data(gdf, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SURF_3,
+                                         debug_activity_source='shortterm_commercial_lease')
 
     df = pd.concat([gdf1, gdf2, gdf3])
     gdf_out = gpd.GeoDataFrame(df, geometry=df.geometry, crs=gdf.crs)
