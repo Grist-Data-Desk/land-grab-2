@@ -6,7 +6,7 @@ import restapi
 
 from land_grab_2.stl_dataset.step_1.constants import DOWNLOAD_TYPE, SHAPEFILE_DOWNLOAD_TYPE, LOCAL_DATA_SOURCE, LAYER, \
     ATTRIBUTE_LABEL_TO_FILTER_BY, ATTRIBUTE_CODE_TO_ALIAS_MAP, API_QUERY_DOWNLOAD_TYPE, GEOJSON_TYPE
-from land_grab_2.stl_dataset.step_1.dataset_cleaning import _clean_queried_data, _filter_and_clean_shapefile
+from land_grab_2.stl_dataset.step_1.dataset_cleaning import _clean_queried_data, _filter_and_clean_shapefile_or_geojson
 from land_grab_2.utilities.utils import _get_filename
 
 os.environ['RESTAPI_USE_ARCPY'] = 'FALSE'
@@ -37,7 +37,7 @@ def extract_and_clean_single_source_helper(source: str, config: dict,
                 _clean_queried_data(source, config, label, alias, queried_data_directory, cleaned_data_directory)
             # if cleaning a shapefile
             elif config[DOWNLOAD_TYPE] in [SHAPEFILE_DOWNLOAD_TYPE, GEOJSON_TYPE]:
-                _filter_and_clean_shapefile(gdf, config, source, label, code, alias, cleaned_data_directory)
+                _filter_and_clean_shapefile_or_geojson(gdf, config, source, label, code, alias, cleaned_data_directory)
 
 
 def _query_arcgis_restapi(config, source, label, code, alias, directory, regen=False):

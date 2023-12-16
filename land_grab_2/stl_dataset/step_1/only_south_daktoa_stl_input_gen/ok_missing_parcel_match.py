@@ -18,9 +18,10 @@ import typer
 from numpy import isnan
 from tqdm import tqdm
 
-from land_grab_2.stl_dataset.step_1.constants import OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SURF_1, \
+from land_grab_2.stl_dataset.step_1.constants import (OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SURF_1, \
     OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SURF_2, OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SURF_3, \
-    OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SUB, ATTRIBUTE_LABEL_TO_FILTER_BY, ATTRIBUTE_CODE_TO_ALIAS_MAP
+    OK_TRUST_FUNDS_TO_HOLDING_DETAIL_FILE_SUB, ATTRIBUTE_LABEL_TO_FILTER_BY, ATTRIBUTE_CODE_TO_ALIAS_MAP,
+                                                      STATE_TRUST_DATA_SOURCE_DIRECTORY)
 from land_grab_2.stl_dataset.step_1.dataset_cleaning import clean_holding_detail_id, \
     _filter_queried_oklahoma_data
 from land_grab_2.stl_dataset.step_1.state_trust_config import STATE_TRUST_CONFIGS
@@ -125,13 +126,13 @@ def process_single_search_results(search_one, source_name):
 @app.command()
 def search_missing_parcels():
     agriculture_parcels_csv = import_csv(
-        '/Users/mpr/Code/land-grab-2/data/stl_dataset/step_1/input/state_trust/source/OK/OK_missing_agricultural_parcels.csv')
+        STATE_TRUST_DATA_SOURCE_DIRECTORY + 'OK/OK_missing_agricultural_parcels.csv')
     longterm_parcels_csv = import_csv(
-        '/Users/mpr/Code/land-grab-2/data/stl_dataset/step_1/input/state_trust/source/OK/OK_missing_longterm_commercial_parcels.csv')
+        STATE_TRUST_DATA_SOURCE_DIRECTORY + 'OK/OK_missing_longterm_commercial_parcels.csv')
     shortterm_parcels_csv = import_csv(
-        '/Users/mpr/Code/land-grab-2/data/stl_dataset/step_1/input/state_trust/source/OK/OK_missing_shortterm_commercial_parcels.csv')
+        STATE_TRUST_DATA_SOURCE_DIRECTORY + 'OK/OK_missing_shortterm_commercial_parcels.csv')
     mineral_parcels_csv = import_csv(
-        '/Users/mpr/Code/land-grab-2/data/stl_dataset/step_1/input/state_trust/source/OK/OK_missing_mineral_parcels.csv')
+        STATE_TRUST_DATA_SOURCE_DIRECTORY + 'OK/OK_missing_mineral_parcels.csv')
 
     missing_csvs = [
         (agriculture_parcels_csv, 'agriculture_parcels'),

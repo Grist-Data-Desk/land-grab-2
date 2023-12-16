@@ -136,8 +136,8 @@ def _get_nd_activity(filtered_gdf, source, config):
     return filtered_gdf
 
 
-def _filter_and_clean_shapefile(gdf, config, source, label, code, alias,
-                                cleaned_data_directory):
+def _filter_and_clean_shapefile_or_geojson(gdf, config, source, label, code, alias,
+                                           cleaned_data_directory):
     # adding projection info for wisconsin
     if source == 'WI':
         gdf = gdf.to_crs(ALBERS_EQUAL_AREA)
