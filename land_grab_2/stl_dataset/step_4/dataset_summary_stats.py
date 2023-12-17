@@ -178,7 +178,8 @@ def gather_single_tribe_details(row, current_tribe, cession_number_col):
             RIGHTS_TYPE: row[RIGHTS_TYPE],
             UNIVERSITY: row[UNIVERSITY],
             STATE: row[STATE],
-            'cession_number': row[cession_number_col]
+            'cession_number': row[cession_number_col],
+            'geometry': row['geometry'],
         }
     except Exception as err:
         print(traceback.format_exc())
@@ -229,16 +230,77 @@ def gis_acres_sum_by_rights_type_tribe_summary(df):
     return tmp_summary
 
 
-def tribe_summary(df, output_dir):
+def create_fully_aggregated_tribe_summary(tribe_agg, tribe_summary):
+    """
+    Create the fully aggregated tribe summary with:
+    - Present day tribe
+    - Cession count and cession numbers
+    - Subsurface, surface, timber, and unknown rights types acres
+    - University and state
+    """
+    tribe_agg[GIS_ACRES] = tribe_agg[GIS_ACRES].map(sum)
+    tribe_agg = tribe_agg.apply(prettyify_list_of_strings, axis=1)
+    tribe_agg["cession_count"] = tribe_agg["cession_number"].map(
+        lambda v: len(v.split(","))
+    )
+    tribe_agg["cession_number"] = tribe_agg[
+        "cession_number"
+    ].replace(".0", "")
+
+    rights = gis_acres_sum_by_rights_type_tribe_summary(tribe_summary)
+    tribe_agg = tribe_agg.join(
+        rights.set_index("present_day_tribe"), on="present_day_tribe"
+    )
+
+    tribe_agg["surface_acres"] = tribe_agg[
+        "surface_acres"
+    ].map(lambda v: round(v, 2))
+    tribe_agg["subsurface_acres"] = tribe_agg[
+        "subsurface_acres"
+    ].map(lambda v: round(v, 2))
+    tribe_agg["timber_acres"] = tribe_agg["timber_acres"].map(
+        lambda v: round(v, 2)
+    )
+
+    # sequence columns
+    tribe_agg = tribe_agg[
+        [
+            "present_day_tribe",
+            "cession_count",
+            "cession_number",
+            *list(
+                sorted(
+                    c
+                    for c in tribe_agg.columns
+                    if c.endswith("_acres") and GIS_ACRES not in c
+                )
+            ),
+            "university",
+            "state",
+        ]
+    ]
+
+
+def tribe_summary(gdf, output_dir):
     results = list(itertools.chain.from_iterable([
         construct_single_tribe_info(row.to_dict())
-        for _, row in df.iterrows()
+        for _, row in gdf.iterrows()
     ]))
-    tribe_summary_tmp = pd.DataFrame(results)
+    tribe_summary_tmp = pd.DataFrame(results).drop(columns=['geometry'])
     group_cols = [c for c in list(tribe_summary_tmp.columns) if GIS_ACRES not in c and 'cession_number' not in c]
+
+    # Create the semi-aggregated tribe summary, first in CSV then as a GeoJSON.
     tribe_summary_semi_aggd = tribe_summary_tmp.groupby(group_cols)[GIS_ACRES].sum().reset_index()
     tribe_summary_semi_aggd.to_csv(output_dir / TRIBE_SUMMARY)
 
+    # Dissolve geometries by group_cols to generate MultiPolygons.
+    tribe_summary_semi_aggd_gdf = gpd.GeoDataFrame(results).dissolve(
+        by=group_cols,
+        aggfunc={GIS_ACRES: 'sum'}
+    ).reset_index();
+    tribe_summary_semi_aggd_gdf.to_file(output_dir / 'tribe-summary.geojson', driver='GeoJSON');
+
+    # Create the fully aggregated tribe summary, first in CSV then as a GeoJSON.
     tribe_summary_full_agg = tribe_summary_tmp.groupby(['present_day_tribe']).agg(list).reset_index()
     tribe_summary_full_agg[GIS_ACRES] = tribe_summary_full_agg[GIS_ACRES].map(sum)
     tribe_summary_full_agg = tribe_summary_full_agg.apply(prettyify_list_of_strings, axis=1)
@@ -266,6 +328,12 @@ def tribe_summary(df, output_dir):
 
     tribe_summary_full_agg.to_csv(output_dir / 'tribe-summary-condensed.csv')
 
+    tribe_summary_full_agg_gdf = gpd.GeoDataFrame(results).dissolve(
+        by='present_day_tribe',
+    ).agg(list).reset_index()
+
+
+
 
 def calculate_summary_statistics_helper(summary_statistics_data_directory, merged_data_directory):
     '''
@@ -278,12 +346,12 @@ def calculate_summary_statistics_helper(summary_statistics_data_directory, merge
     '''
 
     data_tld = Path(os.environ.get('DATA')).resolve()
-    input_file = data_tld / 'stl_dataset/step_3/output/stl_dataset_extra_activities_plus_cessions_plus_prices.csv'
+    input_file = data_tld / 'stl_dataset/step_3/output/stl_dataset_extra_activities_plus_cessions_plus_prices_wgs84.geojson'
     output_dir = data_tld / 'stl_dataset/step_4/output'
-    df_0 = gpd.read_file(input_file, ignore_geometry=True)
+    gdf = gpd.read_file(input_file)
 
-    df = df_0.copy(deep=True)
-    df_1 = df_0.copy(deep=True)
+    gdf_unis = gdf.copy(deep=True)
+    gdf_tribes = gdf.copy(deep=True)
 
     stats_dir = Path(summary_statistics_data_directory).resolve()
     if not stats_dir.exists():
@@ -292,8 +360,8 @@ def calculate_summary_statistics_helper(summary_statistics_data_directory, merge
     if not output_dir.exists():
         output_dir.mkdir(parents=True, exist_ok=True)
 
-    gis_acres_col = GIS_ACRES if GIS_ACRES in df.columns else 'gis_calculated_acres'
-    df[GIS_ACRES] = df[gis_acres_col].astype(float)
+    gis_acres_col = GIS_ACRES if GIS_ACRES in gdf_unis.columns else 'gis_calculated_acres'
+    gdf_unis[GIS_ACRES] = gdf_unis[gis_acres_col].astype(float)
 
-    university_summary(df, output_dir)
-    tribe_summary(df_1, output_dir)
+    university_summary(gdf_unis, output_dir)
+    tribe_summary(gdf_tribes, output_dir)
