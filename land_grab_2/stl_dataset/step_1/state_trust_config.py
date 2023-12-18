@@ -5,7 +5,7 @@ from land_grab_2.stl_dataset.step_1.constants import (
     SURFACE_RIGHTS_TYPE, SUBSURFACE_RIGHTS_TYPE, TRUST_NAME, TIMBER_RIGHTS_TYPE, LAYER,
     STATE_TRUST_DATA_SOURCE_DIRECTORY, EXISTING_COLUMN_TO_FINAL_COLUMN_MAP,
     ACRES, COUNTY, MERIDIAN, TOWNSHIP, RANGE, SECTION, ALIQUOT, BLOCK, ACTIVITY,
-    STATE_ENABLING_ACT, NET_ACRES)
+    STATE_ENABLING_ACT, NET_ACRES, GEOJSON_TYPE)
 
 STATE_TRUST_CONFIGS = {
     # 'AL': {
@@ -484,7 +484,6 @@ STATE_TRUST_CONFIGS = {
             'QuarterDescription': ALIQUOT,
         },
     },
-
     'OK-subsurface-mineral-lease': {
         DOWNLOAD_TYPE: API_QUERY_DOWNLOAD_TYPE,
         STATE: 'OK',
@@ -502,6 +501,131 @@ STATE_TRUST_CONFIGS = {
             'NetAcres': ACRES,
             'CountyName': COUNTY,
             # 'LegalDescription': ALIQUOT,
+        },
+    },
+    'OK-found-parcels-agriculture-parcels': {
+        DOWNLOAD_TYPE: GEOJSON_TYPE,
+        STATE: 'OK',
+        UNIVERSITY: 'Oklahoma State University',
+        MANAGING_AGENCY: 'Commissioners of the Land Office',
+        RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
+        ACTIVITY: 'Agricultural Lease',
+        STATE_ENABLING_ACT: '34. Stat. 267-286 , esp. 272, 274-75 (1906)',
+        LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'OK/OK-found-parcels-agriculture-parcels.geojson',
+        DATA_SOURCE:
+            'https://gis.clo.ok.gov/arcgis/rest/services/Public/PLSSProd/MapServer/2',
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['*'],
+        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+            "*": 'Oklahoma State University'
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'MER': MERIDIAN,
+            'SEC': SECTION,
+            'ALIQUOT': ALIQUOT,
+        },
+    },
+    'OK-found-parcels-agriculture-parcels-0': {
+        DOWNLOAD_TYPE: GEOJSON_TYPE,
+        STATE: 'OK',
+        UNIVERSITY: 'Oklahoma State University',
+        MANAGING_AGENCY: 'Commissioners of the Land Office',
+        RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
+        STATE_ENABLING_ACT: '34. Stat. 267-286 , esp. 272, 274-75 (1906)',
+        LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'OK/OK-found-parcels-agriculture-parcels-0.geojson',
+        DATA_SOURCE:
+            'https://gis.clo.ok.gov/arcgis/rest/services/Public/PLSSProd/MapServer/3',
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['*'],
+        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+            "*": 'Oklahoma State University'
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'MER': MERIDIAN,
+            'SEC': SECTION,
+            'SURV_NUMB': ALIQUOT,
+        },
+    },
+    'OK-found-parcels-shortterm-parcels': {
+        DOWNLOAD_TYPE: GEOJSON_TYPE,
+        STATE: 'OK',
+        UNIVERSITY: 'Oklahoma State University',
+        MANAGING_AGENCY: 'Commissioners of the Land Office',
+        RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
+        ACTIVITY: 'Short Term Commercial Lease',
+        STATE_ENABLING_ACT: '34. Stat. 267-286 , esp. 272, 274-75 (1906)',
+        LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'OK/OK-found-parcels-shortterm-parcels.geojson',
+        DATA_SOURCE:
+            'https://gis.clo.ok.gov/arcgis/rest/services/Public/PLSSProd/MapServer/2',
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['*'],
+        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+            "*": 'Oklahoma State University'
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'MER': MERIDIAN,
+            'SEC': SECTION,
+            'ALIQUOT': ALIQUOT,
+        },
+    },
+    'OK-found-parcels-longterm-parcels': {
+        DOWNLOAD_TYPE: GEOJSON_TYPE,
+        STATE: 'OK',
+        UNIVERSITY: 'Oklahoma State University',
+        MANAGING_AGENCY: 'Commissioners of the Land Office',
+        RIGHTS_TYPE: SURFACE_RIGHTS_TYPE,
+        ACTIVITY: 'Long Term Commercial Lease',
+        STATE_ENABLING_ACT: '34. Stat. 267-286 , esp. 272, 274-75 (1906)',
+        LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'OK/OK-found-parcels-longterm-parcels.geojson',
+        DATA_SOURCE:
+            'https://gis.clo.ok.gov/arcgis/rest/services/Public/PLSSProd/MapServer/2',
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['*'],
+        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+            "*": 'Oklahoma State University'
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'MER': MERIDIAN,
+            'SEC': SECTION,
+            'ALIQUOT': ALIQUOT,
+        },
+    },
+    'OK-found-parcels-mineral-parcels': {
+        DOWNLOAD_TYPE: GEOJSON_TYPE,
+        STATE: 'OK',
+        UNIVERSITY: 'Oklahoma State University',
+        MANAGING_AGENCY: 'Commissioners of the Land Office',
+        RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
+        ACTIVITY: 'Mineral Lease',
+        STATE_ENABLING_ACT: '34. Stat. 267-286 , esp. 272, 274-75 (1906)',
+        LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'OK/OK-found-parcels-mineral-parcels.geojson',
+        DATA_SOURCE:
+            'https://gis.clo.ok.gov/arcgis/rest/services/Public/PLSSProd/MapServer/2',
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['*'],
+        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+            "*": 'Oklahoma State University'
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'MER': MERIDIAN,
+            'SEC': SECTION,
+            'ALIQUOT': ALIQUOT,
+        },
+    },
+    'OK-found-parcels-mineral-parcels-0': {
+        DOWNLOAD_TYPE: GEOJSON_TYPE,
+        STATE: 'OK',
+        UNIVERSITY: 'Oklahoma State University',
+        MANAGING_AGENCY: 'Commissioners of the Land Office',
+        RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
+        ACTIVITY: 'Mineral Lease',
+        STATE_ENABLING_ACT: '34. Stat. 267-286 , esp. 272, 274-75 (1906)',
+        LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'OK/OK-found-parcels-mineral-parcels-0.geojson',
+        DATA_SOURCE:
+            'https://gis.clo.ok.gov/arcgis/rest/services/Public/PLSSProd/MapServer/3',
+        ATTRIBUTE_LABEL_TO_FILTER_BY: ['*'],
+        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+            "*": 'Oklahoma State University'
+        },
+        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+            'MER': MERIDIAN,
+            'SEC': SECTION,
+            'SURV_NUMB': ALIQUOT,
         },
     },
     'SD-subsurface': {

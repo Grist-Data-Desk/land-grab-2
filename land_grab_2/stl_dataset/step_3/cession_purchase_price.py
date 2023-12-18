@@ -12,6 +12,52 @@ from land_grab_2.stl_dataset.step_1.constants import GIS_ACRES
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
+not_a_cession = ['336', '368', '496', '510', '524', '525', '552', '591', '596', '599', '618', '621', '625', '632',
+                 '633', '651', '702', '713', '718', '540a']
+unknown_cession_data = ['717']
+
+
+def get_price_paid_per_acre(cession, price_info):
+    if cession in not_a_cession:
+        return 'N/A'
+
+    if cession in unknown_cession_data:
+        return 'Unknown'
+
+    return 0.0 if not price_info else float(price_info)
+
+
+def find_cession_number_column_name(row):
+    all_cession_nums_column = 'all_cession_numbers'
+    if 'all_cessions_numbers' in row.keys():
+        all_cession_nums_column = 'all_cessions_numbers'
+        return all_cession_nums_column
+
+    if 'all_cession_numbers' in row.keys():
+        all_cession_nums_column = 'all_cession_numbers'
+        return all_cession_nums_column
+
+    return None
+
+
+def extract_cession_numbers(row):
+    all_cession_nums_column = find_cession_number_column_name(row)
+    cession_nums = []
+
+    if all_cession_nums_column is None:
+        return cession_nums
+
+    if isinstance(row[all_cession_nums_column], str) or not np.isnan(row[all_cession_nums_column]):
+        space_split_cession_nums = row[all_cession_nums_column].split(' ')
+        if space_split_cession_nums:
+            return space_split_cession_nums
+
+        comma_split_cession_nums = row[all_cession_nums_column].split(',')
+        if comma_split_cession_nums:
+            return comma_split_cession_nums
+
+    return cession_nums
+
 
 def add_price_columns(stl_data, price_data):
     log.info('processing price information')
@@ -20,27 +66,39 @@ def add_price_columns(stl_data, price_data):
     cession_price_columns = [f'C{i}_price_paid_per_acre' for i, _ in enumerate(cession_columns, start=1)]
 
     out_rows = []
-    for row in stl_data.to_dict(orient='records'):
+    cession_prices_simple = {}
+    stl_data_as_dict = stl_data.to_dict(orient='records')
+    for row in stl_data_as_dict:
         # ensure all cessions have a correlated, initially blank, price column
         for c in cession_price_columns:
             row[c] = ''
 
-        cession_nums = ([]
-                        if ('all_cession_numbers' not in row.keys() or
-                            (not isinstance(row['all_cession_numbers'], str) and np.isnan(row['all_cession_numbers'])))
-                        else row['all_cession_numbers'].split(','))
-        cession_nums = list(itertools.chain.from_iterable([c if ' ' not in c else c.split(' ') for c in cession_nums]))
+        cession_nums = extract_cession_numbers(row)
+
+        if any(' ' in c for c in cession_nums):
+            cession_nums = list(
+                itertools.chain.from_iterable([c if ' ' not in c else c.split(' ') for c in cession_nums]))
+
         cession_prices = {}
         for i, cession in enumerate(cession_nums, start=1):
+            if cession in cession_prices_simple:
+                row[f'C{i}_price_paid_per_acre'] = cession_prices_simple[cession]
+                if isinstance(row[f'C{i}_price_paid_per_acre'], str):
+                    continue
+                cession_prices[(i, cession)] = row[f'C{i}_price_paid_per_acre']
+                continue
+
             cession_price_rows = price_data[price_data['Cession_Number'] == cession].to_dict(orient='records')
             if not cession_price_rows:
                 continue
-            price_info = (
-                cession_price_rows[0]["US_Paid_Per_Acre"].lstrip("$")
-                if not pd.isna(cession_price_rows[0]["US_Paid_Per_Acre"])
-                else cession_price_rows[0]["US_Paid_Per_Acre"]
-            )
-            row[f'C{i}_price_paid_per_acre'] = 0.0 if not price_info else float(price_info)
+
+            price_info = cession_price_rows[0]['US_Paid_Per_Acre - Inflation Adjusted'].lstrip('$')
+            row[f'C{i}_price_paid_per_acre'] = get_price_paid_per_acre(cession, price_info)
+            cession_prices_simple[cession] = row[f'C{i}_price_paid_per_acre']
+
+            if isinstance(row[f'C{i}_price_paid_per_acre'], str):
+                continue
+
             cession_prices[(i, cession)] = row[f'C{i}_price_paid_per_acre']
 
         if 'gis_calculated_acres' in row and row['gis_calculated_acres']:
@@ -60,8 +118,10 @@ def add_price_columns(stl_data, price_data):
     log.info('formatting columns')
     new_col_seq = []
     cession_price_column_names = cession_price_columns.copy()
+    all_cession_nums_column = find_cession_number_column_name(stl_data_as_dict[0])
+
     for c in all_columns:
-        if 'all_cession_numbers' in c:
+        if all_cession_nums_column is not None and all_cession_nums_column in c:
             new_col_seq.append(c)
             new_col_seq.append('price_paid_for_parcel')
         elif c.endswith('present_day_tribe'):
@@ -86,7 +146,8 @@ def main(
         out_dir.mkdir(parents=True, exist_ok=True)
 
     log.info(f'reading {stl_path}')
-    stl_data = pd.read_csv(stl_path)
+
+    stl_data = pd.read_csv(str(stl_path), low_memory=False)
     stl_geo = gpd.read_file(stl_path_geo)
     stl_geo_wgs84 = gpd.read_file(stl_path_geo_wgs84)
 
