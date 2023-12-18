@@ -68,9 +68,9 @@ def calculate_summary_statistics():
     and tribes listed in treaties associated with the university land, and which cessions
     (represented by Royce IDs) overlap with land held in trust. In the second, for each present
     day tribe, get total acreage of state land trust parcels, all associated cessions, and all
-    states and universities that have land taken from this tribe held in trust
+    states and universities that have land taken from this tribe held in trust.
     '''
-    calculate_summary_statistics_helper(_summary_statistics_data_directory(), _merged_data_directory())
+    calculate_summary_statistics_helper(_summary_statistics_data_directory())
 
 
 @app.command()

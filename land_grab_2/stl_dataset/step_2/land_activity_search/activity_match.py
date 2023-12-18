@@ -11,7 +11,7 @@ import geopandas
 import numpy as np
 import pandas as pd
 
-from land_grab_2.stl_dataset.step_1.constants import ACTIVITY, RIGHTS_TYPE
+from land_grab_2.stl_dataset.step_1.constants import ACTIVITY, RIGHTS_TYPE, WGS_84
 from land_grab_2.stl_dataset.step_2.land_activity_search.state_data_sources import STATE_ACTIVITIES, REWRITE_RULES
 from land_grab_2.utilities.overlap import tree_based_proximity, geometric_deduplication
 from land_grab_2.utilities.utils import GristCache, in_parallel, combine_delim_list
@@ -304,6 +304,11 @@ def main(stl_comparison_base_dir, stl_path: Path, the_out_dir: Path):
     log.info(f'final grist_data row_count: {gdf.shape[0]}')
     gdf.to_csv(str(the_out_dir / 'stl_dataset_extra_activities.csv'), index=False)
     gdf.to_file(str(the_out_dir / 'stl_dataset_extra_activities.geojson'), driver='GeoJSON')
+
+    # Additionally, create a version of the dataset in WGS84 for visualization.
+    gdf_wgs84 = gdf.to_crs(WGS_84)
+    gdf_wgs84.to_file(str(the_out_dir / 'stl_dataset_extra_activities_wgs84.geojson'), driver='GeoJSON')
+
     log.info(f'original grist_data row_count: {gdf.shape[0]}')
 
     # if ACTIVITY_DATA_UPDATE:
