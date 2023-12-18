@@ -47,14 +47,16 @@ def extract_cession_numbers(row):
     if all_cession_nums_column is None:
         return cession_nums
 
-    if isinstance(row[all_cession_nums_column], str) and not np.isnan(row[all_cession_nums_column]):
-        space_split_cession_nums = row[all_cession_nums_column].split(' ')
-        if space_split_cession_nums:
-            return space_split_cession_nums
+    if not isinstance(row[all_cession_nums_column], str):
+      return cession_nums
+    
+    space_split_cession_nums = row[all_cession_nums_column].split(' ')
+    if space_split_cession_nums:
+        return space_split_cession_nums
 
-        comma_split_cession_nums = row[all_cession_nums_column].split(',')
-        if comma_split_cession_nums:
-            return comma_split_cession_nums
+    comma_split_cession_nums = row[all_cession_nums_column].split(',')
+    if comma_split_cession_nums:
+        return comma_split_cession_nums
 
     return cession_nums
 
