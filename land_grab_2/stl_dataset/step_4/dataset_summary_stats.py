@@ -289,7 +289,7 @@ def tribe_summary(gdf, output_dir):
     tribe_summary_tmp = pd.DataFrame(results).drop(columns=['geometry'])
     group_cols = [c for c in list(tribe_summary_tmp.columns) if GIS_ACRES not in c and 'cession_number' not in c]
 
-    # Create the semi-aggregated tribe summary, first in CSV then as a GeoJSON.
+    # Create the semi-aggregated tribe summary as both CSV and GeoJSON.
     tribe_summary_semi_aggd = tribe_summary_tmp.groupby(group_cols)[GIS_ACRES].sum().reset_index()
     tribe_summary_semi_aggd.to_csv(output_dir / TRIBE_SUMMARY)
 
@@ -300,14 +300,12 @@ def tribe_summary(gdf, output_dir):
     ).reset_index();
     tribe_summary_semi_aggd_gdf.to_file(output_dir / 'tribe-summary.geojson', driver='GeoJSON');
 
-    # Create the fully aggregated tribe summary, first in CSV then as a GeoJSON.
+    # Create the fully-aggregated tribe summary as both CSV and GeoJSON.
     tribe_summary_full_agg = tribe_summary_tmp.groupby(['present_day_tribe']).agg(list).reset_index()
     tribe_summary_full_agg[GIS_ACRES] = tribe_summary_full_agg[GIS_ACRES].map(sum)
     tribe_summary_full_agg = tribe_summary_full_agg.apply(prettyify_list_of_strings, axis=1)
     tribe_summary_full_agg['cession_count'] = tribe_summary_full_agg['cession_number'].map(lambda v: len(v.split(',')))
     tribe_summary_full_agg['cession_number'] = tribe_summary_full_agg['cession_number'].replace(".0", "")
-
-    # tribe_summary_full_agg['cession_number'] = tribe_summary_full_agg['cession_number'].astype(str).astype(int)
 
     rights = gis_acres_sum_by_rights_type_tribe_summary(tribe_summary_tmp)
     tribe_summary_full_agg = tribe_summary_full_agg.join(rights.set_index('present_day_tribe'), on='present_day_tribe')
@@ -327,15 +325,27 @@ def tribe_summary(gdf, output_dir):
     ]]
 
     tribe_summary_full_agg.to_csv(output_dir / 'tribe-summary-condensed.csv')
+    
+    # Dissolve geometries by present_day_tribe to generate MultiPolygons.
+    tribe_summary_full_agg_gdf = (
+        gpd.GeoDataFrame(results)
+        .dissolve(
+            by="present_day_tribe",
+        )
+        .reset_index()
+    )
+    tribe_summary_geo = tribe_summary_full_agg_gdf.merge(
+        tribe_summary_full_agg, on="present_day_tribe", suffixes=("_x", "")
+    )
+    tribe_summary_geo.drop(
+        tribe_summary_geo.filter(regex="_x$").columns.tolist(), axis=1, inplace=True
+    )
+    tribe_summary_geo.to_file(
+        output_dir / "tribe-summary-condensed.geojson", driver="GeoJSON"
+    )
 
-    tribe_summary_full_agg_gdf = gpd.GeoDataFrame(results).dissolve(
-        by='present_day_tribe',
-    ).agg(list).reset_index()
 
-
-
-
-def calculate_summary_statistics_helper(summary_statistics_data_directory, merged_data_directory):
+def calculate_summary_statistics_helper(summary_statistics_data_directory):
     '''
     Calculate summary statistics based on the full dataset. Create two csvs. In the first,
     for each university calculate total acreage of land held in trust, all present day tribes
@@ -363,5 +373,6 @@ def calculate_summary_statistics_helper(summary_statistics_data_directory, merge
     gis_acres_col = GIS_ACRES if GIS_ACRES in gdf_unis.columns else 'gis_calculated_acres'
     gdf_unis[GIS_ACRES] = gdf_unis[gis_acres_col].astype(float)
 
-    university_summary(gdf_unis, output_dir)
+    # university_summary(gdf_unis, output_dir)
     tribe_summary(gdf_tribes, output_dir)
+
