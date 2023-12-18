@@ -17,13 +17,17 @@ not_a_cession = ['336', '368', '496', '510', '524', '525', '552', '591', '596', 
 unknown_cession_data = ['717']
 
 
-def get_price_paid_per_acre(cession, price_info):
+def get_price_paid_per_acre(cession, price_info_raw):
     if cession in not_a_cession:
         return 'N/A'
 
     if cession in unknown_cession_data:
         return 'Unknown'
 
+    if not isinstance(price_info_raw, str) and np.isnan(price_info_raw):
+        return 'Unknown'
+
+    price_info = price_info_raw.lstrip('$')
     return 0.0 if not price_info else float(price_info)
 
 
@@ -61,6 +65,28 @@ def extract_cession_numbers(row):
     return cession_nums
 
 
+def convert_cession_num_to_int(df):
+    cession_columns = [c for c in df.columns if c.startswith('cession_num_')]
+    for c in cession_columns:
+        df[c] = df[c].map(_convert_cession_num_to_int)
+
+    return df
+
+
+def _convert_cession_num_to_int(value):
+    if not isinstance(value, str) and np.isnan(value):
+        return ''
+    if isinstance(value, str) and value.isalnum():
+        return value
+    if isinstance(value, str):
+        value = value.replace(".0", "")
+        return value
+
+    value = str(int(value))
+
+    return value
+
+
 def add_price_columns(stl_data, price_data):
     log.info('processing price information')
     all_columns = stl_data.columns.tolist()
@@ -70,7 +96,7 @@ def add_price_columns(stl_data, price_data):
     out_rows = []
     cession_prices_simple = {}
     stl_data_as_dict = stl_data.to_dict(orient='records')
-    for row in stl_data_as_dict:
+    for i, row in enumerate(stl_data_as_dict):
         # ensure all cessions have a correlated, initially blank, price column
         for c in cession_price_columns:
             row[c] = ''
@@ -94,7 +120,7 @@ def add_price_columns(stl_data, price_data):
             if not cession_price_rows:
                 continue
 
-            price_info = cession_price_rows[0]['US_Paid_Per_Acre - Inflation Adjusted'].lstrip('$')
+            price_info = cession_price_rows[0]['US_Paid_Per_Acre - Inflation Adjusted']
             row[f'C{i}_price_paid_per_acre'] = get_price_paid_per_acre(cession, price_info)
             cession_prices_simple[cession] = row[f'C{i}_price_paid_per_acre']
 
@@ -134,6 +160,7 @@ def add_price_columns(stl_data, price_data):
 
     df = pd.DataFrame(out_rows)
     df = df[new_col_seq]
+    df = convert_cession_num_to_int(df)
     return df
 
 
