@@ -47,7 +47,7 @@ def extract_cession_numbers(row):
     if all_cession_nums_column is None:
         return cession_nums
 
-    if isinstance(row[all_cession_nums_column], str) or not np.isnan(row[all_cession_nums_column]):
+    if isinstance(row[all_cession_nums_column], str) and not np.isnan(row[all_cession_nums_column]):
         space_split_cession_nums = row[all_cession_nums_column].split(' ')
         if space_split_cession_nums:
             return space_split_cession_nums
