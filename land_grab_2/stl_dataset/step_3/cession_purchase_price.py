@@ -3,7 +3,7 @@ import logging
 import os
 from pathlib import Path
 
-import geopandas
+import geopandas as gpd
 import numpy as np
 import pandas as pd
 
@@ -35,7 +35,11 @@ def add_price_columns(stl_data, price_data):
             cession_price_rows = price_data[price_data['Cession_Number'] == cession].to_dict(orient='records')
             if not cession_price_rows:
                 continue
-            price_info = cession_price_rows[0]['US_Paid_Per_Acre'].lstrip('$')
+            price_info = (
+                cession_price_rows[0]["US_Paid_Per_Acre"].lstrip("$")
+                if not pd.isna(cession_price_rows[0]["US_Paid_Per_Acre"])
+                else cession_price_rows[0]["US_Paid_Per_Acre"]
+            )
             row[f'C{i}_price_paid_per_acre'] = 0.0 if not price_info else float(price_info)
             cession_prices[(i, cession)] = row[f'C{i}_price_paid_per_acre']
 
@@ -69,27 +73,40 @@ def add_price_columns(stl_data, price_data):
     df = pd.DataFrame(out_rows)
     df = df[new_col_seq]
     return df
-    # gdf = geopandas.GeoDataFrame(df, geometry=df.geometry, crs=stl_data.crs)
-    #
-    # return gdf
 
 
-def main(stl_path: Path, cession_price_data: Path, the_out_dir: Path):
-    if not the_out_dir.exists():
-        the_out_dir.mkdir(parents=True, exist_ok=True)
+def main(
+    stl_path: Path,
+    stl_path_geo: Path,
+    stl_path_geo_wgs84,
+    cession_price_path: Path,
+    out_dir: Path,
+):
+    if not out_dir.exists():
+        out_dir.mkdir(parents=True, exist_ok=True)
 
     log.info(f'reading {stl_path}')
-    stl_data = pd.read_csv(str(stl_path))
+    stl_data = pd.read_csv(stl_path)
+    stl_geo = gpd.read_file(stl_path_geo)
+    stl_geo_wgs84 = gpd.read_file(stl_path_geo_wgs84)
 
-    log.info(f'reading {cession_price_data}')
-    price_data = geopandas.read_file(str(cession_price_data))
+    log.info(f'reading {cession_price_path}')
+    price_data = pd.read_csv(cession_price_path)
 
     stl_w_price = add_price_columns(stl_data, price_data)
+    stl_w_price_geo = gpd.GeoDataFrame(stl_w_price, geometry=stl_geo.geometry, crs=stl_geo.crs)
+    stl_w_price_geo_wgs84 = gpd.GeoDataFrame(stl_w_price, geometry=stl_geo_wgs84.geometry, crs=stl_geo_wgs84.crs)
 
     log.info(f'final grist_data row_count: {stl_w_price.shape[0]}')
-    stl_w_price.to_csv(str(the_out_dir / 'stl_dataset_extra_activities_plus_cessions_plus_prices.csv'), index=False)
-    # stl_w_price.to_file(str(the_out_dir / 'stl_dataset_extra_activities_plus_cessions_plus_prices.geojson'),
-    #                     driver='GeoJSON')
+    stl_w_price.to_csv(out_dir / 'stl_dataset_extra_activities_plus_cessions_plus_prices.csv', index=False)
+    stl_w_price_geo.to_file(
+        out_dir / 'stl_dataset_extra_activities_plus_cessions_plus_prices.geojson',
+        driver='GeoJSON'
+    )
+    stl_w_price_geo_wgs84.to_file(
+        out_dir / 'stl_dataset_extra_activities_plus_cessions_plus_prices_wgs84.geojson',
+        driver='GeoJSON'
+    )
     log.info(f'original grist_data row_count: {stl_data.shape[0]}')
 
 
@@ -101,19 +118,25 @@ def run():
         raise Exception(f'RequiredEnvVar: The following ENV vars must be set. {missing_envs}')
 
     data_tld = os.environ.get('DATA')
+    prev_data_dir = Path(f'{data_tld}/stl_dataset/step_2_5').resolve()
     base_data_dir = Path(f'{data_tld}/stl_dataset/step_3').resolve()
-    cession_price_data = base_data_dir / 'input/Cession_Data.csv'
+    cession_price_path = base_data_dir / 'input/Cession_Data.csv'
 
-    prev_step_output = Path(f'{data_tld}/stl_dataset/step_2_5/output').resolve()
-    stl = next(
-        (f for f in prev_step_output.iterdir() if 'csv' in f.name),
-        None
-    )
-    if not stl:
+    prev_step_output = prev_data_dir / 'output'
+    stl_path = next((f for f in prev_step_output.iterdir() if 'csv' in f.name), None)
+    stl_path_geo = prev_data_dir / 'output/stl_dataset_extra_activities_plus_cessions.geojson'
+    stl_path_geo_wgs84 = prev_data_dir / 'output/stl_dataset_extra_activities_plus_cessions_wgs84.geojson'
+    if not stl_path:
         raise Exception(f'MissingInputFile: No CSV was found in: {prev_step_output}.')
 
     out_dir = base_data_dir / 'output'
-    main(stl, cession_price_data, out_dir)
+    main(
+        stl_path=stl_path,
+        stl_path_geo=stl_path_geo,
+        stl_path_geo_wgs84=stl_path_geo_wgs84,
+        cession_price_path=cession_price_path,
+        out_dir=out_dir
+    )
 
 
 if __name__ == '__main__':
