@@ -98,6 +98,9 @@ WI_KEY = {
     '2212': 'Open to hunting only',
 }
 
+MISC_KEY = {
+    '': '',
+}
 
 def get_activity_column(activity, state):
     # which col in the rewrite rules is the one that becomes activity
@@ -134,6 +137,12 @@ def translate_state_activity_code(activity_name):
 
     return activity_name
 
+def aggregate_misc(activity_name):
+    if activity_name in MISC_KEY:
+        return MISC_KEY[activity_name]
+
+    return activity_name
+
 
 def get_activity_name(state, activity, activity_row):
     activity_name = None
@@ -158,6 +167,7 @@ def get_activity_name(state, activity, activity_row):
 
     if activity_name and activity_name is not np.nan:
         activity_name = translate_state_activity_code(activity_name)
+        activity_name = aggregate_misc(activity_name)    
 
     return activity_name if activity_name else activity.name
 
