@@ -27,6 +27,38 @@ def get_price_paid_per_acre(cession, price_info):
     return 0.0 if not price_info else float(price_info)
 
 
+def find_cession_number_column_name(row):
+    all_cession_nums_column = 'all_cession_numbers'
+    if 'all_cessions_numbers' in row.keys():
+        all_cession_nums_column = 'all_cessions_numbers'
+        return all_cession_nums_column
+
+    if 'all_cession_numbers' in row.keys():
+        all_cession_nums_column = 'all_cession_numbers'
+        return all_cession_nums_column
+
+    return None
+
+
+def extract_cession_numbers(row):
+    all_cession_nums_column = find_cession_number_column_name(row)
+    cession_nums = []
+
+    if all_cession_nums_column is None:
+        return cession_nums
+
+    if isinstance(row[all_cession_nums_column], str) or not np.isnan(row[all_cession_nums_column]):
+        space_split_cession_nums = row[all_cession_nums_column].split(' ')
+        if space_split_cession_nums:
+            return space_split_cession_nums
+
+        comma_split_cession_nums = row[all_cession_nums_column].split(',')
+        if comma_split_cession_nums:
+            return comma_split_cession_nums
+
+    return cession_nums
+
+
 def add_price_columns(stl_data, price_data):
     log.info('processing price information')
     all_columns = stl_data.columns.tolist()
@@ -35,15 +67,14 @@ def add_price_columns(stl_data, price_data):
 
     out_rows = []
     cession_prices_simple = {}
-    for row in stl_data.to_dict(orient='records'):
+    stl_data_as_dict = stl_data.to_dict(orient='records')
+    for row in stl_data_as_dict:
         # ensure all cessions have a correlated, initially blank, price column
         for c in cession_price_columns:
             row[c] = ''
 
-        cession_nums = ([]
-                        if ('all_cession_numbers' not in row.keys() or
-                            (not isinstance(row['all_cession_numbers'], str) and np.isnan(row['all_cession_numbers'])))
-                        else row['all_cession_numbers'].split(','))
+        cession_nums = extract_cession_numbers(row)
+
         if any(' ' in c for c in cession_nums):
             cession_nums = list(
                 itertools.chain.from_iterable([c if ' ' not in c else c.split(' ') for c in cession_nums]))
@@ -86,8 +117,10 @@ def add_price_columns(stl_data, price_data):
     log.info('formatting columns')
     new_col_seq = []
     cession_price_column_names = cession_price_columns.copy()
+    all_cession_nums_column = find_cession_number_column_name(stl_data_as_dict[0])
+
     for c in all_columns:
-        if 'all_cession_numbers' in c:
+        if all_cession_nums_column is not None and all_cession_nums_column in c:
             new_col_seq.append(c)
             new_col_seq.append('price_paid_for_parcel')
         elif c.endswith('present_day_tribe'):
