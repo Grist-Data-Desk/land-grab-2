@@ -169,7 +169,7 @@ def map_and_impute_ok_data(df, activity_type):
         'Acres': 'acres',
         'Meridian': 'meridian',
         'Section': 'section',
-        'QuarterDescription': 'aliquot',
+        'Legal_Description': 'aliquot',
         }
 
     mapped_df = df.rename(columns=column_mapping)
