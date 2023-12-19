@@ -350,12 +350,6 @@ def translate_state_activity_code(activity_name):
 
     return activity_name
 
-def aggregate_misc(activity_name):
-    if activity_name in MISC_KEY:
-        return MISC_KEY[activity_name]
-
-    return activity_name
-
 
 def get_activity_name(state, activity, activity_row):
     activity_name = None
