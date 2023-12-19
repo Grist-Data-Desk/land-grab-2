@@ -251,22 +251,22 @@ def get_activity_column(activity, state):
     ]
 
 
-def translate_state_activity_code(activity_name):
+def translate_state_activity_code(activity_name, state):
     if isinstance(activity_name, float):
         activity_name = int(activity_name)
     if isinstance(activity_name, int):
         activity_name = str(activity_name)    
 
-    if activity_name in AZ_KEY:
+    if activity_name in AZ_KEY and state == 'AZ':
         return AZ_KEY[activity_name]
 
-    if activity_name in MT_KEY:
+    if activity_name in MT_KEY and state == 'MT':
         return MT_KEY[activity_name]
 
-    if activity_name in WI_KEY:
+    if activity_name in WI_KEY and state == 'WI':
         return WI_KEY[activity_name]
 
-    if activity_name in WA_KEY:
+    if activity_name in WA_KEY and state == 'WA':
         return WA_KEY[activity_name]
 
     return activity_name
@@ -294,7 +294,7 @@ def get_activity_name(state, activity, activity_row):
                         break
 
     if activity_name and activity_name is not np.nan:
-        activity_name = translate_state_activity_code(activity_name)
+        activity_name = translate_state_activity_code(activity_name, state)
 
     return activity_name if activity_name else activity.name
 
