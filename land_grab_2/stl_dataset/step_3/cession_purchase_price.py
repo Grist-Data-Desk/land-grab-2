@@ -164,11 +164,62 @@ def add_price_columns(stl_data, price_data):
     return df
 
 
+def map_and_impute_ok_data(df, activity_type):
+    column_mapping = {
+        'Acres': 'acres',
+        'Meridian': 'meridian',
+        'Section': 'section',
+        'QuarterDescription': 'aliquot',
+        }
+
+    mapped_df = df.rename(columns=column_mapping)
+
+    mapped_df['township'] = df['Township'].astype(str) + df['TownshipDirection']
+    mapped_df['range'] = df['Range'].astype(str) + df['RangeDirection']
+
+    mapped_df['state'] = 'OK'
+    mapped_df['state_enabling_act'] = '34. Stat. 267-286 , esp. 272, 274-75 (1906)'
+    mapped_df['trust_name'] = 'Oklahoma State University'
+    mapped_df['managing_agency'] = 'Commissioners of the Land Office'
+    mapped_df['university'] = 'Oklahoma State University'
+
+    if activity_type == 'agriculture':
+        mapped_df['activity'] = 'Agriculture'
+        mapped_df['rights_type'] = 'surface'
+    elif activity_type == 'longterm':
+        mapped_df['activity'] = 'Longterm Commercial'
+        mapped_df['rights_type'] = 'surface'
+    elif activity_type == 'mineral':
+        mapped_df['activity'] = 'Mineral Lease'
+        mapped_df['rights_type'] = 'subsurface'
+
+    mapped_df['object_id'] = mapped_df.index + 1
+
+    mapped_df = mapped_df[['object_id',
+                           'state',
+                           'state_enabling_act',
+                           'trust_name',
+                           'managing_agency',
+                           'university',
+                           'acres',
+                           'meridian',
+                           'section',
+                           'aliquot',
+                           'township',
+                           'range',
+                           'activity',
+                           'rights_type']]
+    return mapped_df
+
+
 def main(
     stl_path: Path,
     stl_path_geo: Path,
     stl_path_geo_wgs84,
     cession_price_path: Path,
+    ok_ag_path: Path,
+    ok_longterm_path: Path,
+    ok_mineral_path: Path,
     out_dir: Path,
 ):
     if not out_dir.exists():
@@ -183,12 +234,23 @@ def main(
     log.info(f'reading {cession_price_path}')
     price_data = pd.read_csv(cession_price_path)
 
-    stl_w_price = add_price_columns(stl_data, price_data)
-    stl_w_price_geo = gpd.GeoDataFrame(stl_w_price, geometry=stl_geo.geometry, crs=stl_geo.crs)
-    stl_w_price_geo_wgs84 = gpd.GeoDataFrame(stl_w_price, geometry=stl_geo_wgs84.geometry, crs=stl_geo_wgs84.crs)
+    log.info(f'reading {ok_ag_path}')
+    ok_ag_data = pd.read_csv(ok_ag_path)
+    log.info(f'reading {ok_longterm_path}')
+    ok_longterm_data = pd.read_csv(ok_longterm_path)
+    log.info(f'reading {ok_mineral_path}')
+    ok_mineral_data = pd.read_csv(ok_mineral_path)
 
-    log.info(f'final grist_data row_count: {stl_w_price.shape[0]}')
-    stl_w_price.to_csv(out_dir / 'stl_dataset_extra_activities_plus_cessions_plus_prices.csv', index=False)
+    stl_w_price = add_price_columns(stl_data, price_data)
+    ok_ag_data_mapped = map_and_impute_ok_data(ok_ag_data, 'agriculture')
+    ok_longterm_data_mapped = map_and_impute_ok_data(ok_longterm_data, 'longterm')
+    ok_mineral_data_mapped = map_and_impute_ok_data(ok_mineral_data, 'mineral')
+    stl_w_price_and_ok = pd.concat([stl_w_price, ok_ag_data_mapped, ok_longterm_data_mapped, ok_mineral_data_mapped], ignore_index=True)
+    stl_w_price_geo = gpd.GeoDataFrame(stl_w_price_and_ok, geometry=stl_geo.geometry, crs=stl_geo.crs)
+    stl_w_price_geo_wgs84 = gpd.GeoDataFrame(stl_w_price_and_ok, geometry=stl_geo_wgs84.geometry, crs=stl_geo_wgs84.crs)
+
+    log.info(f'final grist_data row_count: {stl_w_price_and_ok.shape[0]}')
+    stl_w_price_and_ok.to_csv(out_dir / 'stl_dataset_extra_activities_plus_cessions_plus_prices.csv', index=False)
     stl_w_price_geo.to_file(
         out_dir / 'stl_dataset_extra_activities_plus_cessions_plus_prices.geojson',
         driver='GeoJSON'
@@ -214,6 +276,9 @@ def run():
 
     prev_step_output = prev_data_dir / 'output'
     stl_path = next((f for f in prev_step_output.iterdir() if 'csv' in f.name), None)
+    ok_ag_path = base_data_dir / 'input/still_missing-agriculture_parcels.csv'
+    ok_longterm_path = base_data_dir / 'input/still_missing-longterm_parcels.csv'
+    ok_mineral_path = base_data_dir / 'input/still_missing-mineral_parcels.csv'
     stl_path_geo = prev_data_dir / 'output/stl_dataset_extra_activities_plus_cessions.geojson'
     stl_path_geo_wgs84 = prev_data_dir / 'output/stl_dataset_extra_activities_plus_cessions_wgs84.geojson'
     if not stl_path:
@@ -222,7 +287,10 @@ def run():
     out_dir = base_data_dir / 'output'
     main(
         stl_path=stl_path,
+        ok_ag_path=ok_ag_path,
+        ok_longterm_path=ok_longterm_path,
         stl_path_geo=stl_path_geo,
+        ok_mineral_path=ok_mineral_path,
         stl_path_geo_wgs84=stl_path_geo_wgs84,
         cession_price_path=cession_price_path,
         out_dir=out_dir
