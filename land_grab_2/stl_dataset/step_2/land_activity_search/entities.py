@@ -29,6 +29,7 @@ class StateActivityDataSource:
     is_restricted_activity: bool = False
     is_restricted_subsurface_activity: bool = False
     activity_name_appendage_col:Optional[str]=None
+    is_misc: bool = False
     scheduler: str = None
     use_cache: bool = True
 
