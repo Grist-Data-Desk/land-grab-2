@@ -278,7 +278,7 @@ def get_activity_name(state, activity, activity_row):
     if activity.use_name_as_activity and activity.activity_name_appendage_col:
         col_val = activity_row[activity.activity_name_appendage_col]
         if col_val.values[0]:
-            activity_name = col_val.values[0]
+            activity_name = f"{activity.name} - {col_val.values[0]}"
 
     if activity_name is None:
         possible_activity_cols = get_activity_column(activity, state)
