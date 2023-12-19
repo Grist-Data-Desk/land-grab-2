@@ -21,7 +21,7 @@ REWRITE_RULES = {
             "DteExpires": "Lease End Date"
         },
         "Timber": {
-            "Sale_Status": "Activity"
+            "Sale_Statu": "Activity"
         },
         "Oil and gas": {
             "Status": "Activity"
