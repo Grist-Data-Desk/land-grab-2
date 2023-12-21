@@ -60,7 +60,7 @@ REWRITE_RULES = {
             "T_EXPDATE": "Lease End Date"
         },
         "Conservation Easement": {
-            "EASETYPE": "Activity"
+            "EASETYPE": "Sub-activity"
         },
         "Active NonFerrous Mineral Lease": {
             "T_LEASETYPE": "Activity"

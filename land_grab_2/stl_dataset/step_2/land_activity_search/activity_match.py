@@ -11,7 +11,7 @@ import geopandas
 import numpy as np
 import pandas as pd
 
-from land_grab_2.stl_dataset.step_1.constants import ACTIVITY, RIGHTS_TYPE, WGS_84
+from land_grab_2.stl_dataset.step_1.constants import ACTIVITY, RIGHTS_TYPE, STATE, WGS_84
 from land_grab_2.stl_dataset.step_2.land_activity_search.state_data_sources import STATE_ACTIVITIES, REWRITE_RULES
 from land_grab_2.utilities.overlap import tree_based_proximity, geometric_deduplication
 from land_grab_2.utilities.utils import GristCache, in_parallel, combine_delim_list
@@ -274,11 +274,13 @@ def translate_state_activity_code(activity_name, state):
 
 def get_activity_name(state, activity, activity_row):
     activity_name = None
+    appendage_col_value = None
 
     if activity.use_name_as_activity and activity.activity_name_appendage_col:
         col_val = activity_row[activity.activity_name_appendage_col]
         if col_val.values[0]:
-            activity_name = f"{activity.name} - {col_val.values[0]}"
+            activity_name = col_val.values[0]
+            appendage_col_value = col_val.values[0]
 
     if activity_name is None:
         possible_activity_cols = get_activity_column(activity, state)
@@ -286,43 +288,50 @@ def get_activity_name(state, activity, activity_row):
             for activity_col in possible_activity_cols:
                 if activity_col and activity_col in activity_row.keys():
                     activity_name_row = activity_row[activity_col].tolist()
-                    if activity_name_row is not None and isinstance(activity_name_row, list):
+                    if any(activity_name_row):
                         activity_name = str(activity_name_row[0])
-                        if 'None' in activity_name:
+                        if "None" in activity_name:
                             activity_name = None
                             continue
                         break
 
-    if activity_name and activity_name is not np.nan:
+    if pd.notna(activity_name):
         activity_name = translate_state_activity_code(activity_name, state)
+
+    activity_name = (
+        f"{activity_name} - {appendage_col_value}"
+        if appendage_col_value is not None
+        else activity_name
+    )
 
     return activity_name if activity_name else activity.name
 
 def is_subsurface_activity(activity_name):
         return MISC_KEY.get(activity_name, 'surface') == 'subsurface'
 
-def is_incompatible_activity(grist_row, activity, activity_name):
-    
-    restricted_rights_types_for_subsurface = ['subsurface']
-    restricted_rights_types_for_surface = ['surface']
+def is_incompatible_activity(grist_row, activity, activity_name, state):
+    if grist_row[STATE] == state:
+        
+        restricted_rights_types_for_subsurface = ['subsurface']
+        restricted_rights_types_for_surface = ['surface']
 
-    if activity.is_misc:
-        if is_subsurface_activity(activity_name):
-            if grist_row[RIGHTS_TYPE] in restricted_rights_types_for_surface:
-                return True
-        else:
-            if grist_row[RIGHTS_TYPE] in restricted_rights_types_for_subsurface:
-                return True
+        if activity.is_misc:
+            if is_subsurface_activity(activity_name):
+                if grist_row[RIGHTS_TYPE] in restricted_rights_types_for_surface:
+                    return True
+            else:
+                if grist_row[RIGHTS_TYPE] in restricted_rights_types_for_subsurface:
+                    return True
 
-    restricted_rights_types = ['subsurface']
-    if grist_row[RIGHTS_TYPE] in restricted_rights_types and activity.is_restricted_activity:
-        return True
+        restricted_rights_types = ['subsurface']
+        if grist_row[RIGHTS_TYPE] in restricted_rights_types and activity.is_restricted_activity:
+            return True
 
-    restricted_rights_types = ['surface']
-    if grist_row[RIGHTS_TYPE] in restricted_rights_types and activity.is_restricted_subsurface_activity:
-        return True
+        restricted_rights_types = ['surface']
+        if grist_row[RIGHTS_TYPE] in restricted_rights_types and activity.is_restricted_subsurface_activity:
+            return True
 
-    return False
+        return False
 
 
 def exclude_inactive(state, activity_row):
@@ -352,7 +361,7 @@ def capture_matches(matches, state, activity):
             activity_name = rewrite_list[activity_name]
 
         total += 1
-        if contains and not is_incompatible_activity(grist_row, activity, activity_name):
+        if contains and not is_incompatible_activity(grist_row, activity, activity_name, state):
             does_contain += 1
             if exclude_inactive(state, activity_row):
                 continue
