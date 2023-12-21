@@ -257,16 +257,16 @@ def translate_state_activity_code(activity_name, state):
     if isinstance(activity_name, int):
         activity_name = str(activity_name)    
 
-    if activity_name in AZ_KEY and state == 'AZ':
+    if activity_name in AZ_KEY:
         return AZ_KEY[activity_name]
 
-    if activity_name in MT_KEY and state == 'MT':
+    if activity_name in MT_KEY:
         return MT_KEY[activity_name]
 
-    if activity_name in WI_KEY and state == 'WI':
+    if activity_name in WI_KEY:
         return WI_KEY[activity_name]
 
-    if activity_name in WA_KEY and state == 'WA':
+    if activity_name in WA_KEY:
         return WA_KEY[activity_name]
 
     return activity_name
@@ -316,12 +316,13 @@ def is_incompatible_activity(grist_row, activity, activity_name, state):
         restricted_rights_types_for_surface = ['surface']
 
         if activity.is_misc:
-            if is_subsurface_activity(activity_name):
-                if grist_row[RIGHTS_TYPE] in restricted_rights_types_for_surface:
-                    return True
-            else:
-                if grist_row[RIGHTS_TYPE] in restricted_rights_types_for_subsurface:
-                    return True
+            if (
+                is_subsurface_activity(activity_name) and
+                grist_row[RIGHTS_TYPE] in restricted_rights_types_for_surface
+            ):
+                return True
+            elif grist_row[RIGHTS_TYPE] in restricted_rights_types_for_subsurface:
+                return True
 
         restricted_rights_types = ['subsurface']
         if grist_row[RIGHTS_TYPE] in restricted_rights_types and activity.is_restricted_activity:
@@ -332,6 +333,8 @@ def is_incompatible_activity(grist_row, activity, activity_name, state):
             return True
 
         return False
+    else:
+        return True
 
 
 def exclude_inactive(state, activity_row):
