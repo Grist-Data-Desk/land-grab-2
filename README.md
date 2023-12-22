@@ -8,7 +8,7 @@ This project currently requires using Python <= 3.10.4. To set the appropriate P
 
 ### Prerequisities
 
-This project uses [Git LFS](https://git-lfs.com/) to store `.zip`, `.dbf`, and `.shp` files remotely on GitHub rather than directly in the repository source. In order to access these files and build the datasets locally, you'll need to do the following:
+This project uses [Git LFS](https://git-lfs.com/) to store `.zip`, `.dbf`, `.shp`, and `.geojson` files remotely on GitHub rather than directly in the repository source. In order to access these files and build the datasets locally, you'll need to do the following:
 
 1. **Install Git LFS.** Follow [the installation instructions](https://github.com/git-lfs/git-lfs#installing) for your operating system.
 2. At the terminal, run the following two commands (without typing the dollar sign):
