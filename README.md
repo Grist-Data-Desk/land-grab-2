@@ -2,6 +2,10 @@
 
 ## Installation
 
+### Python Version Requirement
+
+This project currently requires using Python <= 3.10.4. To set the appropriate Python version locally, consider using a Python version manager like [`pyenv`](https://github.com/pyenv/pyenv).
+
 ### Prerequisities
 
 This project uses [Git LFS](https://git-lfs.com/) to store `.zip`, `.dbf`, and `.shp` files remotely on GitHub rather than directly in the repository source. In order to access these files and build the datasets locally, you'll need to do the following:
