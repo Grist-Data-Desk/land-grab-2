@@ -84,7 +84,7 @@ Stage 2.5 involves manually enriching the unified dataset from Stage 2 (`data/st
 To execute Stage 3, run the following command at the terminal:
 
 ```sh
-DATA=data python run.py stl-stage-3
+$ DATA=data python run.py stl-stage-3
 ```
 
 This command will take the first CSV found in `data/stl_dataset/step_2_5/output/` and augment it with the prices paid for each parcel of land. The `data` directory for Stage 3 already contains a listing a CSV with the listing of prices paid for land (`data/stl_dataset/step_3/input/Cession_Data.csv`).
@@ -108,8 +108,4 @@ The outputs of this stage are three files, written to:
 
 ### Private Holdings Dataset
 
-- `$ DATA=data python run.py --help`
-- `$ DATA=data python run.py --help`
-
-
-
+—Coming soon—
