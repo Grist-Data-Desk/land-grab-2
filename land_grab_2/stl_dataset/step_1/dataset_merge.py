@@ -10,7 +10,7 @@ import pandas as pd
 from land_grab_2.stl_dataset.step_1.constants import ALL_STATES, ACTIVITY, FINAL_DATASET_COLUMNS, \
     GIS_ACRES, \
     ALBERS_EQUAL_AREA, WGS_84, ACRES_TO_SQUARE_METERS, ACRES, OBJECT_ID, TRUST_NAME, ATTRIBUTE_LABEL_TO_FILTER_BY, \
-    ATTRIBUTE_CODE_TO_ALIAS_MAP, PARCEL_COUNT, ACRES_AGG, STATE
+    ATTRIBUTE_CODE_TO_ALIAS_MAP, PARCEL_COUNT, ACRES_AGG
 from land_grab_2.stl_dataset.step_1.state_trust_config import STATE_TRUST_CONFIGS
 from land_grab_2.utilities.overlap import combine_dfs, fix_geometries
 from land_grab_2.utilities.utils import state_specific_directory, combine_delim_list, _get_filename
