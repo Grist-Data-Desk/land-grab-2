@@ -251,7 +251,7 @@ def get_activity_column(activity, state):
     ]
 
 
-def translate_state_activity_code(activity_name, state):
+def translate_state_activity_code(activity_name):
     if isinstance(activity_name, float):
         activity_name = int(activity_name)
     if isinstance(activity_name, int):
@@ -297,11 +297,9 @@ def get_activity_name(state, activity, activity_row):
 
     if pd.notna(activity_name):
         if state == "WI":
-            appendage_col_value = translate_state_activity_code(
-                appendage_col_value, state
-            )
+            appendage_col_value = translate_state_activity_code(appendage_col_value)
         else:
-            activity_name = translate_state_activity_code(activity_name, state)
+            activity_name = translate_state_activity_code(activity_name)
 
     activity_name = (
         f"{activity_name} - {appendage_col_value}"
