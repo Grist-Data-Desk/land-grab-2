@@ -279,7 +279,7 @@ def get_activity_name(state, activity, activity_row):
     if activity.use_name_as_activity and activity.activity_name_appendage_col:
         col_val = activity_row[activity.activity_name_appendage_col]
         if col_val.values[0]:
-            activity_name = col_val.values[0]
+            activity_name = activity.name
             appendage_col_value = col_val.values[0]
 
     if activity_name is None:
@@ -296,7 +296,12 @@ def get_activity_name(state, activity, activity_row):
                         break
 
     if pd.notna(activity_name):
-        activity_name = translate_state_activity_code(activity_name, state)
+        if state == "WI":
+            appendage_col_value = translate_state_activity_code(
+                appendage_col_value, state
+            )
+        else:
+            activity_name = translate_state_activity_code(activity_name, state)
 
     activity_name = (
         f"{activity_name} - {appendage_col_value}"
