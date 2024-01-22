@@ -313,6 +313,9 @@ def is_subsurface_activity(activity_name):
         return MISC_KEY.get(activity_name, 'surface') == 'subsurface'
 
 def is_incompatible_activity(grist_row, activity, activity_name, state):
+    if grist_row[STATE] == 'WA' and grist_row[RIGHTS_TYPE] == 'timber':
+        return True
+
     if grist_row[STATE] == state:
         
         restricted_rights_types_for_subsurface = ['subsurface']
