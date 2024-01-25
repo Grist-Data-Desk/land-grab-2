@@ -10,7 +10,7 @@ import pandas as pd
 
 from land_grab_2.stl_dataset.step_1.constants import UNIVERSITY, GIS_ACRES, STATE, UNIVERSITY_SUMMARY, \
     TRIBE_SUMMARY, RIGHTS_TYPE
-from land_grab_2.utilities.utils import prettyify_list_of_strings, _summary_statistics_data_directory
+from land_grab_2.utilities.utils import prettyify_list_of_strings
 
 os.environ['RESTAPI_USE_ARCPY'] = 'FALSE'
 
