@@ -4,6 +4,10 @@ Appendix A
 Data processing for Oklahoma and South Dakota
 ---------------------------------------------
 
+[Maria Parazo Rose](https://grist.org/author/maria-parazo-rose/)
+
+Feb 07, 2024
+
 ### Oklahoma
 
 The Oklahoma Commissioners of the Land Office gave us a file that had records of all state trust land parcels that had Oklahoma State University as the trust beneficiary. We then split that file into four separate CSVs based on the lease types: agricultural, short-term commercial, long-term commercial, and mineral. According to officials, we could categorize the agricultural, short-term commercial, and long-term commercial parcels as surface parcels. The mineral parcels were to be counted as subsurface parcels.
@@ -38,7 +42,7 @@ Mineral: 2155
 
 ### South Dakota
 
-This document explains the steps for processing the South Dakota data that was provided to us. There was no spatial data and we were given limited information on the MTRSA numbers, so we had to do significant processing to track the information down on the state's [PLSS server](https://arcgis.sd.gov/arcgis/rest/services/SD_All/Boundary_PLSS_QuarterQuarter/MapServer/0). We cleaned the ID information associated with the parcels and then queried for those adjusted IDs in this state spatial data server.
+This document explains the steps for processing the South Dakota data that was provided to us. There was no spatial data and we were given limited information on the MTRSA numbers, so we had to do significant processing to track the information down on the state's [PLSS server](https://arcgis.sd.gov/arcgis/rest/services/SD_All/Boundary_PLSS_QuarterQuarter/MapServer/0). We cleaned the ID information associated with the parcels and then queried for those adjusted IDs in this state spatial data server. The following files can be found in the [`sd_data`](https://github.com/Grist-Data-Desk/land-grab-2/tree/main/land_grab_2/stl_dataset/step_1/only_south_dakota_stl_input_gen/sd_data) folder and its parent directory.
 
 Files
 
