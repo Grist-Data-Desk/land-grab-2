@@ -1,4 +1,4 @@
-# Land Grab 2
+# Misplaced Trust
 
 This repository accompanies Grist's [Misplaced Trust investigation](https://grist.org/project/equity/land-grant-universities-indigenous-lands-fossil-fuels/). It allows users to build and modify the dataset underlying the project. For more details on our methodology, please view [`METHODOLOGY.md`](https://github.com/Grist-Data-Desk/land-grab-2/blob/main/METHODOLOGY.md). A user guide is available at [`USER-GUIDE.md`](https://github.com/Grist-Data-Desk/land-grab-2/blob/main/USER-GUIDE.md).
 
