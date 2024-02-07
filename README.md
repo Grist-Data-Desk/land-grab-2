@@ -1,5 +1,9 @@
 # Land Grab 2
 
+This repository accompanies Grist's [Misplaced Trust investigation](https://grist.org/project/equity/land-grant-universities-indigenous-lands-fossil-fuels/). It allows users to build and modify the dataset underlying the project. For more details on our methodology, please view [`METHODOLOGY.md`](https://github.com/Grist-Data-Desk/land-grab-2/blob/main/METHODOLOGY.md). A user guide is available at [`USER-GUIDE.md`](https://github.com/Grist-Data-Desk/land-grab-2/blob/main/USER-GUIDE.md).
+
+The investigation was written and reported by [Tristan Ahtone](https://grist.org/author/tahtone/), [Robert Lee](https://grist.org/author/robert-lee/), [Amanda Tachine](https://grist.org/author/amanda-tachine/), [An Garagiola](https://grist.org/author/an-garagiola/), [Audrianna Goodwin](https://grist.org/author/audrianna-goodwin/), [Maria Parazo Rose](https://grist.org/author/maria-parazo-rose/), and [Clayton Aldern](https://grist.org/author/clayton-aldern/). This repository was authored by [Maria Parazo Rose](https://github.com/mariaparazorose), [Clayton Aldern](https://github.com/clayton-aldern), [Marcelle Bonterre](https://github.com/laanak08), and [Parker Ziegler](https://github.com/parkerziegler).
+
 ## Installation
 
 ### Python Version Requirement
