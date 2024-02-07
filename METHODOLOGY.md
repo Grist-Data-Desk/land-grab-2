@@ -55,7 +55,7 @@ Relevant Documents
 
 Table 1: [State Data Sources](https://docs.google.com/spreadsheets/d/1s80JRwNA9j463TcezXK7S14h4mt4L2ltARcyKkUSJuc/edit?pli=1#gid=0)
 
-Appendix A: [Oklahoma and South Dakota processing](https://docs.google.com/document/d/16ZQ_Uo868bHWtaMR7KHvqYsQWIf3NCQWxmzUu93rIPQ/edit)
+Appendix A: [Oklahoma and South Dakota processing](https://github.com/Grist-Data-Desk/land-grab-2/blob/main/APPENDIX-A.md)
 
 Steps
 -----
@@ -93,13 +93,13 @@ It's important to note that we could not find information for 871 surface acres 
 
 Please also note that our dataset is partially incomplete due to the Montana Department of Natural Resources & Conservation's delay in responding to a public records request by the time of publication. In the summer of 2023, we requested a complete dataset of state trust lands that send revenue to Montana State University. However, when we conducted a data review fact check with the Montana DNR this winter, they informed us that the data they supplied was incomplete and thus, inaccurate. We currently have a pending public records request that has yet to be returned.
 
-*(Please see *[*Appendix A*](https://docs.google.com/document/d/16ZQ_Uo868bHWtaMR7KHvqYsQWIf3NCQWxmzUu93rIPQ/edit?usp=sharing)* for specific notes on the data processing for OK.)*
+*(Please see *[*Appendix A*](https://github.com/Grist-Data-Desk/land-grab-2/blob/main/APPENDIX-A.md)* for specific notes on the data processing for OK.)*
 
 ### Data cleaning
 
 When working with this data, one of the main considerations was that nearly all the data sources came in different and incompatible formats: The coordinate reference systems, or CRS, varied and had to be reprojected, the references to the trust names were inconsistent, and some files contained helpful fields, like location-specific identifiers or land use activity, while others were missing entire categories of information. Once we narrowed down the data we wanted, we cleaned and standardized the data, and sorted it into a common set of column names. This was particularly difficult for two states, Oklahoma and South Dakota, which required custom processing based on the format and quality of the initial data provided. 
 
-*(Please see *[*Appendix A*](https://docs.google.com/document/d/16ZQ_Uo868bHWtaMR7KHvqYsQWIf3NCQWxmzUu93rIPQ/edit?usp=sharing)* for specific descriptions of the data processing for OK and SD.)*
+*(Please see *[*Appendix A*](https://github.com/Grist-Data-Desk/land-grab-2/blob/main/APPENDIX-A.md)* for specific descriptions of the data processing for OK and SD.)*
 
 This process required a significant amount of state-specific formatting. This included processes such as:
 
