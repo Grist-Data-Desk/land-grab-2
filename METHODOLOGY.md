@@ -16,7 +16,7 @@ But the Morrill Act is only one piece of legislation that connects land taken fr
 
 To do this, we needed to construct an original dataset. 
 
--   Gristlocated all state trust lands distributed through state enabling acts that currently send revenue to higher education institutions that also benefited from the Morrill Act. 
+-   Grist located all state trust lands distributed through state enabling acts that currently send revenue to higher education institutions that also benefited from the Morrill Act. 
 -   We identified their original Indigenous inhabitants and caretakers, and researched how much the United States would have paid for each parcel. The latter is based on an assessment of Indigenous territorial history, according to the U.S. Forest Service, associated with the land the parcels are on. 
 -   We reconstructed more than 8.2 million acres of state trust parcels taken from 123 tribes, bands, and communities through 121 land cessions, a legal term for the surrendering of land. (It is important to note that land cession histories are incomplete and accurate only to the view of U.S. law and historical negotiations, not to Indigenous histories, epistemologies, or historic territories not captured by federal data.) 
 -   The U.S. Forest Service dataset, which is based on the Schedule of Indian Land Cessions compiled by Charles Royce for the [Eighteenth Annual Report of the Bureau of American Ethnology to the Secretary of the Smithsonian Institution (1896-1897)](https://www.loc.gov/collections/century-of-lawmaking/articles-and-essays/century-presentations/indian-land-cessions/), covers the period from 1787 to 1894.
