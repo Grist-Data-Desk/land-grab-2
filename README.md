@@ -4,6 +4,8 @@ This repository accompanies Grist's [Misplaced Trust investigation](https://gris
 
 The investigation was written and reported by [Tristan Ahtone](https://grist.org/author/tahtone/), [Robert Lee](https://grist.org/author/robert-lee/), [Amanda Tachine](https://grist.org/author/amanda-tachine/), [An Garagiola](https://grist.org/author/an-garagiola/), [Audrianna Goodwin](https://grist.org/author/audrianna-goodwin/), [Maria Parazo Rose](https://grist.org/author/maria-parazo-rose/), and [Clayton Aldern](https://grist.org/author/clayton-aldern/). This repository was authored by [Maria Parazo Rose](https://github.com/mariaparazorose), [Clayton Aldern](https://github.com/clayton-aldern), [Marcelle Bonterre](https://github.com/laanak08), and [Parker Ziegler](https://github.com/parkerziegler).
 
+Looking for the code behind the interactives in the project? That repo is [here](https://github.com/Grist-Data-Desk/land-grab-2-interactives/).
+
 ## Installation
 
 ### Python Version Requirement
