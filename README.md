@@ -6,7 +6,7 @@ The investigation was written and reported by [Tristan Ahtone](https://grist.org
 
 Looking for the code behind the interactives in the project? That repo is [here](https://github.com/Grist-Data-Desk/land-grab-2-interactives/).
 
-`public_data` also includes one additional `xlsx` file related to the Misplaced Trust investigation but underlying a separate piece published by Grist and High Country News. `Grist_STLs-Clipped-to-Reservations.xlsx` effectively subsets the main dataset to include only trust lands present within Federal Indian reservation boundaries.
+`public_data` also includes one additional `xlsx` file related to the Misplaced Trust investigation but underlying a [separate piece](https://grist.org/indigenous/tribal-reservation-state-land-trust-profit/) published by Grist and High Country News. `Grist_STLs-Clipped-to-Reservations.xlsx` effectively subsets the main dataset to include only trust lands present within Federal Indian reservation boundaries.
 
 ## Installation
 
