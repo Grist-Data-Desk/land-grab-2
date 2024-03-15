@@ -81,16 +81,17 @@ def tribe_summary_for_univ_summary(df, col_filter_func, out_column_name):
 def combine_cession_ids(v):
     raw_nums_results = []
     for c in v.tolist():
-        if c and not (isinstance(c, str) or np.isnan(c)):
+        if isinstance(c, str):
             if ',' in c:
                 new_val = c.split(',')
             else:
                 new_val = c.split(' ')
             raw_nums_results.append(new_val)
+        elif np.issubdtype(type(c), np.number) and not np.isnan(c):
+            raw_nums_results.append([str(c)])
+    
     raw_nums = set(itertools.chain.from_iterable(raw_nums_results))
-
-    raw_nums = [n for n in raw_nums if n]
-    clean_nums = ';'.join(raw_nums)
+    clean_nums = ';'.join(filter(None, raw_nums))    
     return clean_nums
 
 
