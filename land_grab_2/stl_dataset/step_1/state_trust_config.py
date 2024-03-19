@@ -251,9 +251,9 @@ STATE_TRUST_CONFIGS = {
             'SNS': 'State Normal School'
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
-            'Acres': ACRES,
-            'COUNTY1': COUNTY,
-            'LegalDesc': ALIQUOT,
+            'CoalGAcres': ACRES,
+            'County1': COUNTY,
+            'CoalGLegal': ALIQUOT,
             'Activity': ACTIVITY,
         },
     },
@@ -272,9 +272,9 @@ STATE_TRUST_CONFIGS = {
             'SNS': 'State Normal School'
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
-            'Acres': ACRES,
-            'COUNTY1': COUNTY,
-            'LegalDesc': ALIQUOT,
+            'OG_GAcres': ACRES,
+            'County1': COUNTY,
+            'OG_GLegal': ALIQUOT,
             'Activity': ACTIVITY,
         },
     },
@@ -294,9 +294,9 @@ STATE_TRUST_CONFIGS = {
             'SNS': 'State Normal School'
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
-            'Acres': ACRES,
-            'COUNTY1': COUNTY,
-            'LegalDesc': ALIQUOT,
+            'Othr_GAcres': ACRES,
+            'County1': COUNTY,
+            'Othr_GLegal': ALIQUOT,
             'Activity': ACTIVITY,
         },
     },
