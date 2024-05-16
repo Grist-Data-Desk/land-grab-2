@@ -175,10 +175,10 @@ def _filter_and_clean_shapefile_or_geojson(gdf, config, source, label, code, ali
         gdf = _get_ok_variant_town_range(gdf)
     elif source == 'OK-found-parcels-longterm-parcels':
         gdf = _get_ok_variant_town_range(gdf)
-    elif source == 'OK-found-parcels-mineral-parcels':
-        gdf = _get_ok_variant_town_range(gdf)
-    elif source == 'OK-found-parcels-mineral-parcels-0':
-        gdf = _get_ok_variant_town_range(gdf)
+    # elif source == 'OK-found-parcels-mineral-parcels':
+    #     gdf = _get_ok_variant_town_range(gdf)
+    # elif source == 'OK-found-parcels-mineral-parcels-0':
+    #     gdf = _get_ok_variant_town_range(gdf)
 
     filtered_gdf = _format_columns(filtered_gdf, config, alias)
 
@@ -217,7 +217,9 @@ def _format_columns(gdf, config, alias):
 
     # add trust name columns
     if alias:
-        gdf[TRUST_NAME] = alias
+        if 'USE_ALIAS' not in config or 'USE_ALIAS' in config and config['USE_ALIAS']:
+            gdf[TRUST_NAME] = alias
+
     return gdf.drop(columns_to_drop, axis=1)
 
 

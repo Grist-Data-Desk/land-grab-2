@@ -14,6 +14,13 @@ from land_grab_2.utilities.utils import GristCache, in_parallel, fetch_remote, f
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
+class RightsType(enum.Enum):
+    SURFACE = 'surface'
+    SUBSURFACE = 'subsurface'
+    NEEDS_LOOKUP = 'needs_lookup'
+    UNIVERSAL = 'universal'
+    DEBUG = 'debug'
+
 
 class StateActivityDataLocation(enum.Enum):
     LOCAL = 'local'
@@ -24,12 +31,10 @@ class StateActivityDataLocation(enum.Enum):
 class StateActivityDataSource:
     name: str
     location: str
+    rights_type: RightsType
     use_name_as_activity: bool = False
     keep_cols: List[str] = field(default_factory=list)
-    is_restricted_activity: bool = False
-    is_restricted_subsurface_activity: bool = False
     activity_name_appendage_col:Optional[str]=None
-    is_misc: bool = False
     scheduler: str = None
     use_cache: bool = True
 

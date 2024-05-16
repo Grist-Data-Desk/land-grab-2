@@ -34,6 +34,8 @@ def extract_and_clean_all():
     '''
     st = datetime.now()
     for state in STATE_TRUST_CONFIGS.keys():
+        if 'CO' not in state:
+            continue
         extract_and_clean_single_source(state)
     print(f'extract_and_clean_all took: {datetime.now() - st}')
 

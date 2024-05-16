@@ -95,7 +95,8 @@ STATE_TRUST_CONFIGS = {
         LAYER: 'SLB_Minerals_University_Beneficiary',
         ATTRIBUTE_LABEL_TO_FILTER_BY: ['Beneficiar'],
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-            'Colorado State University': 'Colorado State University'
+            'School': 'Common School'
+            # 'Colorado State University': 'Colorado State University'
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'Acreage': ACRES,
@@ -248,7 +249,25 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             'ACI': 'MSU Morrill',
             'ACB': 'MSU 2nd Grant',
-            'SNS': 'State Normal School'
+            'SNS': 'State Normal School',
+            'CS': 'Common Schools',
+            '09021': 'Public Land Trust Income - Navigable Rivers',
+            'CB': 'Capitol/Public Buildings',
+            'PH': 'Pine Hills (State Industrial School)',
+            'MT': 'Montana Tech (School of Mines)',
+            'DB': 'School for the Deaf and Blind',
+            '08026': 'Acquired Lands - Public School Income',
+            'UM': 'University of Montana',
+            'SH': 'Soldiers Home (Veterans Home)',
+            '09000': 'Special Sir Grant Fund',
+            'GF': 'General Fund',
+            'FWP': 'Dept. of Fish Wildlife & Parks',
+            'AES': 'Agricultural Experiment Station',
+            'DPHHS': 'Dept. of Public Health and Human Services',
+            'DMA': 'Dept. of Military Affairs',
+            'WRD': 'Water Resources Division/DNRC',
+            'DOT': 'Dept. of Transportation',
+            'Other': 'Other'
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'CoalGAcres': ACRES,
@@ -269,7 +288,25 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             'ACI': 'MSU Morrill',
             'ACB': 'MSU 2nd Grant',
-            'SNS': 'State Normal School'
+            'SNS': 'State Normal School',
+            'CS': 'Common Schools',
+            '09021': 'Public Land Trust Income - Navigable Rivers',
+            'CB': 'Capitol/Public Buildings',
+            'PH': 'Pine Hills (State Industrial School)',
+            'MT': 'Montana Tech (School of Mines)',
+            'DB': 'School for the Deaf and Blind',
+            '08026': 'Acquired Lands - Public School Income',
+            'UM': 'University of Montana',
+            'SH': 'Soldiers Home (Veterans Home)',
+            '09000': 'Special Sir Grant Fund',
+            'GF': 'General Fund',
+            'FWP': 'Dept. of Fish Wildlife & Parks',
+            'AES': 'Agricultural Experiment Station',
+            'DPHHS': 'Dept. of Public Health and Human Services',
+            'DMA': 'Dept. of Military Affairs',
+            'WRD': 'Water Resources Division/DNRC',
+            'DOT': 'Dept. of Transportation',
+            'Other': 'Other'
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'OG_GAcres': ACRES,
@@ -291,7 +328,25 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             'ACI': 'MSU Morrill',
             'ACB': 'MSU 2nd Grant',
-            'SNS': 'State Normal School'
+            'SNS': 'State Normal School',
+            'CS': 'Common Schools',
+            '09021': 'Public Land Trust Income - Navigable Rivers',
+            'CB': 'Capitol/Public Buildings',
+            'PH': 'Pine Hills (State Industrial School)',
+            'MT': 'Montana Tech (School of Mines)',
+            'DB': 'School for the Deaf and Blind',
+            '08026': 'Acquired Lands - Public School Income',
+            'UM': 'University of Montana',
+            'SH': 'Soldiers Home (Veterans Home)',
+            '09000': 'Special Sir Grant Fund',
+            'GF': 'General Fund',
+            'FWP': 'Dept. of Fish Wildlife & Parks',
+            'AES': 'Agricultural Experiment Station',
+            'DPHHS': 'Dept. of Public Health and Human Services',
+            'DMA': 'Dept. of Military Affairs',
+            'WRD': 'Water Resources Division/DNRC',
+            'DOT': 'Dept. of Transportation',
+            'Other': 'Other'
         },
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'Othr_GAcres': ACRES,
@@ -433,12 +488,14 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "*": 'Oklahoma State University'
         },
+        'USE_ALIAS': False,
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'Acres': ACRES,
             'CountyName': COUNTY,
             'Section': SECTION,
             'Meridian': MERIDIAN,
             'QuarterDescription': ALIQUOT,
+            'TrustName': TRUST_NAME,
         },
     },
     'OK-real-estate-subdivs': {
@@ -455,12 +512,14 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "*": 'Oklahoma State University'
         },
+        'USE_ALIAS': False,
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'TotalAllAcreage': ACRES,
             'CountyName': COUNTY,
             'Section': SECTION,
             'Meridian': MERIDIAN,
             'QuarterDescription': ALIQUOT,
+            'TrustName': TRUST_NAME,
         },
     },
     'OK-subsurface-minerals': {
@@ -476,12 +535,14 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "*": 'Oklahoma State University'
         },
+        'USE_ALIAS': False,
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'TotalAllAcreage': ACRES,
             'CountyName': COUNTY,
             'Section': SECTION,
             'Meridian': MERIDIAN,
             'QuarterDescription': ALIQUOT,
+            'TrustName': TRUST_NAME,
         },
     },
     'OK-subsurface-mineral-lease': {
@@ -497,9 +558,11 @@ STATE_TRUST_CONFIGS = {
         ATTRIBUTE_CODE_TO_ALIAS_MAP: {
             "'Oklahoma State University'": 'Oklahoma State University'
         },
+        'USE_ALIAS': False,
         EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
             'NetAcres': ACRES,
             'CountyName': COUNTY,
+            'TrustName': TRUST_NAME,
             # 'LegalDescription': ALIQUOT,
         },
     },
@@ -586,48 +649,48 @@ STATE_TRUST_CONFIGS = {
             'ALIQUOT': ALIQUOT,
         },
     },
-    'OK-found-parcels-mineral-parcels': {
-        DOWNLOAD_TYPE: GEOJSON_TYPE,
-        STATE: 'OK',
-        UNIVERSITY: 'Oklahoma State University',
-        MANAGING_AGENCY: 'Commissioners of the Land Office',
-        RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
-        ACTIVITY: 'Mineral Lease',
-        STATE_ENABLING_ACT: '34. Stat. 267-286 , esp. 272, 274-75 (1906)',
-        LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'OK/OK-found-parcels-mineral-parcels.geojson',
-        DATA_SOURCE:
-            'https://gis.clo.ok.gov/arcgis/rest/services/Public/PLSSProd/MapServer/2',
-        ATTRIBUTE_LABEL_TO_FILTER_BY: ['*'],
-        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-            "*": 'Oklahoma State University'
-        },
-        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
-            'MER': MERIDIAN,
-            'SEC': SECTION,
-            'ALIQUOT': ALIQUOT,
-        },
-    },
-    'OK-found-parcels-mineral-parcels-0': {
-        DOWNLOAD_TYPE: GEOJSON_TYPE,
-        STATE: 'OK',
-        UNIVERSITY: 'Oklahoma State University',
-        MANAGING_AGENCY: 'Commissioners of the Land Office',
-        RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
-        ACTIVITY: 'Mineral Lease',
-        STATE_ENABLING_ACT: '34. Stat. 267-286 , esp. 272, 274-75 (1906)',
-        LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'OK/OK-found-parcels-mineral-parcels-0.geojson',
-        DATA_SOURCE:
-            'https://gis.clo.ok.gov/arcgis/rest/services/Public/PLSSProd/MapServer/3',
-        ATTRIBUTE_LABEL_TO_FILTER_BY: ['*'],
-        ATTRIBUTE_CODE_TO_ALIAS_MAP: {
-            "*": 'Oklahoma State University'
-        },
-        EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
-            'MER': MERIDIAN,
-            'SEC': SECTION,
-            'SURV_NUMB': ALIQUOT,
-        },
-    },
+    # 'OK-found-parcels-mineral-parcels': {
+    #     DOWNLOAD_TYPE: GEOJSON_TYPE,
+    #     STATE: 'OK',
+    #     UNIVERSITY: 'Oklahoma State University',
+    #     MANAGING_AGENCY: 'Commissioners of the Land Office',
+    #     RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
+    #     ACTIVITY: 'Mineral Lease',
+    #     STATE_ENABLING_ACT: '34. Stat. 267-286 , esp. 272, 274-75 (1906)',
+    #     LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'OK/OK-found-parcels-mineral-parcels.geojson',
+    #     DATA_SOURCE:
+    #         'https://gis.clo.ok.gov/arcgis/rest/services/Public/PLSSProd/MapServer/2',
+    #     ATTRIBUTE_LABEL_TO_FILTER_BY: ['*'],
+    #     ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+    #         "*": 'Oklahoma State University'
+    #     },
+    #     EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+    #         'MER': MERIDIAN,
+    #         'SEC': SECTION,
+    #         'ALIQUOT': ALIQUOT,
+    #     },
+    # },
+    # 'OK-found-parcels-mineral-parcels-0': {
+    #     DOWNLOAD_TYPE: GEOJSON_TYPE,
+    #     STATE: 'OK',
+    #     UNIVERSITY: 'Oklahoma State University',
+    #     MANAGING_AGENCY: 'Commissioners of the Land Office',
+    #     RIGHTS_TYPE: SUBSURFACE_RIGHTS_TYPE,
+    #     ACTIVITY: 'Mineral Lease',
+    #     STATE_ENABLING_ACT: '34. Stat. 267-286 , esp. 272, 274-75 (1906)',
+    #     LOCAL_DATA_SOURCE: STATE_TRUST_DATA_SOURCE_DIRECTORY + 'OK/OK-found-parcels-mineral-parcels-0.geojson',
+    #     DATA_SOURCE:
+    #         'https://gis.clo.ok.gov/arcgis/rest/services/Public/PLSSProd/MapServer/3',
+    #     ATTRIBUTE_LABEL_TO_FILTER_BY: ['*'],
+    #     ATTRIBUTE_CODE_TO_ALIAS_MAP: {
+    #         "*": 'Oklahoma State University'
+    #     },
+    #     EXISTING_COLUMN_TO_FINAL_COLUMN_MAP: {
+    #         'MER': MERIDIAN,
+    #         'SEC': SECTION,
+    #         'SURV_NUMB': ALIQUOT,
+    #     },
+    # },
     'SD-subsurface': {
         DOWNLOAD_TYPE: SHAPEFILE_DOWNLOAD_TYPE,
         STATE: 'SD',

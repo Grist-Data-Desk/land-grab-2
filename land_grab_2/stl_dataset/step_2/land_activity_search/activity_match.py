@@ -8,12 +8,12 @@ from functools import partial
 from pathlib import Path
 
 import geopandas
-import numpy as np
 import pandas as pd
 
-from land_grab_2.stl_dataset.step_1.constants import ACTIVITY, RIGHTS_TYPE, STATE, WGS_84
+from land_grab_2.stl_dataset.step_1.constants import ACTIVITY, RIGHTS_TYPE, STATE, WGS_84, ACTIVITY_INFO
+from land_grab_2.stl_dataset.step_2.land_activity_search.entities import RightsType
 from land_grab_2.stl_dataset.step_2.land_activity_search.state_data_sources import STATE_ACTIVITIES, REWRITE_RULES
-from land_grab_2.utilities.overlap import tree_based_proximity, geometric_deduplication
+from land_grab_2.utilities.overlap import tree_based_proximity
 from land_grab_2.utilities.utils import GristCache, in_parallel, combine_delim_list
 
 logging.basicConfig(level=logging.ERROR)
@@ -30,6 +30,7 @@ DONT_USE_COLS = ['TypeGroup', 'Type', 'Status', 'DteGranted', 'DteExpires', 'Nam
 
 GRIST_DATA_UPDATE = defaultdict(set)
 ACTIVITY_DATA_UPDATE = []
+ACTIVITY_INFO_UPDATE = defaultdict(set)
 
 AZ_KEY = {
     '0': 'Unleased Parcels',
@@ -98,7 +99,18 @@ WI_KEY = {
     '2212': 'Open to hunting only',
 }
 
-MISC_KEY = {
+ACTIVITY_RIGHTS_TYPE_LOOKUP_TABLE = {
+    'Agriculture': 'surface',
+    'Grazing': 'surface',
+    'Timber Sale': 'surface',
+    'Salvage Sale': 'surface',
+    'Direct Sale': 'surface',
+    'Grazing Lease': 'surface',
+    'Agricultural Lease': 'surface',
+    'Crop': 'surface',
+    'Recreation - Commercial': 'surface',
+    'Communication': 'surface',
+
     'Prospecting Permit': 'subsurface',
     'Mineral Permit': 'subsurface',
     'Oil and Gas Permit': 'subsurface',
@@ -255,7 +267,7 @@ def translate_state_activity_code(activity_name):
     if isinstance(activity_name, float):
         activity_name = int(activity_name)
     if isinstance(activity_name, int):
-        activity_name = str(activity_name)    
+        activity_name = str(activity_name)
 
     if activity_name in AZ_KEY:
         return AZ_KEY[activity_name]
@@ -288,7 +300,7 @@ def get_activity_name(state, activity, activity_row):
             for activity_col in possible_activity_cols:
                 if activity_col and activity_col in activity_row.keys():
                     activity_name_row = activity_row[activity_col].tolist()
-                    if any(activity_name_row):
+                    if len(activity_name_row) > 0:
                         activity_name = str(activity_name_row[0])
                         if "None" in activity_name:
                             activity_name = None
@@ -309,38 +321,38 @@ def get_activity_name(state, activity, activity_row):
 
     return activity_name if activity_name else activity.name
 
-def is_subsurface_activity(activity_name):
-        return MISC_KEY.get(activity_name, 'surface') == 'subsurface'
+def is_compatible_activity(grist_row, activity, activity_name, state):
+    """
+    if grist row is surface ensure activity is also surface
+    if grist row is subsurface ensure activity is also subsurface
 
-def is_incompatible_activity(grist_row, activity, activity_name, state):
-    if grist_row[STATE] == 'WA' and grist_row[RIGHTS_TYPE] == 'timber':
-        return True
+    if grist row is surface and activity.NEEDS_LOOKUP refer to table to determine activity rights type,
+        then check compatability
+    if grist row is subsurface and activity.NEEDS_LOOKUP refer to table to determine activity rights type,
+        then check compatability
 
-    if grist_row[STATE] == state:
-        
-        restricted_rights_types_for_subsurface = ['subsurface']
-        restricted_rights_types_for_surface = ['surface']
+    washington should only match timber....
+    """
+    IS_COMPATIBLE = True
+    NOT_COMPATIBLE = False
 
-        if activity.is_misc:
-            if (
-                is_subsurface_activity(activity_name) and
-                grist_row[RIGHTS_TYPE] in restricted_rights_types_for_surface
-            ):
-                return True
-            elif grist_row[RIGHTS_TYPE] in restricted_rights_types_for_subsurface:
-                return True
+    if grist_row[STATE].lower() != state.lower():
+        return NOT_COMPATIBLE
 
-        restricted_rights_types = ['subsurface']
-        if grist_row[RIGHTS_TYPE] in restricted_rights_types and activity.is_restricted_activity:
-            return True
+    if grist_row[STATE] == 'WA' and grist_row[RIGHTS_TYPE].lower() == 'timber':
+        return NOT_COMPATIBLE
 
-        restricted_rights_types = ['surface']
-        if grist_row[RIGHTS_TYPE] in restricted_rights_types and activity.is_restricted_subsurface_activity:
-            return True
+    activity_rights_type = (activity.rights_type
+                            if activity.rights_type != RightsType.NEEDS_LOOKUP
+                            else RightsType(ACTIVITY_RIGHTS_TYPE_LOOKUP_TABLE.get(activity_name, RightsType.UNIVERSAL)))
 
-        return False
-    else:
-        return True
+    if activity_rights_type == RightsType.UNIVERSAL:
+        return IS_COMPATIBLE
+
+    if RightsType(grist_row[RIGHTS_TYPE].lower()) != activity_rights_type:
+        return NOT_COMPATIBLE
+
+    return IS_COMPATIBLE
 
 
 def exclude_inactive(state, activity_row):
@@ -352,16 +364,36 @@ def exclude_inactive(state, activity_row):
     return False
 
 
+def fmt_single_activity_info(activity_info):
+    info_key_seq = ['layer_index', 'activity', 'lease_status', 'lessee']
+    info = ' '.join([f'{k}: {activity_info[k]}' for k in info_key_seq])
+    return info
+
+
+def capture_lessee_and_lease_type(activity_row, activity, activity_name, state):
+    if activity.name not in REWRITE_RULES.get(state.lower()):
+        return
+
+    activity_info = {'layer_index': f'{state}-{activity.name}', 'activity': activity_name, 'lease_status': '',
+                     'lessee': ''}
+
+    for key, val in REWRITE_RULES.get(state.lower()).get(activity.name).items():
+        if val == 'lessee':
+            activity_info['lessee'] = activity_row[key]
+        if val == 'lease_status':
+            activity_info['lease_status'] = activity_row[key]
+
+    return fmt_single_activity_info(activity_info)
+
+
 def capture_matches(matches, state, activity):
     rewrite_list = {'OtherMin': 'Other Minerals', 'OilGas': 'Oil & Gas', 'OilAndGas': 'Oil & Gas'}
     total = 0
 
-    does_contain = 0
     grist_data_update = defaultdict(set)
     activity_data_update = []
     for match_score, grist_idx, grist_row, activity_row, contains, _ in matches:
         activity_name = get_activity_name(state, activity, pd.DataFrame([activity_row]))
-
         if activity_name is None or 'None' in activity_name:
             # N.B. for debugging purposes only, otherwise essentially a no-op.
             activity_name = get_activity_name(state, activity, pd.DataFrame([activity_row]))
@@ -369,13 +401,16 @@ def capture_matches(matches, state, activity):
         if activity_name in rewrite_list:
             activity_name = rewrite_list[activity_name]
 
-        total += 1
-        if contains and not is_incompatible_activity(grist_row, activity, activity_name, state):
-            does_contain += 1
+        if contains and is_compatible_activity(grist_row, activity, activity_name, state):
             if exclude_inactive(state, activity_row):
                 continue
 
-            grist_data_update[grist_idx].add(activity_name)
+            activity_info = capture_lessee_and_lease_type(activity_row,
+                                                          activity,
+                                                          activity_name,
+                                                          state)
+
+            grist_data_update[grist_idx].add((activity_name, activity_info))
             activity_data_update.append(activity_row)
 
     return grist_data_update, activity_data_update
@@ -413,12 +448,13 @@ def process_state_activity(stl_comparison_base_dir, grist_data, activity_state, 
 
 def match_all_activities(stl_comparison_base_dir, states_data=None, grist_data=None):
     log.info(f'processing states {states_data.keys()}')
-    global GRIST_DATA_UPDATE, ACTIVITY_DATA_UPDATE, MEMORY
+    global GRIST_DATA_UPDATE, ACTIVITY_INFO_UPDATE, ACTIVITY_DATA_UPDATE, MEMORY
 
     # process_stated_cached = MEMORY.cache(process_state_activity)
 
     for activity_state, activity_info in states_data.items():
-
+        # if 'SD' not in activity_state:
+        #     continue
         print(f'state: {activity_state} activity: {activity_info.name}')
         if not activity_info:
             log.error(f'NO ACTIVITY CONFIG FOR {activity_state}')
@@ -431,22 +467,26 @@ def match_all_activities(stl_comparison_base_dir, states_data=None, grist_data=N
                                         grist_data,
                                         activity_state,
                                         activity_info,
-                                        CACHE_DIR
+                                        CACHE_DIR,
                                     ),
                                     show_progress=True,
-                                    # scheduler='synchronous',  # TODO debug only
                                     batched=False)
         print(f'activity_state {activity_state} took: {datetime.now() - st}')
 
-        for r in grist_results:
-            if r is not None and len(r) > 0:
-                r, act = r
-                ACTIVITY_DATA_UPDATE += act
-                for k, v in r.items():
-                    if any(i is None for i in v):
-                        print(f'Activity is None for state: {activity_state}')
-                        sys.exit(1)
-                    GRIST_DATA_UPDATE[k].update(v)
+        for result in grist_results:
+            if result is not None and len(result) > 0:
+                grist_update, activity_update = result
+                ACTIVITY_DATA_UPDATE += activity_update
+                for row_idx, activity_bundle in grist_update.items():
+                    for bundle in activity_bundle:
+                        activity_name, activity_info = bundle
+                        if any(i is None for i in activity_name):
+                            print(f'Activity is None for state: {activity_state}')
+                            sys.exit(1)
+                        # GRIST_DATA_UPDATE[row_idx].update(activity_name)
+                        # ACTIVITY_INFO_UPDATE[row_idx].update(activity_info)
+                        GRIST_DATA_UPDATE[row_idx].add(activity_name)
+                        ACTIVITY_INFO_UPDATE[row_idx].add(activity_info)
 
 
 def main(stl_comparison_base_dir, stl_path: Path, the_out_dir: Path):
@@ -456,18 +496,36 @@ def main(stl_comparison_base_dir, stl_path: Path, the_out_dir: Path):
     log.info(f'reading {stl_path}')
     gdf = geopandas.read_file(str(stl_path))
 
+    # add missing columns to output column specification
     cols = gdf.columns.tolist()
+    rights_type_idx = cols.index(RIGHTS_TYPE)
     if ACTIVITY not in cols:
-        rights_type_idx = cols.index(RIGHTS_TYPE)
         cols.insert(rights_type_idx + 1, ACTIVITY)
+        gdf[ACTIVITY] = ''
 
+    if ACTIVITY_INFO not in cols:
+        cols.insert(rights_type_idx + 2, ACTIVITY_INFO)
+
+    # run primary matching process
     match_all_activities(stl_comparison_base_dir, STATE_ACTIVITIES, gdf)
-    for row_idx, activity_list in GRIST_DATA_UPDATE.items():
-        new_vals = ','.join([x for x in activity_list if x is not None])
-        existing = gdf.loc[row_idx, ACTIVITY] or ''
-        gdf.loc[row_idx, ACTIVITY] = combine_delim_list(existing, new_vals, sep=',')
 
-    # reorder cols
+    # push updates from match results into output dataframe
+    for row_idx, activity_list in GRIST_DATA_UPDATE.items():
+        if not activity_list:
+            continue
+        new_vals_activity = ','.join([x for x in activity_list if x is not None])
+        existing_activity = gdf.loc[row_idx, ACTIVITY] or ''
+        gdf.loc[row_idx, ACTIVITY] = combine_delim_list(existing_activity, new_vals_activity, sep=',', do_sort=False) #todo: decide if we want this
+
+    gdf[ACTIVITY_INFO] = ''
+    for row_idx, activity_info in ACTIVITY_INFO_UPDATE.items():
+        if not activity_info:
+            continue
+        new_vals_activity_info = '\n'.join([x for x in activity_info if x is not None])
+        existing_activity_info = gdf.loc[row_idx, ACTIVITY_INFO] or ''
+        gdf.loc[row_idx, ACTIVITY_INFO] = combine_delim_list(existing_activity_info, new_vals_activity_info, sep='\n')
+
+    # reorder/select only cols from the spec
     gdf = gdf[cols]
 
     log.info(f'final grist_data row_count: {gdf.shape[0]}')
@@ -527,3 +585,13 @@ def run():
 
 if __name__ == '__main__':
     run()
+
+"""
+* add a new column: activity_info
+    * stringify a dict with the following keys as yaml
+    * keys
+        * layer index, activity, lease status, lessee
+        * 
+        * lease status
+        * lessee 
+"""

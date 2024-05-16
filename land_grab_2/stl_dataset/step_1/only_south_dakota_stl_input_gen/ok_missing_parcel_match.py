@@ -44,7 +44,8 @@ def process_missing_csv_rows(missing_csv, data_source, csv_name):
         specific_col = 'SURV_NUMB'
 
     all_parcels = []
-    for i, row in tqdm(enumerate(missing_csv.to_dict(orient='records'))):
+    missing_items = missing_csv.to_dict(orient='records')
+    for i, row in tqdm(enumerate(missing_items),total=len(missing_items)):
         mer = row['Meridian']
         twp = None if isnan(row['Township']) else int(row['Township'])
         tdir = row['TownshipDirection']
@@ -257,4 +258,6 @@ def generate_raw_missing_parcels_list():
 
 
 if __name__ == '__main__':
-    app()
+    # generate_raw_missing_parcels_list()
+    search_missing_parcels()
+    # app()
