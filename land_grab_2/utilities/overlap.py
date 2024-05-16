@@ -270,41 +270,69 @@ def fix_geometries(gdf):
 
 def is_possibly_same_feature(feature_1, feature_2, crs=None, tolerance: float = 0.15) -> bool:
     return (
-        feature_1.contains(feature_2) or
-        feature_2.contains(feature_1) or
-        feature_1.overlaps(feature_2) or
-        feature_2.overlaps(feature_1) or
-        feature_1.within(feature_2) or
-        feature_2.within(feature_1) or
-        feature_1.covers(feature_2) or
-        feature_2.covers(feature_1) or
-        # feature_1.intersects(feature_2) or
-        # feature_2.intersects(feature_1) or
-        # feature_1.crosses(feature_2) or
-        # feature_2.crosses(feature_1) or
+            feature_1.contains(feature_2) or
+            feature_2.contains(feature_1) or
+            feature_1.overlaps(feature_2) or
+            feature_2.overlaps(feature_1) or
+            feature_1.within(feature_2) or
+            feature_2.within(feature_1) or
+            feature_1.covers(feature_2) or
+            feature_2.covers(feature_1) or
+            # feature_1.intersects(feature_2) or
+            # feature_2.intersects(feature_1) or
+            # feature_1.crosses(feature_2) or
+            # feature_2.crosses(feature_1) or
 
-        # feature_1.touches(feature_2) or
-        # feature_2.touches(feature_1) or
+            # feature_1.touches(feature_2) or
+            # feature_2.touches(feature_1) or
 
-        feature_1.boundary.contains(feature_2.envelope) or
-        feature_2.envelope.contains(feature_1.boundary) or
-        feature_1.boundary.overlaps(feature_2.envelope) or
-        feature_2.envelope.overlaps(feature_1.boundary) or
-        feature_1.boundary.within(feature_2.envelope) or
-        feature_2.envelope.within(feature_1.boundary) or
-        feature_1.boundary.covers(feature_2.envelope) or
-        feature_2.envelope.covers(feature_1.boundary) or
-        # feature_1.boundary.intersects(feature_2.envelope) or
-        # feature_2.envelope.intersects(feature_1.boundary) or
-        # feature_1.boundary.crosses(feature_2.envelope) or
-        # feature_2.envelope.crosses(feature_1.boundary) or
+            feature_1.boundary.contains(feature_2.envelope) or
+            feature_2.envelope.contains(feature_1.boundary) or
+            feature_1.boundary.overlaps(feature_2.envelope) or
+            feature_2.envelope.overlaps(feature_1.boundary) or
+            feature_1.boundary.within(feature_2.envelope) or
+            feature_2.envelope.within(feature_1.boundary) or
+            feature_1.boundary.covers(feature_2.envelope) or
+            feature_2.envelope.covers(feature_1.boundary) or
+            # feature_1.boundary.intersects(feature_2.envelope) or
+            # feature_2.envelope.intersects(feature_1.boundary) or
+            # feature_1.boundary.crosses(feature_2.envelope) or
+            # feature_2.envelope.crosses(feature_1.boundary) or
 
-        # feature_1.boundary.touches(feature_2.envelope) or
-        # feature_2.envelope.touches(feature_1.boundary) or
+            # feature_1.boundary.touches(feature_2.envelope) or
+            # feature_2.envelope.touches(feature_1.boundary) or
 
-        # is_same_geo_feature(feature_1, feature_2, crs=crs, tolerance=tolerance) or
-        False
+            # is_same_geo_feature(feature_1, feature_2, crs=crs, tolerance=tolerance) or
+            False
     )
+
+
+def smart_distance(g, batch, i):
+    dists = []
+    try:
+        d = g['geometry'].envelope.distance(batch[i]['geometry'].envelope)
+        dists.append(d)
+    except:
+        pass
+
+    try:
+        d = g['geometry'].boundary.distance(batch[i]['geometry'].boundary)
+        dists.append(d)
+    except:
+        pass
+
+    try:
+        d = g['geometry'].boundary.distance(batch[i]['geometry'].envelope)
+        dists.append(d)
+    except:
+        pass
+
+    try:
+        dists = [d for d in dists if not np.isnan(d)]
+    except:
+        pass
+
+    return min(dists)
 
 
 def _tree_based_proximity_batch(grist_bounds=None, grist_data=None, crs=None, match_dist_threshold=None, batch=None):
@@ -321,7 +349,7 @@ def _tree_based_proximity_batch(grist_bounds=None, grist_data=None, crs=None, ma
             i
         )
         for grist_idx, (g, i) in enumerate(zip(grist_data, indices))
-        if g['geometry'].boundary.distance(batch[i]['geometry'].envelope) <= match_dist_threshold
+        if smart_distance(g, batch, i) <= match_dist_threshold
     ], key=lambda p: p[0])
 
     return pairs

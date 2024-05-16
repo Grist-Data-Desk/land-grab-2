@@ -20,6 +20,7 @@ from dask.diagnostics import ProgressBar
 # from joblib import Memory
 from tqdm import tqdm
 from tqdm.contrib.concurrent import process_map
+from tqdm.dask import TqdmCallback
 
 from land_grab_2.stl_dataset.step_1.constants import STATE_TRUST_DIRECTORY, QUERIED_DIRECTORY, CLEANED_DIRECTORY, \
     MERGED_DIRECTORY, CESSIONS_DIRECTORY, SUMMARY_STATISTICS_DIRECTORY, STL_OUTPUT_DIRECTORY
@@ -111,7 +112,8 @@ def in_parallel(work_items,
     if not batched:
         with dask.config.set(scheduler=scheduler):
             if show_progress:
-                with ProgressBar():
+                # with ProgressBar():
+                with TqdmCallback(desc="compute"):
                     all_results = dask.bag.from_sequence(work_items).map(a_callable).compute()
                     return all_results
             else:
@@ -124,7 +126,8 @@ def in_parallel(work_items,
     for batch in tqdm(batches):
         with dask.config.set(scheduler=scheduler):
             if show_progress:
-                with ProgressBar():
+                # with ProgressBar():
+                with TqdmCallback(desc="compute"):
                     results = dask.bag.from_sequence(batch, partition_size=partition_size).map(a_callable).compute()
                     all_results += results
             else:
@@ -422,7 +425,7 @@ def _summary_statistics_data_directory(state=None):
         STATE_TRUST_DIRECTORY + SUMMARY_STATISTICS_DIRECTORY, state)
 
 
-def combine_delim_list(old_val, update_val, sep='+'):
+def combine_delim_list(old_val, update_val, sep='+', do_sort=True):
     old_val = str(old_val)
     if old_val == 'nan':
         old_val = ''
@@ -433,7 +436,11 @@ def combine_delim_list(old_val, update_val, sep='+'):
 
     update_vals = [v.strip() for v in update_val.split(sep) if v.strip()]
     old_vals = [v.strip() for v in old_val.split(sep) if v.strip()]
-    new_val = sep.join(sorted(list(set(update_vals + old_vals))))
+
+    new_val = (sep.join(sorted(list(set(update_vals + old_vals))))
+               if do_sort
+               else sep.join(list(set(update_vals + old_vals))))
+
     return new_val
 
 
