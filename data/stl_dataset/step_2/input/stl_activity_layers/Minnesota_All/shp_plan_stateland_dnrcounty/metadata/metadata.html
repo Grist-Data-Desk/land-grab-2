@@ -1,0 +1,234 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><font face="calibri"><title> 
+					Metadata: State Surface Interests Administered by MNDNR or by Counties</title></font><meta name="viewport" content="width=device-width, initial-scale=1.0"><style type="text/css">
+				body {
+					color: #000020;
+					background-color: #FFFFFF;
+				}
+				h1 {
+				}
+				.center {
+					text-align: center;
+					margin-top: 5px;
+					margin-bottom: 5px;
+				}
+				div.box {
+					margin-left: 1em;
+				}
+				div.hide {
+					display: none;
+				}
+				div.show {
+					display: block;
+				}
+				span.hide {
+					display: none;
+				}
+				span.show {
+					display: inline-block;
+				}
+				.backToTop a {
+					color: #DDDDDD;
+					font-style: italic;
+					font-size: 0.85em;
+					}
+				.head {
+					font-size: 1.3em;
+				}
+				a:link {
+					color: #098EA6;
+					font-weight: normal;
+					text-decoration: none;
+				}
+				a:visited {
+					color: #098EA6;
+					text-decoration: none;
+				}
+				a:link:hover, a:visited:hover {
+					color: #007799;
+					background-color: #C6E6EF;
+				}
+				 a:focus, a:hover {
+				   background-color: #C6E6EF;
+				   text-decoration: none
+				 }
+				h2 {
+					background: #dfdbcf;
+					padding: 0px 0px 0px 10px;
+				}
+				h2 a {
+				}
+				h3 {
+				}
+				tr {
+					vertical-align: top;
+					border: 1px solid black;
+				}
+				th {
+					text-align: left;
+					background: #dddddd;
+					vertical-align: bottom;
+				}
+				td {
+					color: black;
+					vertical-align: top;
+					border: 1px solid black;
+				}
+					td.description {
+					background: white;
+				}
+				div.mgmgel {
+					padding: 5px 0px 0px 10px;
+                    display: table;
+					font-size: 1em;
+                }
+                div.mgmgel span:nth-child(1){
+					display: table-cell;
+					width: 30%;
+					font-weight: bold;
+                }
+				@media(min-width:600px){
+					div.mgmgel span:nth-child(1){width: 300px}
+				}
+                div.mgmgel span:nth-child(2){
+					display: table-cell;
+                }
+				.unused {
+					color:787862;
+				}
+				table {
+					margin: 0px 10px 0px 10px;
+					border: 1px solid black;
+					font-size: .9em;
+				}
+				div.smallish {
+					font-size: .8em;
+					color:939393;
+				}
+			</style></head><body><font face="calibri"><div class="mgmg"><A name="thetop"></A><center><h1>State Surface Interests Administered by MNDNR or by Counties</h1></center><div class="smallish"><center>
+						This page last updated:
+						01/25/2016</center><center>
+						Metadata created using <A href="http://www.mngeo.state.mn.us/committee/standards/mgmg/metadata.htm">Minnesota Geographic Metadata Guidelines</A></center></div><BR><HR><span>Go to Section:</span><BR><ol><li><a href="#Identification_Information">Overview</a></li><li><a href="#Data_Quality_Information">Data Quality</a></li><li class="unused">Data Organization</li><li><a href="#Spatial_Reference_Information">Coordinate System</a></li><li><a href="#Entity_and_Attribute_Information">Attributes</a></li><li><a href="#Distribution_Information">Distribution</a> - <a href="#ordering"><font color="#B40404">Get Data</font></a></li><li><a href="#Metadata_Reference_Information">Metadata Reference</a></li></ol><h2><A NAME="Identification_Information"></A>
+					Section 1: Overview
+				</h2><div class="mgmgel"><span>Originator:</span><span>Minnesota Department of Natural Resources (DNR) - Lands and Minerals</span></div><br><div class="mgmgel"><span>
+						Title: 
+					</span><span>State Surface Interests Administered by MNDNR or by Counties</span></div><br><div class="mgmgel"><span>
+						Abstract: 
+					</span><span>State owned surface interests, including fee surface, easement in, lease in, and agreement, administered by the Minnesota Department of Natural Resources or by a County, mapped to the PLS forty and government lot.  When there is no match to the PLS forty or government lot in the PLS40 layer, a record is then matched to the PLS section layer. These layers merge the DNR Control Point Generated PLS layer (PLS40) with land records stored in the DNR's Land Record System (LRS) in Oracle.  The data are limited to a forty, government lot, or section level representation.  Therefore, any state owned lands that are less than a forty, government lot, or section, are represented by the entire forty, government lot, or section. <br>There are many different ways to look at these State lands.  In this case, layers have been created and grouped by selecting the type of State land, the type of interest held by the State, or the administrator of the State land, as follows:<br>- one set of layers (i.e., stateland_type_xxx, where xxx represents the various categories) is created by selecting for the various land types stored in the LANDTYPE field. This set of layers only considers Fee Surface interests.<br>- a second set of layers (i.e., stateland_interest_xxx, where xxx represents the various types of surface interests)  is created by selecting for the various interest types stored in the INT_TYPE field.  Note:  the stateland_interest_conservationeasement layer is a subset of the stateland_interest_easementin layer, so conservation easement records are also in the stateland_interest_easementin layer.<br>- a third set of layers (i.e., stateland_admin_xxx, where xxx represents the various MNDNR units or a county administers these surface interests)  is created by selecting for the various administrators stored in the ADMINISTRATOR or ADMPRGPRJADDL fields. One view of this set of layers includes all surface interest types, while the other view only includes fee surface interests.<br></span></div><br><div class="mgmgel"><span>
+						Purpose: 
+					</span><span>To provide Minnesota DNR resource managers and land records specialists access to DNR land records in GIS format.</span></div><br><div class="mgmgel"><span>
+						Time Period of Content Date:
+					</span><span>05/09/2024</span></div><br><div class="mgmgel"><span>
+						Currentness Reference: 
+					</span><span>Time Period of Content date indicates the date which the user can be confident of accuracy and completeness of the dataset.  Updates occur weekly, for all of the State Lands (also referred to as State surface interests) layers.  The control point generated PLS layer (often referred to as PLS40) was created during the 1990s, with the information based on the General Land Office (GLO) plats and field notes, ranging from the mid-1800s to 1998.  Since that time, additional GLO plats have been used to modify the PLS40 layer to incorporate more recent surveys, especially island surveys, and to make corrections to the PLS40 layer.  To better map the state ownership, a version of PLS40 was modified to include several non-BLM (Bureau of Land Management) surveys.  Note that during processing, any land record that does not match to the PLS forty or government lot is then matched to the PLS section to include as many of the land records as possible in this layer.</span></div><br><div class="mgmgel"><span>
+						Progress: 
+					</span><span>In work</span></div><br><div class="mgmgel"><span>
+						Maintenance and Update Frequency:
+					</span><span>Weekly</span></div><br><div class="mgmgel"><span>
+						Spatial Extent of Data:  
+					</span><span><br>        </span></div><br><div class="mgmgel"><span>
+						Bounding Coordinates:  
+					</span><span>-97.23<br>-89.53<br>49.37<br>43.5</span></div><br><div class="mgmgel"><span>
+						Place Keywords:
+					</span><span>Minnesota</span></div><br><div class="mgmgel"><span>
+						Theme Keywords:
+					</span><span>planning, land ownership, interest types, public land survey (PLS), land stewardship, natural resources</span></div><br><div class="mgmgel"><span>
+						Theme Keyword Thesaurus: 
+					</span><span>
+          </span></div><br><div class="mgmgel"><span>
+						Access Constraints:
+					</span><span>Unrestricted</span></div><br><div class="mgmgel"><span>
+						Use Constraints:
+					</span><span>Internal DNR use is unrestricted.  External use is constrained by the standard, general DNR GIS Data License Agreement.</span></div><br><div class="mgmgel"><span>
+						Contact Person Information: 
+					</span><span>Zeb Thomas,
+							GIS Data Systems Coordinator<br>Minnesota Department of Natural Resources<br>500 Lafayette Rd<br>Saint Paul,
+							MN&nbsp;
+							55155<br>
+							Phone: 651-259-5637<br>
+							Email: <A href="mailto:zeb.thomas@state.mn.us">zeb.thomas@state.mn.us</A></span></div><br><div class="mgmgel"><span>
+						Browse Graphic:  
+					</span><span><A href="https://resources.gisdata.mn.gov/pub/gdrs/data/pub/us_mn_state_dnr/plan_stateland_dnrcounty/metadata/preview.jpg">Click to view a data sample</A>.
+								<br><br></span></div><br><div class="mgmgel"><span>
+						Associated Data Sets:
+					</span><span>This resource replaces State Administered Lands with MNDNR Interest (plan_state_lands_dnr_interest)</span></div><br><h2><a name="Data_Quality_Information"></a>
+					Section 2: Data Quality
+				</h2><div class="mgmgel"><span>
+						Attribute Accuracy: 
+					</span><span>Not specifically assessed</span></div><br><div class="mgmgel"><span>
+						Logical Consistency:
+					</span><span>The original PLS40 layer was built as separate townships, or parts of townships, coverages in Arc/INFO (from ESRI) during the 1990s.  Due to the manner in which the original surveys were drawn as GLO plats based on the GLO field notes, interpretation errors reading the GLO plats, and Arc/INFO processing methods used, there are gaps and overlaps in the PLS40 layer.</span></div><br><div class="mgmgel"><span>
+						Completeness:
+					</span><span>Only those PLS forties, government lots, or sections in which the State holds an interest are included in these layers.  Note that less than 1% of the Land Records currently do not have some type of polygon match in the PLS40 layer.  In some instances, the no match land records represent islands that were never surveyed and were therefore not included in the GLO plats and field notes.  In other cases, it may be that the geocode for a land record does not match a geocode in the PLS40 layer (e.g., the land record lists a forty description, but the parcel is really in a government lot).  When a geocode of a land record does not match to the PLS40 layer, another match is done to the PLS section layer to include the land record, in some way, in this set of layers.  For the most complete look at State Owned properties, as listed in the Land Record System at MNDNR, use the State Lands by Interest (i.e., stateland_interest_xxxx) layers. </span></div><br><div class="mgmgel"><span>
+						Horizontal Positional Accuracy:
+					</span><span>Variable.  At its least accurate, the data are based upon points from manual digitizing of PLS section corners from 1:24000 scale, paper, USGS quadrangles (comprising about 90% of the points used to build the PLS40 layer).  At its most accurate, the data is based upon points collected using GPS units operating at a sub-meter level of accuracy.</span></div><br><div class="mgmgel"><span>
+								Vertical Positional Accuracy:
+							</span><span>Not applicable</span></div><br><div class="mgmgel"><span>
+						Lineage:
+					</span><span>The PLS40 layer was built in the 1990s with Arc/INFO from ESRI, using points digitized from 1:24000 USGS paper quads and some surveyed points.  Cadastral Measurement Management (CMM) software from the Bureau of Land Management was used to combine the point data with bearings and distances captured from the GLO plats and Survey notes to subdivide sections into their aliquot parts, such as a forty or government lot.  In Arc/INFO, the PLS layer was built township by township and later combined into county coverages.  Meander lines were added to the township coverages using the bearings and distances from the original survey notes with Arc/COGO.  After converting the coverages to shapefiles, the county layers were merged into one, statewide-layer, with no error checking for gaps or overlaps of polygon features.</span></div><br><h2 class="unused"><a name="Spatial_Data_Organization_Information"></a>
+					Section 3: Spatial Data Organization (not used in this metadata)
+				</h2><br><h2><a name="Spatial_Reference_Information"></a>
+					Section 4: Coordinate System
+				</h2><div class="mgmgel"><span>
+						Horizontal Coordinate Scheme:
+					</span><span>Universal Transverse Mercator</span></div><br><div class="mgmgel"><span>
+							UTM Zone Number:
+						</span><span>15</span></div><br><div class="mgmgel"><span>
+						Horizontal Datum:
+					</span><span>NAD83</span></div><br><div class="mgmgel"><span>
+						Horizontal Units:
+					</span><span>meters</span></div><br><div class="mgmgel"><span>
+						Vertical Datum:
+					</span><span></span></div><br><div class="mgmgel"><span>
+						Vertical Units:
+					</span><span></span></div><br><div class="mgmgel"><span>
+						Depth Datum:
+					</span><span></span></div><br><div class="mgmgel"><span>
+						Depth Units:
+					</span><span></span></div><br><h2><a name="Entity_and_Attribute_Information"></a>
+					Section 5: Attributes
+				</h2><div class="mgmgel"><span>
+						Overview:
+					</span><span>Attributes for State Owned Land:<br>SU_ID - the unique ID for a LRS spatial unit (aka property)<br>SU_SUID - the non-unique ID of a LRS spatial unit that is a character field type.  In the Land Record System (LRS), spatial units are versioned each time a spatial unit is updated or whenever another type of transaction (such as a lease out) has included it.  <br>SU_SUIDNUM - the SU_SUID of a spatial unit as a number, so that users can compare the IDs of the new Land Record System data with the GSEQKY of the previous Land Record System<br><br>DNRREGION - the name of the DNR region (currently, Northwest, Northeast, Central, Southern)<br>COUNTYNAME - name of one of Minnesota's counties<br><br>COUN - county identified using a 2-digit number from 1 to 87<br>TOWN - PLS township number, where the township is always N(orth).  The township numbers range from 26-71 in the 4th Principal Meridian and from 101-168 in the 5th Principal Meridian.<br>RDIR - range direction identifier, and 1/2-township and 1/2-range identifiers (where 0 = W(est), 1 = E(ast), and 2 = half-township (T58-1/2N R17W) or half-range (T159N R42-1/2W or T160N R42-1/2W), where these half-township and half-range records are all range W(est)).<br>RANG - PLS range number.  The range numbers range from 1-32W and 1-7E in the 4th Principal Meridian and from 3-51W in the 5th Principal Meridian.<br>SECT - PLS section number or tract number.  BLM assigns a tract number to a parcel of land that lies in more than one section in a township or that cannot be identified as being part of a particular section.  The numbering of tracts in a township start with 37 to avoid confusion with section numbers.  Refer to the Glossary found under the BLM General Land Office Records website for more information about tracts.<br>FORT - 2-digit code to identify the PLS forty (gives an approximate location in the section if there is a government lot).  Refer to the FORTDESC field for a text description of these codes.<br>GLOT - PLS lot number (often referred to as government lot). Land Records with a GLOT = 99 indicates a meandered water body. (GLOT = 99 was used in combination with FORT = 0 to identify meandered water bodies in the PLS40 layer.)<br>GM_CH - a 13- or 14-character string that represents the PLS to the government lot.  This field is used to match to PLS40.  The format of this field is as follows:  CCTTTDRRSSFFGG, where CC is COUN, TTT is TOWN, D is RDIR, RR is RANG, SS is SECT, FF is FORT or '00' (see following note), and GG is GLOT.  Note:  if the GLOT is greater than 0, such as government lot 1, the FF part of GM_CH is set to 00.<br>GS_CH - a 9- or 10-character string that represents the PLS to the section.  This field is used to match to PLS - section level.  The format of this field is as follows:  CCTTTDRRSS, where CC is COUN, TTT is TOWN, D is RDIR, RR is RANG, and SS is SECT.<br>FORTDESC - the PLS forty (aka aliquot part) description using text.  A 4-character string, such as NWNE, should be read as the Northwest 1/4 of the Northeast 1/4.   For extra tall and wide townships, additional government lots are added to sections and the FORTDESC field will be similar to 'Third government lot West of SWSW.' <br><br>PLSMATCH - specifies if the land record matches to the PLS forty/government lot or to the PLS section.  That is, in most cases, the land record matches to the PLS forty or government lot (forty/glot-level) layer.  The mismatches from this check are then matched against the PLS section (section-level) layer so that a user knows that there is a land record somewhere in the section, but the exact location is unknown or there may be an error in some element of the geocode creating a no-match between the land record and PLS40.  Note:  some land records, not including SECT > 36 (i.e., the PLS tract numbers) are only section-level records and can be identified by FORT = 0 and GLOT = 0 and only match to the section-level.  Because tracts are mapped as part of PLS40, these records are flagged as matching to the forty/glot-level.<br><br>SU_ACRES - the number of acres that have a State-owned surface interest listed for the specific PLS forty, government lot, or section.<br>SU_PCTFORTY - the number of State-owned acres as a percentage of the total area of the PLS forty, government lot, or, rarely, section<br><br>UINT_NUMERATOR - the numerator of the undivided surface interest in the PLS forty or government lot<br>UINT_DENOMINATOR - the denominator of the undivided surface interest in the PLS forty or government lot<br><br>INT_TYPE - the type of State-owned surface interest, including Fee Surface, Easement In, Lease In, Agreement<br>INT_STATUS - the interest status, in most cases Finalized (i.e., the active interest).  Because management of the property can begin after an acquisition has been closed, this layer includes Closed interests.  However, since Closed interests have not gone through the finalization steps of the acquisition, the data may be incomplete or incorrect.<br><br>LANDTYPE - the land type of the surface interest (including several types of School Trust and University Trust, Acquired, ConCon, Volstead, Tax Forfeited, or Other).  In most cases, ' ' (i.e., blank) is used for the Land Type where the transaction has closed, but has not yet been finalized, and indicates that the records are missing the Land Type.  For several other land records, the land type was entered as 'Other', but since then there has been a change over time in the definition in what the Land Type should be, particularly in the case of Easement In records, and to date they have not been updated.  For the State Lands by Type layers, the Other layer includes both the ' ' and Other records.  The specific codes and descriptions follow:<br>A - Acquired<br>C - Consolidated Conservation Area (aka ConCon)<br>F - Federal: State Lease<br>O - Other: Non-State<br>R - Rural Credit<br>T - Tax Forfeited<br>V - Volstead<br>1 - Trust Fund: School (School Trust)<br>2 - Trust Fund: Indemnity School (School Trust)<br>3 - Trust Fund: Swamp (School Trust)<br>4 - Trust Fund: Internal Improvement (School Trust)<br>5 - Trust Fund: University (University Trust)<br>7 - Trust Fund: Transferred School (School Trust)<br><br>MEANSACQ - the means of acquisition of the surface interest.  The specific codes and descriptions follow:<br>B - County Board Resolution<br>C - Condemnation<br>D - Rural Credit<br>E - Exchange<br>F - Forfeited: General property tax<br>G - Gift<br>L - Leased by State<br>O- Other<br>P - Purchase<br>R - Reversion<br>S - State: Transfer<br>U - US: Congressional Grant, Patent, Deed, Etc.<br><br>LANDTYPECODE - a 1-character code for the land type<br>MEANSACQCODE - a 1-character code for the means of acquisition<br><br>ADMINISTRATOR - a DNR unit or a county (for LANDTYPE = Tax Forfeited) administers the land.  Additional administrators, if there are any for any given land record, along with the management program project and the project name, can be found in the ADMPRGPRJADDL field.  The specific codes and administrators follow:<br>0 - none listed<br>1 - DNR<br>30 - Wildlife<br>33 - Ecological and Water Resources<br>35 - Fisheries<br>40 - Enforcement<br>41 - Forestry<br>42 - Lands and Minerals<br>43 - Parks<br>44 - Waters<br>50 - Metro Greenways<br>62 - Trails and Waterways<br>80 - County: Misc<br>81 - County: Forest<br>82 - County: Park<br>98 - Minerals and Waters<br>ADMINISTRATORCODE - a 2-digit code representing the DNR unit or a county as the administrator.  A '0' indicates that no administrator has been assigned.<br>MGTPRGPRJ - a DNR management program project code<br>MGTPRJNAME - a DNR management project name<br>MGTPRGCODE - a 3-character management program code (e.g., WMA, SFT, SPK).  Refer to the MGTPRGNAME for the text description.<br>MGTPRGNAME - a text description of the management program <br>ADMPRGPRJADDL - additional adminstrators/management program projects/project names that cover the same property (for example, there is a state forest, but there is also a wildlife management area).<br><br>DNRTRNXNUM - the DNR transaction number of the acquisition under which the property was acquired<br>T_CLOSINGDATE - the closing date of the acquisition<br><br>SU_CTYPIN_MISC - the county property information number (PIN) at the time of acquisition, but can also include other miscellaneous information<br><br>DATA_DOWNLOADDATE - the date the data was downloaded from the Land Record System<br><br>Several fields are only included in the stateland_interest_easementin or stateland_interest_conservationeasement layers:<br>CEASEFLAG - Yes (for Conservation Easement), No (for other easement types)<br>EASETYPE - the type of easement in.  Easements In can include various types of Access, Water Bank, Trout Stream, Aquatic Management, ...<br>EASETYPECODE - 2-digit code differentiating the various easement in types<br>EASE_DURATION - the easement in duration - Permanent or Temporary<br>EASE_EXPDATE - for Temporary Easement Ins, the expiration date</span></div><br><div class="mgmgel"><span>
+						Detailed Citation:
+					</span><span>State ownership is very complex, with multiple types of ownership, multiple types of interests, different administrators, and so on.  The attribute table should be used to help identify specific information about any given ownership record.  Some terms and concepts may help to clarify the issues.  <br>(1) State Owned lands (aka surface interests) - lands that are either owned by the state as a fee surface interest, or in which the state has an interest (such as an easement in, lease in, or agreement).  Official land ownership records are located in each county in the County Recorder's Office.  The DNR land records are not the official records, but may be considered secondary sources of ownership information.  <br>(2) Interest Acquired - the real property interest that the State owns, such as Fee Surface, Easement In, Lease In, Agreement.  <br>(3) Administrator - the unit or sub-unit of government responsible for decisions regarding lands that are owned by the State.  For this dataset, the administrators are either various MNDNR units, such as Forestry or Wildlife, or the various Counties. That is, most of these lands are administered by a unit of MNDNR.  The exception is the Tax Forfeited land type, where the State holds the lands in trust for the counties, but the administration of the lands is done by the county in which the land is found.<br>(4) Land Type - land type is a legal and financial designation determining accountability and destination of revenues.  Land types (LANDTYPE field in the data) include several types of School and University Trust, ConCon (Consolidated Conservation Area lands), Acquired, Volstead, and Tax Forfeited.  There are closed, but not finalized, interests that currently have ' ' (i.e., blank) as the land type, since a land type has not yet been entered.  <br>(5) Acreage - the acreage for a land record is based on the acreage for the public land survey GLO plat, a registered resurvey, acreage reported by the county auditor, or acreage listed on the deed to the property.  The legally valid acreage is determined by deed and/or tax assessor/registered survey.  For most purposes, it is a matter of record, rather than a matter of measurement.  <br>(6) Subdivided parcels - since the land records are only mapped to the PLS forty, government lot, or in a few cases, the section, the SU_PCTFORTY field can be used to identify full-PLS ownership versus sub-PLS ownership. (For example, if SU_PCTFORTY = 100, 100% of the forty/government lot is state-owned.  If SU_PCTFORTY = 25, 25% of the forty/government lot is state-owned, according to the land record.  When the SU_PCTFORTY is less than 100%, there can be other state-owned records in the same forty/government lot.)  <br>(7) Undivided interests - an undivided interest occurs when ownership in a parcel is distributed among more than one owner and the parcel is not physically subdivided.  In these cases, the ownership is equally shared throughout the entire acreage of the parcel.  <br>(8) Meander lines - a meander line is not the ownership boundary for a water-oriented government lot.  The actual ownership of the land is determined, in most cases, by the ordinary high water mark.</span></div><br><div class="mgmgel"><span>
+						Table Detail:
+					</span></div><h2><a name="Distribution_Information"></a>
+					Section 6: Distribution
+				</h2><div class="mgmgel"><span>
+						Publisher:
+					</span><span>Minnesota Department of Natural Resources (DNR)</span></div><br><div class="mgmgel"><span>
+						Publication Date:
+					</span><span>11/25/2015</span></div><br><div class="mgmgel"><span>
+						Contact Person Information:
+					</span><span>Zeb Thomas,
+							GIS Data Systems Coordinator<br>Minnesota Department of Natural Resources<br>500 Lafayette Rd<br>Saint Paul,
+							MN&nbsp;
+							55155<br>
+							Phone: 651-259-5637<br>
+							Email: <A href="mailto:zeb.thomas@state.mn.us">zeb.thomas@state.mn.us</A></span></div><br><div class="mgmgel"><span>
+						Distributor's Data Set Identifier:
+					</span><span>plan_stateland_dnrcounty.gdb</span></div><br><div class="mgmgel"><span>
+						Distribution Liability:
+					</span><span>The Minnesota Department of Natural Resources General Geographic Data License Agreement is online: <a target="_blank" href="http://www.dnr.state.mn.us/sitetools/data_software_license.html">http://www.dnr.state.mn.us/sitetools/data_software_license.html</a></span></div><br><div class="mgmgel"><span><a name="ordering"></a>
+						Ordering Instructions:
+					</span><span>Please visit the download page for this dataset on the Minnesota Geospatial Commons website using the web link below (Online Linkage).</span></div><br><div class="mgmgel"><span><font color="#B40404">Online Linkage:</font></span><span><A href="http://gisdata.mn.gov/dataset/plan-stateland-dnrcounty"> I AGREE</A>
+											to the notice in "Distribution Liability" above. Clicking to agree will either begin the download process, link to a service, or provide more instructions. See "Ordering Instructions" above for details.
+								</span></div><br><h2><a name="Metadata_Reference_Information"></a>
+					Section 7: Metadata Reference
+				</h2><div class="mgmgel"><span>
+						Metadata Date:
+					</span><span>01/25/2016</span></div><br><div class="mgmgel"><span>
+						Contact Person Information:
+					</span><span>Renee Johnson,
+						GIS Data Contact<br>Minnesota DNR - Lands and Minerals<br>500 Lafayette Rd<br>Saint Paul,
+						MN&nbsp;
+						55155<br>
+						Phone: 651-259-5396<br>
+						Email: <A href="mailto:renee.johnson@state.mn.us">renee.johnson@state.mn.us</A></span></div><br><div class="mgmgel"><span>
+						Metadata Standard Name:
+					</span><span>Minnesota Geographic Metadata Guidelines</span></div><br><div class="mgmgel"><span>
+						Metadata Standard Version:
+					</span><span>1.2</span></div><br><div class="mgmgel"><span>
+						Metadata Standard Online Linkage:
+					</span><span><A TARGET="viewer" HREF="http://www.mngeo.state.mn.us/committee/standards/mgmg/metadata.htm">http://www.mngeo.state.mn.us/committee/standards/mgmg/metadata.htm</A></span></div><br><p></p><hr><div class="smallish"> This page last updated:
+				01/25/2016<br><A HREF="#Top"> Go back to top</A><p></p><em class="unused">Created with <a href="https://github.com/MetropolitanCouncil/MME">MGMG stylesheet</a> version 2017.04.25.1</em></div></div></font></body></html>

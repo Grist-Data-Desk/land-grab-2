@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?><MD_Metadata xmlns:gts="http://www.isotc211.org/2005/gts" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:xalan="http://xml.apache.org/xalan" xmlns:srv="http://www.isotc211.org/2005/srv" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml" xmlns="http://www.isotc211.org/2005/gmd">
+    <characterSet>
+        <MD_CharacterSetCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8" codeSpace="ISOTC211/19115">utf8</MD_CharacterSetCode>
+    </characterSet>
+    <hierarchyLevel>
+        <MD_ScopeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ScopeCode" codeListValue="dataset" codeSpace="ISOTC211/19115">dataset</MD_ScopeCode>
+    </hierarchyLevel>
+    <hierarchyLevelName>
+        <gco:CharacterString>dataset</gco:CharacterString>
+    </hierarchyLevelName>
+    <contact gco:nilReason="missing"/>
+    <dateStamp gco:nilReason="missing"/>
+    <metadataStandardName>
+        <gco:CharacterString>ISO 19139 Geographic Information - Metadata - Implementation Specification</gco:CharacterString>
+    </metadataStandardName>
+    <metadataStandardVersion>
+        <gco:CharacterString>2007</gco:CharacterString>
+    </metadataStandardVersion>
+    <identificationInfo>
+        <MD_DataIdentification>
+            <citation>
+                <CI_Citation>
+                    <title>
+                        <gco:CharacterString>Contracts_Renewable</gco:CharacterString>
+                    </title>
+                    <date gco:nilReason="missing"/>
+                </CI_Citation>
+            </citation>
+            <abstract>
+                <gco:CharacterString>This dataset depicts the official State of Utah School and Institutional Trust Lands Administration renewable leases data. The types of renewable leases include; energy storage and development, geothermal, hydrogen, solar and wind.</gco:CharacterString>
+            </abstract>
+            <purpose>
+                <gco:CharacterString>This dataset depicts the official State of Utah School and Institutional Trust Lands Administration renewable leases data.</gco:CharacterString>
+            </purpose>
+            <credit>
+                <gco:CharacterString>trust lands administration</gco:CharacterString>
+            </credit>
+            <descriptiveKeywords>
+                <MD_Keywords>
+                    <keyword>
+                        <gco:CharacterString>contracts</gco:CharacterString>
+                    </keyword>
+                    <keyword>
+                        <gco:CharacterString>energy</gco:CharacterString>
+                    </keyword>
+                    <keyword>
+                        <gco:CharacterString>renewable</gco:CharacterString>
+                    </keyword>
+                    <keyword>
+                        <gco:CharacterString>sitla</gco:CharacterString>
+                    </keyword>
+                    <keyword>
+                        <gco:CharacterString>trust lands administration</gco:CharacterString>
+                    </keyword>
+                    <keyword>
+                        <gco:CharacterString>utah</gco:CharacterString>
+                    </keyword>
+                </MD_Keywords>
+            </descriptiveKeywords>
+            <resourceConstraints>
+                <MD_Constraints>
+                    <useLimitation>
+                        <gco:CharacterString>Data represented on this map is for REFERENCE USE ONLY and is not suitable for legal, engineering, or surveying purposes.  Users of this information should review or consult the primary data and information sources to ascertain the usability of the information.  The Trust Lands Administration provides this data in good faith and shall in no event be liable for any incorrect results, or any special, indirect or consequential damages to any party, arising out of or in connection with the use or the inability to use the data hereon.   Land parcels, lease boundaries and associated Trust Lands Administration data layers may have been adjusted to allow for visual “best fit.”   The Surface Ownership Land Status data (if present) are maintained by the Trust Lands Administration to reflect current trust lands status and surface ownership. Lakes, rivers, streams, highways, roads, county and state boundaries are distributed by the Utah Geospatial Resource Center (UGRC) and/or other sources as specified. Contour lines (if present) were generated from USGS 10 meter DEM.By continuing beyond this point and/or by clicking any link on this site, you agree to the terms and conditions as described above and you agree that you understand the limitations and unofficial status of the data provided on this website.Please Note:  While the Trust Lands Administration seeks to verify data for accuracy and content, discrepancies may exist within the data. Acquiring the most updated Trust Lands Administration ownership GIS data may require contacting the GIS staff at TLA-GIS@utah.gov. The Trust Lands Administration GIS department welcomes your comments and concerns regarding the data and will attempt to resolve issues as they are brought to our attention.</gco:CharacterString>
+                    </useLimitation>
+                </MD_Constraints>
+            </resourceConstraints>
+            <language gco:nilReason="missing"/>
+            <characterSet>
+                <MD_CharacterSetCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8" codeSpace="ISOTC211/19115">utf8</MD_CharacterSetCode>
+            </characterSet>
+        </MD_DataIdentification>
+    </identificationInfo>
+</MD_Metadata>

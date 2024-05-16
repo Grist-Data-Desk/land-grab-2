@@ -1,0 +1,1640 @@
+<metadata>
+  <idinfo>
+    <citation>
+      <citeinfo>
+        <origin>Minnesota DNR - Division of Forestry</origin>
+        <pubdate>20220916</pubdate>
+        <title>MNDNR Forest Inventory Old Growth</title>
+        <pubinfo>
+          <publish>Minnesota Department of Natural Resources (DNR)</publish>
+        </pubinfo>
+        <onlink>https://gisdata.mn.gov/dataset/biota-dnr-forest-inv-old-growth</onlink>
+      </citeinfo>
+    </citation>
+    <descript>
+      <abstract>This layer is a digital inventory of currently designated or candidate old growth forest stands on lands administered by the Department of Natural Resources (DNR). This data originates from the Inventory Module of the Minnesota DNR's 4Trees System. Old growth forest designations are determined through an interdisciplinary evaluation process by DNR staff in divisions of Forestry, Fish and Wildlife, Ecological and Water Resources, and Parks and Trails. These data are updated on a continuous basis, as needed.
+
+Also included is the old growth Special Management Zone (SMZ), a 330-foot buffer around the Old Growth layer.</abstract>
+      <purpose>Forest resource planning, harvest plans, treatment plans, wildlife habitat assessment, natural heritage review, native plant community mapping support, historical vegetation studies.</purpose>
+      <supplinf>Statewide</supplinf>
+    </descript>
+    <timeperd>
+      <timeinfo>
+        <sngdate>
+          <caldate>20240510</caldate>
+        </sngdate>
+      </timeinfo>
+      <current>Time Period of Content date indicates the date which the user can be confident of accuracy and completeness of the dataset.</current>
+    </timeperd>
+    <status>
+      <progress>Complete</progress>
+      <update>Daily</update>
+    </status>
+    <spdom>
+      <bounding>
+        <westbc>-96.309815</westbc>
+        <eastbc>-89.813889</eastbc>
+        <northbc>49.292426</northbc>
+        <southbc>43.479354</southbc>
+      </bounding>
+    </spdom>
+    <keywords>
+      <theme>
+        <themekey>Forest, Old Growth, Forest Inventory, Land Cover, biota.</themekey>
+        <themekt>ISO 19115 Category</themekt>
+      </theme>
+      <place>
+        <placekey>Minnesota, MN</placekey>
+      </place>
+    </keywords>
+    <accconst>None</accconst>
+    <useconst>None</useconst>
+    <browse>
+      <browsen>https://resources.gisdata.mn.gov/pub/gdrs/data/pub/us_mn_state_dnr/biota_dnr_forest_inv_old_growth/metadata/preview.jpg</browsen>
+      <browsed>Old Growth Stands</browsed>
+    </browse>
+    <crossref>
+      <citeinfo>
+        <title>MNDNR Forest Inventory: https://gisdata.mn.gov/dataset/biota-dnr-forest-inventory
+
+MNDNR Historic Forest Stand Inventory: Archives of 4trees and (its predecessor) FIM going back to 2001. Full data download (&gt;2 GB): https://gdrs.dnr.state.mn.us/gdrs/data/pub/us_mn_state_dnr/biota_historic_dnr_fim.zip</title>
+      </citeinfo>
+    </crossref>
+    <ptcontac>
+      <cntinfo>
+        <cntperp>
+          <cntorg>Minnesota DNR - Forestry</cntorg>
+          <cntper>Kari Geurts</cntper>
+        </cntperp>
+        <cntpos>MNIT Forestry Business Services Supervisor</cntpos>
+        <cntaddr>
+          <addrtype>Mailling and Physical</addrtype>
+          <address>500 Lafayette Rd</address>
+          <city>Saint Paul</city>
+          <state>MN</state>
+          <postal>55155</postal>
+        </cntaddr>
+        <cntvoice>651-259-5275</cntvoice>
+        <cntemail>kari.geurts@state.mn.us</cntemail>
+      </cntinfo>
+    </ptcontac>
+  </idinfo>
+  <dataqual>
+    <logic>
+      </logic>
+    <complete>As new lands are acquired, 4Trees Stand Inventory data collection is scheduled.</complete>
+    <posacc>
+      <horizpa>
+        <horizpar>Features are digitized onscreen over standard 24k digital raster graphics (DRGs) and U.S. Geological Survey (USGS) digital orthophoto quadrangles (DOQs) and will inherit the horizontal positional accuracy of those products.</horizpar>
+      </horizpa>
+      <vertacc>
+        <vertaccr>Not Applicable</vertaccr>
+      </vertacc>
+    </posacc>
+    <lineage>
+      <procstep>
+        <procdesc>Original source layer was MNDNR's enterprise geodatabase: Forest Inventory Managment System (FIM).  Data are now extracted on a regular basis from the MNDNR's 4Trees Inventory Module (LRM)</procdesc>
+      </procstep>
+    </lineage>
+    <attracc>
+      <attraccr>Data are in use by DNR staff on a daily basis. Attributes are fixed as problems are made known</attraccr>
+    </attracc>
+  </dataqual>
+  <spref>
+    <vertdef>
+      <altsys>
+        <altdatum>NAVD88</altdatum>
+        <altunits>meters</altunits>
+      </altsys>
+      <depthsys>
+        <depthdn>not applicable</depthdn>
+        <depthdu>meters</depthdu>
+      </depthsys>
+    </vertdef>
+    <horizsys>
+      <planar>
+        <gridsys>
+          <gridsysn>Universal Transverse Mercator</gridsysn>
+          <utm>
+            <utmzone>15</utmzone>
+          </utm>
+        </gridsys>
+        <planci>
+          <plandu>meters</plandu>
+        </planci>
+      </planar>
+      <geodetic>
+        <horizdn>NAD83</horizdn>
+        <ellips>GRS80</ellips>
+      </geodetic>
+    </horizsys>
+  </spref>
+  <eainfo>
+    <detailed>
+      <enttyp>
+        <enttypl>dnr_forest_inventory_old_growth</enttypl>
+      </enttyp>
+      <attr>
+        <attrlabl>Cover Type Code</attrlabl>
+        <attrdef>Cover Type</attrdef>
+        <attrdomv>
+          <edom>
+            <edomv>0</edomv>
+            <edomvd>None</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>1</edomv>
+            <edomvd>Ash</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>6</edomv>
+            <edomvd>Willow</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>9</edomv>
+            <edomvd>Lowland Hardwoods</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>12</edomv>
+            <edomvd>Aspen</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>13</edomv>
+            <edomvd>Birch</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>14</edomv>
+            <edomvd>Balm of Gilead</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>15</edomv>
+            <edomvd>Cottonwood</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>17</edomv>
+            <edomvd>Hybrid Poplar</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>20</edomv>
+            <edomvd>Northern Hardwoods</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>25</edomv>
+            <edomvd>Walnut</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>30</edomv>
+            <edomvd>Oak</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>40</edomv>
+            <edomvd>Central Hardwoods</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>51</edomv>
+            <edomvd>White Pine</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>52</edomv>
+            <edomvd>Norway Pine</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>53</edomv>
+            <edomvd>Jack Pine</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>54</edomv>
+            <edomvd>Scotch Pine</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>55</edomv>
+            <edomvd>Ponderosa Pine</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>61</edomv>
+            <edomvd>White Spruce</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>62</edomv>
+            <edomvd>Balsam Fir</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>64</edomv>
+            <edomvd>Norway Spruce</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>70</edomv>
+            <edomvd>Upland Larch</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>71</edomv>
+            <edomvd>Black Spruce-Lowland</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>72</edomv>
+            <edomvd>Tamarack</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>73</edomv>
+            <edomvd>White Cedar</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>74</edomv>
+            <edomvd>Black Spruce-Upland</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>75</edomv>
+            <edomvd>Stagnant Spruce</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>76</edomv>
+            <edomvd>Stagnant Tamarack</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>77</edomv>
+            <edomvd>Stagnant Cedar</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>78</edomv>
+            <edomvd>Offsite Aspen</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>79</edomv>
+            <edomvd>Offsite Oak</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>81</edomv>
+            <edomvd>Red Cedar</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>82</edomv>
+            <edomvd>Cutover Area</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>83</edomv>
+            <edomvd>Lowland Grass</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>84</edomv>
+            <edomvd>Upland Grass</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>85</edomv>
+            <edomvd>Lowland Brush</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>86</edomv>
+            <edomvd>Upland Brush</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>87</edomv>
+            <edomvd>Duff</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>88</edomv>
+            <edomvd>Moss</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>90</edomv>
+            <edomvd>Unknown</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>91</edomv>
+            <edomvd>Agricultural</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>92</edomv>
+            <edomvd>Industrial Develop</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>93</edomv>
+            <edomvd>Recreation Develop</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>94</edomv>
+            <edomvd>Roads</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>95</edomv>
+            <edomvd>Rock Outcrop</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>96</edomv>
+            <edomvd>Permanent Water</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>97</edomv>
+            <edomvd>Nonpermanent Water</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>98</edomv>
+            <edomvd>Marsh</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>99</edomv>
+            <edomvd>Muskeg</edomvd>
+          </edom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>Main Species Code</attrlabl>
+        <attrdef>Main Species</attrdef>
+        <attrdomv>
+          <edom>
+            <edomv>1</edomv>
+            <edomvd>Ash, Black</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>2</edomv>
+            <edomvd>Elm, American</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>3</edomv>
+            <edomvd>Maple, Silver</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>4</edomv>
+            <edomvd>Elm, Red</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>5</edomv>
+            <edomvd>Elm, Rock</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>6</edomv>
+            <edomvd>Willow (tree)</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>7</edomv>
+            <edomvd>Elm, Siberian</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>12</edomv>
+            <edomvd>Aspen, Trembling</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>13</edomv>
+            <edomvd>Birch, Paper</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>14</edomv>
+            <edomvd>Balm of Gilead</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>15</edomv>
+            <edomvd>Cottonwood, Eastern</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>16</edomv>
+            <edomvd>Aspen, Largetooth</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>17</edomv>
+            <edomvd>Poplar, Hybrid</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>21</edomv>
+            <edomvd>Maple, Red</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>22</edomv>
+            <edomvd>Maple, Sugar</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>23</edomv>
+            <edomvd>Basswood</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>24</edomv>
+            <edomvd>Birch, Yellow</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>25</edomv>
+            <edomvd>Black Walnut</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>26</edomv>
+            <edomvd>Butternut</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>27</edomv>
+            <edomvd>Cherry, Black</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>28</edomv>
+            <edomvd>Buckeye</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>29</edomv>
+            <edomvd>Birch, Heart-leaved</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>31</edomv>
+            <edomvd>Aspen, Trembling</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>32</edomv>
+            <edomvd>Oak, Black</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>33</edomv>
+            <edomvd>Oak, Northern Pin</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>34</edomv>
+            <edomvd>Oak, White</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>35</edomv>
+            <edomvd>Oak, Bur</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>38</edomv>
+            <edomvd>Ash, White</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>39</edomv>
+            <edomvd>Ash, Green</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>41</edomv>
+            <edomvd>Hickory, Bitternut</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>42</edomv>
+            <edomvd>Hickory, Shagbark</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>43</edomv>
+            <edomvd>Hackberry</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>45</edomv>
+            <edomvd>Boxelder</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>51</edomv>
+            <edomvd>Pine, White</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>52</edomv>
+            <edomvd>Pine, Norway(Red)</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>53</edomv>
+            <edomvd>Pine, Jack</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>54</edomv>
+            <edomvd>Pine, Scotch(Scots)</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>55</edomv>
+            <edomvd>Pine, Ponderosa</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>56</edomv>
+            <edomvd>Pine, Austrian</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>61</edomv>
+            <edomvd>Spruce, White</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>62</edomv>
+            <edomvd>Fir, Balsam</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>63</edomv>
+            <edomvd>Spruce, Colorado</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>64</edomv>
+            <edomvd>Spruce, Norway</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>65</edomv>
+            <edomvd>Spruce, Black Hills</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>71</edomv>
+            <edomvd>Spruce, Black</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>72</edomv>
+            <edomvd>Tamarack</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>73</edomv>
+            <edomvd>Cedar, White</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>81</edomv>
+            <edomvd>Cedar, Eastern Red</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>82</edomv>
+            <edomvd>Hemlock, Eastern</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>83</edomv>
+            <edomvd>Fir, Douglas</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>84</edomv>
+            <edomvd>Larch, European</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>85</edomv>
+            <edomvd>Larch, Japanese</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>86</edomv>
+            <edomvd>Larch, Siberian</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>90</edomv>
+            <edomvd>Locust, Honey</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>91</edomv>
+            <edomvd>Locust, Black</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>92</edomv>
+            <edomvd>Ironwood</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>93</edomv>
+            <edomvd>Birch, River</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>94</edomv>
+            <edomvd>Blue Beech</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>99</edomv>
+            <edomvd>Misc Species 1</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>100</edomv>
+            <edomvd>Kentucky Coffeetree</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>101</edomv>
+            <edomvd>Larch, Hybrid</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>102</edomv>
+            <edomvd>Maple, Norway</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>103</edomv>
+            <edomvd>Oak, Chinkapin</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>104</edomv>
+            <edomvd>Oak, Swamp White</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>1000</edomv>
+            <edomvd>Misc Species 2</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>1001</edomv>
+            <edomvd>Misc Species 3</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>10005</edomv>
+            <edomvd>Alder</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>10006</edomv>
+            <edomvd>Cherry, Pin</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>10007</edomv>
+            <edomvd>Chokecherry</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>10008</edomv>
+            <edomvd>Dogwood</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>10009</edomv>
+            <edomvd>Hazel</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>10010</edomv>
+            <edomvd>Maple, Mountain</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>10011</edomv>
+            <edomvd>Mountain-Ash</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>10012</edomv>
+            <edomvd>Raspberry</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>10013</edomv>
+            <edomvd>Willow (shrub)</edomvd>
+          </edom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>Old Growth ID</attrlabl>
+        <attrdef>Old Growth Status</attrdef>
+        <attrdomv>
+          <edom>
+            <edomv>5</edomv>
+            <edomvd>Designated Old Growth</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>7</edomv>
+            <edomvd>Designated Future Old Growth</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>8</edomv>
+            <edomvd>Candidate Old Growth</edomvd>
+          </edom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>RAN</attrlabl>
+        <attrdef>DNR Division of Forestry Administrative Areas</attrdef>
+        <attrdomv>
+          <edom>
+            <edomv>111</edomv>
+            <edomvd>Bemidji Area</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>117</edomv>
+            <edomvd>Blackduck Area</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>121</edomv>
+            <edomvd>Warroad Area</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>131</edomv>
+            <edomvd>Baudette Area</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>142</edomv>
+            <edomvd>Backus Area</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>161</edomv>
+            <edomvd>Park Rapids Area</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>199</edomv>
+            <edomvd>Red Lake</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>221</edomv>
+            <edomvd>Deer River Area</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>232</edomv>
+            <edomvd>Aitkin Area</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>234</edomv>
+            <edomvd>Hibbing Area</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>245</edomv>
+            <edomvd>Tower Area</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>251</edomv>
+            <edomvd>Cloquet Area</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>253</edomv>
+            <edomvd>Two Harbors Area</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>261</edomv>
+            <edomvd>Littlefork Area</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>312</edomv>
+            <edomvd>Little Falls Area</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>341</edomv>
+            <edomvd>Lewiston Area</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>344</edomv>
+            <edomvd>Sandstone Area</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>351</edomv>
+            <edomvd>Cambridge Area</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>443</edomv>
+            <edomvd>New Ulm Area</edomvd>
+          </edom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>County ID</attrlabl>
+        <attrdef>County Name</attrdef>
+        <attrdomv>
+          <edom>
+            <edomv>1</edomv>
+            <edomvd>Aitkin</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>2</edomv>
+            <edomvd>Anoka</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>3</edomv>
+            <edomvd>Becker</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>4</edomv>
+            <edomvd>Beltrami</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>5</edomv>
+            <edomvd>Benton</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>6</edomv>
+            <edomvd>Big Stone</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>7</edomv>
+            <edomvd>Blue Earth</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>8</edomv>
+            <edomvd>Brown</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>9</edomv>
+            <edomvd>Carlton</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>10</edomv>
+            <edomvd>Carver</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>11</edomv>
+            <edomvd>Cass</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>12</edomv>
+            <edomvd>Chippewa</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>13</edomv>
+            <edomvd>Chisago</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>14</edomv>
+            <edomvd>Clay</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>15</edomv>
+            <edomvd>Clearwater</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>16</edomv>
+            <edomvd>Cook</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>17</edomv>
+            <edomvd>Cottonwood</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>18</edomv>
+            <edomvd>Crow Wing</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>19</edomv>
+            <edomvd>Dakota</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>20</edomv>
+            <edomvd>Dodge</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>21</edomv>
+            <edomvd>Douglas</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>22</edomv>
+            <edomvd>Faribault</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>23</edomv>
+            <edomvd>Fillmore</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>24</edomv>
+            <edomvd>Freeborn</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>25</edomv>
+            <edomvd>Goodhue</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>26</edomv>
+            <edomvd>Grant</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>27</edomv>
+            <edomvd>Hennepin</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>28</edomv>
+            <edomvd>Houston</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>29</edomv>
+            <edomvd>Hubbard</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>30</edomv>
+            <edomvd>Isanti</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>31</edomv>
+            <edomvd>Itasca</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>32</edomv>
+            <edomvd>Jackson</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>33</edomv>
+            <edomvd>Kanabec</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>34</edomv>
+            <edomvd>Kandiyohi</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>35</edomv>
+            <edomvd>Kittson</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>36</edomv>
+            <edomvd>Koochiching</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>37</edomv>
+            <edomvd>Lac Qui Parle</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>38</edomv>
+            <edomvd>Lake</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>39</edomv>
+            <edomvd>Lake of the Woods</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>40</edomv>
+            <edomvd>LeSueur</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>41</edomv>
+            <edomvd>Lincoln</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>42</edomv>
+            <edomvd>Lyon</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>43</edomv>
+            <edomvd>McLeod</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>44</edomv>
+            <edomvd>Mahnomen</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>45</edomv>
+            <edomvd>Marshall</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>46</edomv>
+            <edomvd>Martin</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>47</edomv>
+            <edomvd>Meeker</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>48</edomv>
+            <edomvd>Mille Lacs</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>49</edomv>
+            <edomvd>Morrison</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>50</edomv>
+            <edomvd>Mower</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>51</edomv>
+            <edomvd>Murray</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>52</edomv>
+            <edomvd>Nicollet</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>53</edomv>
+            <edomvd>Nobles</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>54</edomv>
+            <edomvd>Norman</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>55</edomv>
+            <edomvd>Olmsted</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>56</edomv>
+            <edomvd>Otter Tail</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>57</edomv>
+            <edomvd>Pennington</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>58</edomv>
+            <edomvd>Pine</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>59</edomv>
+            <edomvd>Pipestone</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>60</edomv>
+            <edomvd>Polk</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>61</edomv>
+            <edomvd>Pope</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>62</edomv>
+            <edomvd>Ramsey</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>63</edomv>
+            <edomvd>Red Lake</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>64</edomv>
+            <edomvd>Redwood</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>65</edomv>
+            <edomvd>Renville</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>66</edomv>
+            <edomvd>Rice</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>67</edomv>
+            <edomvd>Rock</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>68</edomv>
+            <edomvd>Roseau</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>69</edomv>
+            <edomvd>St. Louis</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>70</edomv>
+            <edomvd>Scott</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>71</edomv>
+            <edomvd>Sherburne</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>72</edomv>
+            <edomvd>Sibley</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>73</edomv>
+            <edomvd>Stearns</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>74</edomv>
+            <edomvd>Steele</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>75</edomv>
+            <edomvd>Stevens</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>76</edomv>
+            <edomvd>Swift</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>77</edomv>
+            <edomvd>Todd</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>78</edomv>
+            <edomvd>Traverse</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>79</edomv>
+            <edomvd>Wabasha</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>80</edomv>
+            <edomvd>Wadena</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>81</edomv>
+            <edomvd>Waseca</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>82</edomv>
+            <edomvd>Washington</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>83</edomv>
+            <edomvd>Watonwan</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>84</edomv>
+            <edomvd>Wilkin</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>85</edomv>
+            <edomvd>Winona</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>86</edomv>
+            <edomvd>Wright</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>87</edomv>
+            <edomvd>Yellow Medicine</edomvd>
+          </edom>
+        </attrdomv>
+      </attr>
+    </detailed>
+    <overview>
+      <eaover>Stand Key: Unique system-generated number to identify the stand
+
+SLabel: Stand label consisting of the stand's FIM_type and Cover Type Classification/Size/Density
+
+Cover Type Code: Cover type code (see table below)
+
+Site Index: Site Index Value (a measure of site productivity)
+
+Main Species Code: Code for species used for the site index value (see table below)
+
+Old Growth Status: Text field indicating the current old growth designation status (designated, designated FOG, or candidate)(see table below)
+
+Old Growth ID: Unique ID for each old growth site (which can be comprised of multiple stands)
+
+Old Growth Comment: General notes section that sometimes includes info about OG
+
+Location: t-number; unique for each stand
+
+RAN: DNR Division of Forestry Administrative Area Code (see table below)
+
+County Number: Number assigned to the county name (see table below)
+
+PLS: PLS value
+
+Stand Age Last Inventory: Computed from most recent inventory activity
+
+Stand Acres: Total acres in the stand
+
+Stand Age - Current: Current stand age (Current Year - Last Inventory Year) + Last Inventory Age
+</eaover>
+    </overview>
+  </eainfo>
+  <distinfo>
+    <resdesc>biota_dnr_forest_inv_old_growth</resdesc>
+    <distliab>The Minnesota Department of Natural Resources General Geographic Data License Agreement is online: http://www.dnr.state.mn.us/sitetools/data_software_license.html</distliab>
+    <stdorder>
+      <ordering>Please visit the download page for this dataset on the Minnesota Geospatial Commons website using the web link below (Online Linkage).</ordering>
+    </stdorder>
+    <distrib>
+      <cntinfo>
+        <cntperp>
+          <cntorg>Minnesota DNR - GIS</cntorg>
+          <cntper>Zeb Thomas</cntper>
+        </cntperp>
+        <cntpos>GIS Data Systems Coordinator</cntpos>
+        <cntaddr>
+          <addrtype>mailing and physical</addrtype>
+          <address>500 Lafayette Rd</address>
+          <city>Saint Paul</city>
+          <state>MN</state>
+          <postal>55155</postal>
+        </cntaddr>
+        <cntvoice>651-259-5637</cntvoice>
+        <cntemail>zeb.thomas@state.mn.us</cntemail>
+      </cntinfo>
+    </distrib>
+  </distinfo>
+  <metainfo>
+    <metd>20230106</metd>
+    <metstdn>Minnesota Geographic Metadata Guidelines</metstdn>
+    <metstdv>1.2</metstdv>
+    <metextns>
+      <onlink>http://www.mngeo.state.mn.us/committee/standards/mgmg/metadata.htm</onlink>
+    </metextns>
+    <metc>
+      <cntinfo>
+        <cntperp>
+          <cntorg>Minnesota DNR - GIS</cntorg>
+          <cntper>Zeb Thomas</cntper>
+        </cntperp>
+        <cntpos>GIS Data Systems Coordinator</cntpos>
+        <cntaddr>
+          <addrtype>mailing and physical</addrtype>
+          <address>500 Lafayette Rd</address>
+          <city>Saint Paul</city>
+          <state>MN</state>
+          <postal>55155</postal>
+        </cntaddr>
+        <cntvoice>651-259-5637</cntvoice>
+        <cntemail>zeb.thomas@state.mn.us</cntemail>
+      </cntinfo>
+    </metc>
+  </metainfo>
+</metadata>

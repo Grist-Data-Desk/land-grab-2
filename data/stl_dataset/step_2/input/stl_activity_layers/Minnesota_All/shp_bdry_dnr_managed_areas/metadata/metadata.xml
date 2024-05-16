@@ -1,0 +1,340 @@
+<metadata>
+  <idinfo>
+    <citation>
+      <citeinfo>
+        <origin>Minnesota Department of Natural Resources (DNR) - Fisheries Division</origin>
+        <pubdate>20131119</pubdate>
+        <title>State Administered Lands - DNR Management Units, Minnesota</title>
+        <pubinfo>
+          <publish>Minnesota DNR - Management Information Systems</publish>
+        </pubinfo>
+        <onlink>https://gisdata.mn.gov/dataset/bdry-dnr-managed-areas</onlink>
+      </citeinfo>
+    </citation>
+    <descript>
+      <abstract>This data layer shows lands acquired, administered and/or managed by Minnesota  DNR. These include lands in the following categories:  &lt;ul&gt;&lt;li&gt;Aquatic Management Area (AMA)&lt;/li&gt;
+&lt;li&gt;Scientific and Natural Area (SNA)&lt;/li&gt;
+&lt;li&gt;State Forest&lt;/li&gt;
+&lt;li&gt;Other Forest Land&lt;/li&gt;
+&lt;li&gt;State Park&lt;/li&gt;
+&lt;li&gt;State Recreation Area&lt;/li&gt;
+&lt;li&gt;State Wayside&lt;/li&gt;
+&lt;li&gt;Wildlife Management Area (WMA)&lt;/li&gt;
+&lt;/ul&gt;Management Units are often composed of numerous tracts of land that are managed or administered as a single unit.  
+
+Some features in this layer are hyperlinked to websites or documents that provide descriptive information. Use ArcMap's &lt;i&gt;Hyperlink Tool&lt;/i&gt; (yellow lightning bolt) to access deed documents. (To set up the hyperlink, open &lt;i&gt;Layer Properties: Display tab&lt;/i&gt;, check the &lt;i&gt;Hyperlinks&lt;/i&gt; box and choose the field [WEB_LINK1] or [WEB_LINK2].)</abstract>
+      <purpose>For more information about management units, see the following:
+&lt;b&gt;Classification and Purposes -&lt;/b&gt;  MN Statutes 86A: http://www.revisor.mn.gov/statutes/?id=86A.05</purpose>
+      <supplinf>
+        </supplinf>
+    </descript>
+    <timeperd>
+      <timeinfo>
+        <sngdate>
+          <caldate>20240510</caldate>
+        </sngdate>
+      </timeinfo>
+      <current>Time Period of Content date indicates the date which the user can be confident of accuracy and completeness of the dataset.</current>
+    </timeperd>
+    <status>
+      <progress>Complete</progress>
+      <update>Weekly</update>
+    </status>
+    <spdom>
+      <bounding>
+        <westbc>-97.23</westbc>
+        <eastbc>-89.53</eastbc>
+        <northbc>49.37</northbc>
+        <southbc>43.5</southbc>
+      </bounding>
+    </spdom>
+    <keywords>
+      <theme>
+        <themekey>DNR-administered lands, acquisitions, parcels, easement, admin, planningCadastre</themekey>
+        <themekt>
+          </themekt>
+      </theme>
+      <place>
+        <placekey>Minnesota</placekey>
+      </place>
+    </keywords>
+    <accconst>
+      </accconst>
+    <useconst>Delineations are generally representative of managed lands, but they are of varying accuracies.  Do not use for boundary disputes or legal applications.</useconst>
+    <native>shapefile</native>
+    <browse>
+      <browsen>https://resources.gisdata.mn.gov/pub/gdrs/data/pub/us_mn_state_dnr/bdry_dnr_managed_areas/metadata/preview.jpg</browsen>
+    </browse>
+    <crossref>
+      <citeinfo>
+        <title>&lt;a href="..\..\plan_stateland_dnrcounty\metadata\metadata.html" target=_blank&gt;&lt;b&gt;State Surface Interests Administered by MNDNR or by Counties&lt;/b&gt;&lt;/a&gt; - by 40-acre parcel </title>
+      </citeinfo>
+    </crossref>
+    <ptcontac>
+      <cntinfo>
+        <cntperp>
+          <cntorg>Minnesota Department of Natural Resources</cntorg>
+          <cntper>Zeb Thomas</cntper>
+        </cntperp>
+        <cntpos>GIS Data Systems Coordinator</cntpos>
+        <cntaddr>
+          <address>500 Lafayette Rd</address>
+          <city>Saint Paul</city>
+          <state>MN</state>
+          <postal>55155</postal>
+        </cntaddr>
+        <cntvoice>651-259-5637</cntvoice>
+        <cntemail>zeb.thomas@state.mn.us</cntemail>
+      </cntinfo>
+    </ptcontac>
+  </idinfo>
+  <dataqual>
+    <logic>Not Specifically Assessed</logic>
+    <complete>Completed statewide</complete>
+    <posacc>
+      <horizpa>
+        <horizpar>
+          </horizpar>
+      </horizpa>
+      <vertacc>
+        <vertaccr>
+          </vertaccr>
+      </vertacc>
+    </posacc>
+    <lineage>
+      <procstep>
+        <procdesc>
+          </procdesc>
+      </procstep>
+    </lineage>
+    <attracc>
+      <attraccr>
+        </attraccr>
+    </attracc>
+  </dataqual>
+  <spdoinfo>
+    <indspref>None</indspref>
+    <direct>vector</direct>
+    <mgmg3obj>polygon</mgmg3obj>
+    <mgmg3til>state</mgmg3til>
+  </spdoinfo>
+  <spref>
+    <vertdef>
+      <altsys>
+        <altdatum>Not Applicable</altdatum>
+        <altunits>Not Applicable</altunits>
+      </altsys>
+      <depthsys>
+        <depthdn>Not Applicable</depthdn>
+        <depthdu>Not Applicable</depthdu>
+      </depthsys>
+    </vertdef>
+    <horizsys>
+      <planar>
+        <gridsys>
+          <gridsysn>Universal Transverse Mercator</gridsysn>
+          <utm>
+            <utmzone>15</utmzone>
+          </utm>
+        </gridsys>
+        <planci>
+          <plandu>meters</plandu>
+        </planci>
+      </planar>
+      <geodetic>
+        <horizdn>NAD83</horizdn>
+        <ellips>GRS80</ellips>
+      </geodetic>
+    </horizsys>
+  </spref>
+  <eainfo>
+    <detailed>
+      <enttyp>
+        <enttypl>dnr_management_units</enttypl>
+        <enttypd>Feature Class Attribute Table</enttypd>
+        <enttypds>DNR Fisheries</enttypds>
+      </enttyp>
+      <attr>
+        <attrlabl>GLOBAL_ID</attrlabl>
+        <attrdef>ESRI-generated shape ID</attrdef>
+        <attrdefs>ESRI</attrdefs>
+      </attr>
+      <attr>
+        <attrlabl>UNIT_NAME</attrlabl>
+        <attrdef>Management unit name per Land Records System (LRS)</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>UNIT_TYPE</attrlabl>
+        <attrdef>Management unit type per Land Records System (LRS)</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>ADMINISTRATING_DIVISION</attrlabl>
+        <attrdef>Administrating division per Land Records System (LRS)</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>PUADMIN</attrlabl>
+        <attrdef>Administrator code per Land Records System (LRS)</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>ADMINISTRATOR</attrlabl>
+        <attrdef>Administrator per Land Records System (LRS)</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>MGT_PRGM</attrlabl>
+        <attrdef>Management Program per Land Records System (LRS)</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>PGRM_PROJECT</attrlabl>
+        <attrdef>Program Project # per Land Records System (LRS)</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>ACCESS_WO_TRESPASS</attrlabl>
+        <attrdef>Flag indicating whether management unit is publicly-accessible without trespassing</attrdef>
+        <attrdomv>
+          <edom>
+            <edomv>Access open to public</edomv>
+            <edomvd>Management unit is publicly-accessible</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>Access closed to public</edomv>
+            <edomvd>Access open to public	Management unit is not publicly-accessible</edomvd>
+          </edom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>POINT_OF_CONTACT</attrlabl>
+        <attrdef>Point of contact for management unit questions</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>WEB_LINK1</attrlabl>
+        <attrdef>URL web path to scanned deed document (PDF)</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>WEB_LINK2</attrlabl>
+        <attrdef>Addtional URL link (if relevant)</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>CREATE_AUTHOR</attrlabl>
+        <attrdef>Person who created delineation</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>CREATE_DATE</attrlabl>
+        <attrdef>Date of delineation</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>SPATIAL_UPDATE_EDITOR</attrlabl>
+        <attrdef>Last person to update delineation</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>SPATIAL_UPDATE_DATE</attrlabl>
+        <attrdef>Date of last delineation</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>TABULAR_UPDATE_EDITOR</attrlabl>
+        <attrdef>Last person to update tabular attributes</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>TABULAR_UPDATE_DATE</attrlabl>
+        <attrdef>Date of last tabular update</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>EDITOR_NOTES</attrlabl>
+        <attrdef>Editor notes</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>EDITOR_APPROVAL</attrlabl>
+        <attrdef>Person to approve final record</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>PLANNING_ACRES</attrlabl>
+        <attrdef>Total acres of management unit per PLAN_SRC</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>PLANNING_ACRES_SRC</attrlabl>
+        <attrdef>Source of PLAN_ACRES</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>GIS_ACRES</attrlabl>
+        <attrdef>GIS-calculated acres</attrdef>
+      </attr>
+      <attr>
+        <attrlabl>MAP_RESTRICT_RULE_ID</attrlabl>
+        <attrdef>Flag indicating whether management unit should be restricted from showing on public maps</attrdef>
+        <attrdomv>
+          <edom>
+            <edomv>Restricted</edomv>
+            <edomvd>Management unit is restricted from public view maps</edomvd>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>Unrestricted</edomv>
+            <edomvd>Management unit is not restricted from public view maps</edomvd>
+          </edom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>SPAT_ACC_CONF</attrlabl>
+        <attrdef>Confidence in spatial accuracy of delineation</attrdef>
+      </attr>
+    </detailed>
+  </eainfo>
+  <distinfo>
+    <resdesc>bdry_dnr_managed_areas.gdb\dnr_management_units</resdesc>
+    <distliab>The Minnesota Department of Natural Resources General Geographic Data License Agreement is online: http://www.dnr.state.mn.us/sitetools/data_software_license.html</distliab>
+    <stdorder>
+      <digform>
+        <digtinfo>
+          <formname>Shapefile</formname>
+          <formvern>Not Applicable</formvern>
+          <transize>1024</transize>
+        </digtinfo>
+      </digform>
+      <ordering>Please visit the download page for this dataset on the Minnesota Geospatial Commons website using the web link below (Online Linkage).</ordering>
+    </stdorder>
+    <distrib>
+      <cntinfo>
+        <cntperp>
+          <cntorg>Minnesota Department of Natural Resources</cntorg>
+          <cntper>Zeb Thomas</cntper>
+        </cntperp>
+        <cntpos>GIS Data Systems Coordinator</cntpos>
+        <cntaddr>
+          <address>500 Lafayette Rd</address>
+          <city>Saint Paul</city>
+          <state>MN</state>
+          <postal>55155</postal>
+        </cntaddr>
+        <cntvoice>651-259-5637</cntvoice>
+        <cntemail>zeb.thomas@state.mn.us</cntemail>
+      </cntinfo>
+    </distrib>
+  </distinfo>
+  <metainfo>
+    <metd>20160602</metd>
+    <metstdn>Minnesota Geographic Metadata Guidelines</metstdn>
+    <metstdv>1.2</metstdv>
+    <metextns>
+      <onlink>http://www.mngeo.state.mn.us/committee/standards/mgmg/metadata.htm</onlink>
+    </metextns>
+    <metc>
+      <cntinfo>
+        <cntperp>
+          <cntorg>Minnesota DNR - Fisheries Unit</cntorg>
+          <cntper>Lyn Bergquist</cntper>
+        </cntperp>
+        <cntpos>GIS Data Contact</cntpos>
+        <cntaddr>
+          <address>500 Lafayette Rd</address>
+          <city>Saint Paul</city>
+          <state>MN</state>
+          <postal>55155</postal>
+        </cntaddr>
+        <cntvoice>651-259-5189</cntvoice>
+        <cntemail>lyn.bergquist@state.mn.us</cntemail>
+      </cntinfo>
+    </metc>
+  </metainfo>
+</metadata>
