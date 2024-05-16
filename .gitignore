@@ -142,4 +142,4 @@ data/stl_dataset/step_2/input/cache/
 data/stl_dataset/step_2/output/
 data/stl_dataset/step_3/output/
 data/stl_dataset/step_4/output/
-.vscode/data/cache/
+data/cache/
