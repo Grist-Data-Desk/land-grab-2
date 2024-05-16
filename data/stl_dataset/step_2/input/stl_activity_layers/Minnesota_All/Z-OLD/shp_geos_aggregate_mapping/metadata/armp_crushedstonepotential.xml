@@ -1,0 +1,229 @@
+<metadata>
+  <idinfo>
+    <citation>
+      <citeinfo>
+        <origin>Minnesota Department of Natural Resources: Division of Lands and Minerals, Mineral Potential Evaluation Section</origin>
+        <pubdate>20150623</pubdate>
+        <title>Aggregate Resource Mapping Program - Compilation of Crushed Stone Resource Potential</title>
+        <pubinfo>
+          <publish>Minnesota DNR - Lands and Minerals</publish>
+        </pubinfo>
+        <onlink>http://www.dnr.state.mn.us/lands_minerals/aggregate_maps/completed/index.html</onlink>
+      </citeinfo>
+    </citation>
+    <descript>
+      <abstract>This spatial dataset of crushed stone resource potential is based on a compilation of GIS aggregate resources (sand and gravel, crushed stone) reconnaissance scale data spanning twenty county projects completed over a number of years (1987-present) by the DNR's Aggregate Resource Mapping Program (ARMP). The attribute data available varies as a result of the varied years of completion and changes in databases structure and verbiage over time. The past project GIS data has been loaded into the current file geodatabase used by the Aggregate Resource Mapping Program. Therefore the data from the most recent completed counties (Aitkin, Stearns, Kanabec, Olmsted) have the most complete attribute table, while the earlier mapped counties (Sherburne, Wright, Isanti) have limited attribute data. Unlike sand and gravel potential data, crushed stone potential is not found in every county or project area due to it being not good quality bedrock or too far below the surface (greater than 50 feet) to extract economically today. Digital crushed stone resource potential was first delineated for Blue Earth County Project completed in 1999. Since then 11 other counties have had crushed stone resource potential mapped. The attribute data varies by county since database design has changed since 1999. 
+
+Generally speaking the dataset consists of information about the geology, geological characteristics, and aggregate potential of crushed-stone potential units. Four attribute fields relate to crushed stone characteristics, including overburden thickness, quality, probability, and bedrock geological unit. These characteristics were used to calculate the aggregate potential of the map unit for crushed stone.</abstract>
+      <purpose>To summarize the crushed stone resource potential digitized in Minnesota from a compilation of GIS aggregate resources (sand and gravel, crushed stone) reconnaissance scale data spanning twenty county projects completed over a number of years (1999-present). 
+
+The purpose of this project to summarize the geological characteristics, bedrock geology, and crushed-stone potential of the different bedrock units. To help categorize the geological characteristics and incorporate them into a model to help determine the crushed-stone potential of the deposit.
+
+The crushed stone resource potential spatial database is an interpretative data product intended to be used for planning purposes. For example, a community may want to differentiate and protect resources by their quality; they may want to separate resource extraction from other uses to minimize land-use conflict; or they may want to reduce haulage cost by identifying sources in proximity to a project because aggregate is a high bulk, low price commodity and transportation costs can significantly affect price.
+
+The most up-to-date topographic, digital elevation models, county well index wells, and bedrock geologic maps were used in the construction of this data at the time of its creation. New data were also gathered during the mapping effort, at a scale appropriate for the final map scale of 1:100,000.
+However this is a regional reconaissance-scale map and it is still necessary to conduct a detailed investigation to verify the information before investing in a deposit or making site-specific decisions. Factors that were not included in the preparation of this map include ownership, zoning, environmental considerations and protection or easement status.
+
+About the Aggregate Resource Mapping Program:
+The Aggregate Resource Mapping Program (ARMP) began in 1984 when the Minnesota Legislature passed a law (Minnnesota Statutes, section 84.94) to: Identify and classify aggregate resources out side of the Twin Cities metropolitan area; Give aggregate resource information to local units of government and others for making comprehensive land-use and zoning plans; Introduce aggregate resource protection; and Promote orderly and environmentally sound development of the resource.
+Aggregate Mapping Home Page: http://www.dnr.state.mn.us/lands_minerals/aggregate_maps/index.html
+Aggregate Mapping Methodology: http://www.dnr.state.mn.us/lands_minerals/aggregate_maps/methodology.html</purpose>
+      <supplinf>State of Minnesota</supplinf>
+    </descript>
+    <timeperd>
+      <timeinfo>
+        <sngdate>
+          <caldate>20150623</caldate>
+        </sngdate>
+      </timeinfo>
+      <current>Data were digitized between 1999 and 2015.</current>
+    </timeperd>
+    <status>
+      <progress>Complete</progress>
+      <update>Continually</update>
+    </status>
+    <spdom>
+      <bounding>
+        <westbc>-97.23</westbc>
+        <eastbc>-89.53</eastbc>
+        <northbc>49.37</northbc>
+        <southbc>43.5</southbc>
+      </bounding>
+    </spdom>
+    <keywords>
+      <theme>
+        <themekey>bedrock, geological characteristics, aggregate potential, crushed stone, construction aggregates</themekey>
+        <themekt>
+          </themekt>
+      </theme>
+      <place>
+        <placekey>
+          </placekey>
+      </place>
+    </keywords>
+    <accconst>None</accconst>
+    <useconst>Use Disclaimer: 
+Every reasonable effort has been made to ensure the accuracy of the factual data on which this map interpretation is based. However, the Department of Natural Resources does not warrant the accuracy, completeness, or any implied uses of these data. Users may wish to verify critical information; sources include both the references here and information on file in the offices of the Minnesota Department of Natural Resources. Every effort has been made to ensure the interpretation shown conforms to sound geologic and cartographic principles. No claim is made that the interpretation shown is rigorously correct, however, and it should not be used to guide engineering-scale decisions without site-specific verification. This information should not be used to establish legal title, boundaries, or locations of improvements.
+
+Data Disclaimer
+The Minnesota Department of Natural Resources makes no representation or warranties, express or implied, with respect to the reuse of data provided herewith, regardless of its format or the means of its transmission. There is no guarantee or representation to the user as to the accuracy, currency, suitability, or reliability of this data for any purpose. The user accepts the data 'as is', and assumes all risks associated with its use. By accepting this data, the user agrees not to transmit this data or provide access to it or any part of it to another party unless the user shall include with the data a copy of this disclaimer. The Minnesota Department of Natural Resources assumes no responsibility for actual or consequential damage incurred as a result of any user's reliance on this data.</useconst>
+    <browse>
+      <browsen>http://images.dnr.state.mn.us/lands_minerals/aggregate/csp_image.jpg</browsen>
+    </browse>
+    <crossref>
+      <citeinfo>
+        <title>Other Compiled Aggregate Mapping GIS Datasets: 
+Sand and Gravel Resource Potential; Geologic Field Observations; Test Holes; and Status Map of Completed, In-Progress, and Requested Projects
+
+List of Completed DNR Aggregate Mapping Project's Web Pages to Download Maps and Original GIS Data and Metadata at:
+http://www.dnr.state.mn.us/lands_minerals/aggregate_maps/completed/index.html
+Aitkin County (2014/2015) 
+Stearns County (2012)
+Kanabec County (2012)
+Portions of Northern St. Louis and Northern Lake Counties (2010)
+Olmsted County (2010)
+Carlton County and Fond du Lac Reservation (2009)
+Mille Lacs County (2007)
+Meeker County (2006)
+Renville County (2003)
+Le Sueur County (2003)
+Itasca County (2003) - Contracted with MGS
+Benton County (2002)
+Dodge County (2002)
+Chisago County (2000) - Contracted with MGS
+Nicollet County (1999)
+Blue Earth County (1999)
+Clay County (1995)
+Isanti County (1991)
+Wright County (1989)
+Sherburne County (1987)
+
+Completed MGS Aggregate Endowment of the 7-County Twin Cities Metropolitan Area
+7-County Mapping Web page: Information and links to view and download report, maps, and original GIS data and metadata for this MGS mapping project.</title>
+      </citeinfo>
+    </crossref>
+    <ptcontac>
+      <cntinfo>
+        <cntperp>
+          <cntorg>Minnesota DNR - Lands and Minerals</cntorg>
+          <cntper>James Olson</cntper>
+        </cntperp>
+        <cntpos>GIS Analyst</cntpos>
+        <cntaddr>
+          <addrtype>Mailling and Physical</addrtype>
+          <address>500 Lafayette Rd</address>
+          <city>Saint Paul</city>
+          <state>MN</state>
+          <postal>55155</postal>
+        </cntaddr>
+        <cntvoice>651-259-5429</cntvoice>
+        <cntemail>james.olson@state.mn.us</cntemail>
+      </cntinfo>
+    </ptcontac>
+  </idinfo>
+  <dataqual>
+    <logic>
+      </logic>
+    <complete>The data is as complete as when the county project was completed. If you need more information please consult the original project data and metadata found at the Aggregate Mapping Program's completed project page at: http://www.dnr.state.mn.us/lands_minerals/aggregate_maps/completed/index.html  </complete>
+    <posacc>
+      <horizpa>
+        <horizpar>see lineage</horizpar>
+      </horizpa>
+      <vertacc>
+        <vertaccr>None</vertaccr>
+      </vertacc>
+    </posacc>
+    <lineage>
+      <procstep>
+        <procdesc>This varies since the data is a compilation of crushed stone resource potential data digitized between 1999-2015. Please consult the original project metadata found at the Aggregate Mapping Program's completed project page at: http://www.dnr.state.mn.us/lands_minerals/aggregate_maps/completed/index.html  
+
+Generally speaking,the first step in determining the distribution of aggregate resources is to understand the recent geological history of the area. The geological history basically tells us the story, or sequence of events, of when the aggregate and other sediments were deposited. By understanding this story we can determine where the aggregate was deposited, as well as some of the general characteristics about the material. The crushed-stone potential units were delineated using an overburden model developed and interpreted from the county well index, soil surveys, MGS outcrops, exploratory drilling, and field observations. Additionally, the crushed-stone potential was further interpreted using the following Minnesota Geological Survey Bedrock Geology Maps.  Data about the overburden, bedrock, and depth to bedrock includes well locations with well log information indicating a depth to bedrock; bedrock outcrops from the soil information; bedrock outcrops from MGS; depth to bedrock information from exploratory drilling; and bedrock outcrops observed in the field. To interpret the overburden depth, a GIS based computer model was created using the Spatial Analyst extension in ArcGIS.</procdesc>
+      </procstep>
+    </lineage>
+    <attracc>
+      <attraccr>
+        </attraccr>
+    </attracc>
+  </dataqual>
+  <spref>
+    <horizsys>
+      <planar>
+        <gridsys>
+          <gridsysn>Universal Transverse Mercator</gridsysn>
+          <utm>
+            <utmzone>15</utmzone>
+          </utm>
+        </gridsys>
+        <planci>
+          <plandu>meters</plandu>
+        </planci>
+      </planar>
+      <geodetic>
+        <horizdn>NAD83</horizdn>
+        <ellips>GRS80</ellips>
+      </geodetic>
+    </horizsys>
+  </spref>
+  <eainfo>
+    <overview>
+      <eaover>The polygons were delineated to represent geological features, geological characteristics, and aggregate potential for crushed-stone.
+
+An example attribute table with descriptions for crushed stone potential is provided here from the Stearns County Aggregate Map:
+http://files.dnr.state.mn.us/lands_minerals/aggregate/aggregate_crushedstone_attribute_example_stearnscounty.pdf
+
+Please consult the original project data and metadata found at the Aggregate Mapping Program's completed project page at: http://www.dnr.state.mn.us/lands_minerals/aggregate_maps/completed/index.html  </eaover>
+    </overview>
+  </eainfo>
+  <distinfo>
+    <resdesc>
+      </resdesc>
+    <distliab>Please read accompanying document: Minnesota DNR Data and Software License Agreement.pdf</distliab>
+    <stdorder>
+      <ordering>Visit the web site noted in the online linkage section, or send an email to the Distribution Contact listed in this metadata record</ordering>
+    </stdorder>
+    <distrib>
+      <cntinfo>
+        <cntperp>
+          <cntorg>Minnesota DNR - GIS</cntorg>
+          <cntper>Zeb Thomas</cntper>
+        </cntperp>
+        <cntpos>GIS Data Systems Coordinator</cntpos>
+        <cntaddr>
+          <addrtype>mailing and physical</addrtype>
+          <address>500 Lafayette Rd</address>
+          <city>Saint Paul</city>
+          <state>MN</state>
+          <postal>55155</postal>
+        </cntaddr>
+        <cntvoice>651-259-5637</cntvoice>
+        <cntemail>zeb.thomas@state.mn.us</cntemail>
+      </cntinfo>
+    </distrib>
+  </distinfo>
+  <metainfo>
+    <metd>2018-07-13 12:24:29</metd>
+    <metstdn>Minnesota Geographic Metadata Guidelines</metstdn>
+    <metstdv>1.2</metstdv>
+    <metextns>
+      <onlink>http://www.mngeo.state.mn.us/committee/standards/mgmg/metadata.htm</onlink>
+    </metextns>
+    <metc>
+      <cntinfo>
+        <cntperp>
+          <cntorg>Minnesota DNR - Lands and Minerals</cntorg>
+          <cntper>James Olson</cntper>
+        </cntperp>
+        <cntpos>GIS Analyst</cntpos>
+        <cntaddr>
+          <addrtype>mailing and physical</addrtype>
+          <address>500 Lafayette Rd</address>
+          <city>Saint Paul</city>
+          <state>MN</state>
+          <postal>55155</postal>
+        </cntaddr>
+        <cntvoice>651-259-5429</cntvoice>
+        <cntemail>james.olson@state.mn.us</cntemail>
+      </cntinfo>
+    </metc>
+  </metainfo>
+</metadata>

@@ -58,9 +58,6 @@
                     <keyword>
                         <gco:CharacterString>utah</gco:CharacterString>
                     </keyword>
-                    <keyword>
-                        <gco:CharacterString>contract open data</gco:CharacterString>
-                    </keyword>
                 </MD_Keywords>
             </descriptiveKeywords>
             <resourceConstraints>
@@ -79,16 +76,16 @@
                     <geographicElement>
                         <EX_GeographicBoundingBox>
                             <westBoundLongitude>
-                                <gco:Decimal>-113.930314830324</gco:Decimal>
+                                <gco:Decimal>-113.938273180201</gco:Decimal>
                             </westBoundLongitude>
                             <eastBoundLongitude>
                                 <gco:Decimal>-108.973552844228</gco:Decimal>
                             </eastBoundLongitude>
                             <southBoundLatitude>
-                                <gco:Decimal>36.9938831733675</gco:Decimal>
+                                <gco:Decimal>36.9937117903924</gco:Decimal>
                             </southBoundLatitude>
                             <northBoundLatitude>
-                                <gco:Decimal>41.8822891632403</gco:Decimal>
+                                <gco:Decimal>41.8822891611134</gco:Decimal>
                             </northBoundLatitude>
                         </EX_GeographicBoundingBox>
                     </geographicElement>

@@ -55,12 +55,6 @@
                     <keyword>
                         <gco:CharacterString>utah</gco:CharacterString>
                     </keyword>
-                    <keyword>
-                        <gco:CharacterString>contract open data</gco:CharacterString>
-                    </keyword>
-                    <keyword>
-                        <gco:CharacterString>energy open data</gco:CharacterString>
-                    </keyword>
                 </MD_Keywords>
             </descriptiveKeywords>
             <resourceConstraints>
@@ -74,26 +68,6 @@
             <characterSet>
                 <MD_CharacterSetCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8" codeSpace="ISOTC211/19115">utf8</MD_CharacterSetCode>
             </characterSet>
-            <extent>
-                <EX_Extent>
-                    <geographicElement>
-                        <EX_GeographicBoundingBox>
-                            <westBoundLongitude>
-                                <gco:Decimal>-113.699449744889</gco:Decimal>
-                            </westBoundLongitude>
-                            <eastBoundLongitude>
-                                <gco:Decimal>-109.574129993237</gco:Decimal>
-                            </eastBoundLongitude>
-                            <southBoundLatitude>
-                                <gco:Decimal>37.0167235319662</gco:Decimal>
-                            </southBoundLatitude>
-                            <northBoundLatitude>
-                                <gco:Decimal>40.8828977170132</gco:Decimal>
-                            </northBoundLatitude>
-                        </EX_GeographicBoundingBox>
-                    </geographicElement>
-                </EX_Extent>
-            </extent>
         </MD_DataIdentification>
     </identificationInfo>
 </MD_Metadata>

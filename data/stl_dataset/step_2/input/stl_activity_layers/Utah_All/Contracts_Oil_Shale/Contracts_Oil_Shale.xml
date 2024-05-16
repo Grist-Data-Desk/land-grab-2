@@ -58,9 +58,6 @@
                     <keyword>
                         <gco:CharacterString>utah</gco:CharacterString>
                     </keyword>
-                    <keyword>
-                        <gco:CharacterString>contract open data</gco:CharacterString>
-                    </keyword>
                 </MD_Keywords>
             </descriptiveKeywords>
             <resourceConstraints>

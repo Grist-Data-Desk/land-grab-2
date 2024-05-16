@@ -7,14 +7,14 @@
   <title>Nonmetallic Mineral Locations</title>
   <abstract>&lt;DIV STYLE="text-align:Left;">&lt;DIV>&lt;DIV>&lt;P>&lt;SPAN>Geologists use the term 'Industrial Minerals' to describe nonmetallic minerals that have economic or industrial uses. Their characteristics and means of formation are highly variable. Examples of these minerals include garnet, fluorite, quartz, beryl, sulfur, gypsum, mica, and many others.&lt;/SPAN>&lt;/P>&lt;/DIV>&lt;/DIV>&lt;/DIV></abstract>
   <links>
-    <link description="" size="" format="" type="WWW:LINK" url="https://gis.dnr.wa.gov/site1/rest/services/Public_Geology/Mines_and_Minerals/MapServer/11" mimeType="" name="Source"/>
+    <link url="https://gis.dnr.wa.gov/site1/rest/services/Public_Geology/Mines_and_Minerals/MapServer/11" format="" type="WWW:LINK" description="" name="Source" mimeType="" size=""/>
   </links>
   <dates/>
   <fees></fees>
   <encoding></encoding>
   <crs>
     <spatialrefsys nativeFormat="Wkt">
-      <wkt>PROJCRS["NAD83(HARN) / Washington South (ftUS)",BASEGEOGCRS["NAD83(HARN)",DATUM["NAD83 (High Accuracy Reference Network)",ELLIPSOID["GRS 1980",6378137,298.257222101,LENGTHUNIT["metre",1]]],PRIMEM["Greenwich",0,ANGLEUNIT["degree",0.0174532925199433]],ID["EPSG",4152]],CONVERSION["SPCS83 Washington South zone (US Survey feet)",METHOD["Lambert Conic Conformal (2SP)",ID["EPSG",9802]],PARAMETER["Latitude of false origin",45.3333333333333,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8821]],PARAMETER["Longitude of false origin",-120.5,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8822]],PARAMETER["Latitude of 1st standard parallel",47.3333333333333,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8823]],PARAMETER["Latitude of 2nd standard parallel",45.8333333333333,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8824]],PARAMETER["Easting at false origin",1640416.667,LENGTHUNIT["US survey foot",0.304800609601219],ID["EPSG",8826]],PARAMETER["Northing at false origin",0,LENGTHUNIT["US survey foot",0.304800609601219],ID["EPSG",8827]]],CS[Cartesian,2],AXIS["easting (X)",east,ORDER[1],LENGTHUNIT["US survey foot",0.304800609601219]],AXIS["northing (Y)",north,ORDER[2],LENGTHUNIT["US survey foot",0.304800609601219]],USAGE[SCOPE["Engineering survey, topographic mapping."],AREA["United States (USA) - Washington - counties of Adams; Asotin; Benton; Clark; Columbia; Cowlitz; Franklin; Garfield; Grant south of approximately 47°30'N; Grays Harbor; Kittitas; Klickitat; Lewis; Mason; Pacific; Pierce; Skamania; Thurston; Wahkiakum; Walla Walla; Whitman; Yakima."],BBOX[45.54,-124.4,47.61,-116.91]],ID["EPSG",2927]]</wkt>
+      <wkt></wkt>
       <proj4>+proj=lcc +lat_0=45.3333333333333 +lon_0=-120.5 +lat_1=47.3333333333333 +lat_2=45.8333333333333 +x_0=500000.0001016 +y_0=0 +ellps=GRS80 +units=us-ft +no_defs</proj4>
       <srsid>896</srsid>
       <srid>2927</srid>
@@ -26,6 +26,6 @@
     </spatialrefsys>
   </crs>
   <extent>
-    <spatial minx="613656.42431640625" dimensions="2" maxx="2537847.07861328125" crs="EPSG:2927" miny="98425.10009765625" minz="0" maxz="0" maxy="1351211.60205078125"/>
+    <spatial miny="98425.10009765625" crs="EPSG:2927" maxz="0" minx="613656.42431640625" dimensions="2" maxx="2537847.07861328125" maxy="1351211.60205078125" minz="0"/>
   </extent>
 </qgis>

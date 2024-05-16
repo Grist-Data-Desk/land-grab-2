@@ -7,7 +7,7 @@
   <title>Metallic Mineral Locations</title>
   <abstract>&lt;DIV STYLE="text-align:Left;">&lt;DIV>&lt;DIV>&lt;P>&lt;SPAN>Metallic minerals are elements or compounds that are generally hard, shiny, malleable, and usually have good electrical and thermal conductivity and high density. Examples of these minerals include antimony, chromium, copper, silver, gold, iron, and manganese. These characteristics make them desirable for use in most of the products we use every day. We have electronically compiled thousands of documents, maps, and data from multiple sources to provide access to metallic mineral data in Washington State.&lt;/SPAN>&lt;/P>&lt;/DIV>&lt;/DIV>&lt;/DIV></abstract>
   <links>
-    <link description="" size="" format="" type="WWW:LINK" url="https://gis.dnr.wa.gov/site1/rest/services/Public_Geology/Mines_and_Minerals/MapServer/13" mimeType="" name="Source"/>
+    <link url="https://gis.dnr.wa.gov/site1/rest/services/Public_Geology/Mines_and_Minerals/MapServer/13" format="" type="WWW:LINK" description="" name="Source" mimeType="" size=""/>
   </links>
   <dates/>
   <fees></fees>
@@ -26,6 +26,6 @@
     </spatialrefsys>
   </crs>
   <extent>
-    <spatial minx="614140.80859375" dimensions="2" maxx="2527486.9189453125" crs="EPSG:2927" miny="100890.5068359375" minz="0" maxz="0" maxy="1353533.1181640625"/>
+    <spatial miny="100890.5068359375" crs="EPSG:2927" maxz="0" minx="614140.80859375" dimensions="2" maxx="2527486.9189453125" maxy="1353533.1181640625" minz="0"/>
   </extent>
 </qgis>

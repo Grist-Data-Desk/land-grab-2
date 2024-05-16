@@ -7,7 +7,7 @@
   <title>Leases_ALL_USE</title>
   <abstract></abstract>
   <links>
-    <link type="WWW:LINK" mimeType="" name="Source" url="https://services5.arcgis.com/rqsYvPKZmvSrSWbw/ArcGIS/rest/services/Leases_ALL_USE/FeatureServer/0" description="" format="" size=""/>
+    <link mimeType="" format="" url="https://services5.arcgis.com/rqsYvPKZmvSrSWbw/ArcGIS/rest/services/Leases_ALL_USE/FeatureServer/0" size="" name="Source" description="" type="WWW:LINK"/>
   </links>
   <dates/>
   <fees></fees>
@@ -26,6 +26,6 @@
     </spatialrefsys>
   </crs>
   <extent>
-    <spatial miny="4438141.24870000034570694" maxx="-11359240.36969999969005585" crs="EPSG:3857" minz="0" dimensions="2" maxy="5012780.87680000066757202" minx="-12139078.39470000006258488" maxz="0"/>
+    <spatial minx="-12139078.39470000006258488" maxx="-11359240.36969999969005585" maxy="5012780.87680000066757202" miny="4438141.24870000034570694" maxz="0" dimensions="2" minz="0" crs="EPSG:3857"/>
   </extent>
 </qgis>

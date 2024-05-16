@@ -1,0 +1,32 @@
+<!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
+<qgis version="3.32.0-Lima">
+  <identifier>https://gis2.statelands.wyo.gov/arcgis/rest/services/Services/MapViewerService2/MapServer/7</identifier>
+  <parentidentifier></parentidentifier>
+  <language></language>
+  <type>dataset</type>
+  <title>Easements</title>
+  <abstract>&lt;DIV STYLE="text-align:Left;">&lt;DIV>&lt;DIV>&lt;P>&lt;SPAN>Easements on state land give the grantee partial interest, but not ownership, in the land as authorized under Chapter 3 of the Board of Land Commissioners' Rules and Regulations. Easements may include ditches, overhead wires, pipelines, railroads, reservoirs, public roads and highways, roadways to private land or residences, snow fences, underground cables, open spaces, and any other appropriate uses.&lt;/SPAN>&lt;/P>&lt;/DIV>&lt;/DIV>&lt;/DIV></abstract>
+  <links>
+    <link description="" format="" mimeType="" url="https://gis2.statelands.wyo.gov/arcgis/rest/services/Services/MapViewerService2/MapServer/7" type="WWW:LINK" name="Source" size=""/>
+  </links>
+  <dates/>
+  <fees></fees>
+  <rights>This data is based on easements with the Wyoming Office of State Lands and Investments (OSLI) that the OSLI GIS team creates.</rights>
+  <encoding></encoding>
+  <crs>
+    <spatialrefsys nativeFormat="Wkt">
+      <wkt>PROJCRS["NAD_1983_WyLAM",BASEGEOGCRS["NAD83",DATUM["North American Datum 1983",ELLIPSOID["GRS 1980",6378137,298.257222101,LENGTHUNIT["metre",1]]],PRIMEM["Greenwich",0,ANGLEUNIT["degree",0.0174532925199433]],ID["EPSG",4269]],CONVERSION["NAD_1983_WyLAM",METHOD["Lambert Conic Conformal (2SP)",ID["EPSG",9802]],PARAMETER["Latitude of false origin",41,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8821]],PARAMETER["Longitude of false origin",-107.5,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8822]],PARAMETER["Latitude of 1st standard parallel",41,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8823]],PARAMETER["Latitude of 2nd standard parallel",45,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8824]],PARAMETER["Easting at false origin",500000,LENGTHUNIT["metre",1],ID["EPSG",8826]],PARAMETER["Northing at false origin",200000,LENGTHUNIT["metre",1],ID["EPSG",8827]]],CS[Cartesian,2],AXIS["(E)",east,ORDER[1],LENGTHUNIT["metre",1]],AXIS["(N)",north,ORDER[2],LENGTHUNIT["metre",1]],USAGE[SCOPE["Not known."],AREA["United States (USA) - Wyoming."],BBOX[40.99,-111.06,45.01,-104.05]],ID["ESRI",102212]]</wkt>
+      <proj4>+proj=lcc +lat_0=41 +lon_0=-107.5 +lat_1=41 +lat_2=45 +x_0=500000 +y_0=200000 +ellps=GRS80 +towgs84=0.9956,-1.9013,-0.5215,-0.025915,-0.009426,-0.011599,0.00062 +units=m +no_defs</proj4>
+      <srsid>60630</srsid>
+      <srid>520000630</srid>
+      <authid>ESRI:102212</authid>
+      <description>NAD_1983_WyLAM</description>
+      <projectionacronym>lcc</projectionacronym>
+      <ellipsoidacronym>EPSG:7019</ellipsoidacronym>
+      <geographicflag>false</geographicflag>
+    </spatialrefsys>
+  </crs>
+  <extent>
+    <spatial maxy="646471.52870000153779984" minx="-88376.31690000102389604" miny="200501.81539999786764383" minz="0" crs="ESRI:102212" maxx="787113.605200000340119" dimensions="2" maxz="0"/>
+  </extent>
+</qgis>

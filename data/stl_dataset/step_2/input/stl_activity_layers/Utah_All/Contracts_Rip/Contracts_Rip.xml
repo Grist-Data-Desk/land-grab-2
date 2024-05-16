@@ -27,13 +27,13 @@
                 </CI_Citation>
             </citation>
             <abstract>
-                <gco:CharacterString>This dataset depicts the official State of Utah School and Institutional Trust Lands Administration (SITLA) range improvement projects data.</gco:CharacterString>
+                <gco:CharacterString>This dataset depicts the official State of Utah School and Institutional Trust Lands Administration range improvement projects (RIP) data.</gco:CharacterString>
             </abstract>
             <purpose>
                 <gco:CharacterString>This dataset depicts the official State of Utah School and Institutional Trust Lands Administration range improvement projects (RIP) data.</gco:CharacterString>
             </purpose>
             <credit>
-                <gco:CharacterString>trustlands administration</gco:CharacterString>
+                <gco:CharacterString>trust lands administration</gco:CharacterString>
             </credit>
             <descriptiveKeywords>
                 <MD_Keywords>
@@ -57,9 +57,6 @@
                     </keyword>
                     <keyword>
                         <gco:CharacterString>utah</gco:CharacterString>
-                    </keyword>
-                    <keyword>
-                        <gco:CharacterString>contract open data</gco:CharacterString>
                     </keyword>
                 </MD_Keywords>
             </descriptiveKeywords>
