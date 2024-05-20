@@ -139,7 +139,7 @@ REWRITE_RULES = {
         }
     },
     "ok": {
-        "misc": {
+        "Misc": {
             "EasementTy": "lease_status",
             "Purpose": "Activity",
             "Grantee": "lessee"
@@ -357,7 +357,7 @@ REWRITE_RULES = {
             "LEASE_TYPE": "Activity",
             "OGRID_NAM": "lessee"
         },
-        "Minerals": {
+        "Mineral lease": {
             "STATUS": "lease_status",
             # "LEASE_TYPE": "Activity",
             "SUB_TYPE": "Sub-activity",
@@ -381,12 +381,12 @@ REWRITE_RULES = {
         }
     },
     "mt": {
-        "miscellaneous": {
+        "Misc": {
             "UNITTYPE": "Activity",
             "MANAME": "Sub-activity",
             "INST": "lessee"
         },
-        "Oil and Gas Wells": {
+        "Oil and gas well": {
             "Status": "lease_status",
             "Type": 'Sub-activity',
             "CoName": "lessee",
@@ -401,7 +401,7 @@ REWRITE_RULES = {
             "facilname": "lessee",
             "milltypeDe": "Sub-activity"
         },
-        "Oil and Gas Active Lease": {
+        "Oil and gas active lease": {
             "Prim_Cust": "lessee",
             "Producing": "lease_status",
             "DateEffect": "Lease Start Date",
@@ -468,16 +468,16 @@ STATE_ACTIVITIES = {
                                            'full_name'],
                                 rights_type=RightsType.SUBSURFACE,
                                 use_name_as_activity=False),
-        StateActivityDataSource(name='Subsurface Activities',
-                                location='Arizona_All/All-AZ-Mineral-STLs-Fixed.shp',
-                                keep_cols=['ke', 'leased', 'full_name'],
-                                rights_type=RightsType.SUBSURFACE,
-                                use_name_as_activity=False),
-        StateActivityDataSource(name='Surface Activities',
-                                location='Arizona_All/All_AZ_STLs-Fixed.shp',
-                                keep_cols=['ke', 'leased', 'full_name'],
-                                rights_type=RightsType.SURFACE,
-                                use_name_as_activity=False),
+        # StateActivityDataSource(name='Subsurface Activities',
+        #                         location='Arizona_All/All-AZ-Mineral-STLs-Fixed.shp',
+        #                         keep_cols=['ke', 'leased', 'full_name'],
+        #                         rights_type=RightsType.SUBSURFACE,
+        #                         use_name_as_activity=False),
+        # StateActivityDataSource(name='Surface Activities',
+        #                         location='Arizona_All/AZ_Surface_TEST.shp',
+        #                         keep_cols=['ke', 'leased', 'full_name'],
+        #                         rights_type=RightsType.SURFACE,
+        #                         use_name_as_activity=False),
         # Took out this layer because ag is reflected in Misc.
         # StateActivityDataSource(name='Agriculture',
         #                         location='Arizona_All/Grazing.shp',
@@ -608,11 +608,11 @@ STATE_ACTIVITIES = {
 
     ]),
     'ND': StateForActivity(name='north dakota', activities=[
-        # StateActivityDataSource(name='Gas plant',
-        #                         location='NorthDakota_All/ND-GasPlants.shp',
-        #                         keep_cols=['operator', 'status'],
-        #                         rights_type=RightsType.SURFACE,
-        #                         use_name_as_activity=True),
+        StateActivityDataSource(name='Gas plant',
+                                location='NorthDakota_All/ND-GasPlants.shp',
+                                keep_cols=['operator', 'status'],
+                                rights_type=RightsType.SURFACE,
+                                use_name_as_activity=True),
         StateActivityDataSource(name='Oil/gas well - ',
                                 location='NorthDakota_All/ND-Wells.shp',
                                 keep_cols=['operator', 'well_type', 'status'],
@@ -624,16 +624,16 @@ STATE_ACTIVITIES = {
                                 keep_cols=['name'],
                                 rights_type=RightsType.SUBSURFACE,
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='Oil and gas lease',
-                                location='NorthDakota_All/ND-OilGasLease.shp',
-                                keep_cols=['LEASE_STAT', 'LESSEE'],
-                                rights_type=RightsType.SUBSURFACE,
-                                use_name_as_activity=True),
-        # StateActivityDataSource(name='Oil/gas directional well',
-        #                         location='NorthDakota_All/ND-DirectionalWell.shp',
-        #                         keep_cols=['well_sub'],
+        # StateActivityDataSource(name='Oil and gas lease',
+        #                         location='NorthDakota_All/ND-OilGasLease.shp',
+        #                         keep_cols=['LEASE_STAT', 'LESSEE'],
         #                         rights_type=RightsType.SUBSURFACE,
         #                         use_name_as_activity=True),
+        StateActivityDataSource(name='Oil/gas directional well',
+                                location='NorthDakota_All/ND-DirectionalWell.shp',
+                                keep_cols=['well_sub'],
+                                rights_type=RightsType.SUBSURFACE,
+                                use_name_as_activity=True),
 
     ]),
     'NM': StateForActivity(name='new mexico', activities=[
@@ -678,7 +678,7 @@ STATE_ACTIVITIES = {
 
     ]),
     'OK': StateForActivity(name='oklahoma', activities=[
-        StateActivityDataSource(name='misc',
+        StateActivityDataSource(name='Misc',
                                 location='Oklahoma_All/Miscellaneous.shp',
                                 keep_cols=['Purpose', 'Grantee',
                                            'EasementTy'],
@@ -1028,7 +1028,7 @@ STATE_ACTIVITIES = {
                                 rights_type=RightsType.SUBSURFACE,
                                 activity_name_appendage_col='Type',
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='miscellaneous',
+        StateActivityDataSource(name='Misc',
                                 location='Montana_All/ManagedAreas.shp',
                                 keep_cols=['MANAME', 'INST', 'UNITTYPE'],
                                 rights_type=RightsType.UNIVERSAL),
@@ -1037,7 +1037,7 @@ STATE_ACTIVITIES = {
                                 keep_cols=['HarvestPrescription', 'DateSold', 'DateClosed', 'LandOffice'],
                                 rights_type=RightsType.SURFACE,
                                 use_name_as_activity=True),
-        StateActivityDataSource(name='Lumber mill',
+        StateActivityDataSource(name='Lumber Mill',
                                 location='Montana_All/Mills.shp',
                                 keep_cols=['facilname', 'milltypeDe'],
                                 rights_type=RightsType.SURFACE,

@@ -1,3 +1,4 @@
+import copy
 import logging
 import os
 import sys
@@ -374,7 +375,9 @@ def capture_lessee_and_lease_type(activity_row, activity, activity_name, state):
     if activity.name not in REWRITE_RULES.get(state.lower()):
         return
 
-    activity_info = {'layer_index': f'{state}-{activity.name}', 'activity': activity_name, 'lease_status': '',
+    activity_info = {'layer_index': f'{state}-{activity.name}',
+                     'activity': activity_name,
+                     'lease_status': '',
                      'lessee': ''}
 
     for key, val in REWRITE_RULES.get(state.lower()).get(activity.name).items():
@@ -389,10 +392,11 @@ def capture_lessee_and_lease_type(activity_row, activity, activity_name, state):
 def capture_matches(matches, state, activity):
     rewrite_list = {'OtherMin': 'Other Minerals', 'OilGas': 'Oil & Gas', 'OilAndGas': 'Oil & Gas'}
     total = 0
-
+    m2 = list(copy.deepcopy(matches))
+    m_final = []
     grist_data_update = defaultdict(set)
     activity_data_update = []
-    for match_score, grist_idx, grist_row, activity_row, contains, _ in matches:
+    for match_score, grist_idx, grist_row, activity_row, contains, unused in matches:
         activity_name = get_activity_name(state, activity, pd.DataFrame([activity_row]))
         if activity_name is None or 'None' in activity_name:
             # N.B. for debugging purposes only, otherwise essentially a no-op.
@@ -401,6 +405,8 @@ def capture_matches(matches, state, activity):
         if activity_name in rewrite_list:
             activity_name = rewrite_list[activity_name]
 
+        # if contains and not is_compatible_activity(grist_row, activity, activity_name, state):
+        #     assert 1
         if contains and is_compatible_activity(grist_row, activity, activity_name, state):
             if exclude_inactive(state, activity_row):
                 continue
@@ -410,6 +416,7 @@ def capture_matches(matches, state, activity):
                                                           activity_name,
                                                           state)
 
+            m_final.append((match_score, grist_idx, grist_row, activity_row, contains, unused))
             grist_data_update[grist_idx].add((activity_name, activity_info))
             activity_data_update.append(activity_row)
 
@@ -453,7 +460,7 @@ def match_all_activities(stl_comparison_base_dir, states_data=None, grist_data=N
     # process_stated_cached = MEMORY.cache(process_state_activity)
 
     for activity_state, activity_info in states_data.items():
-        # if 'SD' not in activity_state:
+        # if 'AZ' not in activity_state:
         #     continue
         print(f'state: {activity_state} activity: {activity_info.name}')
         if not activity_info:
