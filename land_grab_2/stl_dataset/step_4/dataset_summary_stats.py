@@ -259,6 +259,8 @@ def tribe_summary(gdf, output_dir):
             [construct_single_tribe_info(row.to_dict()) for _, row in gdf.iterrows()]
         )
     )
+    parcels_by_tribe = gpd.GeoDataFrame(results, crs=gdf.crs)
+    parcels_by_tribe.to_file(output_dir / "parcels-by-tribe.geojson", driver="GeoJSON")
     tribe_summary_tmp = pd.DataFrame(results).drop(columns=["geometry"])
     group_cols = [
         c
